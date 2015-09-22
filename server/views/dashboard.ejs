@@ -1,0 +1,157 @@
+<div id='view-dashboard' class='view'>
+    <!-- HANDLEBAR TEMPLATES -->
+    <script id="notification-row-template" type="text/x-handlebars-template">
+        {{#each notifications}}
+        <li><small><a href="#" class="user-action" data-id="notificationselector" data-value="{{notificationId}}">{{Image type}} {{description}}</a></small></li>
+        {{/each}}
+    </script>
+    <!-- /HANDLEBAR TEMPLATES -->
+    <div class="row tiles">
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+        <div class="col-xs-12 col-md-8">
+            <div class="tile-container">
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="tile nav-action" data-id="owner">
+                            <div class="thumbnail bluegray">
+                                <div class="thumbnail-header text-uppercase">
+                                    <i class="fa fa-user fa-3x vcenter"></i>
+                                </div>
+                                <div class="tile-container">
+                                        <div class="h2">
+                                            Bonjour,
+                                        </div>
+                                        <div class="h4">
+                                            <%= account.firstname + ' ' + account.lastname %>
+                                        </div>
+                                </div>
+                                <div class="thumbnail-footer">
+                                    <i class="fa fa-info fa-2x"></i> bailleur
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-8">
+                        <div class="tile-container">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="tile nav-action" data-id="occupant">
+                                        <div class="thumbnail lightgray">
+                                            <div class="thumbnail-header text-uppercase">
+                                                <i class="fa fa-group fa-2x vcenter"></i>
+                                                <span class="h5 vcenter">Locataires</span>
+                                            </div>
+                                            <div class="tile-container">
+                                                <div class="row">
+                                                    <div class="col-xs-9 small">Total</div>
+                                                    <div class="col-xs-3 text-right"><span id="count-all-occupants"></span></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-9 small">En contrat</div>
+                                                    <div class="col-xs-3 text-right"><span id="count-active-occupants"></span></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-9 small">Résilié</div>
+                                                    <div class="col-xs-3 text-right"><span id="count-inactive-occupants"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="tile nav-action" data-id="property">
+                                        <div class="thumbnail lightgray">
+                                            <div class="thumbnail-header text-uppercase">
+                                                <i class="fa fa-key fa-2x vcenter"></i>
+                                                <span class="h5 vcenter">Biens</span>
+                                            </div>
+                                            <div class="tile-container">
+                                                <div class="row">
+                                                    <div class="col-xs-9 small">Total</div>
+                                                    <div class="col-xs-3 text-right"><span id="count-all-properties"></span></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-9 small">Loué</div>
+                                                    <div class="col-xs-3 text-right"><span id="count-active-properties"></span></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-9 small">Libre</div>
+                                                    <div class="col-xs-3 text-right"><span id="count-inactive-properties"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tile-container">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="tile nav-action" data-id="rent">
+                                        <div class="thumbnail coolgrey">
+                                            <div class="thumbnail-header text-uppercase">
+                                                <i class="fa fa-money fa-2x vcenter"></i>
+                                                <span id='rent-month-year' class="h5 vcenter"></span>
+                                            </div>
+                                            <div class="tile-container">
+                                                <div class="row">
+                                                    <div class="col-xs-3 small">Total</div>
+                                                    <div class="col-xs-6 text-right">
+                                                        <span id="count-total-topay-rents" class="h5"></span>
+                                                    </div>
+                                                    <div class="col-xs-3 text-right small">
+                                                        <span id="count-all-rents"></span> loyers
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-3 small">Impayé</div>
+                                                    <div class="col-xs-6 text-right">
+                                                        <span id="count-total-notpaid-rents" class="h5"></span>
+                                                    </div>
+                                                    <div class="col-xs-3 text-right small">
+                                                        <span id="count-not-paid-rents"></span> loyers  
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xs-3 small">Payé</div>
+                                                    <div class="col-xs-6 text-right">
+                                                        <span id="count-total-paid-rents" class="h5"></span>   
+                                                    </div>
+                                                    <div class="col-xs-3 text-right small">
+                                                        <span id="count-paid-rents"></span> loyers 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+    </div>
+    <div class="row tiles">
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+        <div class="col-xs-12 col-md-8">
+            <div class="tile-container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="tile">
+                            <div class="thumbnail lightgray">
+                                <div class="thumbnail-header text-uppercase">
+                                    <i class="fa fa-exclamation fa-2x"></i>
+                                    <span class="h5 vcenter">Irrégularités</span>
+                                </div>
+                                <ul id="notification-list" class="list-unstyled"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden-xs hidden-sm col-md-2"></div>
+    </div>
+</div>

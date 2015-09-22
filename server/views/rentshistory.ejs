@@ -1,0 +1,35 @@
+<script id="rentshistory-template" type="text/x-handlebars-template">
+	<h1>{{ occupant.name }}</h1>
+
+	<table id="renttable" class="table table-hover table-bordered table-responsive">
+		<thead>
+			<tr>
+				<td>Mois</td>
+				<td class="hidden-xs hidden-sm">Année</td>
+				<td class="hidden-xs hidden-sm text-right">Taux T.V.A</td>
+				<td class="text-right">Loyer à régler</td>
+				<td class="text-right">Règlement</td>
+				<td class="hidden-xs hidden-sm text-left">Etat</td>
+			</tr>
+		</thead>
+		<tbody>
+		{{#each rents}}
+		    {{> renthistory-template}}
+		{{/each}}
+		</tbody>
+	</table>
+</script>
+
+<script id="renthistory-template" type="text/x-handlebars-template">
+	<tr id="{{_id}}" class="{{active}}" data-value="{{uid}}">
+		<td class="visible-xs visible-sm">{{month}}/{{year}}</td>
+		<td class="hidden-xs hidden-sm">{{formatMonth month}}</td>
+		<td class="hidden-xs hidden-sm">{{year}}</td>
+		<td class="hidden-xs hidden-sm text-right">{{formatPercent vatRatio}}</td>
+		<td class="text-right">{{formatMoney totalToPay}}</td>
+		<td class="text-right txthighlight">{{formatMoney payment emptyForZero=true}}{{#if paymentType}}<br>{{paymentType paymentType}} {{paymentReference}}{{/if}}{{#if paymentDate}}<br>Réglé le {{paymentDate}}{{/if}}</td>
+		<td class="hidden-xs hidden-sm txtstatus text-left {{status}}">{{paymentStatus}}</td>
+	</tr>		
+</script>
+
+<div id="rents-history-table"></div>

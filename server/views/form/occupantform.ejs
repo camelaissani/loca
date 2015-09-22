@@ -1,0 +1,251 @@
+<div class="well">
+    <form id="occupant-form" role="form">
+        <!-- HANDLEBAR TEMPLATES -->
+        <script id="occupant-property-selector-template" type="text/x-handlebars-template">
+            {{#each properties}}
+                {{#if available}}
+                <option value="{{_id}}">{{name}} (loyer cc : {{formatMoney priceWithExpense}})</option>
+                {{else}}
+                <option value="{{_id}}" {{#if notSelectable}}disabled{{/if}}>{{name}} (loyer cc : {{formatMoney priceWithExpense}} occupé par {{occupantLabel}})</option>
+                {{/if}}
+            {{/each}}
+        </script>
+        <!-- /HANDLEBAR TEMPLATES -->
+        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+        <input type="hidden" id="_id" class="">
+        <h2 id="occupantNameLabel" class="page-header">Locataire</h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label>Renseignements juridiques du locataire.</label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="form-group">
+                    <label class="control-label">Locataire</label>
+                    <select id="isCompany" class="form-control">
+                        <option value="false">Particulier</option>
+                        <option value="true">Société</option>
+                    </select>
+                </div>
+
+                <div class="form-group company-fields">
+                    <label class="control-label">Dénomination de la société</label>
+                    <input type="text" id="company" class="form-control">
+                </div>
+
+                <div class="form-group company-fields">
+                    <label class="control-label">Forme juridique</label>
+                    <input type="text" id="legalForm" class="form-control">
+                </div>
+
+                <div class="form-group company-fields">
+                    <label class="control-label">SIRET</label>
+                    <input type="text" id="siret" class="form-control">
+                </div>
+                <div class="form-group company-fields">
+                    <label class="control-label" for="capital">Capital social</label>
+                    <input type="text" id="capital" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label id="manager-label" class="control-label"></label>
+                    <input type="text" id="manager" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <h2 class="page-header">Type de contrat</h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label>Compléter les champs pour préciser les modalités du contrat conclu avec le locataire.</label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label">Contrat</label>
+                            <select id='contract' class="form-control">
+                                <option value="residency">Bail residence principale 9 ans</option>
+                                <option value="369">Bail commercial 3/6/9 ans</option>
+                                <option value="custom">Bail commercial précaire</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">Date de début</label>
+                            <input type="text" id="beginDate" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label">Date de fin</label>
+                            <input type="text" id="endDate" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Montant de la caution</label>
+                    <input type="number" id="guaranty" min="0" step="0.05" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <div id="termination-row">
+            <h2 class="page-header">Résiliation</h2>
+            <div class="row">
+                <div class="col-xs-12 col-lg-4">
+                    <label>Indiquer la date effective de la fin du contrat.</label>
+                </div>
+                <div class="col-xs-12 col-lg-8">
+                    <div class="form-group">
+                        <label class="control-label">Date</label>
+                        <input type="text" id="terminationDate" class="form-control">
+                    </div>
+                     <div class="form-group">
+                        <label class="control-label">Montant du remboursement de la caution</label>
+                        <input type="number" id="guarantyPayback" min="0" step="0.05" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="page-header">Biens loués</h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label>Précisier les biens loués en selectionnant un local et/ou un parking.</label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div id="properties" class="form-rows">
+                    <div class="row form-row master-form-row">
+                        <div class="col-xs-12">
+                           <div class="form-group">
+                                <label class="control-label">Bien</label>
+                                <select id="propertyId_0" class="available-properties form-field-not-editable form-control"></select>
+                           </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                           <div class="form-group">
+                                <label class="control-label">Date d'entrée</label>
+                                <input type="text" id="entryDate_0" class="form-control">
+                           </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                           <div class="form-group">
+                               <label class="control-label">Date de sortie</label>
+                               <input type="text" id="exitDate_0" class="form-control">
+                           </div>
+                        </div>
+                        <div class="col-xs-12 clearfix">
+                            <div class="pull-right form-btn-remove-row form-btn">
+                                <i class="fa fa-trash-o"></i> Supprimer
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span id="btn-add-property" class="form-btn"><i class="fa fa-plus"></i> Ajouter un bien</span>
+            </div>
+        </div>
+
+        <h2 class="page-header">Contacts</h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label>Personnes à contacter pour toutes démarches administratives (demande de règlement des loyers, réclamation de documents...).</label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div id="contacts" class="form-rows">
+                    <div class="row form-row master-form-row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">Prénom et nom</label>
+                                <input type="text" id="contact_0" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Téléphone</label>
+                                <input type="phone" id="phone_0" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">E-mail</label>
+                                <input type="email" id="email_0" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 clearfix">
+                            <div class="pull-right form-btn-remove-row form-btn">
+                                <i class="fa fa-trash-o"></i> Supprimer
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span id="btn-add-contact" class="form-btn"><i class="fa fa-plus"></i> Ajouter un contact</span>
+            </div>
+        </div>
+
+        <h2 class="page-header">Facturation</h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label>Préciser les éléments pour l'établissment des quittances et des avis d'échéances.</label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="form-group">
+                    <label class="control-label">Référence client</label>
+                    <input type="text" id="reference" class="form-control">
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label class="control-label">Soumis à la T.V.A.</label>
+                            <select id='isVat' class="form-field-not-editable form-control" >
+                                <option value="true">Oui</option>
+                                <option value="false">Non</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-8 occupant-form-vatratio">
+                        <div class="form-group">
+                            <label class="control-label">T.V.A. en %</label>
+                            <input type="number" min="0" max="100" step="0.01" id="vatRatio" class="form-field-not-editable form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Adresse de facturation</label>
+                    <input type="text" id="street1" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="street2" class="form-control">
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label class="control-label">Code postal</label>
+                            <input type="text" id="zipCode" class="form-control">
+                        </div>        
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="form-group">
+                            <label class="control-label">Ville</label>
+                            <input type="text" id="city" class="form-control">
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="page-header">Remise commerciale</h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label></label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="form-group">
+                    <label class="control-label">Montant hors taxe</label>
+                    <input type="number" id="discount" min="0" step="0.05" class="form-control">
+                </div>
+            </div>
+        </div>  
+        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    </form>
+</div>

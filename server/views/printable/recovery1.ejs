@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<% include partials/htmlhead.ejs %>
+
+	<body>
+	<% occupants.forEach(function(occupant, index) { %>
+
+		<div class="page">
+			<% include partials/header.ejs %>
+
+	        <% include partials/customeraddress.ejs %>
+
+			<% include partials/customerreference.ejs %>
+
+			<% include partials/placeanddate.ejs %>
+
+	        <div class="title">Avis d'échéance</div>
+
+			<div class="limit">
+				Montant total de <strong><%= occupant.rent.totalAmount %> euros</strong> était à nous faire parvenir avant le <strong>5 <%= months[month-1] + " " + year %></strong>.
+			</div>
+
+			<div class="items">
+				<table>
+
+				  <% include partials/invoicebody %>
+
+				  <% include partials/rentcalltotal %>
+
+				</table>
+			</div>
+
+			<% include partials/paymentmodalities %>
+
+			<% include partials/footer %>
+			<div class="rubber-stamp red">
+				Rappel<br>Loyer impayé
+			</div>
+		</div>
+
+	<% }); %>
+	<% include partials/printbar %>
+	</body>
+	<% include partials/scripts %>
+</html>

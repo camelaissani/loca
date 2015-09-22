@@ -1,0 +1,4 @@
+Sitemap: http://localhost:8081/sitemap.xml
+User-agent: *
+Disallow: /public/
+Disallow: /bower_components/

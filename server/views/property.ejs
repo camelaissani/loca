@@ -1,0 +1,127 @@
+<div id='view-property' class='view'>
+    <div class="center-container">
+        <div class="filterbar">
+            <ul class="nav nav-pills">
+                <li role="presentation">
+                    <button type="button" class="btn btn-default user-action" data-id="list-action-add-property" data-toggle="tooltip" data-placement="bottom" title="Ajouter un bien"><i class="fa fa-plus-circle"></i> Nouveau</button>
+                </li>
+                <li class="dropdown" role="presentation">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label">Tous (<span class="all-filter-label"></span>)</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="user-action" data-id="list-filter">Tous (<span class="all-filter-label"></span>)</a></li>
+                        <li><a href="#" class="user-action" data-id="list-filter" data-value="loué">Loués (<span class="all-active-filter-label"></span>)</a></li>
+                        <li><a href="#" class="user-action" data-id="list-filter" data-value="disponible">Disponibles (<span class="all-inactive-filter-label"></span>)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="properties" class="list">
+            <!-- HANDLEBAR TEMPLATES -->
+            <script id="list-row-template" type="text/x-handlebars-template">
+                <div id="{{_id}}" class="list-row">
+                    <div class="list-col">
+                        <div class="clearfix">
+                            <div class="list-avatar-col pull-left">
+                                {{Image cssClass='fa-3x'}}
+                            </div>
+                            <div class="pull-left">
+                                <div class="list-title list-value">{{name}}</div>
+                                <div>
+                                    {{propertyName}}
+                                    {{#if surface}}
+                                        <span>{{formatSurface surface}}</span>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-col">
+                        <div class="list-label clearfix">
+                            <small>
+                            <div class="hidden-xs pull-left">Loyer c.c.</div>
+                            {{#if available}}
+                                <div class="list-value pull-right paid">disponible</div>
+                            {{else}}
+                                <div class="list-value pull-right">loué par {{occupantLabel}}</div>
+                            {{/if}}
+                            </small>
+                        </div>
+                        <div class="list-payment-price text-right">{{formatMoney priceWithExpenses}}</div>
+                        <div class="clearfix">
+                            <div class="pull-left">Loyer h.c</div>
+                            <div class="pull-right">{{formatMoney price}}</div>
+                        </div>
+                    </div>
+                    <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+                </div>
+            </script>
+
+            <script id="list-content-template" type="text/x-handlebars-template">
+                {{#each rows}}
+                    {{> list-row-template}}
+                {{/each}}
+            </script>
+            <!-- /HANDLEBAR TEMPLATES -->
+
+            <div class="form-content">
+                <div data-id="property-form" class="sheet">
+                    <div class="list-form-view">
+                        <% include form/propertyform.ejs %>
+                    </div>
+                </div>
+            </div>
+            <h4 class="list-content-selection-label">Bien(s)</h4>
+            <div class="list-content"></div>
+        </div>
+    </div><div class="right-container">
+    <!-- HANDLEBAR TEMPLATE -->
+        <script id="properties-selected-template" type="text/x-handlebars-template">
+            {{#each rows}}
+                <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item user-action">
+                    <div class="clearfix">
+                        <div class="pull-left">{{name}}</div>
+                        <div class="pull-right fa fa-times text-right"></div>
+                    </div>
+                    {{#if surface}}
+                        <div><small>{{formatMoney priceWithExpenses}} c.c. - {{formatSurface surface}}</small></div>
+                    {{else}}
+                        <div><small>{{formatMoney priceWithExpenses}} c.c.</small></div>
+                    {{/if}}
+                </a>
+            {{/each}}
+        </script>
+    <!-- /HANDLEBAR TEMPLATE -->
+        <div class="well menu-card" data-id="properties-selection-menu">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-selection"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler la séléction</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-edit-property" class="list-group-item user-action only-mono-selection"><i class="fa fa-pencil-square-o"></i><span class="hidden-xs hidden-sm"> Editer</span><div class="visible-xs visible-sm"> Bien</div></a>
+            </div>
+            <h4 class="hidden-xs hidden-sm page-header list-selection-menu-label"></h4>
+            <div class="hidden-xs hidden-sm list-selected-elements list-group list-group-selection"></div>
+        </div>
+        <div class="well menu-card" data-id="property-form-menu" data-target="#property-form">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-save-form" class="list-group-item user-action"><i class="fa fa-save"></i><span class="hidden-xs hidden-sm"> Enregistrer</span><div class="visible-xs visible-sm"> Enregistrer</div></a>
+                <a href="#" data-id="list-action-remove-property" class="list-group-item list-group-item-danger user-action"><i class="fa fa-trash"></i><span class="hidden-xs hidden-sm"> Supprimer</span><div class="visible-xs visible-sm"> Supprimer</div></a>
+            </div>
+            <div class="hidden-xs hidden-sm">
+                <h4 class="page-header">Détail du loyer</h4>
+                <div class="row">
+                    <div class="col-xs-6">Loyer<a href="#" title="Hors Charges Hors Taxes">(HCHT)</a></div>
+                    <div id="property-form-summary-rent"class="col-xs-6 text-right">-</div>
+                </div>
+                <div class="row property-no-expense">
+                    <div class="col-xs-6">Charges</div>
+                    <div id="property-form-summary-expense" class="col-xs-6 text-right">-</div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-6">Loyer<a href="#" title="Charges Comprises Hors Taxes">(CCHT)</a></div>
+                    <div id="property-form-summary-totla-rentwithexpenses"class="col-xs-6 text-right">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

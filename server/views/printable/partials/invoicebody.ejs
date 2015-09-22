@@ -1,0 +1,72 @@
+<tr>
+  <th>Description</th>
+  <th>Quantité / Surface m<sup>2</sup></th>
+  <th>Prix Unitaire H.T.</th>
+  <th>Total H.T.</th>
+</tr>
+
+<%
+    occupant.properties.forEach(function(occupantProperty){
+        var property = occupantProperty.property;
+        var m2Price;
+        var m2Expense;
+%>
+	<tr class="item-row">
+	  <td class="description">
+	  	Location <%= property.name %>
+	  </td>
+	  <%
+	    if (property.surface) {
+	        m2Price = property.price / property.surface;
+	  %>
+		  <td class="txtAlignRight"><%= property.surface.toFixed(2) %></td>
+		  <td class="txtAlignRight"><%= m2Price.toFixed(2) %></td>
+	  <% } else { %>
+		  <td class="txtAlignRight">1</td>
+		  <td class="txtAlignRight"><%= property.price.toFixed(2) %></td>
+	  <% } %>
+	  <td class="txtAlignRight"><%= property.price.toFixed(2) %></td>
+	</tr>
+
+	<% if (property.expense) { %>
+		<tr class="item-row">
+		  <td class="description">
+		  	Provision sur charges
+		  </td>
+		  <%
+		    if (property.surface) {
+		        m2Expense = property.expense / property.surface;
+		  %>
+		      <td class="txtAlignRight"><%= property.surface.toFixed(2) %></td>
+		      <td class="txtAlignRight"><%= m2Expense.toFixed(2) %></td>
+		  <% } else { %>
+		      <td class="txtAlignRight">1</td>
+		      <td class="txtAlignRight"><%= property.expense.toFixed(2) %></td>
+		  <% } %>
+		  <td class="txtAlignRight"><%= property.expense.toFixed(2) %></td>
+		</tr>
+	<% } %>
+<% }); %>
+
+<% if (occupant.discount > 0) { %>
+	<tr class="item-row">
+	  <td class="description">
+		Remise exceptionnelle
+	  </td>
+	  <td class="txtAlignRight">1.00</td>
+	  <td class="txtAlignRight">- <%= occupant.discount.toFixed(2) %></td>
+	  <td class="txtAlignRight">- <%= occupant.discount.toFixed(2) %></td>
+	</tr>
+<% } %>
+
+<%
+	var emptyRowCount = 9 - occupant.properties.length;
+	for (var idx=0; idx<emptyRowCount; idx++) { 
+%>
+	<tr class="item-row">
+		<td class="description">&nbsp;</td>
+		<td class="txtAlignRight">&nbsp;</td>
+		<td class="txtAlignRight">&nbsp;</td>
+		<td class="txtAlignRight">&nbsp;</td>
+	</tr>
+<% } %>

@@ -1,0 +1,100 @@
+.huge {
+    font-size: @jumbotron-font-size;
+    height: @jumbotron-font-size * 2;
+}
+.form-control[readonly="readonly"] {
+	    color: @text-color;
+	    background-color: @well-bg;
+	    border: none;
+	    box-shadow: none;
+	    cursor: default;
+	    -webkit-appearance: none;
+	    -moz-appearance: none;
+	    &::-ms-expand {
+	        display: none;
+	    }
+}
+
+form {
+    .alert {
+        display: none;
+    }
+
+    .form-btn {
+        cursor: pointer;
+    }
+
+    .form-error {
+        margin-bottom: 15px;
+        .fa {
+            color: @brand-warning;
+            font-size: 20px;
+        }
+    }
+}
+
+.form-card {
+    background-color: rgba(245,245,245,0.85);
+    max-width: 500px;
+    margin: auto;
+    margin-top: 40px;
+    .btn {
+        width: 100%;
+    }
+    p {
+        margin-top: 10px;
+    }
+    padding: 20px 50px 5px 50px;
+    box-shadow: none;
+    .form-group {
+        margin-bottom: 5px;
+        &:last-of-type {
+            margin-bottom: 15px;
+        }
+    }
+
+}
+
+body.covered-body {
+    .form-card {
+        color: @text-color;
+        a {
+            color: @text-color;
+        }
+    }
+}
+
+/* phones */
+@media (max-width: 767px) {
+    .form-card {
+        max-width: none;
+        margin-top: 10px;
+        padding-left: 10px;
+        padding-right: 10px;
+        background-color: transparent;
+        border: none;
+    }
+
+    .form-content {
+        label {
+            color: @text-color;
+        }
+        .well {
+            padding: 0px 19px;
+            margin-bottom: 0;
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+    }
+
+    body.covered-body {
+        .form-card {
+            color: #fff;
+            a {
+                color: #fff;
+            }
+        }
+    }
+}

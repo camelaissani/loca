@@ -1,0 +1,123 @@
+<div class="well">
+<form id="owner-form" class="grid-form" role="form">
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <input type="hidden" id="_id">
+
+    <h2 class="page-header">Bailleur</h2>
+    <div class="row">
+        <div class="col-xs-12 col-lg-4">
+            <label>Renseignements juridiques du loueur.</label>
+        </div>
+        <div class="col-xs-12 col-lg-8">
+            <div class="form-group">
+                <label class="control-label">Bailleur</label>
+                <select id="isCompany" class="form-control">
+                    <option value="false">Particulier</option>
+                    <option value="true">Société</option>
+                </select>
+            </div>
+            <div class="form-group company-fields">
+                <label class="control-label" for="company">Dénomination de la société</label>
+                <input type="text" id="company" class="form-control"/>
+            </div>
+            <div class="form-group company-fields">
+                <label class="control-label" for="legalForm">Forme juridique</label>
+                <input type="text" id="legalForm" class="form-control"/>
+            </div>
+            <div class="form-group company-fields">
+                <label class="control-label" for="siret">SIRET</label>
+                <input type="text" id="siret" class="form-control"/>
+            </div>
+            <div class="form-group company-fields">
+                <label class="control-label" for="capital">Capital social</label>
+                <input type="text" id="capital" class="form-control"/>
+            </div>
+            <div class="form-group company-fields">
+                <label class="control-label" for="vatNumber">N° de TVA Intracommunautaire</label>
+                <input type="text" id="vatNumber" class="form-control">
+            </div>
+            <div class="form-group">
+                <label id="manager-label" class="control-label" for="manager"></label>
+                <input type="text" id="manager" class="form-control"/>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">Adresse</h2>
+    <div class="row">
+        <div class="col-xs-12 col-lg-4">
+            <label>Adresse pour l'établissment des quittances et des avis d'échéances.</label>
+        </div>
+        <div class="col-xs-12 col-lg-8">
+            <div class="form-group">
+                <label class="control-label">Adresse</label>
+                <input type="text" id="street1" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" id="street2" class="form-control">
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label class="control-label">Code postal</label>
+                        <input type="text" id="zipCode" class="form-control">
+                    </div>        
+                </div>
+                <div class="col-xs-8">
+                    <div class="form-group">
+                        <label class="control-label">Ville</label>
+                        <input type="text" id="city" class="form-control">
+                    </div>                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">Contact</h2>
+    <div class="row">
+        <div class="col-xs-12 col-lg-4">
+            <label>Personne à contacter pour toutes démarches administratives (règlement des loyers, réclamation...).</label>
+        </div>
+        <div class="col-xs-12 col-lg-8">
+            <div class="form-group">
+                <label class="control-label">Prénom et nom</label>
+                <input type="text" id="contact" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label">Téléphone</label>
+                <input type="text" id="phone1" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Téléphone</label>
+                <input type="text" id="phone2" class="form-control">
+            </div>
+           
+            <div class="form-group">
+                <label class="control-label">E-mail</label>
+                <input type="text" id="email" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header">Établissement bancaire</h2>
+    <div class="row">
+        <div class="col-xs-12 col-lg-4">
+            <label>Banque sur laquelle les règlements seront effectués.</label>
+        </div>
+        <div class="col-xs-12 col-lg-8">
+            <div class="form-group">
+                <label class="control-label" for="vatNumber">Dénomination de la banque</label>
+                <input type="text" id="bank" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="vatNumber">IBAN</label>
+                <input type="text" id="rib" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+</form>
+</div>

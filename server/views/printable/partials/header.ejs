@@ -1,0 +1,17 @@
+<div class="logo">
+    <img src="/public/images/logo.png">
+    <h1><%= realm.company %></h1>
+    <div >
+        <%= realm.street1 %>
+        <% if (realm.street2 && realm.street2.length>0) { %>
+        <br><%= realm.street2 %>
+        <% } %>
+        <br><%= realm.zipCode %> <%= realm.city %>
+    </div>
+    <div class="contact">
+        Tél. : <%= realm.phone1 %> <%= realm.phone2?' - '+realm.phone2:'' %>
+        <% if (realm.email && realm.email.length>0) { %>
+        <br>E-mail : <%= realm.email %>
+        <% } %>
+    </div>
+</div>

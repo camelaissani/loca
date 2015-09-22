@@ -1,0 +1,102 @@
+<div class="main-mini-menu-bar">
+    <div class="container">
+        <div class="row">
+            <% if (view !== "website" && view !== "login" && view !== "signup" && view !== "selectrealm") { %>
+            <div class="col-xs-12 text-center">
+                <div class="main-mini-menu-bar-title" data-id="dashboard"><i class="fa fa-tachometer"></i> Tableau de bord</div>
+                <div class="main-mini-menu-bar-title" data-id="rent"><i class="fa fa-money"></i> Loyers</div>
+                <div class="main-mini-menu-bar-title" data-id="occupant"><i class="fa fa-group"></i> Locataires</div>
+                <div class="main-mini-menu-bar-title" data-id="property"><i class="fa fa-key"></i> Biens</div>
+                <div class="main-mini-menu-bar-title" data-id="owner"><i class="fa fa-user"></i> Bailleur</div>
+            </div>
+            <% } else if (view !== "selectrealm") { %>
+            <div class="col-xs-12">
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <div class="main-mini-menu-bar-brand">
+                            <a href="/"><%=webSiteInfo.product.name%></a>
+                        </div>
+                    </div>
+                    <% if (view !== "login") { %>
+                    <a class="pull-right btn btn-primary" href="/login" role="button"><i class="fa fa-sign-in"></i> Se connecter</a>
+                    <% } %>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% if (view !== "website" && view !== "login" && view !== "signup") { %>
+<a href="#" title="Menu principal" class="main-menu-button" data-id="show-main-card"><i class="fa fa-bars"></i></a>
+<% } %>
+<% if (account) { %>
+    <div class="main-menu-card">
+        <h2 class="page-header"><%=webSiteInfo.product.name%></h2>
+        <ul class="nav">
+        <% if (account.realm && view!== "selectrealm") { %>
+            <li><a href="#" class="nav-action" data-id="dashboard"><i class="fa fa-tachometer"></i> Tableau de bord</a></li>
+            <li><a href="#" class="nav-action" data-id="rent"><i class="fa fa-money"></i> Loyers</a></li>
+            <li><a href="#" class="nav-action" data-id="occupant"><i class="fa fa-group"></i> Locataires</a></li>
+            <li><a href="#" class="nav-action" data-id="property"><i class="fa fa-key"></i> Biens</a></li>
+            <li><a href="#" class="nav-action" data-id="owner"><i class="fa fa-user"></i> Bailleur</a></li>
+            <li><a href="/selectrealm"><i class="fa fa-building-o"></i> Organisation</a></li>
+        <% } %>
+            <li><a href="/logout" class=""><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+        </ul>
+    </div>
+<% } %>
+<div class="main-menu-bar">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" title="<%=webSiteInfo.product.slogan%>"><%=webSiteInfo.product.name%></a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <% if (account) { %>
+                    <% if (account.realm && view!== "selectrealm") { %>
+    			<ul class="nav navbar-nav">
+                    <li><a class="nav-action" data-id="dashboard" href="#"><i class="fa fa-tachometer"></i> Tableau de bord</a></li>
+    				<li><a class="nav-action" data-id="rent" href="#"><i class="fa fa-money"></i> Loyers</a></li>
+    				<li><a class="nav-action" data-id="occupant" href="#"><i class="fa fa-group"></i> Locataires</a></li>
+    				<li><a class="nav-action" data-id="property" href="#"><i class="fa fa-key"></i> Biens</a></li>
+    				<li><a class="nav-action" data-id="owner" href="#"><i class="fa fa-user"></i> Bailleur</a></li>
+    			</ul>
+                    <% } %>
+    			<ul class="nav navbar-nav navbar-right">
+    				<li class="dropdown">
+                        <% if (account.realm && account.realms.length>1) { %>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %> @<%= account.realm.name %> <span class="caret"></span></a>
+                        <% } else { %>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %><span class="caret"></span></a>
+                        <% } %>
+                        <ul class="dropdown-menu" role="menu">
+                        <% if (view!== "selectrealm" && account.realms) { %>
+                            <% if (account.realms.length>1) { %>
+                                <% for (index=0; index<account.realms.length; index++) { %>
+                                    <li>
+                                        <a href="#" class='realm-action' data-id="<%=account.realms[index]._id%>"><i class="fa fa-building-o"></i> <%= account.realms[index].name %> </a>
+                                    </li>
+                                <% } %>
+                            <% } %>
+                            <!--li><a href="/selectrealm"><i class="fa fa-plus"></i> Nouvelle organisation</a></li>
+                            <li role="separator" class="divider"></li-->
+                        <% } %>
+                            <li><a href="/logout"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
+                        </ul>
+                    </li>
+    			</ul>
+                <% } else if (view !== "login") { %>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/logout"><i class="fa fa-sign-in"></i> Se connecter</a></li>
+                    </ul>
+                <% } %>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+</div>

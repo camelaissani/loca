@@ -1,0 +1,27 @@
+ <tr>
+  <td colspan="1" class="blank"> </td>
+  <td colspan="2" class="total-line">Sous total H.T.</td>
+  <td class="total-value"><div class="subtotal"><%= occupant.rent.totalWithoutVatAmount.toFixed(2) %> €</div></td>
+</tr>
+<tr>
+  <td colspan="1" class="blank"> </td>
+  <td colspan="2" class="total-line">TVA <%= (occupant.rent.vatRatio*100).toFixed(2) %> %</td>
+  <td class="total-value"><div class="subtotal"><%= occupant.rent.vatAmount.toFixed(2) %> €</div></td>
+</tr>
+<tr>
+  <td colspan="1" class="blank"> </td>
+  <td colspan="2" class="total-line">Solde antérieur</td>
+  <td class="total-value"><div class="subtotal"><%= occupant.rent.balance.toFixed(2) %> €</div></td>
+</tr>
+<% if (occupant.rent.promo > 0) { %>
+<tr>
+  <td colspan="1" class="blank"> </td>
+  <td colspan="2" class="total-line"><%= occupant.rent.notepromo?occupant.rent.notepromo:"Autre remise" %></td>
+  <td class="total-value"><div class="subtotal"><%= (-1*occupant.rent.promo).toFixed(2) %> €</div></td>
+</tr>
+<% } %>
+<tr>
+  <td colspan="1" class="blank"> </td>
+  <td colspan="2" class="total-line">Total T.T.C.</td>
+  <td class="total-value"><div class="total"><%= occupant.rent.totalAmount>0?occupant.rent.totalAmount.toFixed(2):Number(0).toFixed(2) %> €</div></td>
+</tr>

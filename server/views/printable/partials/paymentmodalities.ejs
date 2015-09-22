@@ -1,0 +1,20 @@
+<div class="paymentinfo">
+	<strong>MODALITES DE PAIEMENT</strong>
+	<br> &nbsp;
+	<br><u>Par chèque bancaire ou postal</u>
+	<br>Etablissez votre chèque à l'ordre de la <%= realm.legalForm+' '+realm.company %> et à envoyer à l'adresse suivante :
+	<br><%= realm.street1 %>
+    <% if (realm.street2 && realm.street2.length>0) { %>
+    <br><%= realm.street2 %>
+    <% } %>
+    <br><%= realm.zipCode %> <%= realm.city %>
+	<br> &nbsp;
+­			<br><u>Par virement bancaire</u>
+		<br>Nos coordonnées bancaires
+		<br><%= realm.bank %> IBAN : <%= realm.rib %>
+	<br> &nbsp;
+	<br><u>Par espèce</u>
+	<br>Contactez <%= realm.contact %>
+	<br>Par téléphone au <%= realm.phone1 %> <%= realm.phone2?' ou au '+realm.phone2:'' %>
+	<br>Par E-mail <%= realm.email %>
+</div>

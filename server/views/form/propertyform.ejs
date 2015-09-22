@@ -1,0 +1,84 @@
+<div class="well">
+    <form id='property-form' role="form">
+        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+        <input type="hidden" id="_id"/>
+            <h2 id="propertyNameLabel" class="page-header">Bien à louer</h2>
+            <div class="row">
+                <div class="col-xs-12 col-lg-4">
+                    <label>Décrire le bien proposé à la location.</label>
+                </div>
+                <div class="col-xs-12 col-lg-8">
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select id="type" class="form-control">
+                            <option value="office">Local</option>
+                            <option value="parking">Parking</option>
+                            <option value="letterbox">Boîte aux lettres</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Libellé</label>
+                        <input type="text" id="name" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="property-no-expense row">
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group">
+                                <label>Surface m<sup>2</sup></label>
+                                <input type="text" id="surface" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-lg-6">
+                            <div class="form-group">
+                                <label>Ligne téléphonique</label>
+                                <input type="text" id="phone" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="page-header">Emplacement</h2>
+            <div class="row">
+                <div class="col-xs-12 col-lg-4">
+                    <label>Lieu où se trouve le bien.</label>
+                </div>
+                <div class="col-xs-12 col-lg-8">
+                    <div class="property-no-expense form-group">
+                        <label>Batîment</label>
+                        <input type="text" id="building" class="form-control"/>
+                    </div>
+                    <div class="property-no-expense form-group">
+                        <label>Etage</label>
+                        <input type="text" id="level" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Emplacement / Adresse</label>
+                        <textarea id="location" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="page-header">Loyer</h2>
+            <div class="row">
+                <div class="col-xs-12 col-lg-4">
+                    <label>Indiquer le loyer mensuel hors charge, ainsi que le montant des charges à payer par mois.</label>
+                </div>
+                <div class="col-xs-12 col-lg-8">
+                    <div class="form-group">
+                        <label>Montant du loyer mensuel hors charge hors taxe</label>
+                        <input type="text" id="price" class="form-control"/>
+                    </div>
+                    <div class="property-no-expense form-group">
+                        <label>Montant des charges mensuelles hors taxe</label>
+                        <input type="text" id="expense" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+                
+        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    </form>
+</div>

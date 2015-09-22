@@ -1,0 +1,179 @@
+<div id='view-occupant' class='view'>
+    <div class="center-container">
+        <div class="filterbar">
+            <ul class="nav nav-pills">
+                <li role="presentation">
+                    <button type="button" class="btn btn-default user-action" data-id="list-action-add-occupant" data-toggle="tooltip" data-placement="bottom" title="Ajouter un locataire"><i class="fa fa-plus-circle"></i> Nouveau</button>
+                </li>
+                <li class="dropdown" role="presentation">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label">Tous (<span class="all-filter-label"></span>)</span> <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" class="user-action" data-id="list-filter">Tous (<span class="all-filter-label"></span>)</a></li>
+                        <li><a href="#" class="user-action active" data-id="list-filter" data-value="Contrat en cours">En contrat (<span class="all-active-filter-label"></span>)</a></li>
+                        <li><a href="#" class="user-action" data-id="list-filter" data-value="Contrat résilié">Resiliés (<span class="all-inactive-filter-label"></span>)</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="occupants" class="list">
+            <!-- HANDLEBAR TEMPLATES -->
+            <script id="list-row-template" type="text/x-handlebars-template">
+                <div id="{{_id}}" class="list-row">
+                    <div class="list-col">
+                        <div class="clearfix">
+                            <div class="list-avatar-col pull-left">
+                                {{#if isCompany}}
+                                    <i class="fa fa-group fa-2x"></i>
+                                {{else}}
+                                    <i class="fa fa-user fa-2x"></i>
+                                {{/if}}
+                            </div>
+                            <div class="list-title list-value pull-left">
+                                {{name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-col">
+                        <div>
+                            {{#if terminationDate}}<span class="list-value notpaid">Contrat résilié</span>{{else}}<span class="list-value paid">Contrat en cours</span>{{/if}}
+                        </div>
+                        <div>
+                            {{#if terminationDate}}
+                                {{beginDate}} au {{terminationDate}}
+                            {{else}}
+                                {{beginDate}} au {{endDate}}
+                            {{/if}}
+                        </div>
+                        {{#each properties}}
+                            <div>{{Image property.type}} {{property.name}}</div>
+                        {{/each}}
+                    </div>
+                    <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+                </div>
+            </script>
+
+            <script id="list-content-template" type="text/x-handlebars-template">
+                {{#each rows}}
+                    {{> list-row-template}}
+                {{/each}}
+            </script>
+            <!-- /HANDLEBAR TEMPLATES -->
+
+            <div class="form-content">
+                <div data-id="occupant-form" class="sheet">
+                    <div class="list-form-view">
+                        <% include form/occupantform.ejs %>
+                    </div>
+                </div>
+
+                <div data-id="contract-documents-form" class="sheet">
+                    <div class="list-form-view">
+                        <% include form/contractdocumentsform.ejs %>
+                    </div>
+                </div>
+
+                <div data-id="rents-history" class="sheet">
+                    <div class="list-form-view">
+                        <% include rentshistory.ejs %>
+                    </div>
+                </div>
+
+                <div data-id="print-doc-selector" class="sheet">
+                    <div class="list-form-view">
+                        <div class="list-group">
+                            <a id="printcontract" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Contrat de bail</h4>
+                                <p class="list-group-item-text">Contrat commercial 3/6/9 ans</p>
+                            </a>
+                            <a id="printcustomcontract" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Contrat de bail précaire</h4>
+                                <p class="list-group-item-text">Contrat commercial durée maximum 2 ans</p>
+                            </a>
+                            <a id="printdomcontract" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Contrat de domiciliation</h4>
+                                <p class="list-group-item-text">Contrat de domiciliation (location de boîte aux lettres)</p>
+                            </a>
+                            <a id="printofficechecklist" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Etat des lieux</h4>
+                                <p class="list-group-item-text">Formulaire d'état des lieux à imprimer et à remplir lors de la remise des clés au locataire</p>
+                            </a>
+                            <a id="printguarantycertificate" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Attestation dépot de garantie</h4>
+                                <p class="list-group-item-text">Courrier certifiant le bon règlement du dépot de garantie (à remettre après encaissement)</p>
+                            </a>
+                            <a id="printguarantyrequest" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> Demande de dépot de garantie</h4>
+                                <p class="list-group-item-text">Demande par courrier du règlement du dépot de garantie</p>
+                            </a>
+                            <a id="printinsurancerequest" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> Demande d'attestation d'assurance</h4>
+                                <p class="list-group-item-text">Demande par courrier d'une attestation d'assurance à jour</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="list-content-selection-label">Locataire(s)</h4>
+            <div class="list-content"></div>
+        </div>
+    </div><div class="right-container">
+        <!-- HANDLEBAR TEMPLATE -->
+        <script id="occupants-selected-template" type="text/x-handlebars-template">
+            {{#each rows}}
+                <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item clearfix user-action">
+                    <div class="pull-left">{{name}}</div>
+                    <div class="pull-right fa fa-times text-right"></div>
+                </div>
+            {{/each}}
+        </script>
+        <!-- /HANDLEBAR TEMPLATE -->
+        <div class="well menu-card" data-id="occupants-selection-menu">
+            <div class="list-group">
+                <a href="#" class="list-group-item btn-default user-action cancel-selection"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler la séléction</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-edit-occupant" class="list-group-item user-action only-mono-selection"><i class="fa fa-pencil-square-o"></i><span class="hidden-xs hidden-sm"> Editer le contrat</span><div class="visible-xs visible-sm"> Contrat</div></a>
+                <a href="#" data-id="list-action-manage-documents" class="list-group-item user-action only-mono-selection"><i class="fa fa-folder-o"></i><span class="hidden-xs hidden-sm"> Gérer les documents</span><div class="visible-xs visible-sm"> Documents</div></a>
+                <a href="#" data-id="list-action-rents-history" class="list-group-item user-action only-mono-selection"><i class="fa fa-history"></i><span class="hidden-xs hidden-sm"> Échéancier des loyers</span><div class="visible-xs visible-sm"> Échéancier</div></a>
+                <a href="#" data-id="list-action-print" class="list-group-item user-action hidden-xs hidden-sm"><i class="fa fa-print"></i><span class="hidden-xs hidden-sm"> Imprimer un document</span></a>
+            </div>
+            <h4 class="hidden-xs hidden-sm page-header list-selection-menu-label"></h4>
+            <div class="hidden-xs hidden-sm list-selected-elements list-group list-group-selection"></div>
+        </div>
+        <div class="well menu-card" data-id="occupant-form-menu" data-target="#occupant-form">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-save-form" type="button" class="list-group-item user-action"><i class="fa fa-save"></i><span class="hidden-xs hidden-sm">  Enregistrer</span><div class="visible-xs visible-sm"> Enregistrer</div></a>
+                <a href="#" data-id="list-action-remove-occupant" class="list-group-item list-group-item-danger user-action"><i class="fa fa-trash"></i><span class="hidden-xs hidden-sm"> Supprimer</span><div class="visible-xs visible-sm"> Supprimer</div></a>
+            </div>
+            <div class="hidden-xs hidden-sm">
+                <h4 class="page-header">Détail du loyer</h4>
+                <div class="row"><div class="col-xs-6">Caution</div><div id="occupant-form-summary-guaranty" class="col-xs-6 text-right">-</div></div>
+                <br>
+                <div class="row"><div class="col-xs-6">Biens<a href="#" title="Charges Comprises Hors Taxe">(CCHT)</a></div><div id="occupant-form-summary-rentwithexpenses" class="col-xs-6 text-right">-</div></div>
+                <div class="row"><div class="col-xs-6">Remise<a href="#" title="Hors Taxe">(HT)</a></div><div id="occupant-form-summary-discount" class="col-xs-6 text-right">-</div></div>
+                <br class="occupant-form-vat-row">
+                <div class="occupant-form-vat-row row"><div class="col-xs-6">Loyer<a href="#" title="Charges Comprises Hors Taxe">(CCHT)</a></div><div id="occupant-form-summary-total-rentwithexpenses"class="col-xs-6 text-right">-</div></div>
+                <div class="occupant-form-vat-row row"><div class="col-xs-6">TVA</div><div id="occupant-form-summary-vat" class="col-xs-6 text-right">-</div></div>
+                <br>
+                <div class="row"><div class="col-xs-6">Loyer<a href="#" title="Charges Comprises Toutes Taxes Comprises">(CCTTC)</a></div><div id="occupant-form-summary-totla-rentwithexpensesandvat"class="col-xs-6 text-right">-</div></div>
+            </div>
+        </div>
+        <div class="well menu-card" data-id="contract-documents-form-menu" data-target="#contract-documents-form">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-save-contract-documents" type="button" class="list-group-item user-action"><i class="fa fa-save"></i><span class="hidden-xs hidden-sm">  Enregistrer</span><div class="visible-xs visible-sm"> Enregistrer</div></a>
+            </div>
+        </div>
+        <div class="well menu-card"  data-id="rents-history-menu" data-target="#rents-history">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+            </div>
+         </div>
+         <div class="well menu-card"  data-id="print-doc-selector-menu" data-target="#print-doc-selector">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+            </div>
+            <h4 class="hidden-xs hidden-sm page-header list-selection-menu-label"></h4>
+            <div class="hidden-xs hidden-sm list-selected-elements fixed list-group"></div>
+         </div>
+    </div>
+</div>

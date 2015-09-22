@@ -1,0 +1,9 @@
+<div class="customer">
+	<h3><%= occupant.name %></h3>
+	<%= (occupant.name != occupant.manager)?occupant.manager:'' %>
+	<br><%= occupant.street1 %>
+	<% if (occupant.street2 && occupant.street2.length>0) { %>
+    <br><%= occupant.street2 %>
+    <% } %>
+	<br><%= occupant.zipCode %> <%= occupant.city %>
+</div>

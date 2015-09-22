@@ -1,0 +1,20 @@
+<div class="reference">
+    <table>
+    	<tr>
+            <td class="label">Date d'entrée</td>
+            <td><%= occupant.beginDate %></td>
+        </tr>
+        <tr>
+            <td class="label">Référence facture</td>
+            <td><%= occupant.reference %></td>
+        </tr>
+        <tr>
+            <td class="label">Période de location</td>
+            <td><%= months[month-1] + " " + year %></td>
+        </tr>
+        <tr>
+            <td class="label">Numéro de TVA intra.</td>
+            <td><%= realm.vatNumber %></td>
+        </tr>
+    </table>
+</div>

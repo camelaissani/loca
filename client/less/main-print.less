@@ -1,0 +1,368 @@
+@logo-font-size: 18pt;
+@default-font-size: 10pt;
+@normal-font-size: 11.5pt;
+@large-font-size: 14pt;
+@xlarge-font-size: 15.5pt;
+@small-font-size: 9pt;
+@xsmall-font-size: 8pt;
+
+@margin: 10mm;
+@thin-border: 1pt solid #555;
+@border: 2pt solid #555;
+@large-border: 2.8pt solid #555;
+
+body {
+    margin: 0;
+    padding: 0;
+    font: @default-font-size "Tahoma";
+}
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+}
+table {
+    border: none;
+    border-collapse: collapse;
+}
+
+span,
+span:focus,
+span:active{
+    border: 2px solid #ccc;
+    outline: none;
+    padding: 2px;
+    background-color: #FFFFE0;
+}
+span.error {
+    border: 2px solid red;
+}
+.page {
+    position: relative;
+    width: 210mm;
+    height: 296mm;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+}
+
+.logo {
+    position: absolute;
+    top: @margin;
+    left: @margin;
+    h1 {
+        display: inline-block;
+        font-size: @logo-font-size;
+        color: #330066;
+    }
+    img {
+        display: inline-block;
+    }
+}
+.contact {
+    border-top : @border;
+    margin: 2pt 0 0 0;
+    padding: 5pt 0 0 0;
+}
+.customer {
+    position: absolute;
+    top: @margin + 35mm;
+    left: @margin + 95mm;
+
+    h3{
+        margin-bottom: 5pt;
+    }
+}
+
+.object {
+    position: absolute;
+    top: @margin + 95mm;
+    left: @margin;
+}
+
+.certificate .object {
+    position: absolute;
+    top: @margin + 95mm;
+    left: @margin;
+    right: @margin;
+    padding: 5pt;
+    border: @border;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: @xlarge-font-size;
+    font-weight: bold;
+}
+
+.contract {
+    .object {
+        position: absolute;
+        top: @margin + 65mm;
+        left: @margin;
+        right: @margin;
+        padding: 15pt;
+        border: @border;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: @xlarge-font-size;
+        font-weight: bold;
+        background-color: #ccc;
+        small {
+            font-weight: normal;
+            text-transform: none;
+            font-style: italic;
+        }
+    }
+
+    .items {
+        top: @margin;
+        font-size: @normal-font-size;
+        line-height: @default-font-size + 5;
+        table {
+            border: @thin-border;
+            th {
+                vertical-align: middle;
+            }
+            td {
+                vertical-align: middle;
+            }
+            tr {
+                   border: none;
+            }
+        }
+        small {
+            font-size: @xsmall-font-size;
+        }
+    }
+
+    &:first-child .items {
+        top: @margin + 90mm;
+    }
+
+    .footer {
+        font-size: @xsmall-font-size;
+    }
+
+}
+
+.title {
+    position: absolute;
+
+    top: @margin + 84.7mm;
+    left: @margin + 95mm;
+
+    color: #333;
+    font-weight: bold;
+    font-size: @large-font-size;
+    text-transform:uppercase;
+    letter-spacing: 2pt;
+
+    .invoice {
+        top: @margin + 90mm;
+    }
+}
+
+.limit {
+    position: absolute;
+
+    top: @margin + 105mm;
+    left: @margin;
+}
+
+.paymentinfo {
+    position: absolute;
+
+    top: @margin + 205mm;
+    left: @margin;
+    font-size: @small-font-size;
+}
+
+.footer {
+    position: absolute;
+    bottom: @margin;
+    left: @margin;
+    right: @margin;
+}
+
+.txtAlignRight, .subtotal,.total, .due {
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+.reference {
+    position: absolute;
+    top: @margin + 75mm;
+    left: @margin;
+
+    table {
+        width: 200pt;
+        font-size: @small-font-size;
+    }
+
+    td {
+        padding: 2pt;
+        text-align: right;
+    }
+
+    td.label {
+        text-align: left;
+        font-size: @small-font-size;
+    }
+    table td, table th {
+
+    padding: 2pt;
+    margin: 0;
+}
+}
+
+.today {
+    position: absolute;
+
+    top: @margin + 75mm;
+    left: @margin + 95mm;
+    font: @default-font-size "Tahoma";
+    text-align: left;
+}
+
+
+.items {
+    position: absolute;
+    top: @margin + 115mm;
+    left: @margin;
+    width: 210mm - 2*@margin;
+
+    table {
+        //border: @thin-border;
+        border-top: @thin-border;
+        border-bottom: @thin-border;
+        width: 100%;
+    }
+
+    th {
+        border-right: @thin-border;
+        border-bottom: @thin-border;
+    }
+
+    th:first-child {
+//        border-right: none;
+        border-left: @thin-border;
+    }
+
+    td {
+        padding-right: 10pt;
+        border-right: @thin-border;
+        vertical-align: top;
+    }
+
+    td:first-child {
+        //border-right: none;
+         border-left: @thin-border;
+    }
+
+    td.description {
+        width: 220pt;
+        padding-left:10pt;
+    }
+
+    td.total-line {
+        border-right: none;
+        text-align: left;
+        padding-left:10pt;
+        border-left: @thin-border;
+        border-top: @thin-border;
+    }
+
+    td.total-value {
+        border-left: none;
+        border-top: @thin-border;
+    }
+
+    td.balance {  }
+
+    td.blank:last-child {
+      //  border: none;
+      border-bottom: @thin-border;
+    }
+}
+
+.certificate .items {
+    font-size: @large-font-size;
+    line-height: @large-font-size + 12;
+}
+
+.certificate .signature {
+    font-size: @default-font-size;
+    line-height: normal;
+}
+
+.rubber-stamp {
+    position: absolute;
+    top: @margin + 55mm;
+    left: @margin + 10mm;
+    font-size: @xlarge-font-size;
+    font-weight: bold;
+    text-align: center;
+
+    border-radius: 10pt;
+    border: @large-border;
+    padding: 5pt;
+
+    font-family: 'Vollkorn', serif;
+    text-transform: uppercase;
+    transform:rotate(-20deg);
+    -ms-transform:rotate(-20deg);
+    -ms-transform-origin: bottom left;
+    -moz-transform: rotate(-20deg);
+    -moz-transform-origin: bottom left;
+    -webkit-transform: rotate(-20deg);
+    -webkit-transform-origin: bottom left;
+    -o-transform: rotate(-20deg);
+    -o-transform-origin: bottom left;
+}
+
+.printbutton {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #ccc;
+    text-align: center;
+
+    button {
+        height: 35px;
+        text-transform: uppercase;
+        font-size: 20px;
+    }
+}
+
+.red {
+    color: #d00;
+    border-color: #d00;
+}
+
+.text-right {
+    text-align: right;
+}
+
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+@media print {
+    span,
+    span:focus,
+    span:active{
+        border: none;
+        padding: 0;
+        background-color: transparent;
+    }
+    .page {
+        border: none;
+    }
+    .printbutton {
+        display: none;
+    }
+}

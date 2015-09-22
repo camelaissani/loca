@@ -1,0 +1,29 @@
+
+<form id="signup-form" role="form" action="/signedin" method='post'>
+    <div class="form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <div class="form-group">
+        <label class="control-label">Prénom</label>
+        <input type="text" class="form-control" placeholder="Prénom" id="firstname" name="firstname">
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Nom</label>
+        <input type="text" class="form-control" placeholder="Nom" id="lastname" name="lastname">
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">E-mail</label>
+        <input type="email" class="form-control" placeholder="Votre adresse e-mail" id="email" name="email">
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Mot de passe</label>
+        <input type="password" class="form-control" placeholder="Votre mot de passe" id="password" name="password">
+    </div>
+</form>
+
+<div class="text-center">
+    <small>En cliquant sur S’inscrire, vous acceptez les <a href="/public/pdf/cgu.pdf">conditions d’utilisation</a></small>
+    <button id="signup-send" type="button" class="btn btn-primary">S'inscrire</button>
+    <p>Vous avez déjà un compte ? <a href="/login">Connectez-vous</a></p>
+</div>

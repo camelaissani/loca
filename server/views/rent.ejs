@@ -1,0 +1,201 @@
+<div id='view-rent' class='view'>
+    <div class="center-container">
+        <!-- HANDLEBAR TEMPLATES -->
+        <script id="month-selector-template" type="text/x-handlebars-template">
+            {{#each monthes}}
+            <li><a href="#" class="user-action" data-id="monthselector" data-value="{{monthNumber}}">{{monthLabel}}</a></li>
+            {{/each}}
+        </script>
+        <script id="year-selector-template" type="text/x-handlebars-template">
+            {{#each years}}
+            <li><a href="#" class="user-action" data-id="yearselector" data-value="{{.}}">{{.}}</a></li>
+            {{/each}}
+        </script>
+        <!-- /HANDLEBAR TEMPLATES -->
+        <div class="filterbar row">
+            <div class="col-xs-12 col-sm-6">
+                <ul class="nav nav-pills">
+                    <li id="month-selector-dropdown" class="dropdown" role="presentation">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="month-selector-selection-label"></span> <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu"></ul>
+                    </li>
+                    <li id="year-selector-dropdown" class="dropdown" role="presentation">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="year-selector-selection-label"></span> <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu"></ul>
+                    </li>
+                    <li class="dropdown" role="presentation">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label">Tous (<span class="all-filter-label"></span>)</span> <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#" class="user-action" data-id="list-filter">Tous (<span class="all-filter-label"></span>)</a></li>
+                            <li><a href="#" class="user-action" data-id="list-filter" data-value="Payé">Payés (<span class="paid-filter-label"></span>)</a></li>
+                            <!--<li><a href="#" class="user-action" data-id="list-filter" data-value="Paiement partiel">Partiellement payés (<span class="partially-paid-filter-label"></span>)</a></li>-->
+                            <li><a href="#" class="user-action" data-id="list-filter" data-value="Impayé">Impayés (<span class="not-paid-filter-label"></span>)</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-6 hidden-xs text-right filterbar-info">
+                Réglés : <span class="total-paid txthighlight"></span> - A régler : <span class="total-topay"></span>
+            </div>
+            <div class="col-xs-12 visible-xs text-center filterbar-info">
+                Réglés : <span class="total-paid txthighlight"></span> - A régler : <span class="total-topay"></span>
+            </div>
+        </div>
+
+        <div id="rents" class="list">
+            <!-- HANDLEBAR TEMPLATES -->
+            <script id="list-row-template" type="text/x-handlebars-template">
+                <div id="{{_id}}" class="list-row">
+                    <div class="list-col">
+                        <div class="clearfix">
+                            <div class="pull-left list-avatar-col">
+                                {{Image occupant.properties.0.property.type cssClass='fa-3x'}}
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-calendar-o fa-stack-1x"></i>
+                                    <strong class="fa-stack-1x icon-text">&euro;</strong>
+                                </span>
+                            </div>
+                            <div class="pull-left">
+                                <div class="list-title list-value">{{occupant.name}}</div>
+                                {{#if status}}
+                                <small class="{{status}} list-value">
+                                    {{paymentStatus}}{{#if countMonthNotPaid}} ({{countMonthNotPaid}} mois){{/if}}
+                                </small>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-col">
+                        <div class="list-label clearfix">
+                            <small class="pull-right hidden-xs">Règlement</small>
+                        </div>
+                        <div class="list-payment-price text-right">
+                            <span>{{formatMoney payment withOdometer='payment'}}</span>
+                        </div>
+                        <div class="clearfix">
+                            <small>
+                            <div class="pull-left">Solde :</div>
+                            <div class="list-balance-price pull-right text-right">
+                                {{formatMoney newBalance withOdometer='newBalance'}}
+                            </div>
+                            </small>
+                        </div>
+
+                        <div data-toggle="tooltip" data-placement="right" class="hidden-xs list-comment-link" data-html="true" title="{{breaklines description}}" style="{{commentVisible description}}"><span class="glyphicon glyphicon-comment"></span></div>
+                    </div>
+                    <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+                </div>
+            </script>
+
+            <script id="list-content-template" type="text/x-handlebars-template">
+                {{#each rows}}
+                    {{> list-row-template}}
+                {{/each}}
+            </script>
+            <!-- /HANDLEBAR TEMPLATES -->
+
+            <div class="form-content">
+                <div data-id="pay-rent-form" class="sheet">
+                    <div class="list-form-view">
+                        <% include form/paymentform.ejs %>
+                    </div>
+                </div>
+
+                <div data-id="rents-history" class="sheet">
+                    <div class="list-form-view">
+                        <% include rentshistory.ejs %>
+                    </div>
+                </div>
+
+                <div data-id="print-doc-selector" class="sheet">
+                    <div class="list-form-view">
+                        <div class="list-group">
+                            <a id="rentcall" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Avis d'échéance</h4>
+                                <p class="list-group-item-text">Simple demande de paiement de loyer</p>
+                            </a>
+                            <a id="recovery1" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-bell-o"></i> Avis d'échéance - 1er rappel</h4>
+                                <p class="list-group-item-text">Première relance de l'avis d'échéance avec tampon "LOYER IMPAYE"</p>
+                            </a>
+                            <a id="recovery2" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-bullhorn"></i> Avis d'échéance - 2ème rappel</h4>
+                                <p class="list-group-item-text">Deuxième relance de l'avis d'échéance avec tampon "AVANT HUISSIER"</p>
+                            </a>
+                            <a id="recovery3" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> Courrier locataire loyer impayé - Dernier rappel</h4>
+                                <p class="list-group-item-text">Courrier adressé au locataire pour demande de règlement de loyer impayé sous peine d'expulsion</p>
+                            </a>
+                            <a id="paymentorder" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-gavel"></i> Courrier huissier loyer impayé</h4>
+                                <p class="list-group-item-text">Courrier adressé à huissier de justice pour demande de commandement de payer</p>
+                            </a>
+                            <a id="printinvoices" href="#" class="list-group-item">
+                                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Quittance</h4>
+                                <p class="list-group-item-text">Facture attestant le bon règlement du loyer</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- /.form-content -->
+            <h4 class="list-content-selection-label">Loyer(s)</h4>
+            <div class="list-content"></div>
+        </div>
+    </div>
+    <div class="right-container">
+        <!-- HANDLEBAR TEMPLATE -->
+        <script id="rents-selected-template" type="text/x-handlebars-template">
+            {{#each rows}}
+                <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item user-action">
+                    <div class="clearfix">
+
+                        <div class="pull-left">
+                            <h4 class="">{{occupant.name}}</h4>
+                            <small class="{{status}}">{{paymentStatus}}{{#if countMonthNotPaid}} ({{countMonthNotPaid}} mois){{/if}}</small>
+                        </div>
+                        <div class="pull-right">
+                            <i class="fa fa-times"></i>
+                        </div>
+                        <div class="pull-right">
+                            <h3>{{formatMoney totalToPay hideCurrency=false}}</h3>
+                        </div>
+                    </div>
+                </a>
+            {{/each}}
+        </script>
+        <!-- /HANDLEBAR TEMPLATE -->
+        <div class="menu-card well" data-id="rents-selection-menu">
+            <div class="list-group">
+                <a href="#" class="list-group-item btn-default user-action cancel-selection"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler la séléction</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-pay-rent" class="list-group-item user-action only-mono-selection"><i class="fa fa-credit-card"></i><span class="hidden-xs hidden-sm"> Règlement</span><div class="visible-xs visible-sm"> Règlement</div></a>
+                <a href="#" data-id="list-action-rents-history" class="list-group-item user-action only-mono-selection"><i class="fa fa-history"></i><span class="hidden-xs hidden-sm"> Échéancier des loyers</span><div class="visible-xs visible-sm"> Échéancier</div></a>
+                <a href="#" data-id="list-action-print" class="list-group-item user-action hidden-xs hidden-sm"><i class="fa fa-print"></i><span class="hidden-xs hidden-sm"> Imprimer un document</span></a>
+            </div>
+            <h4 class="page-header hidden-xs hidden-sm list-selection-menu-label"></h4>
+            <div class="list-selected-elements list-group list-group-selection hidden-xs hidden-sm"></div>
+        </div>
+
+         <div class="menu-card well" data-id="pay-rent-form-menu" data-target="#pay-rent-form">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+                <a href="#" data-id="list-action-save-form" type="button" class="list-group-item user-action"><i class="fa fa-save"></i><span class="hidden-xs hidden-sm"> Enregistrer</span><div class="visible-xs visible-sm"> Enregistrer</div></a>
+            </div>
+            <h4 class="page-header hidden-xs hidden-sm list-selection-menu-label"></h4>
+            <div class="list-selected-elements fixed list-group hidden-xs hidden-sm"></div>
+         </div>
+
+         <div class="menu-card well"  data-id="rents-history-menu" data-target="#rents-history">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+            </div>
+         </div>
+
+         <div class="menu-card well"  data-id="print-doc-selector-menu" data-target="#print-doc-selector">
+            <div class="list-group">
+                <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs hidden-sm"> Annuler</span><div class="visible-xs visible-sm"> Annuler</div></a>
+            </div>
+            <h4 class="title-card hidden-xs hidden-sm list-selection-menu-label"></h4>
+            <div class="list-selected-elements fixed list-group hidden-xs hidden-sm"></div>
+         </div>
+    </div>
+</div>
