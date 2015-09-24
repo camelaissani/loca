@@ -1,6 +1,6 @@
 Loca
 ====
-Open source real estate management
+![Loca](http://www.nuageprive.fr/images/loca-sample.png "Open source real estate management")
 
 ## What's Loca?
 
