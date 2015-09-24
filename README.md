@@ -4,7 +4,7 @@ Loca
 
 ## What's Loca?
 
-This nodejs project is a tentative of web application to offer a toolkit for owners of buildings, flats, offices, meeting rooms, car parks, letter boxes...
+This nodejs project is a tentative of web application that offers a toolkit for owners of buildings, flats, offices, meeting rooms, car parks, letter boxes...
 
 The idea is to make easy the management of properties and occupants by proposing many services:
  - Gather all information of your properties and occupants in one place
@@ -13,6 +13,8 @@ The idea is to make easy the management of properties and occupants by proposing
  - Template letters for recovery of not paid rents
 
 ## Getting started
+First of all, you must have **nodejs** and **mongodb** installed on your computer.
+
 Run these commands in your terminal in the directory of the cloned repository.
 
 ```
@@ -33,9 +35,11 @@ npm run watch
 ```
 It will automatically build when the source code changes.
 
+Sorry guys but currently the application is in french...
 
 Why I created this application?
 -------------------------------
 Simply to help my best friend and me to manage properties that we rent.
-Also, to have a good reason to play with node and javascript.
+
+Above all, to have a good reason to play with node and javascript :-)
 
