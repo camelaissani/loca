@@ -49,7 +49,7 @@ module.exports.renderModel = function (req, res, callback) {
 
 module.exports.findOwner = function (realm, callback) {
     var realmFound;
-    db.listWithFilter(null, 'realms', {name: realm.name}, function (errors, realms) {
+    db.findItemById(null, 'realms', realm._id, function (errors, realms) {
         if (errors && errors.length > 0) {
             callback(errors);
         } else if (!realms || realms.length === 0) {

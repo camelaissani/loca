@@ -13,7 +13,8 @@ var gulp = require('gulp'),
     del = require('del'),
     bower = require('gulp-bower'),
     mocha = require('gulp-mocha'),
-    nodemon = require('gulp-nodemon');
+    nodemon = require('gulp-nodemon'),
+    mongobackup = require('mongobackup');
 
 var uglifyOptions = {
     //sourceMapIncludeSources: true
@@ -173,6 +174,20 @@ gulp.task('dev', ['build'], function () {
         script: 'server.js',
         ext: 'ejs html js',
         env: { 'NODE_ENV': 'development' }
+    });
+});
+
+gulp.task('mongodump', function() {
+    mongobackup.dump({
+        db : 'demodb',
+        out : './bkp/'
+    });
+});
+
+gulp.task('mongorestore', function() {
+    mongobackup.restore({
+        drop : true,
+        path : './bkp/demodb'
     });
 });
 

@@ -17,7 +17,7 @@
 					<%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
 					<% if (realm.street2 && realm.street2.length>0) { %>
 			        <%= realm.street2 %>
-			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.rcs %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.renter %>, <span contenteditable="true">gérant</span>.
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
 				</p>
 
 				<p>Ci-après dénommé « LE BAILLEUR »</p>
@@ -353,7 +353,7 @@
 					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span>, le <span contenteditable="true"><%=today%></span>
 				</p>
 				<p>
-					<%=realm.renter%> gérant de <%= realm.company+' '+realm.legalForm %>
+					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
 				</p>
 				<p>
 					<br>&nbsp;

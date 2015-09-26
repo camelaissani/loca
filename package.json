@@ -10,7 +10,8 @@
     "dev": "gulp dev",
     "test": "gulp mocha",
     "clean": "gulp clean",
-    "clean-restore-db": "mongo demodb --eval 'db.dropDatabase()' && mongorestore ./bkp/"
+    "mongodump": "gulp mongodump",
+    "mongorestore": "gulp mongorestore"
   },
   "dependencies": {
     "bcryptjs": "*",
@@ -47,6 +48,7 @@
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",
     "gulp-eslint": "*",
+    "mongobackup": "*",
     "less": "*",
     "minify": "*",
     "mocha": "*",

@@ -44,8 +44,9 @@ module.exports.findItemById = function (realm, collection, id, callback) {
 
     db[collection].find(query, function (err, dbItems) {
         var errors = [];
-
-        logger.info('FINDITEMBYID realm: ' + realm.name + ' collection: ' + collection + ' _id:' + id);
+        if (realm) {
+            logger.info('FINDITEMBYID realm: ' + realm.name + ' collection: ' + collection + ' _id:' + id);
+        }
         logger.debug(query);
         if (err || !dbItems) {
             errors.push('Element non trouvé en base de données');

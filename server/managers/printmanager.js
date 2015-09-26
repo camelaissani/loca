@@ -64,8 +64,8 @@ function buildViewData(realm, month, year, occupants) {
     dataModel.today = moment().format('LL');
     dataModel.month = month;
     dataModel.year = year;
-    dataModel.realm = realm.renter?realm:{
-        renter: '?',
+    dataModel.realm = realm.manager?realm:{
+        manager: '?',
         company: '?',
         legalForm: '?',
         capital: 0,
@@ -148,11 +148,11 @@ module.exports.renderModel = function (req, res, callback) {
     };
 
     occupantIdsLoop(0, function () {
-        db.models.Realm.findOne({name: realm.name}, function (err, realmFound) {
+        db.models.Realm.findOne({_id: realm._id}, function (err, realmFound) {
             if (err) {
                 callback([err]);
             } else {
-                callback([], buildViewData(realmFound, month, year, occupants));
+                callback([], buildViewData(realmFound._doc, month, year, occupants));
             }
         });
     });
