@@ -12,6 +12,8 @@ The idea is to make easy the management of properties and occupants by proposing
  - Follow the rent payments month by month
  - Template letters for recovery of not paid rents
 
+[Try the demo here!](http://demo.nuageprive.fr/logindemo)
+
 ## Getting started
 First of all, you must have **nodejs** and **mongodb** installed on your computer.
 
