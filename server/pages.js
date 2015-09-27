@@ -3,6 +3,7 @@
 var configdir = process.env.OPENSHIFT_DATA_DIR || process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
     config = require(configdir + '/config'),
     rs = require('./requeststrategy'),
+    loginManager = require('./managers/loginmanager'),
     printManager = require('./managers/printmanager'),
     logger = require('winston');
 
@@ -23,19 +24,25 @@ function PAGES(router) {
         render({view: 'login', account: null, errors: null}, res);
     });
 
+    router.route('/logindemo').get(rs.mustSessionLessArea, function (req, res) {
+        loginManager.loginDemo(req, res);
+    });
+
     router.route('/signup').get(rs.mustSessionLessArea, function (req, res) {
         render({view: 'signup', account: null, errors: null}, res);
     });
-
-    // router.route('/website').get(function (req, res) {
-    //     render({view: 'website', account: null, errors: null}, res);
-    // });
 
     router.route('/selectrealm').get(rs.restrictedAreaAndRedirect, function (req, res) {
         render({view: 'selectrealm',  account: req.session.user}, res);
     });
 
     router.route('/loggedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
+        function (req, res) {
+            res.redirect('/index');
+        }
+    );
+
+    router.route('/loggedin').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
         function (req, res) {
             res.redirect('/index');
         }

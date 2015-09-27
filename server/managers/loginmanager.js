@@ -128,6 +128,29 @@ module.exports.signup = function(req, res) {
     });
 };
 
+module.exports.loginDemo = function(req, res) {
+    module.exports.login({
+        param: function(attr) {
+            if (attr == 'email') {
+                return 'demo@demo.com';
+            }
+            else if (attr == 'secretword') {
+                return 'demo';
+            }
+        },
+        session: req.session
+    }, {
+        json: function(result) {
+            if (result.status == ResponseTypes.SUCCESS) {
+                res.redirect('/loggedin');
+            }
+            else {
+                res.redirect('/logout');
+            }
+        }
+    });
+};
+
 module.exports.login = function(req, res) {
     var email = req.param('email'),
         password = req.param('secretword');

@@ -70,7 +70,7 @@
                     <% } %>
     			<ul class="nav navbar-nav navbar-right">
     				<li class="dropdown">
-                        <% if (account.realm && account.realms.length>1) { %>
+                        <% if (account.realm && account.realm.name != '__default_' && account.realms.length>=1) { %>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %> @<%= account.realm.name %> <span class="caret"></span></a>
                         <% } else { %>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %><span class="caret"></span></a>
