@@ -2,6 +2,8 @@ Loca
 ====
 ![Loca](http://www.nuageprive.fr/images/loca-sample.png "Open source real estate management")
 
+[Check out the live demo.](http://demo.nuageprive.fr/logindemo)
+
 ## What's Loca?
 
 This nodejs project is a tentative of web application that offers a toolkit for owners of buildings, flats, offices, meeting rooms, car parks, letter boxes...
@@ -11,8 +13,6 @@ The idea is to make easy the management of properties and occupants by proposing
  - Create rent contract from templates available in the system
  - Follow the rent payments month by month
  - Template letters for recovery of not paid rents
-
-[Try the demo here!](http://demo.nuageprive.fr/logindemo)
 
 ## Getting started
 First of all, you must have **nodejs** and **mongodb** installed on your computer.
