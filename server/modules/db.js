@@ -3,7 +3,7 @@
 var mongojs = require('mongojs'),
     logger = require('winston'),
     collections = ['accounts', 'realms', 'properties', 'occupants', 'notifications'],
-    dbUrl = 'demodb', // "username:password@example.com/mydb",
+    dbUrl = process.env.SELFHOSTED_DBNAME || 'demodb',
     db;
 
 require('sugar');

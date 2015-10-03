@@ -23,7 +23,7 @@ var path = require('path'),
 
 // Server constants
 var ipaddr = process.env.OPENSHIFT_INTERNAL_IP || process.env.OPENSHIFT_NODEJS_IP,
-    http_port = process.env.OPENSHIFT_INTERNAL_PORT || process.env.OPENSHIFT_NODEJS_PORT || 8081,
+    http_port = process.env.OPENSHIFT_INTERNAL_PORT || process.env.OPENSHIFT_NODEJS_PORT || process.env.SELFHOSTED_NODEJS_PORT || 8081,
     basedir = process.env.OPENSHIFT_REPO_DIR || __dirname;
 
 if (process.env.NODE_ENV !== 'production') {

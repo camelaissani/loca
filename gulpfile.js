@@ -30,7 +30,7 @@ var paths = {
     printScripts:       ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/print/**/*.js'],
     htmlFiles:          ['server/views/**/*.ejs'],
     scriptsToLint:      ['*.js', 'client/js/**/*.js', 'server/**/*.js'],
-    purifyCssScripts:   ['bower_components/bootstrap/js/tooltip.js'],
+    purifyCssScripts:   ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js'],
     testScripts:        ['test/**/*.js']
 };
 

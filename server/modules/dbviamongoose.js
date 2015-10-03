@@ -1,9 +1,9 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-    logger = require('winston');
-
-var dbUrl = 'mongodb://localhost/demodb', // mongodb://user:pass@localhost:port/database
+    logger = require('winston'),
+    dbName = process.env.SELFHOSTED_DBNAME || 'demodb',
+    dbUrl = 'mongodb://localhost/'+dbName,
     self = this;
 
 var createModels = function () {
