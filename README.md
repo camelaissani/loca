@@ -2,6 +2,8 @@ Loca
 ====
 ![Loca](http://www.nuageprive.fr/images/loca-sample.png "Open source real estate management")
 
+[Check out the live demo.](http://demo.nuageprive.fr/logindemo)
+
 ## What's Loca?
 
 This nodejs project is a tentative of web application that offers a toolkit for owners of buildings, flats, offices, meeting rooms, car parks, letter boxes...
