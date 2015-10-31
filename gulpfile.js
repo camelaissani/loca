@@ -1,6 +1,7 @@
 'use strict';
 
-var gulp = require('gulp'),
+var db = process.env.SELFHOSTED_DBNAME || 'demodb',
+    gulp = require('gulp'),
     gulpsync = require('gulp-sync')(gulp),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -179,7 +180,7 @@ gulp.task('dev', ['build'], function () {
 
 gulp.task('mongodump', function() {
     mongobackup.dump({
-        db : 'demodb',
+        db : db,
         out : './bkp/'
     });
 });
@@ -187,7 +188,7 @@ gulp.task('mongodump', function() {
 gulp.task('mongorestore', function() {
     mongobackup.restore({
         drop : true,
-        path : './bkp/demodb'
+        path : './bkp/'+db
     });
 });
 

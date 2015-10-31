@@ -182,7 +182,12 @@ LOCA.currentYear = LOCA.now.getFullYear();
 
     $(document).ready(function() {
         var viewId = LOCA.application.getViewFromQueryString(window.location);
-        LOCA.application.updateData(viewId);
+        var $demoPopover = $('#demo-popover');
+        LOCA.application.updateData(viewId, function() {
+            if ($demoPopover.length) {
+                LOCA.application.showErrors(['Les données du site sont réinitialisées toutes les 30 minutes.']);
+            }
+        });
     });
 
 })(window.$, window.Handlebars, window.moment, window.accounting);

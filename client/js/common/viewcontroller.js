@@ -112,8 +112,8 @@ LOCA.ViewController = (function() {
         },
         function (overviewItems) {
             var countAll = overviewItems.countAll;
-            var countFree = overviewItems.countFree | overviewItems.countActive;
-            var countBusy = overviewItems.countBusy | overviewItems.countInactive;
+            var countFree = overviewItems.countFree | overviewItems.countInactive;
+            var countBusy = overviewItems.countBusy | overviewItems.countActive;
             $(self.config.domViewId + ' .all-filter-label').html(countAll);
             $(self.config.domViewId + ' .all-active-filter-label').html(countBusy);
             $(self.config.domViewId + ' .all-inactive-filter-label').html(countFree);

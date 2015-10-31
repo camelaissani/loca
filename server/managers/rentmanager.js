@@ -60,9 +60,22 @@ function checkDate(month, year) {
 
 module.exports._computeRent = function (month, year, properties) {
     var amount = 0, expense = 0;
+    var beginRentMoment = moment('01/'+month+'/'+year, 'DD/MM/YYYY').startOf('day');
+    var endRentMoment = moment(beginRentMoment).endOf('month').endOf('day');
     properties.forEach(function (item) {
-        amount += item.property.price;
-        expense += item.property.expense || 0;
+        var entryMoment = moment(item.entryDate, 'DD/MM/YYYY').startOf('day');
+        var exitMoment = moment(item.exitDate, 'DD/MM/YYYY').endOf('day');
+        //var toPrint = 'Rent of '+beginRentMoment.format('MM/YYYY') + ' [' + entryMoment.format('DD/MM/YYYY') + '-' + exitMoment.format('DD/MM/YYYY') + ']';
+        if (beginRentMoment.isSame(entryMoment) ||
+            endRentMoment.isSame(exitMoment) ||
+            beginRentMoment.isBetween(entryMoment, exitMoment) && endRentMoment.isBetween(entryMoment, exitMoment)) {
+            //console.log(toPrint + ' > OK');
+            amount += item.property.price;
+            expense += item.property.expense || 0;
+        }
+        //else {
+            //console.log(toPrint + ' > --');
+        //}
     });
 
     return {amount: amount, expense: expense};

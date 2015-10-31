@@ -54,6 +54,9 @@
             <% include signup.ejs %>
         <% } %>
         </div>
+        <%if (account && webSiteInfo.demomode) {%>
+        <div id="demo-popover" style="display:none;"></div>
+        <%}%>
         <%include footer.ejs%>
         <% if (view !== 'website' && view !== 'login' && view !== 'signup') { %>
             <div id="waitwindow" class="alert alert-info" style="display:none;">

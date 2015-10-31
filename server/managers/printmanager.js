@@ -12,10 +12,23 @@ function rentBuildViewData(occupant, month, year) {
     var rent = occupant.rents[year][month],
         rentPrice,
         beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY'),
-        endMoment = moment(occupant.endDate, 'DD/MM/YYYY');
+        endMoment = moment(occupant.endDate, 'DD/MM/YYYY'),
+        beginRentMoment = moment('01/'+month+'/'+year, 'DD/MM/YYYY').startOf('day'),
+        endRentMoment = moment(beginRentMoment).endOf('month').endOf('day');
 
     occupant.durationInMonth = Math.round(moment.duration(endMoment.diff(beginMoment)).asMonths());
     rent.occupant = Object.clone(occupant);
+
+    rent.occupant.properties.forEach(function(occupantProperty) {
+        var entryMoment = moment(occupantProperty.entryDate, 'DD/MM/YYYY').startOf('day'),
+            exitMoment = moment(occupantProperty.exitDate, 'DD/MM/YYYY').endOf('day');
+        if (beginRentMoment.isSame(entryMoment) ||
+            endRentMoment.isSame(exitMoment) ||
+            beginRentMoment.isBetween(entryMoment, exitMoment) && endRentMoment.isBetween(entryMoment, exitMoment)) {
+            occupantProperty.visibleOnInvoice = true;
+        }
+    });
+
     rent._id = rent.occupant._id;
     rentPrice = rentManager._computeRent(month, year, occupant.properties);
 

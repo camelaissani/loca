@@ -9,7 +9,7 @@ LOCA.application = (function($, History) {
         if (History.enabled) {
             History.Adapter.bind(window, 'statechange', function() {
                 var state = History.getState();
-                _getViewAndUpdateData(state.data);
+                _getViewAndUpdateData(state.data, false);
             });
         }
 
@@ -34,12 +34,12 @@ LOCA.application = (function($, History) {
         });
 
         $(document).on('click', '#notificationwindow button', function() {
-            this.hideWaitMessage();
+            that.hideWaitMessage();
             that.hideErrors();
         });
     }
 
-    function _getViewAndUpdateData(data, noGetView) {
+    function _getViewAndUpdateData(data, noGetView, callback) {
         var oldNavMapItem,
             oldViewId,
             navMapItem = LOCA.routes[data.viewId],
@@ -61,7 +61,7 @@ LOCA.application = (function($, History) {
             $mainPhoneBar.find('.main-mini-menu-bar-title.active').removeClass('active');
             $mainPhoneBar.find('.main-mini-menu-bar-title[data-id="' + data.menuId + '"]').addClass('active');
 
-            _updateDataInCurrentView(data);
+            _updateDataInCurrentView(data, callback);
         }
 
         function requestPage() {
@@ -95,7 +95,7 @@ LOCA.application = (function($, History) {
         }
     }
 
-    function _updateDataInCurrentView(data) {
+    function _updateDataInCurrentView(data, callback) {
         var navMapItem = LOCA.routes[data.viewId],
             $container = $('.view-container');
 
@@ -106,6 +106,9 @@ LOCA.application = (function($, History) {
             navMapItem.change(function() {
                 $container.css('visibility', 'visible');
                 $container.css('opacity', 1);
+                if (callback) {
+                    callback();
+                }
             });
         }
     }
@@ -114,7 +117,7 @@ LOCA.application = (function($, History) {
         window.open(url, '_blank', 'location=no,menubar=yes,status=no,titlebar=yes,toolbar=yes,scrollbars=yes,resizable=yes,width=1000,height=700');
     };
 
-    Loca.prototype.updateData = function(viewId) {
+    Loca.prototype.updateData = function(viewId, callback) {
         var navMapItem = LOCA.routes[viewId],
             navData,
             $container;
@@ -124,7 +127,7 @@ LOCA.application = (function($, History) {
                 menuId: navMapItem.menuId?navMapItem.menuId:viewId,
                 viewId: viewId
             };
-            _getViewAndUpdateData(navData, true);
+            _getViewAndUpdateData(navData, true, callback);
         } else {
             this.hideWaitMessage();
             $container = $('.view-container');
@@ -161,7 +164,7 @@ LOCA.application = (function($, History) {
         if (addToHistory && History.enabled) {
             History.pushState(navData, navMapItem.title, facingUrl);
         } else {
-            _getViewAndUpdateData(navData);
+            _getViewAndUpdateData(navData, false);
         }
     };
 

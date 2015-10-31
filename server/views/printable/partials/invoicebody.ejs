@@ -10,6 +10,8 @@
         var property = occupantProperty.property;
         var m2Price;
         var m2Expense;
+
+        if (occupantProperty.visibleOnInvoice) {
 %>
 	<tr class="item-row">
 	  <td class="description">
@@ -46,6 +48,7 @@
 		  <td class="txtAlignRight"><%= property.expense.toFixed(2) %></td>
 		</tr>
 	<% } %>
+<% } %>
 <% }); %>
 
 <% if (occupant.discount > 0) { %>
@@ -61,7 +64,7 @@
 
 <%
 	var emptyRowCount = 9 - occupant.properties.length;
-	for (var idx=0; idx<emptyRowCount; idx++) { 
+	for (var idx=0; idx<emptyRowCount; idx++) {
 %>
 	<tr class="item-row">
 		<td class="description">&nbsp;</td>
