@@ -1,0 +1,57 @@
+<!-- HANDLEBAR TEMPLATES -->
+<script id="notification-list-template" type="text/x-handlebars-template">
+    {{#if notifications}}
+        {{!--
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-notifications" data-slide-to="0" class="active"></li>
+         {{#each notifications}}
+            <li data-target="#carousel-notifications" data-slide-to="{{indexPlusOne}}"></li>
+        {{/each}}
+        </ol>
+        --}}
+
+        <div class="carousel-inner" role="listbox">
+            <div class="item active text-center">
+                <div class="vertical-center">
+                    <h4><i class="fa fa-bullhorn fa-5x"></i></h4>
+                    <h3>Anomalies</h3>
+                </div>
+            </div>
+            {{#each notifications}}
+            <div class="item text-center">
+                <div class="vertical-center">
+                    <h2 class="user-action" data-id="notificationselector" data-value="{{notificationId}}">{{Image type}} {{title}}</h2>
+                    <h4>{{description}}</h4>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        {{!--
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-notifications" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Précédent</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-notifications" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Suivant</span>
+        </a>
+        --}}
+    {{else}}
+        <div class="carousel-inner">
+            <div class="item active text-center">
+                <div class="vertical-center">
+                    <h4><i class="fa fa-bullhorn fa-5x"></i></h4>
+                    <h3>Anomalies</h3>
+                </div>
+            </div>
+            <div class="item text-center">
+                <div class="vertical-center">
+                    <h3>Ca roule, aucun problème :)</h3>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</script>
+<!-- /HANDLEBAR TEMPLATES -->

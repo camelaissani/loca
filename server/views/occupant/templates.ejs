@@ -1,0 +1,51 @@
+<!-- HANDLEBAR TEMPLATES -->
+<script id="view-occupant-list-row-template" type="text/x-handlebars-template">
+    <div id="{{_id}}" class="list-row">
+        <div class="list-col">
+            <div class="clearfix">
+                <div class="list-avatar-col pull-left">
+                    {{#if isCompany}}
+                        <i class="fa fa-group fa-2x"></i>
+                    {{else}}
+                        <i class="fa fa-user fa-2x"></i>
+                    {{/if}}
+                </div>
+                <div class="list-title list-value pull-left">
+                    {{name}}
+                </div>
+            </div>
+        </div>
+        <div class="list-col">
+            <div>
+                {{#if terminationDate}}<span class="list-value notpaid">Contrat résilié</span>{{else}}<span class="list-value paid">Contrat en cours</span>{{/if}}
+            </div>
+            <div>
+                {{#if terminationDate}}
+                    {{beginDate}} au {{terminationDate}}
+                {{else}}
+                    {{beginDate}} au {{endDate}}
+                {{/if}}
+            </div>
+            {{#each properties}}
+                <div>{{Image property.type}} {{property.name}}</div>
+            {{/each}}
+        </div>
+        <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+    </div>
+</script>
+
+<script id="view-occupant-list-content-template" type="text/x-handlebars-template">
+    {{#each rows}}
+        {{> view-occupant-list-row-template}}
+    {{/each}}
+</script>
+
+<script id="view-occupant-selected-list-template" type="text/x-handlebars-template">
+    {{#each rows}}
+        <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item clearfix user-action">
+            <div class="pull-left">{{name}}</div>
+            <div class="pull-right fa fa-times text-right"></div>
+        </div>
+    {{/each}}
+</script>
+<!-- /HANDLEBAR TEMPLATE -->

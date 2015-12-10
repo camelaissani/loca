@@ -1,0 +1,81 @@
+<!-- HANDLEBAR TEMPLATES -->
+<script id="view-rent-month-selector-template" type="text/x-handlebars-template">
+    {{#each monthes}}
+    <li><a href="#" class="user-action" data-id="monthselector" data-value="{{monthNumber}}">{{monthLabel}}</a></li>
+    {{/each}}
+</script>
+
+<script id="view-rent-year-selector-template" type="text/x-handlebars-template">
+    {{#each years}}
+    <li><a href="#" class="user-action" data-id="yearselector" data-value="{{.}}">{{.}}</a></li>
+    {{/each}}
+</script>
+
+<script id="view-rent-list-row-template" type="text/x-handlebars-template">
+    <div id="{{_id}}" class="list-row">
+        <div class="list-col">
+            <div class="clearfix">
+                <div class="pull-left list-avatar-col">
+                    {{Image occupant.properties.0.property.type cssClass='fa-3x'}}
+                    <span class="fa-stack fa-lg">
+                        <i class="fa fa-calendar-o fa-stack-1x"></i>
+                        <strong class="fa-stack-1x icon-text">&euro;</strong>
+                    </span>
+                </div>
+                <div class="pull-left">
+                    <div class="list-title list-value">{{occupant.name}}</div>
+                    {{#if status}}
+                    <small class="{{status}} list-value">
+                        {{paymentStatus}}{{#if countMonthNotPaid}} ({{countMonthNotPaid}} mois){{/if}}
+                    </small>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        <div class="list-col">
+            <div class="list-label clearfix">
+                <small class="pull-right hidden-xs">Règlement</small>
+            </div>
+            <div class="list-payment-price text-right">
+                <span>{{formatMoney payment withOdometer='payment'}}</span>
+            </div>
+            <div class="clearfix">
+                <small>
+                <div class="pull-left">Solde :</div>
+                <div class="list-balance-price pull-right text-right">
+                    {{formatMoney newBalance withOdometer='newBalance'}}
+                </div>
+                </small>
+            </div>
+
+            <div data-toggle="tooltip" data-placement="right" class="hidden-xs list-comment-link" data-html="true" title="{{breaklines description}}" style="{{commentVisible description}}"><span class="glyphicon glyphicon-comment"></span></div>
+        </div>
+        <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+    </div>
+</script>
+
+<script id="view-rent-list-content-template" type="text/x-handlebars-template">
+    {{#each rows}}
+        {{> view-rent-list-row-template}}
+    {{/each}}
+</script>
+
+<script id="view-rent-selected-list-template" type="text/x-handlebars-template">
+    {{#each rows}}
+        <div class="list-group-item">
+            <div class="clearfix">
+                <div class="pull-left">
+                    <h4 class="">{{occupant.name}}</h4>
+                    <small class="{{status}}">{{paymentStatus}}{{#if countMonthNotPaid}} ({{countMonthNotPaid}} mois){{/if}}</small>
+                </div>
+                <div id="{{_id}}" class="pull-right user-action" data-id="remove-item-from-selection">
+                    <i class="fa fa-times"></i>
+                </div>
+                <div class="pull-right">
+                    <h3>{{formatMoney totalToPay hideCurrency=false}}</h3>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</script>
+<!-- /HANDLEBAR TEMPLATES -->

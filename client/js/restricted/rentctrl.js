@@ -19,14 +19,14 @@ LOCA.rentCtrl = (function($, Handlebars) {
 
     RentCtrl.prototype.initTemplates = function() {
         // Handlebars templates
-        this.templateMonthSelector = Handlebars.compile($('#view-rent #month-selector-template').html());
+        this.templateMonthSelector = Handlebars.compile($('#view-rent-month-selector-template').html());
 
-        this.templateYearSelector = Handlebars.compile($('#view-rent #year-selector-template').html());
+        this.templateYearSelector = Handlebars.compile($('#view-rent-year-selector-template').html());
 
-        Handlebars.registerPartial('renthistory-template', $('#view-rent #renthistory-template').html());
-        this.templateHistoryRents = Handlebars.compile($('#view-rent #rentshistory-template').html());
+        Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
+        this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
 
-        var $rentsSelected = $('#view-rent #rents-selected-template');
+        var $rentsSelected = $('#view-rent-selected-list-template');
         if ($rentsSelected.length >0) {
             this.templateSelectedRow = Handlebars.compile($rentsSelected.html());
         }
@@ -134,13 +134,13 @@ LOCA.rentCtrl = (function($, Handlebars) {
             self.openForm('pay-rent-form');
         }
         else if (actionId==='list-action-rents-history') {
-            $('#rents-history-table').html('');
+            $('#history-rents-table').html('');
             LOCA.requester.ajax({
                 type: 'GET',
                 url: '/api/rents/occupant?id='+selection[0]._id
             },
             function(rentsHistory) {
-                $('#rents-history-table').html(self.templateHistoryRents(rentsHistory));
+                $('#history-rents-table').html(self.templateHistoryRents(rentsHistory));
                 self.scrollToVisible('#renttable .active');
             });
             self.openForm('rents-history', true);

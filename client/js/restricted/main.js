@@ -33,6 +33,9 @@ LOCA.currentYear = LOCA.now.getFullYear();
     };
 
     //Handlebars helpers
+    Handlebars.registerHelper('indexPlusOne', function() {
+        return new Handlebars.SafeString(Number(arguments[0].data.index)+1); //index not zero based
+    });
     Handlebars.registerHelper('formatSurface', function(text, options) {
         text = Handlebars.Utils.escapeExpression(text);
         text = LOCA.formatSurface(text, options.hash.hideUnit, options.hash.emptyForZero);
@@ -185,7 +188,8 @@ LOCA.currentYear = LOCA.now.getFullYear();
         var $demoPopover = $('#demo-popover');
         LOCA.application.updateData(viewId, function() {
             if ($demoPopover.length) {
-                LOCA.application.showErrors(['Les données du site sont réinitialisées toutes les 30 minutes.']);
+                window.bootbox.alert( { message: 'Les données du site sont réinitialisées toutes les 30 minutes.',
+                                        title: 'Avertissement'} );
             }
         });
     });

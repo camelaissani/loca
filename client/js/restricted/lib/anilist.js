@@ -10,7 +10,7 @@ LOCA.List = (function($, Handlebars, Events){
     // -----------------------------------------------------------------------
     // CONSTRUCTOR
     // -----------------------------------------------------------------------
-    function List(listId) {
+    function List(listId, rowTemplateId, contentTemplateId) {
         var self = this;
 
         // Use minivents
@@ -18,10 +18,12 @@ LOCA.List = (function($, Handlebars, Events){
 
         // attributes
         this.listId = listId.startsWith('#')?listId.slice(1, listId.length):listId;
+        this.rowTemplateId = (rowTemplateId && rowTemplateId.startsWith('#'))?rowTemplateId.slice(1, rowTemplateId.length):rowTemplateId;
+        this.contentTemplateId = (contentTemplateId && contentTemplateId.startsWith('#'))?contentTemplateId.slice(1, contentTemplateId.length):contentTemplateId;
         this.filterText = '';
 
         // row management
-        $(document).on('click', '#'+this.listId+' .list-row', function() {
+        $(document).on('click', '#' + this.listId + ' .list-row', function() {
             self.select($(this));
             return false;
         });
@@ -129,11 +131,11 @@ LOCA.List = (function($, Handlebars, Events){
         this.$rowsContainer = this.$list.find('.list-content');
 
         // Handlebars templates
-        var rowTemplate = this.$list.find('#list-row-template');
+        var rowTemplate = $('#' + this.rowTemplateId);
         if (rowTemplate.length >0) {
             this.sourceTemplateRow = rowTemplate.html();
-            Handlebars.registerPartial('list-row-template', this.sourceTemplateRow);
-            this.templateRowsContainer = Handlebars.compile(this.$list.find('#list-content-template').html());
+            Handlebars.registerPartial(this.rowTemplateId, this.sourceTemplateRow);
+            this.templateRowsContainer = Handlebars.compile($('#' + this.contentTemplateId).html());
         }
     };
 

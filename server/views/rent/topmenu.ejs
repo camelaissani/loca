@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-6">
+        <ul class="nav nav-pills">
+            <li id="month-selector-dropdown" class="dropdown" role="presentation">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="month-selector-selection-label"></span> <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu"></ul>
+            </li>
+            <li id="year-selector-dropdown" class="dropdown" role="presentation">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="year-selector-selection-label"></span> <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu"></ul>
+            </li>
+            <li class="dropdown" role="presentation">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label">Tous (<span class="all-filter-label"></span>)</span> <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" class="user-action" data-id="list-filter">Tous (<span class="all-filter-label"></span>)</a></li>
+                    <li><a href="#" class="user-action" data-id="list-filter" data-value="Payé">Payés (<span class="paid-filter-label"></span>)</a></li>
+                    <!--<li><a href="#" class="user-action" data-id="list-filter" data-value="Paiement partiel">Partiellement payés (<span class="partially-paid-filter-label"></span>)</a></li>-->
+                    <li><a href="#" class="user-action" data-id="list-filter" data-value="Impayé">Impayés (<span class="not-paid-filter-label"></span>)</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="col-sm-6 hidden-xs text-right filterbar-info">
+        Réglés : <span class="total-paid txthighlight"></span> - A régler : <span class="total-topay"></span>
+    </div>
+    <div class="col-xs-12 visible-xs text-center filterbar-info">
+        Réglés : <span class="total-paid txthighlight"></span> - A régler : <span class="total-topay"></span>
+    </div>
+</div>

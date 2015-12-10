@@ -1,0 +1,48 @@
+<div id="rents" class="list">
+    <div class="form-content">
+        <div data-id="pay-rent-form" class="sheet">
+            <div class="list-form-view">
+                <% include paymentform.ejs %>
+            </div>
+        </div>
+
+        <div data-id="rents-history" class="sheet">
+            <div class="list-form-view">
+                <% include rentshistory.ejs %>
+            </div>
+        </div>
+
+        <div data-id="print-doc-selector" class="sheet">
+            <div class="list-form-view">
+                <div class="list-group">
+                    <a id="rentcall" href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Avis d'échéance</h4>
+                        <p class="list-group-item-text">Simple demande de paiement de loyer</p>
+                    </a>
+                    <a id="recovery1" href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading"><i class="fa fa-bell-o"></i> Avis d'échéance - 1er rappel</h4>
+                        <p class="list-group-item-text">Première relance de l'avis d'échéance avec tampon "LOYER IMPAYE"</p>
+                    </a>
+                    <a id="recovery2" href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading"><i class="fa fa-bullhorn"></i> Avis d'échéance - 2ème rappel</h4>
+                        <p class="list-group-item-text">Deuxième relance de l'avis d'échéance avec tampon "AVANT HUISSIER"</p>
+                    </a>
+                    <a id="recovery3" href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> Courrier locataire loyer impayé - Dernier rappel</h4>
+                        <p class="list-group-item-text">Courrier adressé au locataire pour demande de règlement de loyer impayé sous peine d'expulsion</p>
+                    </a>
+                    <a id="paymentorder" href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading"><i class="fa fa-gavel"></i> Courrier huissier loyer impayé</h4>
+                        <p class="list-group-item-text">Courrier adressé à huissier de justice pour demande de commandement de payer</p>
+                    </a>
+                    <a id="printinvoices" href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Quittance</h4>
+                        <p class="list-group-item-text">Facture attestant le bon règlement du loyer</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /.form-content -->
+    <h4 class="list-content-selection-label">Loyer(s)</h4>
+    <div class="list-content"></div>
+</div>

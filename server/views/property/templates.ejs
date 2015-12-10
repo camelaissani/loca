@@ -1,0 +1,62 @@
+<!-- HANDLEBAR TEMPLATES -->
+<script id="view-property-list-row-template" type="text/x-handlebars-template">
+    <div id="{{_id}}" class="list-row">
+        <div class="list-col">
+            <div class="clearfix">
+                <div class="list-avatar-col pull-left">
+                    {{Image cssClass='fa-3x'}}
+                </div>
+                <div class="pull-left">
+                    <div class="list-title list-value">{{name}}</div>
+                    <div>
+                        {{propertyName}}
+                        {{#if surface}}
+                            <span>{{formatSurface surface}}</span>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list-col">
+            <div class="list-label clearfix">
+                <small>
+                <div class="hidden-xs pull-left">Loyer c.c.</div>
+                {{#if available}}
+                    <div class="list-value pull-right paid">disponible</div>
+                {{else}}
+                    <div class="list-value pull-right">loué par {{occupantLabel}}</div>
+                {{/if}}
+                </small>
+            </div>
+            <div class="list-payment-price text-right">{{formatMoney priceWithExpenses}}</div>
+            <div class="clearfix">
+                <div class="pull-left">Loyer h.c</div>
+                <div class="pull-right">{{formatMoney price}}</div>
+            </div>
+        </div>
+        <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+    </div>
+</script>
+
+<script id="view-property-list-content-template" type="text/x-handlebars-template">
+    {{#each rows}}
+        {{> view-property-list-row-template}}
+    {{/each}}
+</script>
+
+<script id="view-property-selected-list-template" type="text/x-handlebars-template">
+    {{#each rows}}
+        <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item user-action">
+            <div class="clearfix">
+                <div class="pull-left">{{name}}</div>
+                <div class="pull-right fa fa-times text-right"></div>
+            </div>
+            {{#if surface}}
+                <div><small>{{formatMoney priceWithExpenses}} c.c. - {{formatSurface surface}}</small></div>
+            {{else}}
+                <div><small>{{formatMoney priceWithExpenses}} c.c.</small></div>
+            {{/if}}
+        </a>
+    {{/each}}
+</script>
+<!-- /HANDLEBAR TEMPLATE -->

@@ -24,10 +24,10 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
 
     OccupantCtrl.prototype.initTemplates = function() {
         // Handlebars templates
-        Handlebars.registerPartial('renthistory-template', $('#view-occupant #renthistory-template').html());
-        this.templateHistoryRents = Handlebars.compile($('#view-occupant #rentshistory-template').html());
+        Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
+        this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
 
-        var $occupantsSelected = $('#view-occupant #occupants-selected-template');
+        var $occupantsSelected = $('#view-occupant-selected-list-template');
         if ($occupantsSelected.length >0) {
             self.templateSelectedRow = Handlebars.compile($occupantsSelected.html());
         }
@@ -172,13 +172,13 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
             });
         }
         else if (actionId==='list-action-rents-history') {
-            $('#rents-history-table').html('');
+            $('#history-rents-table').html('');
             LOCA.requester.ajax({
                 type: 'GET',
                 url: '/api/rents/occupant?id='+selection[0]._id
             },
             function(rentsHistory) {
-                $('#rents-history-table').html(self.templateHistoryRents(rentsHistory));
+                $('#history-rents-table').html(self.templateHistoryRents(rentsHistory));
             });
             self.openForm('rents-history', true);
         }

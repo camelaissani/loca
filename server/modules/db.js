@@ -1,9 +1,10 @@
 'use strict';
 
-var mongojs = require('mongojs'),
+var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/../..',
+    config = require(configdir + '/config'),
+    mongojs = require('mongojs'),
     logger = require('winston'),
     collections = ['accounts', 'realms', 'properties', 'occupants', 'notifications'],
-    dbUrl = process.env.SELFHOSTED_DBNAME || 'demodb',
     db;
 
 require('sugar');
@@ -28,8 +29,8 @@ function buildFilter(realm, filter) {
 
 module.exports.init = function () {
     if (!db) {
-        logger.info('connecting database...');
-        db = mongojs(dbUrl, collections);
+        logger.info('connecting database ' + config.database + '...');
+        db = mongojs(config.database, collections);
         logger.info('database connected');
     } else {
         logger.info('database already connected');

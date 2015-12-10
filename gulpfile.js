@@ -1,8 +1,13 @@
 'use strict';
 
-var db = process.env.SELFHOSTED_DBNAME || 'demodb',
+var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
+    config = require(configdir + '/config'),
     gulp = require('gulp'),
+    watch = require('gulp-watch'),
+    batch = require('gulp-batch'),
+    gulpif = require('gulp-if'),
     gulpsync = require('gulp-sync')(gulp),
+    babel = require('gulp-babel'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     imagemin = require('gulp-imagemin'),
@@ -17,21 +22,23 @@ var db = process.env.SELFHOSTED_DBNAME || 'demodb',
     nodemon = require('gulp-nodemon'),
     mongobackup = require('mongobackup');
 
-var uglifyOptions = {
-    //sourceMapIncludeSources: true
+var babelOptions = {
+    presets: ['es2015']
 };
+
+var uglifyOptions = {};
 
 var paths = {
     images:             'client/images/**/*',
     publicLessFile:     'client/less/main-public.less',
     restrictedLessFile: 'client/less/main-restricted.less',
     printLessFile:      'client/less/main-print.less',
-    publicScripts:      ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/public/**/*.js', 'bower_components/bootbox/bootbox.js'],
-    restrictedScripts:  ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'bower_components/bootbox/bootbox.js', 'client/js/restricted/**/_*.js', 'client/js/restricted/lib/**/*.js', 'client/js/restricted/form/**/*.js', 'client/js/restricted/**/*.js'],
+    publicScripts:      ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/public/**/*.js'],
+    restrictedScripts:  ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/restricted/**/_*.js', 'client/js/restricted/lib/**/*.js', 'client/js/restricted/form/**/*.js', 'client/js/restricted/**/*.js'],
     printScripts:       ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/print/**/*.js'],
     htmlFiles:          ['server/views/**/*.ejs'],
     scriptsToLint:      ['*.js', 'client/js/**/*.js', 'server/**/*.js'],
-    purifyCssScripts:   ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js'],
+    purifyCssScripts:   ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js', 'bower_components/bootstrap/js/carousel.js', 'bower_components/bootbox/bootbox.js'],
     testScripts:        ['test/**/*.js']
 };
 
@@ -41,6 +48,10 @@ var watchPaths = {
     publicScriptFiles :     ['client/js/common/**/*.js', 'client/js/public/**/*.js'],
     restrictedScriptFiles : ['client/js/common/**/*.js', 'client/js/restricted/**/*.js'],
     printScriptFiles :      ['client/js/common/**/*.js', 'client/js/print/**/*.js']
+};
+
+var isProd = function() {
+    return process.env.NODE_ENV === 'production';
 };
 
 gulp.task('eslint', function () {
@@ -85,28 +96,49 @@ gulp.task('clean-print-scripts', function (cb) {
 gulp.task('publicScripts', ['clean-public-scripts'], function () {
     return gulp.src(paths.publicScripts)
           .pipe(sourcemaps.init())
-          .pipe(uglify(uglifyOptions))
+          .pipe(babel(babelOptions))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(concat('public.min.js'))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/js'));
 });
 
+gulp.task('watchPublicScripts', function () {
+    watch(watchPaths.publicScriptFiles, batch(function (events, done) {
+        gulp.start('publicScripts', done);
+    }));
+});
+
 gulp.task('restrictedScripts', ['clean-restricted-scripts'], function () {
     return gulp.src(paths.restrictedScripts)
           .pipe(sourcemaps.init())
-          .pipe(uglify(uglifyOptions))
+          .pipe(babel(babelOptions))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(concat('restricted.min.js'))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/js'));
 });
 
+gulp.task('watchRestrictedScripts', function () {
+    watch(watchPaths.restrictedScriptFiles, batch(function (events, done) {
+        gulp.start('restrictedScripts', done);
+    }));
+});
+
 gulp.task('printScripts', ['clean-print-scripts'], function () {
     return gulp.src(paths.printScripts)
           .pipe(sourcemaps.init())
-          .pipe(uglify(uglifyOptions))
+          .pipe(babel(babelOptions))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(concat('print.min.js'))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/js'));
+});
+
+gulp.task('watchPrintScripts', function () {
+    watch(watchPaths.printScriptFiles, batch(function (events, done) {
+        gulp.start('printScripts', done);
+    }));
 });
 
 gulp.task('images', ['clean-images'], function () {
@@ -115,12 +147,18 @@ gulp.task('images', ['clean-images'], function () {
           .pipe(gulp.dest('public/images'));
 });
 
+gulp.task('watchImageFiles', function () {
+    watch(watchPaths.imageFiles, batch(function (events, done) {
+        gulp.start('images', done);
+    }));
+});
+
 gulp.task('publicLess', ['clean-public-css'], function () {
     return gulp.src(paths.publicLessFile)
           .pipe(sourcemaps.init())
           .pipe(less())
           .pipe(purifyCss(paths.publicScripts.concat(paths.purifyCssScripts).concat(paths.htmlFiles)))
-          .pipe(minifyCss())
+          .pipe(gulpif(isProd, minifyCss()))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/css'));
 });
@@ -130,7 +168,7 @@ gulp.task('restrictedLess', ['clean-restricted-css'], function () {
           .pipe(sourcemaps.init())
           .pipe(less())
           .pipe(purifyCss(paths.restrictedScripts.concat(paths.purifyCssScripts).concat(paths.htmlFiles)))
-          .pipe(minifyCss())
+          .pipe(gulpif(isProd, minifyCss()))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/css'));
 });
@@ -139,18 +177,18 @@ gulp.task('printLess', ['clean-print-css'], function () {
     return gulp.src(paths.printLessFile)
           .pipe(sourcemaps.init())
           .pipe(less())
-          .pipe(minifyCss())
+          .pipe(gulpif(isProd, minifyCss()))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('watch', function () {
-    gulp.watch(watchPaths.publicScriptFiles, ['publicScripts', 'eslint']);
-    gulp.watch(watchPaths.restrictedScriptFiles, ['restrictedScripts', 'eslint']);
-    gulp.watch(watchPaths.printScriptFiles, ['printScripts', 'eslint']);
-    gulp.watch(watchPaths.lessFiles, ['publicLess', 'restrictedLess', 'printLess']);
-    gulp.watch(watchPaths.imageFiles, ['mages']);
+gulp.task('watchLessFiles', function () {
+    watch(watchPaths.lessFiles, batch(function (events, done) {
+        gulp.start(['publicLess', 'restrictedLess', 'printLess'], done);
+    }));
 });
+
+gulp.task('watch', ['watchPublicScripts', 'watchRestrictedScripts', 'watchPrintScripts', 'watchImageFiles', 'watchLessFiles']);
 
 gulp.task('lint', ['eslint']);
 
@@ -180,7 +218,7 @@ gulp.task('dev', ['build'], function () {
 
 gulp.task('mongodump', function() {
     mongobackup.dump({
-        db : db,
+        db : config.database,
         out : './bkp/'
     });
 });
@@ -188,7 +226,7 @@ gulp.task('mongodump', function() {
 gulp.task('mongorestore', function() {
     mongobackup.restore({
         drop : true,
-        path : './bkp/'+db
+        path : './bkp/' + config.database
     });
 });
 

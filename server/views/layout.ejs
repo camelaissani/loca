@@ -1,0 +1,29 @@
+<div id='<%= viewId %>' class='container-fluid view'>
+    <% if (typeof topMenu != 'undefined') { %>
+        <div class="filterbar row">
+            <div class="col-xs-12">
+                <%- include(topMenu) %>
+            </div>
+        </div>
+    <% } %>
+    <div class="row">
+        <% if (typeof rightMenu != 'undefined') { %>
+        <div class="col-xs-12 col-sm-8">
+            <%- include(content) %>
+        </div>
+        <div class="menu col-xs-12 col-sm-4">
+            <%- include(rightMenu) %>
+        </div>
+        <% } else { %>
+            <div class="col-xs-12">
+                <%- include(content) %>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- HANDLEBAR TEMPLATES -->
+<% if (typeof templates != 'undefined') { %>
+<%- include(templates) %>
+<% } %>
+<!-- /HANDLEBAR TEMPLATES -->

@@ -4,7 +4,9 @@ LOCA.ViewController = (function() {
         this.config = config;
         this.filterValue = '';
         if (config.domListId) {
-            this.list = new LOCA.List(config.domListId);
+            this.list = new LOCA.List(config.domListId,
+                                      config.domViewId + '-list-row-template',
+                                      config.domViewId + '-list-content-template');
         }
         this.initListeners();
     }
@@ -166,6 +168,8 @@ LOCA.ViewController = (function() {
         LOCA.layoutManager.hideMenu(function () {
             if (self.list) {
                 self.list.hideAllRows(callback);
+            } else if (callback) {
+                callback();
             }
         });
     };

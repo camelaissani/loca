@@ -1,0 +1,10 @@
+<h1><center><%=config.website.product.slogan%></center></h1>
+<div class="centeredbtn">
+    <% if (config.demomode) {%>
+    <a href="/signup" class="btn btn-primary btn-lg">S'inscrire gratuitement</a>
+    <a href="/logindemo" class="btn btn-success btn-lg">Démonstration</a>
+    <% } else { %>
+    <a disabled class="btn btn-primary btn-lg">S'inscrire gratuitement</a>
+    <% } %>
+    <p>Vous avez déjà un compte ? <a href="/login">Connectez-vous</a></p>
+</div>

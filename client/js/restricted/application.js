@@ -16,7 +16,7 @@ LOCA.application = (function($, History) {
         // Wait / error dialog management
         LOCA.requester.beforeListener(function() {
             that.showWaitMessage();
-            that.hideErrors();
+            window.bootbox.hideAll();
         });
 
         LOCA.requester.afterListener(function() {
@@ -24,18 +24,18 @@ LOCA.application = (function($, History) {
         });
 
         LOCA.requester.responseFailListener(function(errors) {
-            that.showErrors(errors);
+            if (!errors) {
+                window.bootbox.alert({title: 'Oups...', message:'Problème d\'accès au serveur. Vérifiez votre connexion reseau.'});
+            }
+            else if (errors.length > 0) {
+                window.bootbox.alert({title: 'Oups...', message: errors.join(' ')});
+            }
         });
 
         // Header menu management
         $(document).on('click', '.nav-action', function() {
             var viewId = $(this).data('id');
             that.updateView(viewId, null, true);
-        });
-
-        $(document).on('click', '#notificationwindow button', function() {
-            that.hideWaitMessage();
-            that.hideErrors();
         });
     }
 
@@ -178,30 +178,6 @@ LOCA.application = (function($, History) {
         if (waitCounter <= 0) {
             waitCounter = 0;
             $('#waitwindow').hide();
-        }
-    };
-
-    Loca.prototype.hideErrors = function() {
-        $('#notificationwindow').hide();
-    };
-
-    Loca.prototype.showErrors = function(errors) {
-        var $notificationWindow = $('#notificationwindow'),
-            $divErrors = $notificationWindow.find('#errors');
-
-        $divErrors.html('');
-        if (!errors) {
-            $divErrors.html('Erreur de connexion. Il impossible de contacter le serveur pour le moment.');
-            $notificationWindow.show();
-        }
-        else if (errors.length > 0) {
-            for (var i = 0; i < errors.length; ++i) {
-                if (i > 0) {
-                    $divErrors.append('<br>');
-                }
-                $divErrors.append(errors[i]);
-            }
-            $notificationWindow.show();
         }
     };
 

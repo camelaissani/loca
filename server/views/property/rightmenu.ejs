@@ -1,0 +1,31 @@
+<div class="well menu-card" data-id="properties-selection-menu">
+    <div class="list-group">
+        <a href="#" class="list-group-item user-action cancel-selection"><i class="fa fa-reply"></i><span class="hidden-xs"> Annuler la séléction</span><div class="visible-xs"> Annuler</div></a>
+        <a href="#" data-id="list-action-edit-property" class="list-group-item user-action only-mono-selection"><i class="fa fa-pencil-square-o"></i><span class="hidden-xs"> Editer</span><div class="visible-xs"> Bien</div></a>
+    </div>
+    <h4 class="hidden-xs page-header list-selection-menu-label"></h4>
+    <div class="hidden-xs list-selected-elements list-group list-group-selection"></div>
+</div>
+<div class="well menu-card" data-id="property-form-menu" data-target="#property-form">
+    <div class="list-group">
+        <a href="#" class="list-group-item user-action cancel-form"><i class="fa fa-reply"></i><span class="hidden-xs"> Annuler</span><div class="visible-xs"> Annuler</div></a>
+        <a href="#" data-id="list-action-save-form" class="list-group-item user-action"><i class="fa fa-save"></i><span class="hidden-xs"> Enregistrer</span><div class="visible-xs"> Enregistrer</div></a>
+        <a href="#" data-id="list-action-remove-property" class="list-group-item list-group-item-danger user-action"><i class="fa fa-trash"></i><span class="hidden-xs"> Supprimer</span><div class="visible-xs"> Supprimer</div></a>
+    </div>
+    <div class="hidden-xs">
+        <h4 class="page-header">Détail du loyer</h4>
+        <div class="row">
+            <div class="col-xs-6">Loyer<a href="#" title="Hors Charges Hors Taxes">(HCHT)</a></div>
+            <div id="property-form-summary-rent"class="col-xs-6 text-right">-</div>
+        </div>
+        <div class="row property-no-expense">
+            <div class="col-xs-6">Charges</div>
+            <div id="property-form-summary-expense" class="col-xs-6 text-right">-</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-6">Loyer<a href="#" title="Charges Comprises Hors Taxes">(CCHT)</a></div>
+            <div id="property-form-summary-totla-rentwithexpenses"class="col-xs-6 text-right">-</div>
+        </div>
+    </div>
+</div>

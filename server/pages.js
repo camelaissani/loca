@@ -11,7 +11,7 @@ logger.info('Loaded configuration from ' + configdir + '/config');
 logger.info('Configuration content:', config);
 
 function render(model, res) {
-    model.webSiteInfo = config.webSiteInfo;
+    model.config = config;
     res.render('index', model);
 }
 
@@ -28,9 +28,11 @@ function PAGES(router) {
         loginManager.loginDemo(req, res);
     });
 
-    router.route('/signup').get(rs.mustSessionLessArea, function (req, res) {
-        render({view: 'signup', account: null, errors: null}, res);
-    });
+    if (config.productive) {
+        router.route('/signup').get(rs.mustSessionLessArea, function (req, res) {
+            render({view: 'signup', account: null, errors: null}, res);
+        });
+    }
 
     router.route('/selectrealm').get(rs.restrictedAreaAndRedirect, function (req, res) {
         render({view: 'selectrealm',  account: req.session.user}, res);
@@ -48,11 +50,13 @@ function PAGES(router) {
         }
     );
 
-    router.route('/signedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
-        function (req, res) {
-            res.redirect('/login');
-        }
-    );
+    if (config.productive) {
+        router.route('/signedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
+            function (req, res) {
+                res.redirect('/login');
+            }
+        );
+    }
 
     router.route('/index').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
         function (req, res) {
@@ -72,27 +76,27 @@ function PAGES(router) {
         });
 
     router.route('/page/dashboard').get(rs.restrictedArea, rs.mustRealmSet, function (req, res) {
-        res.render('dashboard', {account: req.session.user});
+        res.render('dashboard/index', {account: req.session.user});
     });
 
     router.route('/page/rent').get(rs.restrictedArea, rs.mustRealmSet, function (req, res) {
-        res.render('rent');
+        res.render('rent/index');
     });
 
     router.route('/page/occupant').get(rs.restrictedArea, rs.mustRealmSet, function (req, res) {
-        res.render('occupant');
+        res.render('occupant/index');
     });
 
     router.route('/page/property').get(rs.restrictedArea, rs.mustRealmSet, function (req, res) {
-        res.render('property');
+        res.render('property/index');
     });
 
     router.route('/page/owner').get(rs.restrictedArea, rs.mustRealmSet, function (req, res) {
-        res.render('owner');
+        res.render('owner/index');
     });
 
     router.route('/page/account').get(rs.restrictedArea, rs.mustRealmSet, function (req, res) {
-        res.render('account');
+        res.render('account/index');
     });
 
     // Print

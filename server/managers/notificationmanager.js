@@ -126,7 +126,8 @@ module.exports.feeders = [
                             type: 'expiredDocument',
                             notificationId: module.exports.generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD/MM/YYYY') + document.name),
                             expirationDate: document.expirationDate,
-                            description: occupant.name + ' : ' + document.name + ' expiré le ' + moment(document.expirationDate).format('DD/MM/YYYY'),
+                            title: occupant.name,
+                            description: document.name + ' a expiré le ' + moment(document.expirationDate).format('DD/MM/YYYY'),
                             actionUrl: ''
                         });
                     });
@@ -136,7 +137,8 @@ module.exports.feeders = [
                             notifications.push({
                                 type: 'warning',
                                 notificationId: module.exports.generateId(occupant._id.toString() + '_no_document'),
-                                description: occupant.name + ' : Pas de document enregistré, assurance manquante ?',
+                                title: occupant.name,
+                                description: 'Aucun document n\'est associé au contrat de bail. L\'assurance du bien loué est-elle manquante ?',
                                 actionUrl: ''
                             });
                             return true;

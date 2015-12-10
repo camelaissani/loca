@@ -33,6 +33,7 @@ describe('notificationmanager', function () {
                     {
                         notificationId: manager.generateId(occupantId + '_document_' + moment(expirationDate).format('DD/MM/YYYY') + documentDescription),
                         expirationDate: expirationDate,
+                        title: occupantName,
                         description: 'Document ' + documentDescription + ' à expiré le ' + moment(expirationDate).format('DD/MM/YYYY'),
                         actionUrl: ''
                     }
@@ -46,6 +47,7 @@ describe('notificationmanager', function () {
                     {
                         notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
                         expirationDate: expirationDate,
+                        title: occupantName,
                         description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
                         actionUrl: ''
                     }
@@ -81,6 +83,7 @@ describe('notificationmanager', function () {
                         type: 'expiredDocument',
                         notificationId: manager.generateId(occupantId + '_document_' + moment(expirationDate).format('DD/MM/YYYY') + documentDescription),
                         expirationDate: expirationDate,
+                        title: occupantName,
                         description: 'Document ' + documentDescription + ' à expiré le ' + moment(expirationDate).format('DD/MM/YYYY'),
                         actionUrl: ''
                     }
@@ -97,6 +100,7 @@ describe('notificationmanager', function () {
                         type: 'chequeToCollect',
                         notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
                         expirationDate: expirationDate,
+                        title: occupantName,
                         description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
                         actionUrl: ''
                     }
@@ -113,6 +117,7 @@ describe('notificationmanager', function () {
                         type: 'chequeToCollect',
                         notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
                         expirationDate: expirationDate,
+                        title: occupantName,
                         description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
                         actionUrl: ''
                     }

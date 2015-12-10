@@ -1,3 +1,7 @@
+<%
+    var isUnrestrictedView = ['website', 'login', 'signup'].indexOf(view) !== -1,
+        isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'login', 'signup' ].indexOf(view) !== -1;
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,14 +9,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title><%=webSiteInfo.productName%> <%=webSiteInfo.productSlogan%></title>
-        <% if (view === 'website') { %>
-            <%include metatags.ejs%>
+        <title><%=config.website.productName%> <%=config.website.productSlogan%></title>
+        <% if (isUnrestrictedView) { %>
+            <%- include website/metatags.ejs %>
         <% } %>
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
-        <% if (view === 'website' || view === 'login' || view === 'signup') { %>
+        <% if (isUnrestrictedView) { %>
 
             <link href="/public/css/main-public.css" rel="stylesheet">
 
@@ -25,61 +29,40 @@
         <script src="/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
     </head>
 
-    <% if (view === 'website' || view === 'login' || view === 'signup') { %>
+    <% if (isUnrestrictedView) { %>
     <body class="covered-body">
     <% } else { %>
     <body>
     <% } %>
-        <%include header.ejs%>
-        <div class="view-container fluid-container" style="visibility:hidden;opacity:0;">
-        <% if (view === 'website') { %>
-            <% include website.ejs %>
-        <% } else if (view === 'selectrealm') { %>
-            <% include selectrealm.ejs %>
-        <% }else if (view === 'dashboard') { %>
-            <% include dashboard.ejs %>
-        <% } else if (view === 'rent') { %>
-            <% include rent.ejs %>
-        <% } else if (view === 'occupant') { %>
-            <% include occupant.ejs %>
-        <% } else if (view === 'property') { %>
-            <% include property.ejs %>
-        <% } else if (view === 'owner') { %>
-            <% include owner.ejs %>
-        <% } else if (view === 'account') { %>
-            <% include account.ejs %>
-        <% } else if (view === 'login') { %>
-            <% include login.ejs %>
-        <% } else if (view === 'signup') { %>
-            <% include signup.ejs %>
+        <%- include website/header.ejs %>
+
+        <div class="view-container" style="visibility:hidden;opacity:0;">
+        <% if (isValidView) { %>
+            <%- include(view+'/index') %>
+        <% } else { %>
+            <p>Page inconnue</p>
         <% } %>
         </div>
-        <%if (account && webSiteInfo.demomode) {%>
+
+        <%if (account && config.demomode) {%>
         <div id="demo-popover" style="display:none;"></div>
         <%}%>
-        <%include footer.ejs%>
+
+        <%- include website/footer.ejs %>
         <% if (view !== 'website' && view !== 'login' && view !== 'signup') { %>
-            <div id="waitwindow" class="alert alert-info" style="display:none;">
-                <div class="loading"><i class="fa fa-refresh fa-spin"></i> chargement des données...</div>
-            </div>
-            <div id="notificationwindow" class="alert alert-warning">
-                <button type="button" class="close">&times;</button>
-                <h4>Avertissement</h4>
-                <p id="errors"></p>
+            <div id="waitwindow" class="alert" style="display:none;">
+                <i class="fa fa-refresh fa-spin fa-2x"></i><span class="loading">Chargement...</span>
             </div>
         <% } %>
     </body>
         <script src="//cdn.jsdelivr.net/velocity/1.2.2/velocity.min.js" type="text/javascript"></script>
         <script src="//cdn.jsdelivr.net/velocity/1.2.2/velocity.ui.min.js" type="text/javascript"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="/bower_components/jquery-waypoints/waypoints.min.js" type="text/javascript"></script>
         <script src="/bower_components/sugar/release/sugar.min.js" type="text/javascript"></script>
         <script src="/bower_components/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
         <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_fr.js" type="text/javascript"></script>
-    <% if (view === 'website') { %>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js" type="text/javascript"></script>
-    <% } %>
-    <% if (view === 'website' || view === 'login' || view === 'signup') { %>
+        <script src="/bower_components/bootbox/bootbox.js" type="text/javascript"></script>
+    <% if (isUnrestrictedView) { %>
         <script src="/public/js/public.min.js" type="text/javascript"></script>
     <% } else { %>
         <script src="//cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js" type="text/javascript"></script>

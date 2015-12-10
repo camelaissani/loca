@@ -1,5 +1,8 @@
 module.exports = {
-    webSiteInfo: {
+    productive: true,
+    demomode: process.env.SELFHOSTED_DEMOMODE,
+    database: process.env.SELFHOSTED_DBNAME || 'demodb',
+    website: {
         company: {name: '', website: ''},
         product: {
             name: 'Loca',
@@ -31,7 +34,6 @@ module.exports = {
             website: 'http://www.nuageprive.fr',
             twitter: {url: 'https://twitter.com/camelaissani', id: '@camelaissani'},
             github: {url: 'https://github.com/camelaissani', id: 'camelaissani'}
-        },
-        demomode: true
+        }
     }
 };

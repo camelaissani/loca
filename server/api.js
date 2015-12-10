@@ -1,7 +1,8 @@
 'use strict';
 
-var configdir = process.env.OPENSHIFT_DATA_DIR || process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
-    config = require(configdir + '/config'),rs = require('./requeststrategy'),
+var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
+    config = require(configdir + '/config'),
+    rs = require('./requeststrategy'),
     loginManager = require('./managers/loginmanager'),
     rentManager = require('./managers/rentmanager'),
     occupantManager = require('./managers/occupantmanager'),
@@ -29,7 +30,7 @@ var getDateFromRequest = function (req) {
 };
 
 function API(router) {
-    if (config.webSiteInfo.demomode) {
+    if (config.productive) {
         router.route('/signup').post(loginManager.signup);
     }
     router.route('/login').post(loginManager.login);

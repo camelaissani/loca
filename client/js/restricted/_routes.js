@@ -19,6 +19,9 @@ LOCA.routes.dashboard = {
             LOCA.dashboardCtrl.startUp();
         }
         LOCA.dashboardCtrl.loadData(callback);
+    },
+    pageExit: function (callback) {
+        LOCA.dashboardCtrl.pageExit(callback);
     }
 };
 

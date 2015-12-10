@@ -1,4 +1,4 @@
-<script id="rentshistory-template" type="text/x-handlebars-template">
+<script id="history-rents-template" type="text/x-handlebars-template">
 	<h1>{{ occupant.name }}</h1>
 
 	<table id="renttable" class="table table-hover table-bordered table-responsive">
@@ -14,13 +14,13 @@
 		</thead>
 		<tbody>
 		{{#each rents}}
-		    {{> renthistory-template}}
+		    {{> history-rent-row-template}}
 		{{/each}}
 		</tbody>
 	</table>
 </script>
 
-<script id="renthistory-template" type="text/x-handlebars-template">
+<script id="history-rent-row-template" type="text/x-handlebars-template">
 	<tr id="{{_id}}" class="{{active}}" data-value="{{uid}}">
 		<td class="visible-xs visible-sm">{{month}}/{{year}}</td>
 		<td class="hidden-xs hidden-sm">{{formatMonth month}}</td>
@@ -29,7 +29,7 @@
 		<td class="text-right">{{formatMoney totalToPay}}</td>
 		<td class="text-right txthighlight">{{formatMoney payment emptyForZero=true}}{{#if paymentType}}<br>{{paymentType paymentType}} {{paymentReference}}{{/if}}{{#if paymentDate}}<br>Réglé le {{paymentDate}}{{/if}}</td>
 		<td class="hidden-xs hidden-sm txtstatus text-left {{status}}">{{paymentStatus}}</td>
-	</tr>		
+	</tr>
 </script>
 
-<div id="rents-history-table"></div>
+<div id="history-rents-table"></div>

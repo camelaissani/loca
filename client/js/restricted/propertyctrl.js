@@ -21,7 +21,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
 
     PropertyCtrl.prototype.initTemplates = function() {
         // Handlebars templates
-        var $propertiesSelected = $('#view-property #properties-selected-template');
+        var $propertiesSelected = $('#view-property-selected-list-template');
         if ($propertiesSelected.length >0) {
             self.templateSelectedRow = Handlebars.compile($propertiesSelected.html());
         }

@@ -1,9 +1,11 @@
 'use strict';
 
-var mongoose = require('mongoose'),
+var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/../..',
+    config = require(configdir + '/config'),
+    mongoose = require('mongoose'),
     logger = require('winston'),
     dbName = process.env.SELFHOSTED_DBNAME || 'demodb',
-    dbUrl = 'mongodb://localhost/'+dbName,
+    dbUrl = 'mongodb://localhost/' + config.database,
     self = this;
 
 var createModels = function () {
@@ -57,7 +59,7 @@ var createModels = function () {
 
 module.exports.init = function() {
     if (!self.models) {
-        logger.info('connecting database via mongoose...');
+        logger.info('connecting database ' + dbName + ' via mongoose...');
         mongoose.connect(dbUrl);
         logger.info('database connected.');
         createModels();

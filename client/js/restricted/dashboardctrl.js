@@ -1,4 +1,4 @@
-LOCA.dashboardCtrl = (function ($, Handlebars) {
+LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
     var self;
 
     // DashboardCtrl extends Controller
@@ -13,7 +13,7 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
     DashboardCtrl.prototype.constructor = DashboardCtrl;
 
     DashboardCtrl.prototype.initTemplates = function() {
-        this.templateRow = Handlebars.compile($('#view-dashboard #notification-row-template').html());
+        this.notificationListTemplate = Handlebars.compile($('#notification-list-template').html());
     };
 
     DashboardCtrl.prototype.startUp = function(callback) {
@@ -23,46 +23,41 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
 
     DashboardCtrl.prototype.pageExit = function(callback) {
         // Call parent
-        LOCA.ViewController.prototype.pageExit.call(this, callback);
+        LOCA.ViewController.prototype.pageExit.call(this, function() {
+            $('#view-dashboard .carousel').carousel('pause');
+            if (callback) {
+                callback();
+            }
+        });
     };
 
     DashboardCtrl.prototype.loadData = function (callback) {
-        var now = new Date();
-        $('#view-dashboard #rent-month-year').html('Loyers ' + LOCA.formatMonth(now.getMonth() + 1) + ' ' + now.getFullYear());
+        var currentMoment = moment();
+        $('#view-dashboard #current-day').html(currentMoment.format('Do'));
+        $('#view-dashboard .current-month').html(currentMoment.format('MMMM YYYY'));
 
         loadRentsOverview(function () {
             loadOccupantsOverview(function () {
                 loadPropertiesOverview(function () {
-                    loadNotifications(callback);
+                    loadNotifications(function() {
+                        $('#view-dashboard .carousel').each(function(index) {
+                            var $carousel = $(this);
+                            if (index%2) {
+                                setTimeout(function() {
+                                    $carousel.carousel({interval: 8000});
+                                }, 2500*index);
+                            } else {
+                                $carousel.carousel({interval: 8000});
+                            }
+                        });
+                        if (callback) {
+                            callback();
+                        }
+                    });
                 });
             });
         });
     };
-
-    // DashboardCtrl.prototype.loadList = function(callback) {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.loadList.call(this, callback);
-    // };
-
-    // DashboardCtrl.prototype.getSelectedIds = function() {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.getSelectedIds.call(this);
-    // };
-
-    // DashboardCtrl.prototype.scrollToVisible = function(selector) {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.scrollToVisible.call(this, selector);
-    // };
-
-    // DashboardCtrl.prototype.openForm = function(id) {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.openForm.call(this, id);
-    // };
-
-    // DashboardCtrl.prototype.closeForm = function(id) {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.closeForm.call(this, id);
-    // };
 
     function loadOccupantsOverview(callback) {
         LOCA.requester.ajax({
@@ -76,6 +71,9 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
             $('#view-dashboard #count-all-occupants').html(countAll);
             $('#view-dashboard #count-active-occupants').html(countActive);
             $('#view-dashboard #count-inactive-occupants').html(countInactive);
+            $('#view-dashboard #count-all-occupants-label').html(countAll>1?'Locataires':'Locataire');
+            $('#view-dashboard #count-active-occupants-label').html('En contrat');
+            $('#view-dashboard #count-inactive-occupants-label').html(countInactive>1?'Resiliés':'Resilié');
             if (callback) {
                 callback();
             }
@@ -94,6 +92,9 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
             $('#view-dashboard #count-all-properties').html(countAll);
             $('#view-dashboard #count-active-properties').html(countBusy);
             $('#view-dashboard #count-inactive-properties').html(countFree);
+            $('#view-dashboard #count-all-properties-label').html(countAll>1?'Biens':'Bien');
+            $('#view-dashboard #count-active-properties-label').html(countBusy>1?'Loués':'Loué');
+            $('#view-dashboard #count-inactive-properties-label').html(countFree>1?'Libres':'Libre');
             if (callback) {
                 callback();
             }
@@ -110,12 +111,14 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
             var countPaid = rentsOverview.countPaid;
             var countPartiallyPaid = rentsOverview.countPartiallyPaid;
             var countNotPaid = rentsOverview.countNotPaid;
+            var countPaidAndPartiallyPaid = countPaid + countPartiallyPaid;
             var totalToPay = rentsOverview.totalToPay;
             var totalNotPaid = rentsOverview.totalNotPaid;
             var totalPaid = rentsOverview.totalPaid;
             $('#view-dashboard #count-all-rents').html(countAll);
-            $('#view-dashboard #count-paid-rents').html(countPaid + countPartiallyPaid);
-            $('#view-dashboard #count-not-paid-rents').html(countNotPaid);
+            $('#view-dashboard #count-all-rents-label').html(countAll>1?'Loyers':'Loyer');
+            $('#view-dashboard #count-paid-rents').html(countPaidAndPartiallyPaid + (countPaidAndPartiallyPaid>1?' loyers':' loyer'));
+            $('#view-dashboard #count-not-paid-rents').html(countNotPaid +(countNotPaid>1?' loyers':' loyer'));
             //$('#view-dashboard #count-partially-paid-rents').html(countPartiallyPaid);
             $('#view-dashboard #count-total-topay-rents').html(LOCA.formatMoney(totalToPay));
             $('#view-dashboard #count-total-notpaid-rents').html(LOCA.formatMoney(totalNotPaid*(-1)));
@@ -143,7 +146,7 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
             if (!notificationsToDisplay || notificationsToDisplay.length === 0) {
                 notificationsToDisplay = emptyNotifications;
             }
-            $('#view-dashboard #notification-list').html(self.templateRow({notifications:notificationsToDisplay}));
+            $('#view-dashboard #carousel-notifications').html(self.notificationListTemplate({notifications:notificationsToDisplay}));
             if (callback) {
                 callback();
             }
@@ -156,4 +159,4 @@ LOCA.dashboardCtrl = (function ($, Handlebars) {
     };
 
     return new DashboardCtrl();
-}) (window.$, window.Handlebars);
+}) (window.$, window.moment, window.Handlebars);
