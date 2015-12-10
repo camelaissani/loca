@@ -1,5 +1,5 @@
 module.exports = {
-    productive: true,
+    productive: false,
     demomode: process.env.SELFHOSTED_DEMOMODE,
     database: process.env.SELFHOSTED_DBNAME || 'demodb',
     website: {

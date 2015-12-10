@@ -11,7 +11,11 @@
 </form>
 <div class="text-center">
     <button id="login-send" type="button" class="btn btn-primary">Se connecter</button>
+    <%if (config.productive) {%>
     <p>Pas encore de compte ? <a href="/signup">S'inscrire gratuitement</a>
+    <%} else {%>
+    <p>&nbsp;</p>
+    <%}%>
 </div>
 <!--div class="clearfix">
     <a href="/forgotpass" id="forgot-password" class="pull-right">Mot de passe oublié ?</a>
