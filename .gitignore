@@ -29,5 +29,5 @@ node_modules
 bower_components
 public/css/
 public/images/
-public/js/
+public/js/*.min.js
 bkp

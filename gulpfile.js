@@ -29,25 +29,23 @@ var babelOptions = {
 var uglifyOptions = {};
 
 var paths = {
-    images:             'client/images/**/*',
-    publicLessFile:     'client/less/main-public.less',
-    restrictedLessFile: 'client/less/main-restricted.less',
-    printLessFile:      'client/less/main-print.less',
-    publicScripts:      ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/public/**/*.js'],
-    restrictedScripts:  ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/restricted/**/_*.js', 'client/js/restricted/lib/**/*.js', 'client/js/restricted/form/**/*.js', 'client/js/restricted/**/*.js'],
-    printScripts:       ['client/js/common/**/_*.js', 'client/js/common/**/*.js', 'client/js/print/**/*.js'],
+    images:             'server/views/images/**/*',
+    publicLessFile:     'server/views/less/main-public.less',
+    restrictedLessFile: 'server/views/less/main-restricted.less',
+    printLessFile:      'server/views/less/main-print.less',
+    publicScripts:      ['public/js/*analytics.js', 'server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/website/**/*.js', 'server/views/login/**/*.js', 'server/views/signup/**/*.js'],
+    restrictedScripts:  ['server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/**/_*.js', 'server/views/**/*form.js', 'server/views/**/*.js'],
+    printScripts:       ['server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/printable/**/*.js'],
     htmlFiles:          ['server/views/**/*.ejs'],
-    scriptsToLint:      ['*.js', 'client/js/**/*.js', 'server/**/*.js'],
+    scriptsToLint:      ['*.js', 'server/**/*.js'],
     purifyCssScripts:   ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js', 'bower_components/bootstrap/js/carousel.js', 'bower_components/bootbox/bootbox.js'],
     testScripts:        ['test/**/*.js']
 };
 
 var watchPaths = {
-    imageFiles :            ['client/images/**/*'],
-    lessFiles :             ['client/less/**/*.less'],
-    publicScriptFiles :     ['client/js/common/**/*.js', 'client/js/public/**/*.js'],
-    restrictedScriptFiles : ['client/js/common/**/*.js', 'client/js/restricted/**/*.js'],
-    printScriptFiles :      ['client/js/common/**/*.js', 'client/js/print/**/*.js']
+    imageFiles:  ['server/views/images/**/*'],
+    lessFiles:   ['server/views/less/**/*.less'],
+    scriptFiles: ['server/views/**/*.js']
 };
 
 var isProd = function() {
@@ -59,10 +57,6 @@ gulp.task('eslint', function () {
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failOnError());
-});
-
-gulp.task('clean', ['clean-images'], function (cb) {
-    del(['public/css/**', 'public/js/**', 'node_modules', 'bower_components'], cb);
 });
 
 gulp.task('clean-images', function (cb) {
@@ -97,60 +91,36 @@ gulp.task('publicScripts', ['clean-public-scripts'], function () {
     return gulp.src(paths.publicScripts)
           .pipe(sourcemaps.init())
           .pipe(babel(babelOptions))
-          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(concat('public.min.js'))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/js'));
-});
-
-gulp.task('watchPublicScripts', function () {
-    watch(watchPaths.publicScriptFiles, batch(function (events, done) {
-        gulp.start('publicScripts', done);
-    }));
 });
 
 gulp.task('restrictedScripts', ['clean-restricted-scripts'], function () {
     return gulp.src(paths.restrictedScripts)
           .pipe(sourcemaps.init())
           .pipe(babel(babelOptions))
-          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(concat('restricted.min.js'))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/js'));
-});
-
-gulp.task('watchRestrictedScripts', function () {
-    watch(watchPaths.restrictedScriptFiles, batch(function (events, done) {
-        gulp.start('restrictedScripts', done);
-    }));
 });
 
 gulp.task('printScripts', ['clean-print-scripts'], function () {
     return gulp.src(paths.printScripts)
           .pipe(sourcemaps.init())
           .pipe(babel(babelOptions))
-          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(concat('print.min.js'))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
           .pipe(sourcemaps.write())
           .pipe(gulp.dest('public/js'));
-});
-
-gulp.task('watchPrintScripts', function () {
-    watch(watchPaths.printScriptFiles, batch(function (events, done) {
-        gulp.start('printScripts', done);
-    }));
 });
 
 gulp.task('images', ['clean-images'], function () {
     return gulp.src(paths.images)
           .pipe(imagemin({optimizationLevel: 5}))
           .pipe(gulp.dest('public/images'));
-});
-
-gulp.task('watchImageFiles', function () {
-    watch(watchPaths.imageFiles, batch(function (events, done) {
-        gulp.start('images', done);
-    }));
 });
 
 gulp.task('publicLess', ['clean-public-css'], function () {
@@ -182,13 +152,31 @@ gulp.task('printLess', ['clean-print-css'], function () {
           .pipe(gulp.dest('public/css'));
 });
 
+gulp.task('watchScripts', function () {
+    watch(watchPaths.scriptFiles, batch(function (events, done) {
+        gulp.start('publicScripts', 'restrictedScripts', 'printScripts', done);
+    })).once('exit', function () {
+        process.exit();
+    });
+});
+
+gulp.task('watchImageFiles', function () {
+    watch(watchPaths.imageFiles, batch(function (events, done) {
+        gulp.start('images', done);
+    })).once('exit', function () {
+        process.exit();
+    });
+});
+
 gulp.task('watchLessFiles', function () {
     watch(watchPaths.lessFiles, batch(function (events, done) {
         gulp.start(['publicLess', 'restrictedLess', 'printLess'], done);
-    }));
+    })).once('exit', function () {
+        process.exit();
+    });
 });
 
-gulp.task('watch', ['watchPublicScripts', 'watchRestrictedScripts', 'watchPrintScripts', 'watchImageFiles', 'watchLessFiles']);
+gulp.task('watch', ['watchScripts', 'watchImageFiles', 'watchLessFiles']);
 
 gulp.task('lint', ['eslint']);
 
@@ -204,7 +192,7 @@ gulp.task('mocha', function () {
     return gulp.src(paths.testScripts)
         .pipe(mocha({reporter: 'nyan'}))
         .once('end', function () {
-            process.exit();  // Because of db connection not closed
+            process.exit();  // Because db connection not closed
         });
 });
 
@@ -213,6 +201,8 @@ gulp.task('dev', ['build'], function () {
         script: 'server.js',
         ext: 'ejs html js',
         env: { 'NODE_ENV': 'development' }
+    }).once('exit', function () {
+        process.exit();
     });
 });
 

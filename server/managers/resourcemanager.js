@@ -1,6 +1,7 @@
 'use strict';
 
 var moment = require('moment'),
+    Helper = require('./helper'),
     db = require('../modules/db'),
     OF = require('../modules/objectfilter'),
     math = require('mathjs');
@@ -20,29 +21,6 @@ var schema = new OF({
     expense: Number
 });
 
-function checkDate(month, year) {
-    var day, now = new Date();
-
-    if (!month || !year) {
-        day = now.getDate();
-        month = now.getMonth() + 1;
-        year = now.getFullYear();
-    } else {
-        month = Number(month);
-        year = Number(year);
-        if (month <= 0 || month > 12 || year <= 0) {
-            month = now.getMonth() + 1;
-            year = now.getFullYear();
-        }
-    }
-
-    return {
-        day: day,
-        month: month,
-        year: year
-    };
-}
-
 function buildOccupants(realm, callback) {
     db.list(realm, 'occupants', function (errors, occupants) {
         var index, currentOccupant;
@@ -57,7 +35,7 @@ function buildOccupants(realm, callback) {
 }
 
 function addComputedProperties(items, occupants) {
-    var date = checkDate(),
+    var date = Helper.currentDate(),
         currentDate = moment([date.year, date.month - 1, date.day]).endOf('day');
 
     if (items) {

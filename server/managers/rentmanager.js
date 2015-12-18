@@ -4,6 +4,7 @@ var moment = require('moment'),
     math = require('mathjs'),
     db = require('../modules/db.js'),
     OF = require('../modules/objectfilter'),
+    Helper = require('./helper'),
     occupantManager = require('./occupantmanager.js');
 
 var paymentSchema = new OF({
@@ -36,27 +37,6 @@ var rentSchema = new OF({
     promo: Number,
     notepromo: String
 });
-
-function checkDate(month, year) {
-    var now = new Date();
-
-    if (!month || !year) {
-        month = now.getMonth() + 1;
-        year = now.getFullYear();
-    } else {
-        month = Number(month);
-        year = Number(year);
-        if (month <= 0 || month > 12 || year <= 0) {
-            month = now.getMonth() + 1;
-            year = now.getFullYear();
-        }
-    }
-
-    return {
-        month: month,
-        year: year
-    };
-}
 
 module.exports._computeRent = function (month, year, properties) {
     var amount = 0, expense = 0;
@@ -402,7 +382,7 @@ module.exports.findOccupantRents = function (realm, id, month, year, callback) {
 
 module.exports.renderModel = function (req, res, callback) {
     var realm = req.session.user.realm,
-        date = checkDate(req.query.month, req.query.year),
+        date = Helper.currentDate(req.query.month, req.query.year),
         action = req.query.action,
         id = req.query.id,
         model = {
@@ -437,7 +417,7 @@ module.exports.renderModel = function (req, res, callback) {
 
 module.exports.one = function (req, res) {
     var realm = req.session.user.realm,
-        date = checkDate(req.body.month, req.body.year),
+        date = Helper.currentDate(req.body.month, req.body.year),
         id = req.body.id;
 
     module.exports.findOccupantRents(realm, id, date.month, date.year, function (errors, occupant, rent/*, rents*/) {
@@ -453,7 +433,7 @@ module.exports.one = function (req, res) {
 
 module.exports.update = function (req, res) {
     var realm = req.session.user.realm,
-        date = checkDate(req.body.month, req.body.year),
+        date = Helper.currentDate(req.body.month, req.body.year),
         rent = paymentSchema.filter(req.body);
 
     if (!rent.payment || rent.payment <= 0) {

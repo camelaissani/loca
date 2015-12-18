@@ -4,6 +4,7 @@ var mongojs = require('mongojs'),
     moment = require('moment'),
     db = require('../modules/db'),
     OF = require('../modules/objectfilter'),
+    Helper = require('./helper'),
     rentManager = require('./rentmanager');
 
 var collection = 'occupants';
@@ -35,30 +36,6 @@ var schema = new OF({
 });
 
 require('sugar');
-
-function checkDate(month, year) {
-    var day,
-        now = new Date();
-
-    if (!month || !year) {
-        day = now.getDate();
-        month = now.getMonth() + 1;
-        year = now.getFullYear();
-    } else {
-        month = Number(month);
-        year = Number(year);
-        if (month <= 0 || month > 12 || year <= 0) {
-            month = now.getMonth() + 1;
-            year = now.getFullYear();
-        }
-    }
-
-    return {
-        day: day,
-        month: month,
-        year: year
-    };
-}
 
 function buildPropertyMap(realm, callback) {
     var index, property;
@@ -101,7 +78,7 @@ module.exports.defaultValuesOccupant = function(occupant)  {
     }
     occupant.discount = occupant.discount ? Number(occupant.discount) : 0;
 
-    var date = checkDate();
+    var date = Helper.currentDate();
     // Compute if contract is completed
     if (!occupant.terminationDate.isBlank()) {
         var currentDate = moment([date.year, date.month-1, date.day]).endOf('day');
@@ -143,7 +120,7 @@ module.exports.findAllOccupants = function(realm, callback, filter) {
 
 module.exports.one = function(req, res) {
     var realm = req.session.user.realm,
-        date = checkDate(req.query.month, req.query.year),
+        date = Helper.currentDate(req.query.month, req.query.year),
         id = req.body.id;
 
     module.exports.findOccupant(realm, id, date.month, date.year, function(errors, occupant/*, office, parking*/) {
