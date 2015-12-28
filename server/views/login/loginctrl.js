@@ -1,8 +1,11 @@
 LOCA.loginCtrl = (function() {
-    function LoginCtrl() {}
+    function LoginCtrl() {
+        LOCA.Form.call(this);
+    }
 
     // SUBOBJECT OF FORM
-    LoginCtrl.prototype = new LOCA.Form();
+    LoginCtrl.prototype = Object.create(LOCA.Form.prototype);
+    LoginCtrl.prototype.constructor = LoginCtrl;
 
     // METHODS TO OVERRIDE
     LoginCtrl.prototype.getDomSelector = function() {

@@ -1,10 +1,13 @@
 LOCA.ContractDocumentsForm = (function($, moment) {
-    function ContractDocumentsForm() { }
+    function ContractDocumentsForm() { 
+        LOCA.Form.call(this, {
+            alertOnFieldError: true
+        });
+    }
 
     // SUBOBJECT OF FORM
-    ContractDocumentsForm.prototype = new LOCA.Form({
-        alertOnFieldError: true
-    });
+    ContractDocumentsForm.prototype = Object.create(LOCA.Form.prototype);
+    ContractDocumentsForm.prototype.constructor = ContractDocumentsForm;
 
     // METHODS TO OVERRIDE
     ContractDocumentsForm.prototype.getDomSelector = function() {

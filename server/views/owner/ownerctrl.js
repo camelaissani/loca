@@ -11,22 +11,8 @@ LOCA.ownerCtrl = (function($) {
             domViewId: '#view-owner'
         });
     }
-    OwnerCtrl.prototype = Object.create(LOCA.ViewController);
+    OwnerCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     OwnerCtrl.prototype.constructor = OwnerCtrl;
-
-    // OwnerCtrl.prototype.initTemplates = function() {
-    //
-    // };
-
-    OwnerCtrl.prototype.startUp = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.startUp.call(this, callback);
-    };
-
-    OwnerCtrl.prototype.pageExit = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.pageExit.call(this, callback);
-    };
 
     OwnerCtrl.prototype.loadData = function(callback) {
         var data;
@@ -51,21 +37,6 @@ LOCA.ownerCtrl = (function($) {
             }
         });
     };
-
-    // OwnerCtrl.prototype.loadList = function(callback) {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.loadList.call(this, callback);
-    // };
-
-    // OwnerCtrl.prototype.getSelectedIds = function() {
-    //     // Call parent
-    //     return LOCA.ViewController.prototype.getSelectedIds.call(this);
-    // };
-
-    // OwnerCtrl.prototype.scrollToVisible = function(selector) {
-    //     // Call parent
-    //     LOCA.ViewController.prototype.scrollToVisible.call(this, selector);
-    // };
 
     OwnerCtrl.prototype.openForm = function() {
         self.edited = true;
@@ -103,11 +74,6 @@ LOCA.ownerCtrl = (function($) {
                 self.closeForm();
             });
         }
-    };
-
-    OwnerCtrl.prototype.initListeners = function() {
-        // Call parent
-        LOCA.ViewController.prototype.initListeners.call(this);
     };
 
     return new OwnerCtrl();

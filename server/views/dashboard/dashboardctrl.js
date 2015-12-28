@@ -9,16 +9,11 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             domViewId: '#view-dashboard'
         });
     }
-    DashboardCtrl.prototype = Object.create(LOCA.ViewController);
+    DashboardCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     DashboardCtrl.prototype.constructor = DashboardCtrl;
 
     DashboardCtrl.prototype.initTemplates = function() {
         this.notificationListTemplate = Handlebars.compile($('#notification-list-template').html());
-    };
-
-    DashboardCtrl.prototype.startUp = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.startUp.call(this, callback);
     };
 
     DashboardCtrl.prototype.pageExit = function(callback) {
@@ -152,11 +147,6 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             }
         });
     }
-
-    DashboardCtrl.prototype.initListeners = function() {
-        // Call parent
-        LOCA.ViewController.prototype.initListeners.call(this);
-    };
 
     return new DashboardCtrl();
 }) (window.$, window.moment, window.Handlebars);

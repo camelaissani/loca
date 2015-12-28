@@ -2,7 +2,9 @@ LOCA.signupCtrl = (function() {
     function SignupCtrl() {}
 
     // SUBOBJECT OF FORM
-    SignupCtrl.prototype = new LOCA.Form();
+    SignupCtrl.prototype = Object.create(LOCA.Form.prototype);
+    SignupCtrl.prototype.constructor = SignupCtrl;
+
 
     // METHODS TO OVERRIDE
     SignupCtrl.prototype.getDomSelector = function() {

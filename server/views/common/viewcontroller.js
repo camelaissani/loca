@@ -102,7 +102,9 @@ LOCA.ViewController = (function() {
             });
             return;
         }
-        this.onLoadData(callback);
+        if (callback) {
+            callback();
+        }
     };
 
     ViewController.prototype.loadList = function (callback) {

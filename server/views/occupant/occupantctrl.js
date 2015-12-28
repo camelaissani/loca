@@ -19,7 +19,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
         });
     }
     // Inheritance stuff
-    OccupantCtrl.prototype = Object.create(LOCA.ViewController);
+    OccupantCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     OccupantCtrl.prototype.constructor = OccupantCtrl;
 
     OccupantCtrl.prototype.initTemplates = function() {
@@ -32,47 +32,6 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
             self.templateSelectedRow = Handlebars.compile($occupantsSelected.html());
         }
     };
-
-    OccupantCtrl.prototype.startUp = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.startUp.call(this, callback);
-    };
-
-    OccupantCtrl.prototype.pageExit = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.pageExit.call(this, callback);
-    };
-
-    OccupantCtrl.prototype.loadData = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.loadData.call(this, callback);
-    };
-
-    OccupantCtrl.prototype.loadList = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.loadList.call(this, callback);
-    };
-
-    OccupantCtrl.prototype.getSelectedIds = function() {
-        // Call parent
-        return LOCA.ViewController.prototype.getSelectedIds.call(this);
-    };
-
-    OccupantCtrl.prototype.scrollToVisible = function(selector) {
-        // Call parent
-        LOCA.ViewController.prototype.scrollToVisible.call(this, selector);
-    };
-
-    OccupantCtrl.prototype.openForm = function(id) {
-        // Call parent
-        LOCA.ViewController.prototype.openForm.call(this, id);
-    };
-
-    OccupantCtrl.prototype.closeForm = function(id) {
-        // Call parent
-        LOCA.ViewController.prototype.closeForm.call(this, id);
-    };
-
 
     function loadPropertyList(callback) {
         LOCA.requester.ajax({

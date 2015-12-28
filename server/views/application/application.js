@@ -4,7 +4,7 @@ LOCA.application = (function($, History) {
     var waitCounter = 0;
 
     function Loca() {
-        var that = this;
+        self = this;
         // History management only on html 5 browser
         if (History.enabled) {
             History.Adapter.bind(window, 'statechange', function() {
@@ -15,12 +15,12 @@ LOCA.application = (function($, History) {
 
         // Wait / error dialog management
         LOCA.requester.beforeListener(function() {
-            that.showWaitMessage();
+            self.showWaitMessage();
             window.bootbox.hideAll();
         });
 
         LOCA.requester.afterListener(function() {
-            that.hideWaitMessage();
+            self.hideWaitMessage();
         });
 
         LOCA.requester.responseFailListener(function(errors) {
@@ -35,7 +35,7 @@ LOCA.application = (function($, History) {
         // Header menu management
         $(document).on('click', '.nav-action', function() {
             var viewId = $(this).data('id');
-            that.updateView(viewId, null, true);
+            self.updateView(viewId, null, true);
         });
     }
 
@@ -190,6 +190,5 @@ LOCA.application = (function($, History) {
         return viewId;
     };
 
-    self = new Loca();
-    return self;
+    return new Loca();
 })(window.$, window.History);

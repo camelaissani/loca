@@ -16,7 +16,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
             }
         });
     }
-    PropertyCtrl.prototype = Object.create(LOCA.ViewController);
+    PropertyCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     PropertyCtrl.prototype.constructor = PropertyCtrl;
 
     PropertyCtrl.prototype.initTemplates = function() {
@@ -25,46 +25,6 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
         if ($propertiesSelected.length >0) {
             self.templateSelectedRow = Handlebars.compile($propertiesSelected.html());
         }
-    };
-
-    PropertyCtrl.prototype.startUp = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.startUp.call(this, callback);
-    };
-
-    PropertyCtrl.prototype.pageExit = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.pageExit.call(this, callback);
-    };
-
-    PropertyCtrl.prototype.loadData = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.loadData.call(this, callback);
-    };
-
-    PropertyCtrl.prototype.loadList = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.loadList.call(this, callback);
-    };
-
-    PropertyCtrl.prototype.getSelectedIds = function() {
-        // Call parent
-        return LOCA.ViewController.prototype.getSelectedIds.call(this);
-    };
-
-    PropertyCtrl.prototype.scrollToVisible = function(selector) {
-        // Call parent
-        LOCA.ViewController.prototype.scrollToVisible.call(this, selector);
-    };
-
-    PropertyCtrl.prototype.openForm = function(id) {
-        // Call parent
-        LOCA.ViewController.prototype.openForm.call(this, id);
-    };
-
-    PropertyCtrl.prototype.closeForm = function(id) {
-        // Call parent
-        LOCA.ViewController.prototype.closeForm.call(this, id);
     };
 
     PropertyCtrl.prototype.onUserAction = function($action, actionId) {
@@ -120,11 +80,6 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
                 });
             });
         }
-    };
-
-    PropertyCtrl.prototype.initListeners = function() {
-        // Call parent
-        LOCA.ViewController.prototype.initListeners.call(this);
     };
 
     PropertyCtrl.prototype.onLoadData = function(callback) {

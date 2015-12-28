@@ -1,11 +1,14 @@
 LOCA.PaymentForm = (function($) {
 
-    function PaymentForm() { }
+    function PaymentForm() { 
+        LOCA.Form.call(this, {
+            alertOnFieldError: true
+        });
+    }
 
     // SUBOBJECT OF FORM
-    PaymentForm.prototype = new LOCA.Form({
-        alertOnFieldError: true
-    });
+    PaymentForm.prototype = Object.create(LOCA.Form.prototype);
+    PaymentForm.prototype.constructor = PaymentForm;
 
     // METHODS TO OVERRIDE
     PaymentForm.prototype.getDomSelector = function() {

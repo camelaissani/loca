@@ -14,7 +14,7 @@ LOCA.rentCtrl = (function($, Handlebars) {
             }
         });
     }
-    RentCtrl.prototype = Object.create(LOCA.ViewController);
+    RentCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     RentCtrl.prototype.constructor = RentCtrl;
 
     RentCtrl.prototype.initTemplates = function() {
@@ -30,21 +30,6 @@ LOCA.rentCtrl = (function($, Handlebars) {
         if ($rentsSelected.length >0) {
             this.templateSelectedRow = Handlebars.compile($rentsSelected.html());
         }
-    };
-
-    RentCtrl.prototype.startUp = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.startUp.call(this, callback);
-    };
-
-    RentCtrl.prototype.pageExit = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.pageExit.call(this, callback);
-    };
-
-    RentCtrl.prototype.loadData = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.loadData.call(this, callback);
     };
 
     RentCtrl.prototype.loadList = function (callback) {
@@ -85,26 +70,6 @@ LOCA.rentCtrl = (function($, Handlebars) {
                 }
             });
         });
-    };
-
-    RentCtrl.prototype.getSelectedIds = function() {
-        // Call parent
-        return LOCA.ViewController.prototype.getSelectedIds.call(this);
-    };
-
-    RentCtrl.prototype.scrollToVisible = function(selector) {
-        // Call parent
-        LOCA.ViewController.prototype.scrollToVisible.call(this, selector);
-    };
-
-    RentCtrl.prototype.openForm = function(id) {
-        // Call parent
-        LOCA.ViewController.prototype.openForm.call(this, id);
-    };
-
-    RentCtrl.prototype.closeForm = function(id) {
-        // Call parent
-        LOCA.ViewController.prototype.closeForm.call(this, id);
     };
 
     RentCtrl.prototype.onUserAction = function($action, actionId) {

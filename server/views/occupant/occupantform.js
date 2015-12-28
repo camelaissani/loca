@@ -1,11 +1,14 @@
 LOCA.OccupantForm = (function($, Handlebars, moment) {
 
-    function OccupantForm() { }
+    function OccupantForm() {
+        LOCA.Form.call(this, {
+            alertOnFieldError: true
+        });
+    }
 
     // SUBOBJECT OF FORM
-    OccupantForm.prototype = new LOCA.Form({
-        alertOnFieldError: true
-    });
+    OccupantForm.prototype = Object.create(LOCA.Form.prototype);
+    OccupantForm.prototype.constructor = OccupantForm;
 
     // METHODS TO OVERRIDE
     OccupantForm.prototype.getDomSelector = function() {

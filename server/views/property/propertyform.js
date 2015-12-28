@@ -1,11 +1,14 @@
 LOCA.PropertyForm = (function($) {
 
-    function PropertyForm() {}
+    function PropertyForm() {
+        LOCA.Form.call(this, {
+            alertOnFieldError: true
+        });
+    }
 
     // SUBOBJECT OF FORM
-    PropertyForm.prototype = new LOCA.Form({
-        alertOnFieldError: true
-    });
+    PropertyForm.prototype = Object.create(LOCA.Form.prototype);
+    PropertyForm.prototype.constructor = PropertyForm;
 
     // METHODS TO OVERRIDE
     PropertyForm.prototype.getDomSelector = function() {

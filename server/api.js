@@ -3,6 +3,7 @@
 var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
     config = require(configdir + '/config'),
     rs = require('./requeststrategy'),
+    Helper = require('./managers/helper'),
     loginManager = require('./managers/loginmanager'),
     rentManager = require('./managers/rentmanager'),
     occupantManager = require('./managers/occupantmanager'),
@@ -10,24 +11,6 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
     resourceManager = require('./managers/resourcemanager'),
     ownerManager = require('./managers/ownermanager'),
     notificationManager = require('./managers/notificationmanager');
-
-var getDateFromRequest = function (req) {
-    var month = Number(req.query.month),
-        year = Number(req.query.year),
-        now = new Date();
-
-    if (!month || !year) {
-        month = now.getMonth() + 1;
-        year = now.getFullYear();
-    } else if (month <= 0 || month > 12 || year <= 1899) {
-        month = now.getMonth() + 1;
-        year = now.getFullYear();
-    }
-    return {
-        month: month,
-        year: year
-    };
-};
 
 function API(router) {
     if (config.productive) {
@@ -99,7 +82,7 @@ function API(router) {
     router.route('/api/rents/occupant').get(rs.restrictedArea, function (req, res) {
         var realm = req.session.user.realm,
             id = req.query.id,
-            date = getDateFromRequest(req);
+            date = Helper.currentDate(req.query.month, req.query.year);
 
         rentManager.findOccupantRents(realm, id, date.month, date.year, function (errors, occupant, rent, rents) {
             var i, currentRent;
@@ -119,7 +102,7 @@ function API(router) {
     });
     router.route('/api/rents').get(rs.restrictedArea, function (req, res) {
         var realm = req.session.user.realm,
-            date = getDateFromRequest(req);
+            date = Helper.currentDate(req.query.month, req.query.year);
 
         rentManager.findAllOccupantRents(realm, date.month, date.year, function (errors, rents) {
             if (errors && errors.length > 0) {
@@ -131,7 +114,7 @@ function API(router) {
     });
     router.route('/api/rents/overview').get(rs.restrictedArea, function (req, res) {
         var realm = req.session.user.realm,
-            date = getDateFromRequest(req);
+            date = Helper.currentDate(req.query.month, req.query.year);
 
         rentManager.findAllOccupantRents(realm, date.month, date.year, function (errors, rents) {
             if (errors && errors.length>0) {
