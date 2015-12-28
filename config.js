@@ -6,7 +6,7 @@ module.exports = {
         company: {name: '', website: ''},
         product: {
             name: 'Loca',
-            slogan: 'Outil gratuit pour la gestion de vos biens immobiliers',
+            slogan: 'Gestion de vos biens immobiliers',
             website: 'http://localhost:8081/',
             imageUrl: 'http://localhost:8081/public/images/1.jpg'
         },
@@ -22,9 +22,9 @@ module.exports = {
         },
         metatags: {
             type: 'website',
-            title: 'Logiciel gratuit de gestion immobilière',
+            title: 'Logiciel open source de gestion immobilière',
             description: '',
-            keywords: 'Logiciel gratuit, Gestion immobilière, gérer ses biens en ligne, gestion des loyers, quittances, avis d\'écheance',
+            keywords: 'Logiciel open source, Logiciel gratuit, Gestion immobilière, gérer ses biens en ligne, gestion des loyers, quittances, avis d\'écheance',
             location: 'Ile de France',
             rating: 'General',
             author: {name: 'Camel Aissani', twitter: '@camelaissani'}
