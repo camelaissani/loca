@@ -12,6 +12,8 @@ logger.info('Configuration content:', config);
 
 function render(model, res) {
     model.config = config;
+    model.isUnrestrictedView = ['website', 'login', 'signup'].indexOf(model.view) !== -1,
+    model.isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'login', 'signup' ].indexOf(model.view) !== -1;
     res.render('index', model);
 }
 

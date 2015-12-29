@@ -12,7 +12,7 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
     uglify = require('gulp-uglify'),
     imagemin = require('gulp-imagemin'),
     less = require('gulp-less'),
-    minifyCss = require('gulp-minify-css'),
+    cssNano = require('gulp-cssnano'),
     purifyCss = require('gulp-purifycss'),
     sourcemaps = require('gulp-sourcemaps'),
     eslint = require('gulp-eslint'),
@@ -89,31 +89,31 @@ gulp.task('clean-print-scripts', function (cb) {
 
 gulp.task('publicScripts', ['clean-public-scripts'], function () {
     return gulp.src(paths.publicScripts)
-          .pipe(sourcemaps.init())
+          .pipe(gulpif(!isProd, sourcemaps.init()))
           .pipe(babel(babelOptions))
           .pipe(concat('public.min.js'))
           .pipe(gulpif(isProd, uglify(uglifyOptions)))
-          .pipe(sourcemaps.write())
+          .pipe(gulpif(!isProd, sourcemaps.write()))
           .pipe(gulp.dest('public/js'));
 });
 
 gulp.task('restrictedScripts', ['clean-restricted-scripts'], function () {
     return gulp.src(paths.restrictedScripts)
-          .pipe(sourcemaps.init())
+          .pipe(gulpif(!isProd, sourcemaps.init()))
           .pipe(babel(babelOptions))
           .pipe(concat('restricted.min.js'))
           .pipe(gulpif(isProd, uglify(uglifyOptions)))
-          .pipe(sourcemaps.write())
+          .pipe(gulpif(!isProd, sourcemaps.write()))
           .pipe(gulp.dest('public/js'));
 });
 
 gulp.task('printScripts', ['clean-print-scripts'], function () {
     return gulp.src(paths.printScripts)
-          .pipe(sourcemaps.init())
+          .pipe(gulpif(!isProd, sourcemaps.init()))
           .pipe(babel(babelOptions))
           .pipe(concat('print.min.js'))
           .pipe(gulpif(isProd, uglify(uglifyOptions)))
-          .pipe(sourcemaps.write())
+          .pipe(gulpif(!isProd, sourcemaps.write()))
           .pipe(gulp.dest('public/js'));
 });
 
@@ -125,30 +125,30 @@ gulp.task('images', ['clean-images'], function () {
 
 gulp.task('publicLess', ['clean-public-css'], function () {
     return gulp.src(paths.publicLessFile)
-          .pipe(sourcemaps.init())
+          .pipe(gulpif(!isProd, sourcemaps.init()))
           .pipe(less())
           .pipe(purifyCss(paths.publicScripts.concat(paths.purifyCssScripts).concat(paths.htmlFiles)))
-          .pipe(gulpif(isProd, minifyCss()))
-          .pipe(sourcemaps.write())
+          .pipe(gulpif(isProd, cssNano()))
+          .pipe(gulpif(!isProd, sourcemaps.write()))
           .pipe(gulp.dest('public/css'));
 });
 
 gulp.task('restrictedLess', ['clean-restricted-css'], function () {
     return gulp.src(paths.restrictedLessFile)
-          .pipe(sourcemaps.init())
+          .pipe(gulpif(!isProd, sourcemaps.init()))
           .pipe(less())
           .pipe(purifyCss(paths.restrictedScripts.concat(paths.purifyCssScripts).concat(paths.htmlFiles)))
-          .pipe(gulpif(isProd, minifyCss()))
-          .pipe(sourcemaps.write())
+          .pipe(gulpif(isProd, cssNano()))
+          .pipe(gulpif(!isProd, sourcemaps.write()))
           .pipe(gulp.dest('public/css'));
 });
 
 gulp.task('printLess', ['clean-print-css'], function () {
     return gulp.src(paths.printLessFile)
-          .pipe(sourcemaps.init())
+          .pipe(gulpif(!isProd, sourcemaps.init()))
           .pipe(less())
-          .pipe(gulpif(isProd, minifyCss()))
-          .pipe(sourcemaps.write())
+          .pipe(gulpif(isProd, cssNano()))
+          .pipe(gulpif(!isProd, sourcemaps.write()))
           .pipe(gulp.dest('public/css'));
 });
 

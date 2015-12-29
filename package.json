@@ -45,7 +45,7 @@
     "gulp-if": "^2.0.0",
     "gulp-imagemin": "*",
     "gulp-less": "*",
-    "gulp-minify-css": "*",
+    "gulp-cssnano": "*",
     "gulp-mocha": "*",
     "gulp-nodemon": "*",
     "gulp-purifycss": "*",
