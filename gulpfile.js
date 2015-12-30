@@ -201,8 +201,6 @@ gulp.task('dev', ['build'], function () {
         script: 'server.js',
         ext: 'ejs html js',
         env: { 'NODE_ENV': 'development' }
-    }).once('exit', function () {
-        process.exit();
     });
 });
 
@@ -221,3 +219,9 @@ gulp.task('mongorestore', function() {
 });
 
 gulp.task('default', ['build']);
+
+process.once('SIGINT', function() {
+    nodemon().once('exit', function() {
+        process.exit();
+    });
+});
