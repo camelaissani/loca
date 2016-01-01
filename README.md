@@ -41,7 +41,7 @@ Sorry guys but currently the application is in french...
 
 Why I created this application?
 -------------------------------
-Simply to help my best friend and me to manage properties that we rent.
+Simply to help my best friend and I to manage properties that we rent.
 
 Above all, to have a good reason to play with node and javascript :-)
 
