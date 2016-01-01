@@ -12,8 +12,11 @@ logger.info('Configuration content:', config);
 
 function render(model, res) {
     model.config = config;
-    model.isUnrestrictedView = ['website', 'login', 'signup'].indexOf(model.view) !== -1,
     model.isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'login', 'signup' ].indexOf(model.view) !== -1;
+    model.isLogged = model.account?true:false;
+    model.isRealmSelected = model.account && model.account.realm;
+    model.isDefaultRealmSelected = model.isRealmSelected && model.account.realm.name === '__default_';
+    model.isMultipleRealmsAvailable = model.account && model.account.realms && model.account.realms.length>1;
     res.render('index', model);
 }
 

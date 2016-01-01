@@ -6,13 +6,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title><%=config.website.productName%> <%=config.website.productSlogan%></title>
-        <% if (isUnrestrictedView) { %>
+        <% if (!isLogged) { %>
             <%- include website/metatags.ejs %>
         <% } %>
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
-        <% if (isUnrestrictedView) { %>
+        <% if (!isLogged) { %>
 
             <link href="/public/css/main-public.css" rel="stylesheet">
 
@@ -25,7 +25,7 @@
         <script src="/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
     </head>
 
-    <% if (isUnrestrictedView) { %>
+    <% if (!isLogged) { %>
     <body class="covered-body">
     <% } else { %>
     <body>
@@ -45,7 +45,7 @@
         <%}%>
 
         <%- include website/footer.ejs %>
-        <% if (!isUnrestrictedView) { %>
+        <% if (isLogged) { %>
             <div id="waitwindow" class="alert" style="display:none;">
                 <i class="fa fa-refresh fa-spin fa-2x"></i><span class="loading">Chargement...</span>
             </div>
@@ -58,7 +58,7 @@
         <script src="/bower_components/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
         <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_fr.js" type="text/javascript"></script>
         <script src="/bower_components/bootbox/bootbox.js" type="text/javascript"></script>
-    <% if (isUnrestrictedView) { %>
+    <% if (!isLogged) { %>
         <script src="/public/js/public.min.js" type="text/javascript"></script>
     <% } else { %>
         <script src="//cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js" type="text/javascript"></script>
