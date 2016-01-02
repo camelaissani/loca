@@ -22,19 +22,18 @@ var path = require('path'),
     pageRoutes = require('./server/pages');
 
 // Server constants
-var ipaddr = process.env.OPENSHIFT_INTERNAL_IP || process.env.OPENSHIFT_NODEJS_IP,
-    http_port = process.env.SELFHOSTED_NODEJS_PORT || 8081,
+var http_port = process.env.SELFHOSTED_NODEJS_PORT || 8081,
     basedir = __dirname;
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
+    logger.info('In production mode');
+} else {
     // Create new middleware to handle errors and respond with content negotiation.
     // This middleware is only intended to be used in a development environment,
     // as the full error stack traces will be sent back to the client when an error occurs.
     app.use(errorHandler());
     //logger.level = 'debug';
     logger.info('In development mode');
-} else {
-    logger.info('In production mode');
 }
 
 // Init locale
@@ -74,6 +73,6 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 // Start web app
-app.listen(http_port, ipaddr, function () {
+app.listen(http_port, function () {
     logger.info('Listening port ' + http_port);
 });

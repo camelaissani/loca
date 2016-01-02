@@ -44,7 +44,7 @@ var paths = {
 
 var watchPaths = {
     imageFiles:  ['server/views/images/**/*'],
-    lessFiles:   ['server/views/less/**/*.less'],
+    lessFiles:   ['server/views/**/*.less'],
     scriptFiles: ['server/views/**/*.js']
 };
 
@@ -117,6 +117,15 @@ gulp.task('printScripts', ['clean-print-scripts'], function () {
           .pipe(gulp.dest('public/js'));
 });
 
+gulp.task('bootboxScript', function () {
+    return gulp.src(['bower_components/bootbox/bootbox.js'])
+          .pipe(gulpif(!isProd, sourcemaps.init()))
+          .pipe(concat('bootbox.min.js'))
+          .pipe(gulpif(isProd, uglify(uglifyOptions)))
+          .pipe(gulpif(!isProd, sourcemaps.write()))
+          .pipe(gulp.dest('bower_components/bootbox'));
+});
+
 gulp.task('images', ['clean-images'], function () {
     return gulp.src(paths.images)
           .pipe(imagemin({optimizationLevel: 5}))
@@ -152,35 +161,29 @@ gulp.task('printLess', ['clean-print-css'], function () {
           .pipe(gulp.dest('public/css'));
 });
 
-gulp.task('watchScripts', function () {
+gulp.task('watchScriptFiles', function () {
     watch(watchPaths.scriptFiles, batch(function (events, done) {
         gulp.start('publicScripts', 'restrictedScripts', 'printScripts', done);
-    })).once('exit', function () {
-        process.exit();
-    });
+    }));
 });
 
 gulp.task('watchImageFiles', function () {
     watch(watchPaths.imageFiles, batch(function (events, done) {
         gulp.start('images', done);
-    })).once('exit', function () {
-        process.exit();
-    });
+    }));
 });
 
 gulp.task('watchLessFiles', function () {
     watch(watchPaths.lessFiles, batch(function (events, done) {
         gulp.start(['publicLess', 'restrictedLess', 'printLess'], done);
-    })).once('exit', function () {
-        process.exit();
-    });
+    }));
 });
 
-gulp.task('watch', ['watchScripts', 'watchImageFiles', 'watchLessFiles']);
+gulp.task('watch', ['watchScriptFiles', 'watchImageFiles', 'watchLessFiles']);
 
 gulp.task('lint', ['eslint']);
 
-gulp.task('build', ['lint', 'images', 'publicLess', 'restrictedLess', 'printLess', 'publicScripts', 'restrictedScripts', 'printScripts']);
+gulp.task('build', ['lint', 'images', 'publicLess', 'restrictedLess', 'printLess', 'publicScripts', 'restrictedScripts', 'printScripts', 'bootboxScript']);
 
 gulp.task('install', gulpsync.sync(['bower', 'build', 'mocha']));
 
@@ -199,8 +202,7 @@ gulp.task('mocha', function () {
 gulp.task('dev', ['build'], function () {
     nodemon({
         script: 'server.js',
-        ext: 'ejs html js',
-        env: { 'NODE_ENV': 'development' }
+        ext: 'ejs html js'
     });
 });
 
@@ -221,7 +223,5 @@ gulp.task('mongorestore', function() {
 gulp.task('default', ['build']);
 
 process.once('SIGINT', function() {
-    nodemon().once('exit', function() {
-        process.exit();
-    });
+    process.exit();
 });
