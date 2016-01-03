@@ -3,12 +3,12 @@
   "version": "0.0.2",
   "private": true,
   "scripts": {
-    "postinstall": "gulp install",
+    "postinstall": "gulp bower",
     "start": "NODE_ENV=production node server.js",
     "build": "gulp build",
     "watch": "gulp watch",
     "dev": "gulp dev",
-    "test": "gulp mocha",
+    "test": "gulp test",
     "clean": "gulp clean",
     "mongodump": "gulp mongodump",
     "mongorestore": "gulp mongorestore"

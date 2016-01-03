@@ -181,17 +181,13 @@ gulp.task('watchLessFiles', function () {
 
 gulp.task('watch', ['watchScriptFiles', 'watchImageFiles', 'watchLessFiles']);
 
-gulp.task('lint', ['eslint']);
-
-gulp.task('build', ['lint', 'images', 'publicLess', 'restrictedLess', 'printLess', 'publicScripts', 'restrictedScripts', 'printScripts', 'bootboxScript']);
-
-gulp.task('install', gulpsync.sync(['bower', 'build', 'mocha']));
+gulp.task('build', ['eslint', 'images', 'publicLess', 'restrictedLess', 'printLess', 'publicScripts', 'restrictedScripts', 'printScripts', 'bootboxScript']);
 
 gulp.task('bower', function() {
     return bower();
 });
 
-gulp.task('mocha', function () {
+gulp.task('test', ['eslint'], function () {
     return gulp.src(paths.testScripts)
         .pipe(mocha({reporter: 'nyan'}))
         .once('end', function () {
@@ -220,7 +216,7 @@ gulp.task('mongorestore', function() {
     });
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', gulpsync.sync(['bower', 'build', 'test']));
 
 process.once('SIGINT', function() {
     process.exit();
