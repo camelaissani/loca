@@ -2,7 +2,7 @@
 
 var moment = require('moment'),
     crypto = require('crypto'),
-    db = require('../modules/db.js'),
+    db = require('../modules/db'),
     OF = require('../modules/objectfilter');
 
 var collection = 'notifications';

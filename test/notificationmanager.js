@@ -3,12 +3,19 @@
 var assert = require('assert'),
     sinon = require('sinon'),
     moment = require('moment'),
-    manager = require('../server/managers/notificationmanager'),
-    db = require('../server/modules/db');
-
-db.init();
+    proxyquire = require('proxyquire'),
+    mocks = require('./mocks'),
+    manager;
 
 describe('notificationmanager', function () {
+    before(function() {
+        var mockedDB = mocks.db;
+        mockedDB.list = function (realm, collection, callback) {
+            callback(null, []);
+        };
+        manager = proxyquire('../server/managers/notificationmanager', {'../modules/db': mocks.db});
+    });
+
     it('list all notifications', function (done) {
         var req = { session : { user: { realm: {name : 'test'} } } },
             res = {

@@ -19,6 +19,7 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
     del = require('del'),
     bower = require('gulp-bower'),
     mocha = require('gulp-mocha'),
+    istanbul = require('gulp-istanbul'),
     nodemon = require('gulp-nodemon'),
     mongobackup = require('mongobackup');
 
@@ -36,6 +37,8 @@ var paths = {
     publicScripts:      ['public/js/*analytics.js', 'server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/website/**/*.js', 'server/views/login/**/*.js', 'server/views/signup/**/*.js'],
     restrictedScripts:  ['server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/**/_*.js', 'server/views/**/*form.js', 'server/views/**/*.js'],
     printScripts:       ['server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/printable/**/*.js'],
+    frontendScripts:    ['server/views/**/*.js'],
+    backendScripts:     ['server/*.js', 'server/modules/**/*.js', 'server/managers/**/*.js'],
     htmlFiles:          ['server/views/**/*.ejs'],
     scriptsToLint:      ['*.js', 'server/**/*.js'],
     purifyCssScripts:   ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js', 'bower_components/bootstrap/js/carousel.js', 'bower_components/bootbox/bootbox.js'],
@@ -188,11 +191,18 @@ gulp.task('bower', function() {
 });
 
 gulp.task('test', ['eslint'], function () {
-    return gulp.src(paths.testScripts)
-        .pipe(mocha({reporter: 'nyan'}))
-        .once('end', function () {
-            process.exit();  // Because db connection not closed
-        });
+    return gulp.src(paths.backendScripts)
+          .pipe(istanbul({includeUntested: true}))
+          .pipe(istanbul.hookRequire())
+          .on('finish', function () {
+              gulp.src(paths.testScripts)
+              .pipe(mocha({reporter: 'list'}))
+              .pipe(istanbul.writeReports({
+                  dir: 'unit-test-coverage',
+                  reporters: [ 'lcov', 'text-summary'],
+                  reportOpts: { dir: 'unit-test-coverage'}
+              }));
+          });
 });
 
 gulp.task('dev', ['build'], function () {

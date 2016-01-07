@@ -2,7 +2,7 @@
 
 var moment = require('moment'),
     math = require('mathjs'),
-    db = require('../modules/db.js'),
+    db = require('../modules/db'),
     OF = require('../modules/objectfilter'),
     Helper = require('./helper'),
     occupantManager = require('./occupantmanager.js');
