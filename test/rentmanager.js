@@ -7,7 +7,7 @@ var assert = require('assert'),
     manager = proxyquire('../server/managers/rentmanager', {'../modules/db': new mocks.DB()});
 
 describe('rentmanager', function() {
-    describe('Compute one rent price', function() {
+    describe('Compute one rent price - contract started first day of month', function() {
         var properties = [
             {
                 entryDate: '01/01/2000',
@@ -21,14 +21,41 @@ describe('rentmanager', function() {
             }
         ];
 
-        it('Assert rent price', function(){
+        it('Assert first rent price', function(){
             var price = manager._computeRent(1, 2000, properties);
             assert.equal(100, price.amount);
             assert.equal(10, price.expense);
         });
 
-        it('Assert rent price', function(){
+        it('Assert second rent price', function(){
             var price = manager._computeRent(2, 2000, properties);
+            assert.equal(150, price.amount);
+            assert.equal(10, price.expense);
+        });
+    });
+
+    describe('Compute one rent price - contract not started the first day of month', function() {
+        var properties = [
+            {
+                entryDate: '11/01/2015',
+                exitDate: '10/01/2025',
+                property: { price: 100, expense: 10 }
+            },
+            {
+                entryDate: '11/01/2015',
+                exitDate: '10/01/2025',
+                property: { price: 50 }
+            }
+        ];
+
+        it('Assert first rent price', function(){
+            var price = manager._computeRent(1, 2015, properties);
+            assert.equal(150, price.amount);
+            assert.equal(10, price.expense);
+        });
+
+        it('Assert last rent price', function(){
+            var price = manager._computeRent(1, 2025, properties);
             assert.equal(150, price.amount);
             assert.equal(10, price.expense);
         });
