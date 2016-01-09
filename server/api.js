@@ -1,6 +1,6 @@
 'use strict';
 
-var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
+var configdir = process.env.SELFHOSTED_CONFIG_DIR || '..',
     config = require(configdir + '/config'),
     rs = require('./requeststrategy'),
     Helper = require('./managers/helper'),

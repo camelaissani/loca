@@ -1,41 +1,71 @@
-module.exports.db = { 
-    init: function () {
-        console.log('mocked function db.init');
-    },
+module.exports.DB = function() { 
+    this.init = function () {
+    };
     
-    findItemById: function (realm, collection, id, callback) {
-        console.log('mocked function db.findItemById');
-    },
+    this.findItemById = function (realm, collection, id, callback) {
+    };
     
-    listWithFilter: function (realm, collection, filter, callback) {
-        console.log('mocked function db.listWithFilter');
-    },
+    this.listWithFilter = function (realm, collection, filter, callback) {
+    };
 
-    list: function (realm, collection, callback) {
-        console.log('mocked function db.list');
-    },
+    this.list = function (realm, collection, callback) {
+    };
 
-    add: function (realm, collection, item, callback) {
-        console.log('mocked function db.add');
-    },
+    this.add = function (realm, collection, item, callback) {
+    };
 
-    updateWithFilter: function (realm, collection, filter, item, callback) {
-        console.log('mocked function db.updateWithFilter');
-    },
+    this.updateWithFilter = function (realm, collection, filter, item, callback) {
+    };
 
-    update: function (realm, collection, item, callback) {
-        console.log('mocked function db.update');
-    },
+    this.update = function (realm, collection, item, callback) {
+    };
 
-    upsert: function (realm, collection, query, fieldsToSet, fieldsToSetOnInsert, callback) {
-        console.log('mocked function db.upsert');
-    },
+    this.upsert = function (realm, collection, query, fieldsToSet, fieldsToSetOnInsert, callback) {
+    };
 
-    removeWithFilter: function (realm, collection, filter, callback) {
-        console.log('mocked function db.removeWithFilter');
-    },
+    this.removeWithFilter = function (realm, collection, filter, callback) {
+    };
 
-    remove: function (realm, collection, items, callback) {
-        console.log('mocked function db.remove');
-    }
+    this.remove = function (realm, collection, items, callback) {
+    };
+};
+
+module.exports.LoginManager = function() {
+    this.signup = function (req, res) {
+        res.json({});
+    };
+
+    this.login = function (req, res) {
+        res.json({});
+    };
+
+    this.logout = function (req, res) {
+        res.json({});
+    };
+
+    this.selectRealm = function (req, res) {
+        res.json({});
+    };
+};
+
+module.exports.RequestStrategy = function() {
+    this.mustSessionLessArea = function (req, res, next) {
+        next();
+    };
+
+    this.restrictedArea = function (req, res, next) {
+        next();
+    };
+
+    this.restrictedAreaAndRedirect = function (req, res, next) {
+        next();
+    };
+
+    this.mustRealmSetAndRedirect = function (req, res, next) {
+        next();
+    };
+
+    this.mustRealmSet = function (req, res, next) {
+        next();
+    };
 };

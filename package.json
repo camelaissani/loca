@@ -58,6 +58,7 @@
     "minify": "*",
     "mocha": "*",
     "proxyquire": "*",
+    "supertest": "*",
     "mongobackup": "*",
     "nodemon": "*",
     "sinon": "*",

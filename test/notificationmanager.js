@@ -9,11 +9,11 @@ var assert = require('assert'),
 
 describe('notificationmanager', function () {
     before(function() {
-        var mockedDB = mocks.db;
+        var mockedDB = new mocks.DB();
         mockedDB.list = function (realm, collection, callback) {
             callback(null, []);
         };
-        manager = proxyquire('../server/managers/notificationmanager', {'../modules/db': mocks.db});
+        manager = proxyquire('../server/managers/notificationmanager', {'../modules/db': mockedDB});
     });
 
     it('list all notifications', function (done) {

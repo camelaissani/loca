@@ -11,10 +11,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-coverage
-
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
+unit-test-coverage
 
 # node-waf configuration
 .lock-wscript
@@ -31,4 +28,3 @@ public/css/
 public/images/
 public/js/*.min.js
 bkp
-unit-test-coverage
