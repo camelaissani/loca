@@ -58,6 +58,40 @@ function buildPropertyMap(realm, callback) {
     });
 }
 
+function _getPaidRents(occupant, startMoment, excludeCurrentMonth) {
+    var currentMoment = moment(startMoment),
+        month,
+        year,
+        paidRents = [],
+        rent;
+
+    if (excludeCurrentMonth) {
+        currentMoment.add('months', 1);
+    }
+    month = currentMoment.month() + 1; // 0 based
+    year = currentMoment.year();
+    while (occupant.rents && occupant.rents[year] && occupant.rents[year][month]) {
+        rent = occupant.rents[year][month];
+        if (rent.payment && rent.payment !== 0) {
+            paidRents.push(month + '/' + year);
+        }
+
+        currentMoment.add('months', 1);
+        month = currentMoment.month() + 1; // 0 based
+        year = currentMoment.year();
+    }
+    return paidRents;
+}
+
+function getPaidRents(occupant) {
+    var startMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
+    return _getPaidRents(occupant, startMoment, false);
+}
+
+function getPaidRentsAfterDate(occupant, startMoment) {
+    return _getPaidRents(occupant, startMoment, true);
+}
+
 module.exports.defaultValuesOccupant = function(occupant)  {
     occupant.street1 = occupant.street1?occupant.street1:'';
     occupant.street2 = occupant.street2?occupant.street2:'';
@@ -213,9 +247,11 @@ module.exports.update = function(req, res) {
         }
         delete dbOccupant._id;
         occupant.rents = dbOccupant.rents;
-        occupant.documents = dbOccupant.documents;
+        if (dbOccupant.documents) {
+            occupant.documents = dbOccupant.documents;
+        }
 
-        afterPaidRents = rentManager.getPaidRentsAfterDate(occupant, momentEnd);
+        afterPaidRents = getPaidRentsAfterDate(occupant, momentEnd);
         if (!afterPaidRents || afterPaidRents.length === 0) {
             buildPropertyMap(realm, function(errors, propertyMap) {
                 if (errors && errors.length > 0) {
@@ -289,7 +325,7 @@ module.exports.remove = function(req, res) {
         }, function(errors, occupants) {
             if (occupants && occupants.length > 0) {
                 for (i=0; i < occupants.length; i++) {
-                    isPaidRents = (rentManager.getPaidRents(occupants[i]).length>0);
+                    isPaidRents = (getPaidRents(occupants[i]).length>0);
                     if (isPaidRents) {
                         callback(['Impossible de supprimer le locataire : ' + occupants[i].name + ' des loyers ont été encaissés.']);
                         return;

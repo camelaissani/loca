@@ -187,40 +187,6 @@ module.exports._updateRentPayment = function (rentMoment, previousRent, occupant
     return null;
 };
 
-module.exports._getPaidRents = function (occupant, startMoment, excludeCurrentMonth) {
-    var currentMoment = moment(startMoment),
-        month,
-        year,
-        paidRents = [],
-        rent;
-
-    if (excludeCurrentMonth) {
-        currentMoment.add('months', 1);
-    }
-    month = currentMoment.month() + 1; // 0 based
-    year = currentMoment.year();
-    while (occupant.rents && occupant.rents[year] && occupant.rents[year][month]) {
-        rent = occupant.rents[year][month];
-        if (rent.payment && rent.payment !== 0) {
-            paidRents.push(month + '/' + year);
-        }
-
-        currentMoment.add('months', 1);
-        month = currentMoment.month() + 1; // 0 based
-        year = currentMoment.year();
-    }
-    return paidRents;
-};
-
-module.exports.getPaidRents = function (occupant) {
-    var startMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
-    return module.exports._getPaidRents(occupant, startMoment, false);
-};
-
-module.exports.getPaidRentsAfterDate = function (occupant, startMoment) {
-    return module.exports._getPaidRents(occupant, startMoment, true);
-};
-
 module.exports._buildViewData = function (occupant, rent, month, year) {
     var now = new Date(),
         rentMoment,
