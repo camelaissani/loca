@@ -27,7 +27,6 @@ function API(router) {
     router.route('/api/occupants').get(rs.restrictedArea, function (req, res) {
         var realm = req.session.user.realm,
             occupantIdx;
-
         occupantManager.findAllOccupants(realm, function (errors, occupants) {
             if (errors && errors.length > 0) {
                 res.json({errors: errors});

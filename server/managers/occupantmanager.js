@@ -66,7 +66,7 @@ function _getPaidRents(occupant, startMoment, excludeCurrentMonth) {
         rent;
 
     if (excludeCurrentMonth) {
-        currentMoment.add('months', 1);
+        currentMoment.add(1, 'months');
     }
     month = currentMoment.month() + 1; // 0 based
     year = currentMoment.year();
@@ -76,7 +76,7 @@ function _getPaidRents(occupant, startMoment, excludeCurrentMonth) {
             paidRents.push(month + '/' + year);
         }
 
-        currentMoment.add('months', 1);
+        currentMoment.add(1, 'months');
         month = currentMoment.month() + 1; // 0 based
         year = currentMoment.year();
     }
