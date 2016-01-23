@@ -1,48 +1,39 @@
 'use strict';
 
-var sugar = require('sugar'),
-    express = require('express'),
-    request = require('supertest'),
-    assert = require('assert'),
-    sinon = require('sinon'),
-    proxyquire = require('proxyquire'),
+var helpers = require('./helpers'),
     mocks = require('./mocks');
+
+var configPackage = {
+    relativePath: '../config',
+    instance: { productive: true }
+};
 
 var testSet = [
     {
-        label: '/signup',
         mockedPackages: [
             {
                 relativePath: './managers/loginmanager',
                 instance: new mocks.LoginManager(),
                 ensureCallMethods: ['signup']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/signup'
     },
     {
-        label: '/login',
         mockedPackages: [
             {
                 relativePath: './managers/loginmanager',
                 instance: new mocks.LoginManager(),
                 ensureCallMethods: ['login']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/login'
     },
     {
-        label: '/logout',
         mockedPackages: [
             {
                 relativePath: './managers/loginmanager',
@@ -54,16 +45,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedAreaAndRedirect']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/logout'
     },
     {
-        label: '/api/selectrealm',
         mockedPackages: [
             {
                 relativePath: './managers/loginmanager',
@@ -75,16 +62,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/api/selectrealm'
     },
     {
-        label: '/occupants/one',
         mockedPackages: [
             {
                 relativePath: './managers/occupantmanager',
@@ -96,16 +79,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/occupants/one'
     },
     {
-        label: '/occupants/add',
         mockedPackages: [
             {
                 relativePath: './managers/occupantmanager',
@@ -117,16 +96,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/occupants/add'
     },
     {
-        label: '/occupants/update',
         mockedPackages: [
             {
                 relativePath: './managers/occupantmanager',
@@ -138,16 +113,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/occupants/update'
     },
     {
-        label: '/occupants/remove',
         mockedPackages: [
             {
                 relativePath: './managers/occupantmanager',
@@ -159,16 +130,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/occupants/remove'
     },
     {
-        label: '/api/occupants',
         mockedPackages: [
             {
                 relativePath: './managers/occupantmanager',
@@ -180,16 +147,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/occupants'
     },
     {
-        label: '/api/occupants/overview',
         mockedPackages: [
             {
                 relativePath: './managers/occupantmanager',
@@ -201,16 +164,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/occupants/overview'
     },
     {
-        label: '/documents/update',
         mockedPackages: [
             {
                 relativePath: './managers/documentmanager',
@@ -222,16 +181,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/documents/update'
     },
     {
-        label: '/api/notifications',
         mockedPackages: [
             {
                 relativePath: './managers/notificationmanager',
@@ -243,16 +198,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/notifications'
     },
     {
-        label: '/rents/one',
         mockedPackages: [
             {
                 relativePath: './managers/rentmanager',
@@ -264,16 +215,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/rents/one'
     },
     {
-        label: '/rents/update',
         mockedPackages: [
             {
                 relativePath: './managers/rentmanager',
@@ -285,16 +232,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/rents/update'
     },
     {
-        label: '/api/rents/occupant',
         mockedPackages: [
             {
                 relativePath: './managers/rentmanager',
@@ -306,16 +249,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/rents/occupant'
     },
     {
-        label: '/api/rents',
         mockedPackages: [
             {
                 relativePath: './managers/rentmanager',
@@ -327,16 +266,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/rents'
     },
     {
-        label: '/api/rents/overview',
         mockedPackages: [
             {
                 relativePath: './managers/rentmanager',
@@ -348,16 +283,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/rents/overview'
     },
     {
-        label: '/properties/add',
         mockedPackages: [
             {
                 relativePath: './managers/resourcemanager',
@@ -369,16 +300,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/properties/add'
     },
     {
-        label: '/properties/update',
         mockedPackages: [
             {
                 relativePath: './managers/resourcemanager',
@@ -390,16 +317,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/properties/update'
     },
     {
-        label: '/properties/remove',
         mockedPackages: [
             {
                 relativePath: './managers/resourcemanager',
@@ -411,16 +334,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/properties/remove'
     },
     {
-        label: '/api/properties',
         mockedPackages: [
             {
                 relativePath: './managers/resourcemanager',
@@ -432,16 +351,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/properties'
     },
     {
-        label: '/api/properties/overview',
         mockedPackages: [
             {
                 relativePath: './managers/resourcemanager',
@@ -453,16 +368,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/properties/overview'
     },
     {
-        label: '/api/owner',
         mockedPackages: [
             {
                 relativePath: './managers/ownermanager',
@@ -474,16 +385,12 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'get',
         route:'/api/owner'
     },
     {
-        label: '/owner/update',
         mockedPackages: [
             {
                 relativePath: './managers/ownermanager',
@@ -495,10 +402,7 @@ var testSet = [
                 instance: new mocks.RequestStrategy(),
                 ensureCallMethods: ['restrictedArea']
             },
-            {
-                relativePath: '../config',
-                instance: { productive: true }
-            }
+            configPackage
         ],
         httpMethod: 'post',
         route:'/owner/update'
@@ -506,39 +410,5 @@ var testSet = [
 ];
 
 describe('api', function () {
-
-    testSet.each(function(test) {
-        it(test.label, function (done) {
-            var app = express();
-            var router = express.Router();
-            var API;
-            var mocks = {};
-
-            test.mockedPackages.each(function(mock) {
-                mocks[mock.relativePath] = mock.instance;
-                if (mock.ensureCallMethods) {
-                    mock.ensureCallMethods.each(function(methodName) {
-                        sinon.spy(mock.instance, methodName);
-                    });
-                }
-            });
-
-            app.use(router);
-            API = proxyquire('../server/api', mocks);
-            API(router);
-
-            request(app)[test.httpMethod](test.route)
-            .expect(200)
-            .end(function(err, res) {
-                test.mockedPackages.each(function(mock) {
-                    if (mock.ensureCallMethods) {
-                        mock.ensureCallMethods.each(function(methodName) {
-                            assert(mock.instance[methodName].called);
-                        });
-                    }
-                });
-                done();
-            });
-        });
-    });
+    helpers.testRoutes('../server/api', testSet);
 });

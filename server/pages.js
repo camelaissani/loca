@@ -1,6 +1,6 @@
 'use strict';
 
-var configdir = process.env.OPENSHIFT_DATA_DIR || process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/..',
+var configdir = process.env.SELFHOSTED_CONFIG_DIR || '..',
     config = require(configdir + '/config'),
     rs = require('./requeststrategy'),
     loginManager = require('./managers/loginmanager'),

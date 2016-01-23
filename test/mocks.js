@@ -1,3 +1,8 @@
+module.exports.Logger = function() {
+    this.info = function (text) {
+    };
+};
+
 module.exports.DB = function() {
     this.init = function () {
     };
@@ -41,10 +46,12 @@ module.exports.RequestStrategy = function() {
     };
 
     this.restrictedAreaAndRedirect = function (req, res, next) {
+        req.session = {user: {realm:{}}};
         next();
     };
 
     this.mustRealmSetAndRedirect = function (req, res, next) {
+        req.session = {user: {realm:{}}};
         next();
     };
 
@@ -67,6 +74,10 @@ module.exports.LoginManager = function() {
     };
 
     this.selectRealm = function (req, res) {
+        res.json({});
+    };
+
+    this.loginDemo = function (req, res) {
         res.json({});
     };
 };
@@ -150,3 +161,11 @@ module.exports.OwnerManager = function() {
         callback(null, []);
     };
 };
+
+module.exports.PrintManager = function() {
+    this.renderModel = function(req, res, callback) {
+        res.render('', {});
+    };
+};
+
+
