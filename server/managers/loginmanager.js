@@ -2,37 +2,47 @@
 
 var bcrypt = require('bcryptjs'),
     logger = require('winston'),
-    db = require('../modules/dbviamongoose'),
+    realmManager = require('./realmmanager'),
+    db = require('../modules/db'),
+    OF = require('../modules/objectfilter'),
     ResponseTypes = {
-        SUCCESS:          'success',
-        DB_ERROR:         'db-error',
-        ENCRYPT_ERROR:    'encrypt-error',
-        MISSING_FIELD:    'missing-field',
-        USER_NOT_FOUND:   'login-user-not-found',
+        SUCCESS: 'success',
+        DB_ERROR: 'db-error',
+        ENCRYPT_ERROR: 'encrypt-error',
+        MISSING_FIELD: 'missing-field',
+        USER_NOT_FOUND: 'login-user-not-found',
         INVALID_PASSWORD: 'login-invalid-password',
-        INVALID_REALM:    'login-invalid-realm',
-        REALM_NOT_FOUND:  'login-realm-not-found',
-        REALM_TAKEN:      'signup-realm-taken',
-        EMAIL_TAKEN:      'signup-email-taken'
+        INVALID_REALM: 'login-invalid-realm',
+        REALM_NOT_FOUND: 'login-realm-not-found',
+        REALM_TAKEN: 'signup-realm-taken',
+        EMAIL_TAKEN: 'signup-email-taken'
     };
 
-var createRealm = function (name, email, callback) {
-    var newRealm = new db.models.Realm({
+var schema = new OF({
+    email: String,
+    password: String,
+    firstname: String,
+    lastname: String,
+    creation: String
+});
+
+var createRealm = function(name, email, callback) {
+    var newRealm = {
         name: name,
         creation: new Date(),
         administrator: email
-    });
+    };
 
-    newRealm.save(function(err) {
+    realmManager.add(newRealm, function(err, dbRealm) {
         if (callback) {
-            callback(err, newRealm);
+            callback(err, dbRealm);
         }
     });
 };
 
-var checkUserMemberOfRealm = function (email, realms) {
+var checkUserMemberOfRealm = function(email, realms) {
     var realmsFound;
-    realmsFound = realms.filter(function (realm) {
+    realmsFound = realms.filter(function(realm) {
         if (realm.administrator === email ||
             realm.user1 === email ||
             realm.user2 === email ||
@@ -43,7 +53,7 @@ var checkUserMemberOfRealm = function (email, realms) {
             realm.user7 === email ||
             realm.user8 === email ||
             realm.user9 === email ||
-            realm.user10 === email ) {
+            realm.user10 === email) {
             return true;
         }
     });
@@ -57,14 +67,18 @@ module.exports.signup = function(req, res) {
         lastname = req.param('lastname');
 
     var checkNotExistingAccount = function(success) {
-            db.models.Account.findOne({ email: email }, function(err, account) {
+            module.exports.findOne(email, function(err, account) {
                 if (err) {
-                    res.json({status: ResponseTypes.DB_ERROR});
+                    res.json({
+                        status: ResponseTypes.DB_ERROR
+                    });
                     logger.error(ResponseTypes.DB_ERROR);
                     return;
                 }
                 if (account) {
-                    res.json({status: ResponseTypes.EMAIL_TAKEN});
+                    res.json({
+                        status: ResponseTypes.EMAIL_TAKEN
+                    });
                     logger.info(ResponseTypes.EMAIL_TAKEN);
                     return;
                 }
@@ -75,25 +89,29 @@ module.exports.signup = function(req, res) {
             bcrypt.hash(password, 10, function(err, hash) {
                 var account;
                 if (err) {
-                    res.json({status:ResponseTypes.ENCRYPT_ERROR});
+                    res.json({
+                        status: ResponseTypes.ENCRYPT_ERROR
+                    });
                     logger.error(ResponseTypes.ENCRYPT_ERROR + ': ' + err);
                     return;
                 }
 
-                account = new db.models.Account({
-                    email:     email,
-                    password:  hash,
+                account = {
+                    email: email.toLowerCase(),
+                    password: hash,
                     firstname: firstname,
-                    lastname:  lastname
-                });
-                account.save(callback);
+                    lastname: lastname
+                };
+                module.exports.add(account, callback);
             });
         };
 
     logger.info('Request new account: ' + email);
 
     if (!email || !password || !firstname || !lastname) {
-        res.json({status:ResponseTypes.MISSING_FIELD});
+        res.json({
+            status: ResponseTypes.MISSING_FIELD
+        });
         logger.info(ResponseTypes.MISSING_FIELD);
         return;
     }
@@ -103,15 +121,19 @@ module.exports.signup = function(req, res) {
     checkNotExistingAccount(function() {
         createAccount(function(err) {
             if (err) {
-                res.json({status:ResponseTypes.DB_ERROR});
+                res.json({
+                    status: ResponseTypes.DB_ERROR
+                });
                 logger.error(ResponseTypes.DB_ERROR + ': ' + err);
                 return;
             }
             logger.info('Create realm on the fly for new user ' + email);
-            createRealm('__default_', email, function (error, newRealm) {
+            createRealm('__default_', email, function(error, newRealm) {
                 if (error) {
                     logger.info('Login failed ' + ResponseTypes.DB_ERROR);
-                    res.json({status: ResponseTypes.DB_ERROR});
+                    res.json({
+                        status: ResponseTypes.DB_ERROR
+                    });
                     return;
                 }
                 res.json({
@@ -133,8 +155,7 @@ module.exports.loginDemo = function(req, res) {
         param: function(attr) {
             if (attr == 'email') {
                 return 'demo@demo.com';
-            }
-            else if (attr == 'secretword') {
+            } else if (attr == 'secretword') {
                 return 'demo';
             }
         },
@@ -143,8 +164,7 @@ module.exports.loginDemo = function(req, res) {
         json: function(result) {
             if (result.status == ResponseTypes.SUCCESS) {
                 res.redirect('/loggedin');
-            }
-            else {
+            } else {
                 res.redirect('/logout');
             }
         }
@@ -159,36 +179,46 @@ module.exports.login = function(req, res) {
 
     if (!email || !password) {
         logger.info('Login failed ' + ResponseTypes.MISSING_FIELD);
-        res.json({status: ResponseTypes.MISSING_FIELD});
+        res.json({
+            status: ResponseTypes.MISSING_FIELD
+        });
         return;
     }
 
     email = email.toLowerCase();
 
     var checkEmailPassword = function(grantedAccess) {
-        db.models.Account.findOne({ email: email }, function (err, account) {
+        module.exports.findOne(email, function(err, account) {
             if (err) {
                 logger.info('Login failed ' + ResponseTypes.DB_ERROR);
-                res.json({status: ResponseTypes.DB_ERROR});
+                res.json({
+                    status: ResponseTypes.DB_ERROR
+                });
                 return;
             }
 
-            if (!account){
+            if (!account) {
                 logger.info('Login failed ' + ResponseTypes.USER_NOT_FOUND);
-                res.json({status: ResponseTypes.USER_NOT_FOUND});
+                res.json({
+                    status: ResponseTypes.USER_NOT_FOUND
+                });
                 return;
             }
 
-            bcrypt.compare(password, account.password, function (error, status) {
+            bcrypt.compare(password, account.password, function(error, status) {
                 if (error) {
                     logger.info('Login failed ' + ResponseTypes.ENCRYPT_ERROR);
-                    res.json({status: ResponseTypes.ENCRYPT_ERROR});
+                    res.json({
+                        status: ResponseTypes.ENCRYPT_ERROR
+                    });
                     return;
                 }
 
                 if (status !== true) {
                     logger.info('Login failed ' + ResponseTypes.INVALID_PASSWORD);
-                    res.json({status: ResponseTypes.INVALID_PASSWORD});
+                    res.json({
+                        status: ResponseTypes.INVALID_PASSWORD
+                    });
                     return;
                 }
                 grantedAccess(account);
@@ -197,12 +227,14 @@ module.exports.login = function(req, res) {
     };
 
     var checkRealmAccess = function(account, grantedAccess) {
-        db.models.Realm.find(function (err, realms) {
+        realmManager.findAll(function(err, realms) {
             var realmsFound;
 
             if (err) {
                 logger.info('Login failed ' + ResponseTypes.DB_ERROR);
-                res.json({status: ResponseTypes.DB_ERROR});
+                res.json({
+                    status: ResponseTypes.DB_ERROR
+                });
                 return;
             }
 
@@ -218,9 +250,11 @@ module.exports.login = function(req, res) {
 
     checkEmailPassword(function(account) {
         logger.info('Login successful ' + email);
-        checkRealmAccess(account, function(realms){
+        checkRealmAccess(account, function(realms) {
             if (!realms || realms.length === 0) {
-                res.json({status:ResponseTypes.REALM_NOT_FOUND});
+                res.json({
+                    status: ResponseTypes.REALM_NOT_FOUND
+                });
                 logger.error('No realm found for ' + email);
                 return;
             }
@@ -238,7 +272,9 @@ module.exports.login = function(req, res) {
                 delete req.session.user.realm;
                 logger.info('Found ' + realms.length + ' realms for ' + email);
             }
-            res.json({status:ResponseTypes.SUCCESS});
+            res.json({
+                status: ResponseTypes.SUCCESS
+            });
         });
     });
 };
@@ -250,19 +286,55 @@ module.exports.logout = function(req, res) {
 };
 
 module.exports.selectRealm = function(req, res) {
-    db.models.Realm.findById(req.body.id, function (err, realm) {
-        var realmsFound;
+    realmManager.findOne(req.body.id, function(err, realm) {
         if (err) {
-            res.json({status: ResponseTypes.DB_ERROR});
+            res.json({
+                status: ResponseTypes.DB_ERROR
+            });
             return;
         }
-        realmsFound = checkUserMemberOfRealm(req.session.user.email, [realm]);
-        if (realmsFound && realmsFound.length > 0) {
-            req.session.user.realm = realm;
-            logger.info('Switch to realm ' + realm.name + ' for ' + req.session.user.email);
-            res.json({status:ResponseTypes.SUCCESS});
+        req.session.user.realm = realm;
+        logger.info('Switch to realm ' + realm.name + ' for ' + req.session.user.email);
+        res.json({
+            status: ResponseTypes.SUCCESS
+        });
+    });
+};
+
+module.exports.findOne = function(email, callback) {
+    db.listWithFilter(null, 'accounts', {
+        email: email.toLowerCase()
+    }, function(errors, accounts) {
+        if (errors && errors.length > 0) {
+            callback(errors);
+        } else if (!accounts || accounts.length === 0) {
+            callback(['account not found']);
         } else {
-            res.json({status:ResponseTypes.INVALID_REALM});
+            callback(null, accounts[0]);
+        }
+    });
+};
+
+module.exports.findAll = function(callback) {
+    db.list(null, 'accounts', function(errors, accounts) {
+        if (errors && errors.length > 0) {
+            callback(errors);
+        } else if (!accounts || accounts.length === 0) {
+            callback(['account not found']);
+        } else {
+            callback(null, accounts);
+        }
+    });
+};
+
+module.exports.add = function(account, callback) {
+    var newAccount = schema.filter(account);
+    db.add(null, 'accounts', newAccount, function(errors, dbAccount) {
+        if (errors && errors.length > 0) {
+            callback(errors);
+        } else {
+            delete dbAccount.password;
+            callback(null, dbAccount);
         }
     });
 };

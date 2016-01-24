@@ -16,7 +16,6 @@ var express = require('express'),
 // App requirements
 var path = require('path'),
     moment = require('moment'),
-    dbviamongoose = require('./server/modules/dbviamongoose'),
     db = require('./server/modules/db'),
     apiRoutes = require('./server/api'),
     pageRoutes = require('./server/pages');
@@ -40,16 +39,21 @@ if (process.env.NODE_ENV === 'production') {
 moment.locale('fr');
 
 // Init connection to database
-// TODO replace mongoose db management by home made one
-dbviamongoose.init();
 db.init();
 
 // Init express
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cookieSession({ secret: 'loca-secret', cookie : { maxAge  : 3600000 } }));
+app.use(cookieSession({
+    secret: 'loca-secret',
+    cookie: {
+        maxAge: 3600000
+    }
+}));
 app.use(methodOverride());
 
 //Init routes
@@ -58,7 +62,9 @@ apiRoutes(router);
 pageRoutes(router);
 
 // Icon / static files
-app.use(favicon(path.join(basedir, '/public/images/favicon.png'), { maxAge: 2592000000 }));
+app.use(favicon(path.join(basedir, '/public/images/favicon.png'), {
+    maxAge: 2592000000
+}));
 app.use('/bower_components', express.static(path.join(basedir, '/bower_components')));
 app.use('/public', express.static(path.join(basedir, '/public')));
 app.use('/public/image', express.static(path.join(basedir, '/public/images')));
@@ -73,6 +79,6 @@ app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
 // Start web app
-app.listen(http_port, function () {
+app.listen(http_port, function() {
     logger.info('Listening port ' + http_port);
 });
