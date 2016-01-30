@@ -7,19 +7,29 @@ var assert = require('assert'),
     mocks = require('./mocks'),
     manager;
 
-describe('notificationmanager', function () {
+describe('notificationmanager', function() {
     before(function() {
-        var mockedDB = new mocks.DB();
-        mockedDB.list = function (realm, collection, callback) {
+        var mockedModel = new mocks.Model();
+        mockedModel.findAll = function(realm, callback) {
             callback(null, []);
         };
-        manager = proxyquire('../server/managers/notificationmanager', {'../modules/db': mockedDB});
+        manager = proxyquire('../server/managers/notificationmanager', {
+            '../models/notification': mockedModel
+        });
     });
 
-    it('list all notifications', function (done) {
-        var req = { session : { user: { realm: {name : 'test'} } } },
+    it('list all notifications', function(done) {
+        var req = {
+                session: {
+                    user: {
+                        realm: {
+                            name: 'test'
+                        } 
+                    }
+                }
+            },
             res = {
-                json: function (result) {
+                json: function(result) {
                     assert(result.length === 2);
                     assert(result[0].notificationId !== result[1].notificationId);
                     assert(result[0].expired === false);
@@ -32,43 +42,48 @@ describe('notificationmanager', function () {
         expirationDate.setDate(expirationDate.getDate() + 1);
 
         manager.feeders = [
+
             function expiredDocuments(realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     documentDescription = "assurance 2014";
-                callback([
-                    {
-                        notificationId: manager.generateId(occupantId + '_document_' + moment(expirationDate).format('DD/MM/YYYY') + documentDescription),
-                        expirationDate: expirationDate,
-                        title: occupantName,
-                        description: 'Document ' + documentDescription + ' à expiré le ' + moment(expirationDate).format('DD/MM/YYYY'),
-                        actionUrl: ''
-                    }
-                ]);
+                callback([{
+                    notificationId: manager.generateId(occupantId + '_document_' + moment(expirationDate).format('DD/MM/YYYY') + documentDescription),
+                    expirationDate: expirationDate,
+                    title: occupantName,
+                    description: 'Document ' + documentDescription + ' à expiré le ' + moment(expirationDate).format('DD/MM/YYYY'),
+                    actionUrl: ''
+                }]);
             },
             function chequesToCollect(realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     chequeNumber = "XXXXX";
-                callback([
-                    {
-                        notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
-                        expirationDate: expirationDate,
-                        title: occupantName,
-                        description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
-                        actionUrl: ''
-                    }
-                ]);
+                callback([{
+                    notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
+                    expirationDate: expirationDate,
+                    title: occupantName,
+                    description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
+                    actionUrl: ''
+                }]);
             }
         ];
 
         manager.findAll(req, res);
     });
 
-    it('Assert one is expired', function (done) {
-        var req = { session : { user: { realm: {name : 'test'} } } },
+    it('Assert one is expired', function(done) {
+        var req = {
+                session: {
+                    user: {
+                        realm: {
+                            name: 'test'
+                        } 
+                    }
+                }
+            },
             res = {
-                json: function (result) {
+                json: function(result) {
                     assert(result.length === 3);
                     assert(result[0].notificationId !== result[1].notificationId);
                     assert(result[0].expired === true);
@@ -79,22 +94,21 @@ describe('notificationmanager', function () {
             };
 
         manager.feeders = [
+
             function expiredDocuments(realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     documentDescription = "assurance 2014",
                     expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() - 1);
-                callback([
-                    {
-                        type: 'expiredDocument',
-                        notificationId: manager.generateId(occupantId + '_document_' + moment(expirationDate).format('DD/MM/YYYY') + documentDescription),
-                        expirationDate: expirationDate,
-                        title: occupantName,
-                        description: 'Document ' + documentDescription + ' à expiré le ' + moment(expirationDate).format('DD/MM/YYYY'),
-                        actionUrl: ''
-                    }
-                ]);
+                callback([{
+                    type: 'expiredDocument',
+                    notificationId: manager.generateId(occupantId + '_document_' + moment(expirationDate).format('DD/MM/YYYY') + documentDescription),
+                    expirationDate: expirationDate,
+                    title: occupantName,
+                    description: 'Document ' + documentDescription + ' à expiré le ' + moment(expirationDate).format('DD/MM/YYYY'),
+                    actionUrl: ''
+                }]);
             },
             function chequesToCollect(realmName, callback) {
                 var occupantId = "123",
@@ -102,16 +116,14 @@ describe('notificationmanager', function () {
                     chequeNumber = "XXXXX",
                     expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate());
-                callback([
-                    {
-                        type: 'chequeToCollect',
-                        notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
-                        expirationDate: expirationDate,
-                        title: occupantName,
-                        description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
-                        actionUrl: ''
-                    }
-                ]);
+                callback([{
+                    type: 'chequeToCollect',
+                    notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
+                    expirationDate: expirationDate,
+                    title: occupantName,
+                    description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
+                    actionUrl: ''
+                }]);
             },
             function chequesToCollect(realmName, callback) {
                 var occupantId = "123",
@@ -119,16 +131,14 @@ describe('notificationmanager', function () {
                     chequeNumber = "XXXXX",
                     expirationDate = new Date();
                 expirationDate.setDate(expirationDate.getDate() + 1);
-                callback([
-                    {
-                        type: 'chequeToCollect',
-                        notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
-                        expirationDate: expirationDate,
-                        title: occupantName,
-                        description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
-                        actionUrl: ''
-                    }
-                ]);
+                callback([{
+                    type: 'chequeToCollect',
+                    notificationId: manager.generateId(occupantId + '_rentPayment_' + moment(expirationDate).format('DD/MM/YYYY') + chequeNumber),
+                    expirationDate: expirationDate,
+                    title: occupantName,
+                    description: 'Encaisser le chèque de ' + occupantName + ' n°' + chequeNumber + ' le ' + moment(expirationDate).format('DD/MM/YYYY'),
+                    actionUrl: ''
+                }]);
             }
         ];
 

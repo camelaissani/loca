@@ -1,28 +1,13 @@
 'use strict';
 
 var moment = require('moment'),
-    Helper = require('./helper'),
-    db = require('../modules/db'),
-    OF = require('../modules/objectfilter'),
-    math = require('mathjs');
-
-var collection = 'properties';
-var schema = new OF({
-    _id: String,
-    type: String,
-    name: String,
-    description: String,
-    surface: Number,
-    phone: String,
-    building: String,
-    level: String,
-    location: String,
-    price: Number,
-    expense: Number
-});
+    math = require('mathjs'),
+    propertyModel = require('../models/property'),
+    occupantModel = require('../models/occupant'),
+    Helper = require('./helper');
 
 function buildOccupants(realm, callback) {
-    db.list(realm, 'occupants', function (errors, occupants) {
+    occupantModel.findAll(realm, function (errors, occupants) {
         var index, currentOccupant;
         if (occupants && occupants.length > 0) {
             for (index = 0; index < occupants.length; index++) {
@@ -105,14 +90,14 @@ function addComputedProperties(items, occupants) {
 }
 
 module.exports.findAllResources = function (realm, callback) {
-    db.listWithFilter(realm, 'properties',  {
+    propertyModel.findFilter(realm, {
         $query: {},
         $orderby: {
             type: 1,
             name: 1
         }
     }, function (errors, resources) {
-        if (errors && errors.length > 0) {
+        if (errors) {
             callback(errors, resources);
         } else {
             buildOccupants(realm, function (errors, occupants) {
@@ -129,12 +114,12 @@ module.exports.findAllResources = function (realm, callback) {
 
 module.exports.add = function (req, res) {
     var realm = req.session.user.realm,
-        property = schema.filter(req.body);
+        property = propertyModel.schema.filter(req.body);
 
-    db.add(realm, collection, property,
+    propertyModel.add(realm, property,
         function (errors) {
             var result;
-            if (errors && errors.length > 0) {
+            if (errors) {
                 result = {errors: errors};
             } else {
                 buildOccupants(realm, function (errors, occupants) {
@@ -153,12 +138,12 @@ module.exports.add = function (req, res) {
 
 module.exports.update = function (req, res) {
     var realm = req.session.user.realm,
-        property = schema.filter(req.body);
+        property = propertyModel.schema.filter(req.body);
 
-    db.update(realm, collection, property,
+    propertyModel.update(realm, property,
         function (errors) {
             var result;
-            if (errors && errors.length > 0) {
+            if (errors) {
                 result = {errors: errors};
             } else {
                 buildOccupants(realm, function (errors, occupants) {
@@ -179,7 +164,7 @@ module.exports.remove = function (req, res) {
     var realm = req.session.user.realm,
         ids = req.body.ids;
 
-    db.remove(realm, collection, ids, function (errors) {
+    propertyModel.remove(realm, ids, function (errors) {
         res.json({errors: errors});
     });
 };

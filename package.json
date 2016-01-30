@@ -22,11 +22,11 @@
         "errorhandler": "*",
         "express": "^4.0.0",
         "winston": "*",
+        "express-winston": "0.2.*",
         "mathjs": "*",
         "method-override": "*",
         "moment": "*",
         "mongojs": "*",
-        "morgan": "*",
         "serve-favicon": "*",
         "string": "*",
         "sugar": "*"

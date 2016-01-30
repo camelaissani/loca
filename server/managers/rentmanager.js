@@ -2,41 +2,10 @@
 
 var moment = require('moment'),
     math = require('mathjs'),
-    db = require('../modules/db'),
-    OF = require('../modules/objectfilter'),
+    rentModel = require('../models/rent'),
+    occupantModel = require('../models/occupant'),
     Helper = require('./helper'),
     occupantManager = require('./occupantmanager.js');
-
-var paymentSchema = new OF({
-    _id: String,
-    month: Number,
-    year: Number,
-    payment: Number,
-    paymentType: String,
-    paymentReference: String,
-    paymentDate: String,
-    description: String,
-    promo: Number,
-    notepromo: String
-});
-
-var rentSchema = new OF({
-    month: Number,
-    year: Number,
-    discount: Number,
-    balance: Number,
-    isVat: Boolean,
-    vatRatio: Number,
-    vatAmount: Number,
-    totalAmount: Number,
-    payment: Number,
-    paymentType: String,
-    paymentReference: String,
-    paymentDate: String,
-    description: String,
-    promo: Number,
-    notepromo: String
-});
 
 module.exports._computeRent = function (month, year, properties) {
     var amount = 0, expense = 0;
@@ -145,7 +114,7 @@ module.exports._updateRentPayment = function (rentMoment, previousRent, occupant
         rentPrice;
 
     if (occupant.rents && occupant.rents[year] && occupant.rents[year][month]) {
-        dbRent = rentSchema.filter(occupant.rents[year][month]);
+        dbRent = rentModel.rentSchema.filter(occupant.rents[year][month]);
         if (!previousRent) {
             if (rentData.payment !== undefined) {
                 dbRent.payment = rentData.payment;
@@ -395,7 +364,7 @@ module.exports.one = function (req, res) {
 module.exports.update = function (req, res) {
     var realm = req.session.user.realm,
         date = Helper.currentDate(req.body.month, req.body.year),
-        rent = paymentSchema.filter(req.body);
+        rent = rentModel.paymentSchema.filter(req.body);
 
     if (!rent.payment || rent.payment <= 0) {
         rent.payment = 0;
@@ -422,8 +391,8 @@ module.exports.update = function (req, res) {
                 momentBegin.add('months', 1);
             } while (previousRent);
 
-            db.update(realm, 'occupants', dbOccupant, function(errors/*, occupants*/) {
-                if (errors && errors.length > 0) {
+            occupantModel.update(realm, dbOccupant, function(errors) {
+                if (errors) {
                     res.json({errors: errors});
                 } else {
                     res.json(module.exports._buildViewData(dbOccupant, dbOccupant.rents[date.year][date.month], date.month, date.year));

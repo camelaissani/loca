@@ -2,9 +2,8 @@
 
 var bcrypt = require('bcryptjs'),
     logger = require('winston'),
-    realmManager = require('./realmmanager'),
-    db = require('../modules/db'),
-    OF = require('../modules/objectfilter'),
+    accountModel = require('../models/account'),
+    realmModel = require('../models/realm'),
     ResponseTypes = {
         SUCCESS: 'success',
         DB_ERROR: 'db-error',
@@ -18,14 +17,6 @@ var bcrypt = require('bcryptjs'),
         EMAIL_TAKEN: 'signup-email-taken'
     };
 
-var schema = new OF({
-    email: String,
-    password: String,
-    firstname: String,
-    lastname: String,
-    creation: String
-});
-
 var createRealm = function(name, email, callback) {
     var newRealm = {
         name: name,
@@ -33,7 +24,7 @@ var createRealm = function(name, email, callback) {
         administrator: email
     };
 
-    realmManager.add(newRealm, function(err, dbRealm) {
+    realmModel.add(newRealm, function(err, dbRealm) {
         if (callback) {
             callback(err, dbRealm);
         }
@@ -67,7 +58,7 @@ module.exports.signup = function(req, res) {
         lastname = req.param('lastname');
 
     var checkNotExistingAccount = function(success) {
-            module.exports.findOne(email, function(err, account) {
+            accountModel.findOne(email, function(err, account) {
                 if (err) {
                     res.json({
                         status: ResponseTypes.DB_ERROR
@@ -102,7 +93,7 @@ module.exports.signup = function(req, res) {
                     firstname: firstname,
                     lastname: lastname
                 };
-                module.exports.add(account, callback);
+                accountModel.add(account, callback);
             });
         };
 
@@ -172,8 +163,8 @@ module.exports.loginDemo = function(req, res) {
 };
 
 module.exports.login = function(req, res) {
-    var email = req.param('email'),
-        password = req.param('secretword');
+    var email = req.body.email,
+        password = req.body.secretword;
 
     logger.info('Check login ' + email);
 
@@ -188,7 +179,7 @@ module.exports.login = function(req, res) {
     email = email.toLowerCase();
 
     var checkEmailPassword = function(grantedAccess) {
-        module.exports.findOne(email, function(err, account) {
+        accountModel.findOne(email, function(err, account) {
             if (err) {
                 logger.info('Login failed ' + ResponseTypes.DB_ERROR);
                 res.json({
@@ -227,7 +218,7 @@ module.exports.login = function(req, res) {
     };
 
     var checkRealmAccess = function(account, grantedAccess) {
-        realmManager.findAll(function(err, realms) {
+        realmModel.findAll(function(err, realms) {
             var realmsFound;
 
             if (err) {
@@ -286,7 +277,7 @@ module.exports.logout = function(req, res) {
 };
 
 module.exports.selectRealm = function(req, res) {
-    realmManager.findOne(req.body.id, function(err, realm) {
+    realmModel.findOne(req.body.id, function(err, realm) {
         if (err) {
             res.json({
                 status: ResponseTypes.DB_ERROR
@@ -298,43 +289,5 @@ module.exports.selectRealm = function(req, res) {
         res.json({
             status: ResponseTypes.SUCCESS
         });
-    });
-};
-
-module.exports.findOne = function(email, callback) {
-    db.listWithFilter(null, 'accounts', {
-        email: email.toLowerCase()
-    }, function(errors, accounts) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else if (!accounts || accounts.length === 0) {
-            callback(['account not found']);
-        } else {
-            callback(null, accounts[0]);
-        }
-    });
-};
-
-module.exports.findAll = function(callback) {
-    db.list(null, 'accounts', function(errors, accounts) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else if (!accounts || accounts.length === 0) {
-            callback(['account not found']);
-        } else {
-            callback(null, accounts);
-        }
-    });
-};
-
-module.exports.add = function(account, callback) {
-    var newAccount = schema.filter(account);
-    db.add(null, 'accounts', newAccount, function(errors, dbAccount) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            delete dbAccount.password;
-            callback(null, dbAccount);
-        }
     });
 };

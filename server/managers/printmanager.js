@@ -1,7 +1,7 @@
 'use strict';
 
 var moment = require('moment'),
-    realmManager = require('./realmmanager'),
+    realmModel = require('../models/realm'),
     occupantManager = require('./occupantmanager'),
     rentManager = require('./rentmanager');
 //    logger = require('winston');
@@ -161,7 +161,7 @@ module.exports.renderModel = function(req, res, callback) {
     };
 
     occupantIdsLoop(0, function() {
-        realmManager.findOne(realm._id, function(err, realmFound) {
+        realmModel.findOne(realm._id, function(err, realmFound) {
             if (err) {
                 callback([err]);
             } else {

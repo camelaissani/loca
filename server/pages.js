@@ -7,9 +7,6 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || '..',
     printManager = require('./managers/printmanager'),
     logger = require('winston');
 
-logger.info('Loaded configuration from ' + configdir + '/config');
-logger.info('Configuration content:', config);
-
 function render(model, res) {
     model.config = config;
     model.isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'login', 'signup'].indexOf(model.view) !== -1;
@@ -21,6 +18,9 @@ function render(model, res) {
 }
 
 function PAGES(router) {
+    logger.debug('Loaded configuration from', configdir + '/config');
+    logger.silly('Configuration content:', config);
+
     router.route('/').get(rs.mustSessionLessArea, function(req, res) {
         render({
             view: 'website',

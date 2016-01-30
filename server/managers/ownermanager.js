@@ -1,28 +1,6 @@
 'use strict';
 
-var db = require('../modules/db'),
-    OF = require('../modules/objectfilter');
-
-var schema = new OF({
-    _id: String,
-    isCompany: Boolean,
-    company: String,
-    legalForm: String,
-    siret: String,
-    capital: Number,
-    vatNumber: String,
-    manager: String,
-    street1: String,
-    street2: String,
-    zipCode: String,
-    city: String,
-    contact: String,
-    phone1: String,
-    phone2: String,
-    email: String,
-    bank: String,
-    rib: String
-});
+var ownerModel = require('../models/owner');
 
 function buildViewData(realm) {
     var dataModel = {};
@@ -37,49 +15,45 @@ module.exports.renderModel = function (req, res, callback) {
         model = {account: req.session.user},
         realmFound;
 
-    db.list(realm, 'realms', function (errors, realms) {
-        if ((errors && errors.length > 0) || (!realms || realms.length === 0)) {
+    ownerModel.findAll(realm, 'realms', function (errors, dbRealms) {
+        if (errors) {
             callback(errors, model);
         } else {
-            realmFound = buildViewData(realms[0]);
-            callback([], Object.merge(model, realmFound));
+            realmFound = buildViewData(dbRealms[0]);
+            callback(null, Object.merge(model, realmFound));
         }
     });
 };
 
 module.exports.findOwner = function (realm, callback) {
-    var realmFound;
-    db.findItemById(null, 'realms', realm._id, function (errors, realms) {
-        if (errors && errors.length > 0) {
+    ownerModel.findOne(realm, realm._id, function (errors, dbRealm) {
+        if (errors) {
             callback(errors);
-        } else if (!realms || realms.length === 0) {
-            callback([], {});
         } else {
-            realmFound = realms[0];
-            if (realmFound && !realmFound.manager) {
-                realmFound.manager = realmFound.renter;
-                delete realmFound.renter;
+            if (!dbRealm.manager) {
+                dbRealm.manager = dbRealm.renter;
+                delete dbRealm.renter;
             }
-            if (realmFound && !realmFound.siret) {
-                realmFound.siret = realmFound.rcs;
-                delete realmFound.rcs;
+            if (dbRealm && !dbRealm.siret) {
+                dbRealm.siret = dbRealm.rcs;
+                delete dbRealm.rcs;
             }
-            callback([], realmFound);
+            callback(null, dbRealm);
         }
     });
 };
 
 module.exports.update = function (req, res) {
     var realm = req.session.user.realm,
-        owner = schema.filter(req.body);
+        owner = ownerModel.schema.filter(req.body);
 
     if (!owner._id) {
         owner.name = realm.name;
-        db.add(realm, 'realms', owner, function (errors) {
+        ownerModel.add(realm, owner, function (errors) {
             res.json({errors: errors});
         });
     } else {
-        db.update(realm, 'realms', owner, function (errors) {
+        ownerModel.update(realm, owner, function (errors) {
             res.json({errors: errors});
         });
     }
