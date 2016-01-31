@@ -1,5 +1,8 @@
 Loca
 ====
+
+[![Build Status](https://travis-ci.org/camelaissani/loca.svg?branch=master)](https://travis-ci.org/camelaissani/loca)
+
 ![Loca](http://www.nuageprive.fr/images/loca-sample.png "Open source real estate management")
 
 [Check out the live demo.](http://demo.nuageprive.fr/)
