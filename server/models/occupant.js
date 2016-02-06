@@ -30,7 +30,8 @@ function OccupantModel() {
         reference: String,
         isVat: Boolean,
         vatRatio: Number,
-        discount: Number
+        discount: Number,
+        rents: Object
     });
 }
 

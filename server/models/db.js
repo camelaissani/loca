@@ -135,7 +135,7 @@ module.exports.updateWithFilter = function(realm, collection, filter, item, call
             if (err || !saved) {
                 callback(['Element non mis à jour en base de données']);
             } else {
-                logger.debug('\treturned value is', item);
+                logger.silly('\treturned value is', item);
                 logger.info('\tsuccess');
                 callback([]);
             }
