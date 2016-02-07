@@ -1,11 +1,12 @@
 'use strict';
 
-var db = require('./db'),
-    OF = require('./objectfilter');
+var Model = require('./model'),
+    OF = require('./objectfilter'),
+    logger = require('winston');
 
 function AccountModel() {
-    this.collection = 'accounts';
-    db.addCollection(this.collection);
+    // Call super constructor
+    Model.call(this, 'accounts');
     this.schema = new OF({
         email: String,
         password: String,
@@ -15,11 +16,14 @@ function AccountModel() {
     });
 }
 
+AccountModel.prototype = Object.create(Model.prototype);
+AccountModel.prototype.constructor = AccountModel;
+
 AccountModel.prototype.findOne = function(email, callback) {
-    db.listWithFilter(null, this.collection, {
+    Model.prototype.findFilter.call(this, null, {
         email: email.toLowerCase()
     }, function(errors, accounts) {
-        if (errors && errors.length > 0) {
+        if (errors) {
             callback(errors);
         } else if (!accounts || accounts.length === 0) {
             callback(['account not found']);
@@ -29,28 +33,12 @@ AccountModel.prototype.findOne = function(email, callback) {
     });
 };
 
-AccountModel.prototype.findAll = function(callback) {
-    db.list(null, this.collection, function(errors, accounts) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else if (!accounts || accounts.length === 0) {
-            callback(['account not found']);
-        } else {
-            callback(null, accounts);
-        }
-    });
+AccountModel.prototype.add = function(item, callback) {
+    Model.prototype.add.call(this, null, item, callback);
 };
 
-AccountModel.prototype.add = function(account, callback) {
-    var newAccount = this.schema.filter(account);
-    db.add(null, this.collection, newAccount, function(errors, dbAccount) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            delete dbAccount.password;
-            callback(null, dbAccount);
-        }
-    });
+AccountModel.prototype.findAll = AccountModel.prototype.update = AccountModel.prototype.remove = function() {
+    logger.error('method not implemented!');
 };
 
 module.exports = new AccountModel();

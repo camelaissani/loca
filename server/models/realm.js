@@ -1,11 +1,12 @@
 'use strict';
 
-var db = require('./db'),
-    OF = require('./objectfilter');
+var Model = require('./model'),
+    OF = require('./objectfilter'),
+    logger = require('winston');
 
 function RealmModel() {
-    this.collection = 'realms';
-    db.addCollection(this.collection);
+    // Call super constructor
+    Model.call(this, 'realms');
     this.schema = new OF({
         _id: String,
         administrator: String,
@@ -44,21 +45,25 @@ function RealmModel() {
     });
 }
 
+RealmModel.prototype = Object.create(Model.prototype);
+RealmModel.prototype.constructor = RealmModel;
+
 RealmModel.prototype.findOne = function(id, callback) {
-    db.findItemById(null, this.collection, id, function(errors, realms) {
-        if (errors && errors.length > 0) {
+    Model.prototype.findOne.call(this, null, id, function(errors, realm) {
+        if (errors) {
             callback(errors);
-        } else if (!realms || realms.length === 0) {
+        } else if (!realm) {
             callback(['realm not found']);
         } else {
-            callback(null, realms[0]);
+            callback(null, realm);
         }
     });
 };
 
+
 RealmModel.prototype.findAll = function(callback) {
-    db.list(null, this.collection, function(errors, realms) {
-        if (errors && errors.length > 0) {
+    Model.prototype.findAll.call(this, null, function(errors, realms) {
+        if (errors) {
             callback(errors);
         } else if (!realms || realms.length === 0) {
             callback(['realm not found']);
@@ -69,14 +74,11 @@ RealmModel.prototype.findAll = function(callback) {
 };
 
 RealmModel.prototype.add = function(realm, callback) {
-    var newRealm = this.schema.filter(realm);
-    db.add(null, this.collection, newRealm, function(errors, dbRealm) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            callback(null, dbRealm);
-        }
-    });
+    Model.prototype.add.call(this, null, realm, callback);
+};
+
+RealmModel.prototype.update = RealmModel.prototype.remove = function() {
+    logger.error('method not implemented!');
 };
 
 module.exports = new RealmModel();
