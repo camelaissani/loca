@@ -2,7 +2,9 @@ Loca
 ====
 
 [![Build Status](https://travis-ci.org/camelaissani/loca.svg?branch=master)](https://travis-ci.org/camelaissani/loca)
+
 [![Coverage Status](https://coveralls.io/repos/github/camelaissani/loca/badge.svg?branch=master)](https://coveralls.io/github/camelaissani/loca?branch=master)
+<sup>Only backend code is covered see issue #8 and #9</sup>
 
 ## What's Loca?
 
