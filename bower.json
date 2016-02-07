@@ -1,15 +1,15 @@
 {
-  "name": "loca",
-  "description": "",
-  "version": "0.0.2",
-  "dependencies": {
-    "jquery": "1.11.2",
-    "jquery-waypoints": "2.0.5",
-    "jquery-validation": "1.13.1",
-    "sugar": "1.4.1",
-    "minivents-cuzzo": "*",
-    "accountingjs": "0.3.2",
-    "bootstrap": "^3.3.2",
-    "bootbox": "*"
-  }
+    "name": "loca",
+    "description": "",
+    "version": "0.0.2",
+    "dependencies": {
+        "jquery": "1.11.2",
+        "jquery-waypoints": "2.0.5",
+        "jquery-validation": "1.14.0",
+        "sugar": "1.4.1",
+        "minivents-cuzzo": "*",
+        "accountingjs": "0.3.2",
+        "bootstrap": "^3.3.2",
+        "bootbox": "*"
+    }
 }
