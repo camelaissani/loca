@@ -5,6 +5,7 @@ var logger = require('winston'),
 
 function Model(collection) {
     this.collection = collection;
+    db.addCollection(collection);
 }
 
 Model.prototype.findOne = function(realm, id, callback) {

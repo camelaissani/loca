@@ -5,6 +5,7 @@ var db = require('./db'),
 
 function AccountModel() {
     this.collection = 'accounts';
+    db.addCollection(this.collection);
     this.schema = new OF({
         email: String,
         password: String,

@@ -5,6 +5,7 @@ var db = require('./db'),
 
 function RealmModel() {
     this.collection = 'realms';
+    db.addCollection(this.collection);
     this.schema = new OF({
         _id: String,
         administrator: String,

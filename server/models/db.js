@@ -4,7 +4,7 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/../..',
     config = require(configdir + '/config'),
     mongojs = require('mongojs'),
     logger = require('winston'),
-    collections = ['accounts', 'realms', 'properties', 'occupants', 'notifications'],
+    collections = [],
     db;
 
 require('sugar');
@@ -36,6 +36,15 @@ module.exports.init = function() {
         logger.info('database connected');
     } else {
         logger.info('database already connected');
+    }
+};
+
+module.exports.addCollection = function(collection) {
+    var index = collections.findIndex(collection.toLowerCase());
+
+    if (index < 0) {
+        collections.add(collection.toLowerCase());
+        logger.silly('db collections have been updated', collections);
     }
 };
 
@@ -166,7 +175,7 @@ module.exports.upsert = function(realm, collection, query, fieldsToSet, fieldsTo
             upsert: true
         };
 
-    logger.info('upsert in collection', collection, 'in realm: ', realm ? realm.name : '');
+    logger.info('upsert in collection', collection, 'in realm:', realm ? realm.name : '');
     logger.debug('\tfilter is', query);
     logger.debug('\titem to update is', fieldsToSet);
     logger.debug('\titem to insert is', fieldsToSetOnInsert);
