@@ -1,9 +1,12 @@
 module.exports.Logger = function() {
     this.info = function(text) {};
+    this.error = function(text) {};
 };
 
 module.exports.DB = function() {
     this.init = function() {};
+
+    this.addCollection = function(collection) {};
 
     this.findItemById = function(realm, collection, id, callback) {};
 

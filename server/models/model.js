@@ -9,12 +9,14 @@ function Model(collection) {
 }
 
 Model.prototype.findOne = function(realm, id, callback) {
-    var self = this;
+    var self = this,
+        item;
     db.findItemById(realm, this.collection, id, function(errors, dbItems) {
         if (errors && errors.length > 0) {
             callback(errors);
         } else {
-            callback(null, self.schema.filter(dbItems[0]));
+            item = (dbItems && dbItems.length > 0) ? dbItems[0] : null;
+            callback(null, self.schema ? self.schema.filter(item) : item);
         }
     });
 };
@@ -24,16 +26,20 @@ Model.prototype.findAll = function(realm, callback) {
 };
 
 Model.prototype.findFilter = function(realm, filter, callback) {
-    var self = this;
+    var self = this,
+        items;
     db.listWithFilter(realm, this.collection, filter, function(errors, dbItems) {
         if (errors && errors.length > 0) {
             callback(errors);
         } else {
-            dbItems.forEach(function(dbItem) {
+            items = dbItems ? dbItems : [];
+            if (self.schema) {
+                items.forEach(function(item) {
 
-                dbItem = self.schema.filter(dbItem);
-            });
-            callback(null, dbItems);
+                    item = self.schema.filter(item);
+                });
+            }
+            callback(null, items);
         }
     });
 };
