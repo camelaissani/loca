@@ -143,12 +143,9 @@ module.exports.signup = function(req, res) {
 
 module.exports.loginDemo = function(req, res) {
     module.exports.login({
-        param: function(attr) {
-            if (attr == 'email') {
-                return 'demo@demo.com';
-            } else if (attr == 'secretword') {
-                return 'demo';
-            }
+        body: {
+            email: 'demo@demo.com',
+            secretword: 'demo'
         },
         session: req.session
     }, {
