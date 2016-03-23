@@ -26,7 +26,7 @@ module.exports.renderModel = function (req, res, callback) {
 };
 
 module.exports.findOwner = function (realm, callback) {
-    ownerModel.findOne(realm, realm._id, function (errors, dbRealm) {
+    ownerModel.findOne(null, realm._id, function (errors, dbRealm) {
         if (errors) {
             callback(errors);
         } else {
