@@ -26,7 +26,7 @@ AccountModel.prototype.findOne = function(email, callback) {
         if (errors) {
             callback(errors);
         } else if (!accounts || accounts.length === 0) {
-            callback(['account not found']);
+            callback(null, null);
         } else {
             callback(null, accounts[0]);
         }

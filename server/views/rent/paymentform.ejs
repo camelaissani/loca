@@ -5,16 +5,16 @@
 	 	<input type="hidden" id="month" value=""/>
 	 	<input type="hidden" id="year" value=""/>
 	 	 	<h2 id="occupantNameLabel"></h2>
-		 	<h2 class="page-header">Règlement</h2>
+		 	<h2 class="page-header"><%= t('Payment') %> - <span id="paymentPeriod"></span></h2>
 		 	<div class="row">
 		 		<div class="col-xs-12 col-lg-4">
-		 			<label>Indiquer le montant, le mode de règlement et la date de paiement.</label>
+		 			<label><%= t('Indicate the amount, the type, and the date of payment') %></label>
 		 		</div>
 		 		<div class="col-xs-12 col-lg-8">
 		 			<div class="row">
 			 			<div class="col-xs-12 col-lg-6">
 						    <div class="form-group">
-						        <label class="control-label" for="payment">Montant</label>
+						        <label class="control-label" for="payment"><%= t('Amount') %></label>
 						        <div class="input-group">
 							      	<input type="text" id="payment" class="form-control text-right" />
 							      	<span class="input-group-addon">€</span>
@@ -23,12 +23,12 @@
 						</div>
 						<div class="col-xs-12 col-lg-6">
 						    <div class="form-group">
-						        <label class="control-label" for="paymentType">Mode</label>
+						        <label class="control-label" for="paymentType"><%= t('Type') %></label>
 						        <select id="paymentType" class="form-control">
-						            <option value="cheque">Chèque</option>
-						            <option value="cash">Espèce</option>
-						            <option value="levy">Prélèvement</option>
-						            <option value="transfer">Virement</option>
+						            <option value="cheque"><%= t('cheque') %></option>
+						            <option value="cash"><%= t('cash') %></option>
+						            <option value="levy"><%= t('levy') %></option>
+						            <option value="transfer"><%= t('transfer') %></option>
 						        </select>
 						    </div>
 					    </div>
@@ -36,43 +36,43 @@
 					<div class="row">
 						<div class="col-xs-12 col-lg-6">
 						    <div class="form-group">
-						        <label class="control-label" for="paymentReference">Référence</label>
+						        <label class="control-label" for="paymentReference"><%= t('Reference') %></label>
 						        <input type="text" id="paymentReference" class="form-control" />
 						    </div>
 						</div>
 						<div class="col-xs-12 col-lg-6">
 							<div class="form-group">
-						        <label class="control-label" for="paymentDate">Date</label>
+						        <label class="control-label" for="paymentDate"><%= t('Date') %></label>
 						        <input type="text" class="datepicker form-control" id="paymentDate" />
 						    </div>
 						</div>
 				    </div>
 				</div>
 			</div>
-		 	<h2 class="page-header">Réduction sur le loyer</h2>
+		 	<h2 class="page-header"><%= t('Discount') %></h2>
 		 	<div class="row">
 		 		<div class="col-xs-12 col-lg-4">
-		 			<label>Déduction sur le loyer courant.</label>
+		 			<label><%= t('Discount on current rent') %></label>
 		 		</div>
 		 		<div class="col-xs-12 col-lg-8">
 				    <div class="form-group">
-				        <label class="control-label" for="promo">Montant</label>
+				        <label class="control-label" for="promo"><%= t('Amount') %></label>
 				        <input type="text" id="promo" class="form-control" />
 				    </div>
 				    <div class="form-group">
-				        <label class="control-label" for="notepromo">Motif de la réduction.</label>
+				        <label class="control-label" for="notepromo"><%= t('Reason for reduction') %></label>
 				        <input type="text" id="notepromo" class="form-control" />
 				    </div>
 		 		</div>
 		 	</div>
-		 	<h2 class="page-header">Note interne</h2>
+		 	<h2 class="page-header"><%= t('Internal note') %></h2>
 		 	<div class="row">
 		 		<div class="col-xs-12 col-lg-4">
-		 			<label>Information interne qui n'apparaîtra pas sur la quittance.</label>
+		 			<label><%= t('Comments that will not appear on the rent invoice') %></label>
 		 		</div>
 		 		<div class="col-xs-12 col-lg-8">
 					<div class="form-group">
-				        <label class="control-label" for="description">Commentaires</label>
+				        <label class="control-label" for="description"><%= t('Comments') %></label>
 				        <textarea type="text" class="form-control" id="description" rows="4" /></textarea>
 				    </div>
 				</div>

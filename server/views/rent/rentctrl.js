@@ -1,4 +1,4 @@
-LOCA.rentCtrl = (function($, Handlebars) {
+LOCA.rentCtrl = (function($, Handlebars, moment) {
 
     // RentCtrl extends Controller
     function RentCtrl() {
@@ -7,6 +7,7 @@ LOCA.rentCtrl = (function($, Handlebars) {
         LOCA.ViewController.call(this, {
             domViewId: '#view-rent',
             domListId: '#rents',
+            listSelectionLabel: 'Selected rent',
             listSelectionMenuId: 'rents-selection-menu',
             urls: {
                 overview: '/api/rents/overview',
@@ -192,19 +193,19 @@ LOCA.rentCtrl = (function($, Handlebars) {
     RentCtrl.prototype.onLoadData = function(callback) {
         var self = this,
             years = [],
-            monthes = [
-                {monthLabel: 'Janvier', monthNumber: 1},
-                {monthLabel: 'Février', monthNumber: 2},
-                {monthLabel: 'Mars', monthNumber: 3},
-                {monthLabel: 'Avril', monthNumber: 4},
-                {monthLabel: 'Mai', monthNumber: 5},
-                {monthLabel: 'Juin', monthNumber: 6},
-                {monthLabel: 'Juillet', monthNumber: 7},
-                {monthLabel: 'Août', monthNumber: 8},
-                {monthLabel: 'Séptembre', monthNumber: 9},
-                {monthLabel: 'Octobre', monthNumber: 10},
-                {monthLabel: 'Novembre', monthNumber: 11},
-                {monthLabel: 'Décembre', monthNumber: 12}
+            months = [
+                {monthLabel: moment.months()[0], monthNumber: 1},
+                {monthLabel: moment.months()[1], monthNumber: 2},
+                {monthLabel: moment.months()[2], monthNumber: 3},
+                {monthLabel: moment.months()[3], monthNumber: 4},
+                {monthLabel: moment.months()[4], monthNumber: 5},
+                {monthLabel: moment.months()[5], monthNumber: 6},
+                {monthLabel: moment.months()[6], monthNumber: 7},
+                {monthLabel: moment.months()[7], monthNumber: 8},
+                {monthLabel: moment.months()[8], monthNumber: 9},
+                {monthLabel: moment.months()[9], monthNumber: 10},
+                {monthLabel: moment.months()[10], monthNumber: 11},
+                {monthLabel: moment.months()[11], monthNumber: 12}
             ],
             year;
         for (year = LOCA.currentYear - 9; year<=LOCA.currentYear + 9; ++year) {
@@ -213,9 +214,9 @@ LOCA.rentCtrl = (function($, Handlebars) {
 
         self.form.bindForm();
 
-        $('#month-selector-dropdown ul').html(self.templateMonthSelector({monthes:monthes}));
+        $('#month-selector-dropdown ul').html(self.templateMonthSelector({months:months}));
         $('#year-selector-dropdown ul').html(self.templateYearSelector({years:years}));
-        $('.month-selector-selection-label').html(monthes[LOCA.currentMonth-1].monthLabel);
+        $('.month-selector-selection-label').html(months[LOCA.currentMonth-1].monthLabel);
         $('.year-selector-selection-label').html(LOCA.currentYear);
 
         if (callback) {
@@ -226,4 +227,4 @@ LOCA.rentCtrl = (function($, Handlebars) {
 
 
     return new RentCtrl();
-})(window.$, window.Handlebars);
+})(window.$, window.Handlebars, window.moment);

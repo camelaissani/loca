@@ -1,4 +1,4 @@
-LOCA.propertyCtrl = (function($, Handlebars, bootbox){
+LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
     var self;
 
     // PropertyCtrl extends Controller
@@ -9,6 +9,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
         LOCA.ViewController.call(this, {
             domViewId: '#view-property',
             domListId: '#properties',
+            listSelectionLabel: 'Selected property',
             listSelectionMenuId: 'properties-selection-menu',
             urls: {
                 overview: '/api/properties/overview',
@@ -44,7 +45,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
             self.openForm('property-form');
         }
         else if (actionId==='list-action-remove-property') {
-            bootbox.confirm('Êtes-vous sûr de vouloir supprimer ce bien ?', function(result) {
+            bootbox.confirm(i18next.t('Are you sure to remove this property'), function(result) {
                 if (!result) {
                     return;
                 }
@@ -90,4 +91,4 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox){
     };
 
     return new PropertyCtrl();
-})(window.$, window.Handlebars, window.bootbox);
+})(window.$, window.Handlebars, window.bootbox, window.i18next);

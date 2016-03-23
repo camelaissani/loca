@@ -314,6 +314,8 @@ LOCA.List = (function($, Handlebars, Events){
         var $rowsToFilter;
         var $rowsToShow;
         var $rowsToHide;
+        var filterValues;
+        var index;
 
         this.filterText = text;
 
@@ -323,8 +325,11 @@ LOCA.List = (function($, Handlebars, Events){
 
         // hide rows that not match filter
         if (this.filterText) {
-            $rowsToFilter = $allRows.find('.list-value').filter(':contains("'+this.filterText+'")').closest('.list-row');
-            $rowsToFilter.addClass('list-element-filtered');
+            filterValues = this.filterText.split(',');
+            for (index = 0; index < filterValues.length; index++) {
+                $rowsToFilter = $allRows.find('.list-value').filter(':contains("'+filterValues[index]+'")').closest('.list-row');
+                $rowsToFilter.addClass('list-element-filtered');
+            }
 
             if (!noAnimation) {
                 $rowsToHide = $allRows.not('.list-element-filtered').not(':hidden');

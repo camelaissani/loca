@@ -1,6 +1,6 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-rent-month-selector-template" type="text/x-handlebars-template">
-    {{#each monthes}}
+    {{#each months}}
     <li><a href="#" class="user-action" data-id="monthselector" data-value="{{monthNumber}}">{{monthLabel}}</a></li>
     {{/each}}
 </script>
@@ -14,43 +14,43 @@
 <script id="view-rent-list-row-template" type="text/x-handlebars-template">
     <div id="{{_id}}" class="list-row">
         <div class="list-col">
+            {{#if status}}
+            <div class="{{status}} list-label list-value">
+                {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
+            </div>
+            {{/if}}
             <div class="clearfix">
                 <div class="pull-left list-avatar-col">
-                    {{Image occupant.properties.0.property.type cssClass='fa-3x'}}
                     <span class="fa-stack fa-lg">
-                        <i class="fa fa-calendar-o fa-stack-1x"></i>
-                        <strong class="fa-stack-1x icon-text">&euro;</strong>
+                        <i class="fa fa-calendar-o fa-stack-2x"></i>
+                        <span class="fa icon-text fa-stack-1x">&euro;</span>
                     </span>
                 </div>
                 <div class="pull-left">
                     <div class="list-title list-value">{{occupant.name}}</div>
-                    {{#if status}}
-                    <small class="{{status}} list-value">
-                        {{paymentStatus}}{{#if countMonthNotPaid}} ({{countMonthNotPaid}} mois){{/if}}
-                    </small>
-                    {{/if}}
                 </div>
+            </div>
+            <div class='list-label'>
+            {{#each occupant.properties}} {{Image property.type}} {{propertyName property.type}}{{#unless @last}} - {{/unless}} {{/each}}
             </div>
         </div>
         <div class="list-col">
             <div class="list-label clearfix">
-                <small class="pull-right hidden-xs">Règlement</small>
+                <small class="pull-right hidden-xs"><%= t('Payment') %></small>
             </div>
             <div class="list-payment-price text-right">
                 <span>{{formatMoney payment withOdometer='payment'}}</span>
             </div>
-            <div class="clearfix">
-                <small>
-                <div class="pull-left">Solde :</div>
+            <div class="list-label clearfix">
+                <div class="pull-left"><%= t('Balance')%></div>
                 <div class="list-balance-price pull-right text-right">
                     {{formatMoney newBalance withOdometer='newBalance'}}
                 </div>
-                </small>
             </div>
 
             <div data-toggle="tooltip" data-placement="right" class="hidden-xs list-comment-link" data-html="true" title="{{breaklines description}}" style="{{commentVisible description}}"><span class="glyphicon glyphicon-comment"></span></div>
         </div>
-        <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+        <div class="list-selection-overlay"></i></div>
     </div>
 </script>
 
@@ -66,7 +66,7 @@
             <div class="clearfix">
                 <div class="pull-left">
                     <h4 class="">{{occupant.name}}</h4>
-                    <small class="{{status}}">{{paymentStatus}}{{#if countMonthNotPaid}} ({{countMonthNotPaid}} mois){{/if}}</small>
+                    <small class="{{status}}">{{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}</small>
                 </div>
                 <div id="{{_id}}" class="pull-right user-action" data-id="remove-item-from-selection">
                     <i class="fa fa-times"></i>

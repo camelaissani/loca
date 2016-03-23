@@ -1,18 +1,18 @@
 <form id="login-form" role="form" action="/loggedin" method='post'>
     <div class="form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
     <div class="form-group">
-        <label class="control-label">E-mail</label>
-        <input type="email" class="form-control" id="username" name="username" placeholder="Votre adresse e-mail">
+        <label class="control-label"><%= t('E-mail') %></label>
+        <input type="email" class="form-control" id="username" name="username" placeholder="<%= t('Your email address') %>">
     </div>
     <div class="form-group">
-        <label class="control-label">Mot de passe</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe">
+        <label class="control-label"><%= t('Password') %></label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="<%= t('Your password') %>">
     </div>
 </form>
 <div class="text-center">
-    <button id="login-send" type="button" class="btn btn-primary">Se connecter</button>
+    <button id="login-send" type="button" class="btn btn-primary"><%= t('Sign in') %></button>
     <%if (config.productive) {%>
-    <p>Pas encore de compte ? <a href="/signup">S'inscrire gratuitement</a>
+    <p><%= t('No account yet?') %><a href="/signup"><%= t('Free subscription') %></a>
     <%} else {%>
     <p>&nbsp;</p>
     <%}%>

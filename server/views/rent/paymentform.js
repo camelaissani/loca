@@ -1,6 +1,6 @@
-LOCA.PaymentForm = (function($) {
+LOCA.PaymentForm = (function($, moment, i18next) {
 
-    function PaymentForm() { 
+    function PaymentForm() {
         LOCA.Form.call(this, {
             alertOnFieldError: true
         });
@@ -47,13 +47,28 @@ LOCA.PaymentForm = (function($) {
         if (!payment.promo) {
             payment.promo= '';
         }
+
+        if (payment.paymentDate) {
+            payment.paymentDate = moment(payment.paymentDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //db formtat to display one
+        }
     };
 
     PaymentForm.prototype.afterSetData = function(args) {
-        var payment = args[0];
+        var payment = args[0],
+            paymentPeriod;
 
+        paymentPeriod = moment.months()[payment.month-1] + ' ' + payment.year;
         $(this.getDomSelector() + ' #occupantNameLabel').html(payment.occupant.name);
+        $(this.getDomSelector() + ' #paymentPeriod').html(paymentPeriod);
     };
+
+    PaymentForm.prototype.onGetData = function(data) {
+        if (data.paymentDate) {
+            data.paymentDate = moment(data.paymentDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+        }
+        return data;
+    };
+
 
     PaymentForm.prototype.getManifest = function() {
         var self = this;
@@ -69,7 +84,7 @@ LOCA.PaymentForm = (function($) {
                         return amount>0;
                     }
                 },
-                fdate: ['DD/MM/YYYY']
+                fdate: [i18next.t('__fmt_date__')]
             },
             'paymentType': {
                 required: {
@@ -104,4 +119,4 @@ LOCA.PaymentForm = (function($) {
     };
 
     return PaymentForm;
-})(window.$);
+})(window.$, window.moment, window.i18next);

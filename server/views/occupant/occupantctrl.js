@@ -1,4 +1,4 @@
-LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
+LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
 
     var self;
 
@@ -11,6 +11,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
         LOCA.ViewController.call(this, {
             domViewId: '#view-occupant',
             domListId: '#occupants',
+            listSelectionLabel: 'Selected tenant',
             listSelectionMenuId: '#occupants-selection-menu',
             urls: {
                 overview: '/api/occupants/overview',
@@ -65,7 +66,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
             });
         }
         else if (actionId==='list-action-remove-occupant') {
-            bootbox.confirm('Êtes-vous sûr de vouloir supprimer ce locataire ?', function(result) {
+            bootbox.confirm(i18next.t('Are you sure to remove this tenant?'), function(result) {
                 if (!result) {
                     return;
                 }
@@ -210,4 +211,4 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox) {
     };
 
     return new OccupantCtrl();
-})(window.$, window.Handlebars, window.bootbox);
+})(window.$, window.Handlebars, window.bootbox, window.i18next);

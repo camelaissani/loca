@@ -2,7 +2,7 @@ LOCA.routes.occupant = {
     url: function () {
         return '/page/occupant';
     },
-    title: 'Locataires',
+    title: window.i18next.t('Tenants'),
     change: function (callback) {
         if (!LOCA.occupantCtrl.alreadyLoaded) {
             LOCA.occupantCtrl.alreadyLoaded = true;

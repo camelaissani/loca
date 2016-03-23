@@ -1,4 +1,4 @@
-LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
+LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
     var self;
 
     // DashboardCtrl extends Controller
@@ -26,23 +26,27 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
         });
     };
 
-    DashboardCtrl.prototype.loadData = function (callback) {
+    DashboardCtrl.prototype.loadData = function(callback) {
         var currentMoment = moment();
         $('#view-dashboard #current-day').html(currentMoment.format('Do'));
         $('#view-dashboard .current-month').html(currentMoment.format('MMMM YYYY'));
 
-        loadRentsOverview(function () {
-            loadOccupantsOverview(function () {
-                loadPropertiesOverview(function () {
+        loadRentsOverview(function() {
+            loadOccupantsOverview(function() {
+                loadPropertiesOverview(function() {
                     loadNotifications(function() {
                         $('#view-dashboard .carousel').each(function(index) {
                             var $carousel = $(this);
-                            if (index%2) {
+                            if (index % 2) {
                                 setTimeout(function() {
-                                    $carousel.carousel({interval: 8000});
-                                }, 2500*index);
+                                    $carousel.carousel({
+                                        interval: 8000
+                                    });
+                                }, 2500 * index);
                             } else {
-                                $carousel.carousel({interval: 8000});
+                                $carousel.carousel({
+                                    interval: 8000
+                                });
                             }
                         });
                         if (callback) {
@@ -59,16 +63,16 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             type: 'GET',
             url: '/api/occupants/overview'
         },
-        function (occupantsOverview) {
+        function(occupantsOverview) {
             var countAll = occupantsOverview.countAll;
             var countActive = occupantsOverview.countActive;
             var countInactive = occupantsOverview.countInactive;
             $('#view-dashboard #count-all-occupants').html(countAll);
             $('#view-dashboard #count-active-occupants').html(countActive);
             $('#view-dashboard #count-inactive-occupants').html(countInactive);
-            $('#view-dashboard #count-all-occupants-label').html(countAll>1?'Locataires':'Locataire');
-            $('#view-dashboard #count-active-occupants-label').html('En contrat');
-            $('#view-dashboard #count-inactive-occupants-label').html(countInactive>1?'Resiliés':'Resilié');
+            $('#view-dashboard #count-all-occupants-label').html(i18next.t('Tenant', {count: countAll}));
+            $('#view-dashboard #count-active-occupants-label').html(i18next.t('Lease', {count: countActive}));
+            $('#view-dashboard #count-inactive-occupants-label').html(i18next.t('Terminated lease', {count: countActive}));
             if (callback) {
                 callback();
             }
@@ -80,16 +84,16 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             type: 'GET',
             url: '/api/properties/overview'
         },
-        function (propertiesOverview) {
+        function(propertiesOverview) {
             var countAll = propertiesOverview.countAll;
             var countFree = propertiesOverview.countFree;
             var countBusy = propertiesOverview.countBusy;
             $('#view-dashboard #count-all-properties').html(countAll);
             $('#view-dashboard #count-active-properties').html(countBusy);
             $('#view-dashboard #count-inactive-properties').html(countFree);
-            $('#view-dashboard #count-all-properties-label').html(countAll>1?'Biens':'Bien');
-            $('#view-dashboard #count-active-properties-label').html(countBusy>1?'Loués':'Loué');
-            $('#view-dashboard #count-inactive-properties-label').html(countFree>1?'Libres':'Libre');
+            $('#view-dashboard #count-all-properties-label').html(i18next.t('Property', {count: countAll}));
+            $('#view-dashboard #count-active-properties-label').html(i18next.t('Leased', {count: countBusy}));
+            $('#view-dashboard #count-inactive-properties-label').html(i18next.t('Available', {count: countFree}));
             if (callback) {
                 callback();
             }
@@ -101,7 +105,7 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             type: 'GET',
             url: '/api/rents/overview'
         },
-        function (rentsOverview) {
+        function(rentsOverview) {
             var countAll = rentsOverview.countAll;
             var countPaid = rentsOverview.countPaid;
             var countPartiallyPaid = rentsOverview.countPartiallyPaid;
@@ -111,12 +115,12 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             var totalNotPaid = rentsOverview.totalNotPaid;
             var totalPaid = rentsOverview.totalPaid;
             $('#view-dashboard #count-all-rents').html(countAll);
-            $('#view-dashboard #count-all-rents-label').html(countAll>1?'Loyers':'Loyer');
-            $('#view-dashboard #count-paid-rents').html(countPaidAndPartiallyPaid + (countPaidAndPartiallyPaid>1?' loyers':' loyer'));
-            $('#view-dashboard #count-not-paid-rents').html(countNotPaid +(countNotPaid>1?' loyers':' loyer'));
+            $('#view-dashboard #count-all-rents-label').html(i18next.t('Rent', {count: countAll}));
+            $('#view-dashboard #count-paid-rents').html(countPaidAndPartiallyPaid + ' ' + i18next.t('Rent', {count: countPaidAndPartiallyPaid}));
+            $('#view-dashboard #count-not-paid-rents').html(countNotPaid + ' ' +  i18next.t('Rent', {count: countNotPaid}));
             //$('#view-dashboard #count-partially-paid-rents').html(countPartiallyPaid);
             $('#view-dashboard #count-total-topay-rents').html(LOCA.formatMoney(totalToPay));
-            $('#view-dashboard #count-total-notpaid-rents').html(LOCA.formatMoney(totalNotPaid*(-1)));
+            $('#view-dashboard #count-total-notpaid-rents').html(LOCA.formatMoney(totalNotPaid * (-1)));
             $('#view-dashboard #count-total-paid-rents').html(LOCA.formatMoney(totalPaid));
             if (callback) {
                 callback();
@@ -129,9 +133,12 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             type: 'GET',
             url: '/api/notifications'
         },
-        function (notifications) {
+        function(notifications) {
             var notificationsToDisplay,
-                emptyNotifications = [{type:'ok', description: 'Rien à signaler'}];
+                emptyNotifications = [{
+                    type: 'ok',
+                    description: 'Rien à signaler'
+                }];
 
             if (notifications && notifications.length > 0) {
                 notificationsToDisplay = notifications.filter(function(notification) {
@@ -141,7 +148,9 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
             if (!notificationsToDisplay || notificationsToDisplay.length === 0) {
                 notificationsToDisplay = emptyNotifications;
             }
-            $('#view-dashboard #carousel-notifications').html(self.notificationListTemplate({notifications:notificationsToDisplay}));
+            $('#view-dashboard #carousel-notifications').html(self.notificationListTemplate({
+                notifications: notificationsToDisplay
+            }));
             if (callback) {
                 callback();
             }
@@ -149,4 +158,4 @@ LOCA.dashboardCtrl = (function ($, moment, Handlebars) {
     }
 
     return new DashboardCtrl();
-}) (window.$, window.moment, window.Handlebars);
+})(window.$, window.moment, window.Handlebars, window.i18next);

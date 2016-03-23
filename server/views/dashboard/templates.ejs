@@ -14,7 +14,7 @@
             <div class="item active text-center">
                 <div class="vertical-center">
                     <h4><i class="fa fa-bullhorn fa-5x"></i></h4>
-                    <h3>Anomalies</h3>
+                    <h3><%= t('Issue') %></h3>
                 </div>
             </div>
             {{#each notifications}}
@@ -31,11 +31,11 @@
         <!-- Controls -->
         <a class="left carousel-control" href="#carousel-notifications" role="button" data-slide="prev">
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-            <span class="sr-only">Précédent</span>
+            <span class="sr-only"><%= t('Previous') %></span>
         </a>
         <a class="right carousel-control" href="#carousel-notifications" role="button" data-slide="next">
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-            <span class="sr-only">Suivant</span>
+            <span class="sr-only"><%= t('Next') %></span>
         </a>
         --}}
     {{else}}
@@ -43,12 +43,12 @@
             <div class="item active text-center">
                 <div class="vertical-center">
                     <h4><i class="fa fa-bullhorn fa-5x"></i></h4>
-                    <h3>Anomalies</h3>
+                    <h3><%= t('Issue') %></h3>
                 </div>
             </div>
             <div class="item text-center">
                 <div class="vertical-center">
-                    <h3>Ca roule, aucun problème :)</h3>
+                    <h3><%= t("It's going OK! No problems (^_^)") %></h3>
                 </div>
             </div>
         </div>

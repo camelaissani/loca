@@ -2,28 +2,28 @@
 <form id="signup-form" role="form" action="/signedin" method='post'>
     <div class="form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
     <div class="form-group">
-        <label class="control-label">Prénom</label>
-        <input type="text" class="form-control" placeholder="Prénom" id="firstname" name="firstname">
+        <label class="control-label"><%= t('First name') %></label>
+        <input type="text" class="form-control" placeholder="<%= t('First name') %>" id="firstname" name="firstname">
     </div>
 
     <div class="form-group">
-        <label class="control-label">Nom</label>
-        <input type="text" class="form-control" placeholder="Nom" id="lastname" name="lastname">
+        <label class="control-label"><%= t('Last name') %></label>
+        <input type="text" class="form-control" placeholder="<%= t('Last name') %>" id="lastname" name="lastname">
     </div>
 
     <div class="form-group">
-        <label class="control-label">E-mail</label>
-        <input type="email" class="form-control" placeholder="Votre adresse e-mail" id="email" name="email">
+        <label class="control-label"><%= t('E-mail') %></label>
+        <input type="email" class="form-control" placeholder="<%= t('Your email address') %>" id="email" name="email">
     </div>
 
     <div class="form-group">
-        <label class="control-label">Mot de passe</label>
-        <input type="password" class="form-control" placeholder="Votre mot de passe" id="password" name="password">
+        <label class="control-label"><%= t('Password') %></label>
+        <input type="password" class="form-control" placeholder="<%= t('Your password') %>" id="password" name="password">
     </div>
 </form>
 
 <div class="text-center">
-    <small>En cliquant sur S’inscrire, vous acceptez les <a href="/public/pdf/cgu.pdf">conditions d’utilisation</a></small>
-    <button id="signup-send" type="button" class="btn btn-primary">S'inscrire</button>
-    <p>Vous avez déjà un compte ? <a href="/login">Connectez-vous</a></p>
+    <small><%= t('By clicking Register, you accept the') %> <a href="/public/pdf/cgu.pdf"><%= t('Term of use') %></a></small>
+    <button id="signup-send" type="button" class="btn btn-primary"><%= t('Register') %></button>
+    <p><%= t('You already have an account?') %> <a href="/login"><%= t('Sign in') %></a></p>
 </div>

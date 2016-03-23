@@ -1,5 +1,5 @@
-(function($) {
-    $(document).ready(function () {
+(function($, i18next) {
+    document.addEventListener('applicationReady', function(/*event*/) {
         var $container,
             location,
             loginForm,
@@ -21,15 +21,15 @@
                     }
 
                     if (response.status === 'login-user-not-found') {
-                        message = 'Utilisateur inconnu.';
+                        message = i18next.t('Unknown user');
                     } else if (response.status === 'login-invalid-password') {
-                        message = 'Mot de passe incorrect.';
+                        message = i18next.t('Bad password');
                     } else if (response.status === 'login-realm-not-found') {
-                        message = 'Connexion à votre compte est non autorisée. Actuellement vous ne gérez aucun bien immobilier.';
+                        message = i18next.t('This user does not manage any real estate accounts');
                     } else if (response.status === 'missing-field') {
-                        message = 'Veuillez completer tous les champs.';
+                        message = i18next.t('Please fill missing fields');
                     } else {
-                        message = 'Une erreur technique s\'est produite.';
+                        message = i18next.t('A technical issue has occured (-_-\')');
                     }
                     loginForm.showErrorMessage(message);
                 });
@@ -49,11 +49,11 @@
                     }
 
                     if (response.status === 'missing-field') {
-                        message = 'Veuillez completer tous les champs.';
+                        message = i18next.t('Please fill missing fields');
                     } else if (response.status === 'signup-email-taken') {
-                        message = 'Le compte utilisateur existe déjà.';
+                        message = i18next.t('This user already exists');
                     } else {
-                        message = 'Une erreur technique s\'est produite.';
+                        message = i18next.t('A technical issue has occured (-_-\')');
                     }
 
                     signupForm.showErrorMessage(message);
@@ -64,4 +64,4 @@
         $container.css('visibility','visible');
         $container.css('opacity',1);
     });
-})(window.$);
+})(window.$, window.i18next);

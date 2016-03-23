@@ -10,6 +10,11 @@
         "minivents-cuzzo": "*",
         "accountingjs": "0.3.2",
         "bootstrap": "^3.3.2",
-        "bootbox": "*"
+        "bootbox": "*",
+        "i18next": "*",
+        "i18next-xhr-backend": "*",
+        "i18next-browser-languagedetector": "*",
+        "i18next-localstorage-cache": "*",
+        "i18next-sprintf-postprocessor": "*"
     }
 }

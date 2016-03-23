@@ -3,12 +3,15 @@ module.exports = {
     demomode: process.env.SELFHOSTED_DEMOMODE,
     database: process.env.SELFHOSTED_DBNAME || 'demodb',
     website: {
-        company: {name: '', website: ''},
+        company: {
+            name: '',
+            website: ''
+        },
         product: {
             name: 'Loca',
-            slogan: 'Gestion de vos biens immobiliers',
-            website: 'http://localhost:8081/',
-            imageUrl: 'http://localhost:8081/public/images/1.jpg'
+            slogan: 'Real estate management',
+            website: 'https://demo.nuageprive.fr/',
+            imageUrl: 'http://demo.nuageprive.fr/public/images/1.jpg'
         },
         contact: {
             phone: '01.99.99.99.99',
@@ -22,18 +25,27 @@ module.exports = {
         },
         metatags: {
             type: 'website',
-            title: 'Logiciel open source de gestion immobilière',
+            title: 'Open source real estate management',
             description: '',
-            keywords: 'Logiciel open source, Logiciel gratuit, Gestion immobilière, gérer ses biens en ligne, gestion des loyers, quittances, avis d\'écheance',
-            location: 'Ile de France',
+            keywords: 'open source software, free software, real estate management, online management, rent management, invoices, rent notices',
+            location: 'Paris, France',
             rating: 'General',
-            author: {name: 'Camel Aissani', twitter: '@camelaissani'}
+            author: {
+                name: 'Camel Aissani',
+                twitter: '@camelaissani'
+            }
         },
         author: {
             name: 'Camel Aissani',
             website: 'http://www.nuageprive.fr',
-            twitter: {url: 'https://twitter.com/camelaissani', id: '@camelaissani'},
-            github: {url: 'https://github.com/camelaissani', id: 'camelaissani'}
+            twitter: {
+                url: 'https://twitter.com/camelaissani',
+                id: '@camelaissani'
+            },
+            github: {
+                url: 'https://github.com/camelaissani',
+                id: 'camelaissani'
+            }
         }
     }
 };

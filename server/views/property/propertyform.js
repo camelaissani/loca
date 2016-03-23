@@ -1,4 +1,4 @@
-LOCA.PropertyForm = (function($) {
+LOCA.PropertyForm = (function($, i18next) {
 
     function PropertyForm() {
         LOCA.Form.call(this, {
@@ -97,7 +97,7 @@ LOCA.PropertyForm = (function($) {
             $('.user-action[data-id="list-action-remove-property"]').show();
         }
         else {
-            $(this.getDomSelector() + ' #propertyNameLabel').html('Bien à louer');
+            $(this.getDomSelector() + ' #propertyNameLabel').html(i18next.t('Property to rent'));
             $('.user-action[data-id="list-action-remove-property"]').hide();
         }
 
@@ -140,4 +140,4 @@ LOCA.PropertyForm = (function($) {
     }
 
     return PropertyForm;
-})(window.$);
+})(window.$, window.i18next);

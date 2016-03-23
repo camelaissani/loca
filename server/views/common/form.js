@@ -1,20 +1,22 @@
-LOCA.Form = (function($, moment) {
+LOCA.Form = (function($, moment, i18next) {
     // VALIDATORS
     $.validator.addMethod('mindate', function(value, element, params) {
         var minDate = $(params[0] + ' #' + params[1]).val();
-        var momentMin = moment(minDate, 'DD/MM/YYYY', true);
-        var momentValue = moment(value, 'DD/MM/YYYY', true);
+        var momentMin = moment(minDate, i18next.t('__fmt_date__'), true);
+        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
         params[2] = minDate;
         return this.optional(element) || (momentValue.isValid() && momentMin.isValid() && (momentValue.isSame(momentMin) || momentValue.isAfter(momentMin)));
-    }, 'Veuillez indiquer une date après le {2}.');
+    },
+    i18next.t('Please set a date after the', {date: '{2}'}));
 
     $.validator.addMethod('maxdate', function(value, element, params) {
         var maxDate = $(params[0] + ' #' + params[1]).val();
-        var momentMax = moment(maxDate, 'DD/MM/YYYY', true);
-        var momentValue = moment(value, 'DD/MM/YYYY', true);
+        var momentMax = moment(maxDate, i18next.t('__fmt_date__'), true);
+        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
         params[2] = maxDate;
         return this.optional(element) || (momentValue.isValid() && momentMax.isValid() && (momentValue.isSame(momentMax) || momentValue.isBefore(momentMax)));
-    }, $.validator.format('Veuillez indiquer une date avant le {2}.'));
+    },
+    i18next.t('Please set a date before the', {date: '{2}'}));
 
     $.validator.addMethod('maxcontractdate', function(value, element, params) {
         var contract = $(params[0] + ' #' + params[1]).val();
@@ -22,9 +24,9 @@ LOCA.Form = (function($, moment) {
         var endDate;
         var momentBegin, momentEnd;
         var contractDuration;
-        var momentValue = moment(value, 'DD/MM/YYYY', true);
+        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
 
-        momentBegin = moment(beginDate, 'DD/MM/YYYY', true);
+        momentBegin = moment(beginDate, i18next.t('__fmt_date__'), true);
         if (momentBegin.isValid()) {
             if (contract === 'custom') {
                 contractDuration = moment.duration(2, 'years');
@@ -33,25 +35,25 @@ LOCA.Form = (function($, moment) {
             }
             contractDuration = moment.duration(9, 'years');
             momentEnd = moment(momentBegin).add(contractDuration).subtract('days', 1);
-            endDate = momentEnd.format('DD/MM/YYYY');
+            endDate = momentEnd.format(i18next.t('__fmt_date__'));
             return endDate === value;
         }
         return this.optional(element);
-    }, 'Date de fin de bail non valide avec le type de contrat.');
+    },
+    i18next.t('The end date of contract is not compatible with contract selected'));
 
-    $.validator.addMethod(
-        'fdate',
-        function(value, element, params) {
-            var pattern = params[0];
-            params[1] = moment(new Date()).format(pattern);
-            return this.optional(element) || moment(value, pattern, true).isValid();
-        },
-        'Date non valide (ex : {1}).');
+    $.validator.addMethod('fdate', function(value, element, params) {
+        var pattern = params[0];
+        params[1] = moment(new Date()).format(pattern);
+        return this.optional(element) || moment(value, pattern, true).isValid();
+    },
+    i18next.t('The date is not valid (Sample date:)', {date: '{1}'}));
 
     $.validator.addMethod('phoneFR', function(phone_number, element) {
         phone_number = phone_number.replace(/\(|\)|\s+|-/g, '');
         return this.optional(element) || phone_number.length > 9 && phone_number.match(/^(?:(?:(?:00\s?|\+)33\s?)|(?:\(?0))(?:\d{2}\)?\s?\d{4}\s?\d{4}|\d{3}\)?\s?\d{3}\s?\d{3,4}|\d{4}\)?\s?(?:\d{5}|\d{3}\s?\d{3})|\d{5}\)?\s?\d{4,5})$/);
-    }, 'Veuillez entrer un numéro valide.');
+    },
+    i18next.t('Please enter a valid phone number'));
 
 
     function Form(options) {
@@ -231,7 +233,7 @@ LOCA.Form = (function($, moment) {
                 self.onSubmit(response, callback);
             },
             function() {
-                self.showErrorMessage('Une erreur technique s\'est produite.');
+                self.showErrorMessage(i18next.t('A technical issue has occured (-_-\')'));
             });
         }
     };
@@ -282,7 +284,7 @@ LOCA.Form = (function($, moment) {
                 if (self.options.alertOnFieldError) {
                     errorCount = this.numberOfInvalids();
                     if (errorCount) {
-                        self.$alertMsg.html('Votre formulaire n\'est pas valide. Veuillez vérifier les champs en erreur.');
+                        self.$alertMsg.html(i18next.t('The form is not valid. Please check the field with error', {count: errorCount}));
                         self.$alert.show();
                     }
                 }
@@ -300,4 +302,4 @@ LOCA.Form = (function($, moment) {
 
     return Form;
 
-})(window.$, window.moment);
+})(window.$, window.moment, window.i18next);

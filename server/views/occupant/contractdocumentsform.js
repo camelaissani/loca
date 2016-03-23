@@ -1,5 +1,5 @@
-LOCA.ContractDocumentsForm = (function($, moment) {
-    function ContractDocumentsForm() { 
+LOCA.ContractDocumentsForm = (function($, moment, i18next) {
+    function ContractDocumentsForm() {
         LOCA.Form.call(this, {
             alertOnFieldError: true
         });
@@ -43,7 +43,7 @@ LOCA.ContractDocumentsForm = (function($, moment) {
                         return $(self.getDomSelector() + ' #name_0').val().trim() !== '';
                     }
                 },
-                fdate: ['DD/MM/YYYY']
+                fdate: [i18next.t('__fmt_date__')]
             }
         };
     };
@@ -55,8 +55,10 @@ LOCA.ContractDocumentsForm = (function($, moment) {
         this.documentRowCount=0;
 
         if (occupant.documents) {
-            occupant.documents.forEach(function(document, index) {
-                document.expirationDate = moment(document.expirationDate).format('DD/MM/YYYY');
+            occupant.documents.forEach(function(doc, index) {
+                if (doc.expirationDate) {
+                    doc.expirationDate = moment(doc.expirationDate).format(i18next.t('__fmt_date__')); //db formtat to display one
+                }
                 if (index !==0) { // Except first one row still exists
                     self.addDocumentRow();
                 }
@@ -67,7 +69,18 @@ LOCA.ContractDocumentsForm = (function($, moment) {
     ContractDocumentsForm.prototype.afterSetData = function(args) {
         var occupant = args[0];
 
-        $(this.getDomSelector() + ' #occupantNameLabel').html('Documents de '+ occupant.name);
+        $(this.getDomSelector() + ' #occupantNameLabel').html(i18next.t('\'s documents', {name:occupant.name}));
+    };
+
+    ContractDocumentsForm.prototype.onGetData = function(data) {
+        if (data.documents) {
+            data.documents.forEach(function(doc) {
+                if (doc.expirationDate) {
+                    doc.expirationDate = moment(doc.expirationDate, i18next.t('__fmt_date__')).toDate(); //display format to db one
+                }
+            });
+        }
+        return data;
     };
 
     ContractDocumentsForm.prototype.onBind = function() {
@@ -123,10 +136,10 @@ LOCA.ContractDocumentsForm = (function($, moment) {
 
         $('#'+itemExpirtationDateName, $newRow).rules('add', {
             required: true,
-            fdate: ['DD/MM/YYYY']
+            fdate: [i18next.t('__fmt_date__')]
         });
     };
 
     return ContractDocumentsForm;
-})(window.$, window.moment);
+})(window.$, window.moment, window.i18next);
 

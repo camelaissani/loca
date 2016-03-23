@@ -1,10 +1,10 @@
-<h1><center><%=config.website.product.slogan%></center></h1>
+<h1><center><%= t(config.website.product.slogan) %></center></h1>
 <div class="centeredbtn">
     <% if (config.demomode) {%>
-    <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg">S'inscrire gratuitement</a>
-    <a href="/logindemo" class="btn btn-success btn-lg">Démonstration</a>
+    <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
+    <a href="/logindemo" class="btn btn-success btn-lg"><%= t('Demonstration') %></a>
     <% } else { %>
-    <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg">S'inscrire gratuitement</a>
+    <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
     <% } %>
-    <p>Vous avez déjà un compte ? <a href="/login">Connectez-vous</a></p>
+    <p><%= t('You already have an account?') %> <a href="/login"><%= t('Sign in') %></a></p>
 </div>

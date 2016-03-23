@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-5 col-xs-12">
             <div class="tile cover">
-                <h2>Bonjour,</h2>
+                <h2><%= t('Hello')%>,</h2>
                 <h2><%= account.firstname + ' ' + account.lastname %></h2>
             </div>
         </div>
@@ -13,7 +13,7 @@
                         <div class="item active text-center">
                             <div class="vertical-center">
                                 <h4><i class="fa fa-group fa-5x"></i></h4>
-                                <h3>Locataires</h3>
+                                <h3><%= t('Tenants') %></h3>
                             </div>
                         </div>
                         <div class="item text-center">
@@ -45,7 +45,7 @@
                         <div class="item active text-center">
                             <div class="vertical-center">
                                 <h4><i class="fa fa-key fa-5x"></i></h4>
-                                <h3>Biens</h3>
+                                <h3><%= t('Properties') %></h3>
                             </div>
                         </div>
                         <div class="item text-center">
@@ -85,7 +85,7 @@
                         <div class="item active text-center">
                             <div class="vertical-center">
                                 <h4><i class="fa fa-money fa-5x"></i></h4>
-                                <h3>Loyers</h3>
+                                <h3><%= t('Rents') %></h3>
                             </div>
                         </div>
                         <div class="item text-center">
@@ -107,7 +107,7 @@
         <div class="col-sm-2 col-xs-6">
             <div class="tile green text-center nav-action" data-id="rent">
                 <div class="vertical-center">
-                    <h4>Loyers versés</h4>
+                    <h4><%= t('Paid') %></h4>
                     <div class="tilecurrency"><span id="count-total-paid-rents"></span></div>
                     <h4 id="count-paid-rents"></h4>
                 </div>
@@ -116,7 +116,7 @@
         <div class="col-sm-2 col-xs-6">
             <div class="tile orange text-center nav-action" data-id="rent">
                 <div class="vertical-center">
-                    <h4>Loyers à percevoir</h4>
+                    <h4><%= t('Not paid') %></h4>
                     <div class="tilecurrency"><span id="count-total-notpaid-rents"></span></div>
                     <h4 id="count-not-paid-rents"></h4>
                 </div>
@@ -126,7 +126,7 @@
             <div class="tile dark blue text-center nav-action" data-id="owner">
                 <div class="vertical-center">
                     <h4><i class="fa fa-info-circle fa-inverse fa-5x"></i></h4>
-                    <h3>Bailleur</h3>
+                    <h3><%= t('Landloard') %></h3>
                 </div>
             </div>
         </div>

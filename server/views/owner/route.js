@@ -2,7 +2,7 @@ LOCA.routes.owner = {
     url: function () {
         return '/page/owner';
     },
-    title: 'Bailleur',
+    title: window.i18next.t('Landloard'),
     change: function (callback) {
         if (!LOCA.ownerCtrl.alreadyLoaded) {
             LOCA.ownerCtrl.alreadyLoaded = true;

@@ -1,31 +1,67 @@
-(function(Handlebars, moment, accounting) {
+(function(i18next, Handlebars, moment, accounting) {
     // Method helpers
     LOCA.formatSurface = function(text, hideUnit, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, 'm<sup>2</sup>', 2, '.', ',', hideUnit?'%v':'%v %s');
+        return accounting.formatMoney(text, 'm<sup>2</sup>', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), hideUnit?'%v':'%v %s');
     };
 
     LOCA.formatMoney = function(text, hideCurrency, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, '€', 2, '.', ',', hideCurrency?'%v':'%v %s');
+        return accounting.formatMoney(text, '€', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), hideCurrency?'%v':'%v %s');
     };
 
     LOCA.formatPercent = function(text, hidePercent, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatNumber(accounting.toFixed(text*100, 2), 2, '', ',') + (hidePercent?'':' %');
+        return accounting.formatNumber(accounting.toFixed(text*100, 2), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator')) + (hidePercent?'':' %');
     };
 
     LOCA.formatMonth = function(text) {
         return moment.months()[parseInt(text, 10)-1];
     };
 
+    LOCA.formatDate = function(text) {
+        return moment(text, 'DD/MM/YYYY').format(i18next.t('__fmt_date__'));
+    };
+
     //Handlebars helpers
+    Handlebars.registerHelper('i18next', function(params) {
+        var attr,
+            options,
+            text;
+
+        if (params.hash && params.hash.key) {
+            for(attr in params.hash) {
+                if (attr !== 'key') {
+                    if (!options) {
+                        options = {};
+                    }
+                    if (attr.toLowerCase() === 'date') {
+                        options[attr] = LOCA.formatDate(params.hash[attr]);
+                    }
+                    else if (attr.toLowerCase() === 'amount') {
+                        options[attr] = LOCA.formatMoney(params.hash[attr]);
+                    }
+                    else {
+                        options[attr] = params.hash[attr];
+                    }
+                }
+            }
+            if (options) {
+                text = i18next.t(params.hash.key, options);
+            }
+            else {
+                text = i18next.t(params.hash.key);
+            }
+            return new Handlebars.SafeString(text);
+        }
+        return new Handlebars.SafeString('???');
+    });
     Handlebars.registerHelper('indexPlusOne', function() {
         return new Handlebars.SafeString(Number(arguments[0].data.index)+1); //index not zero based
     });
@@ -42,7 +78,7 @@
         var symbol = '€';
 
         text = Handlebars.Utils.escapeExpression(text);
-        amount = accounting.formatMoney(text, '', 2, '.', ',', '%v');
+        amount = accounting.formatMoney(text, '', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');
 
         if (!options) {
             html = '<span class="price-content"><span class="'+classes+'">'+amount+'</span><span class="price-symbol">'+symbol+'</span></span>';
@@ -75,6 +111,11 @@
         text = LOCA.formatPercent(text, options.hash.hidePercent, options.hash.emptyForZero);
         return new Handlebars.SafeString(text);
     });
+    Handlebars.registerHelper('formatDate', function(text/*, options*/) {
+        text = Handlebars.Utils.escapeExpression(text);
+        text = LOCA.formatDate(text);
+        return new Handlebars.SafeString(text);
+    });
     Handlebars.registerHelper('formatMonth', function(text/*, options*/) {
         text = Handlebars.Utils.escapeExpression(text);
         text = LOCA.formatMonth(text);
@@ -96,29 +137,29 @@
             paymentType = this.type;
         }
         if (paymentType === 'cheque') {
-            return new Handlebars.SafeString('chèque');
+            return new Handlebars.SafeString(i18next.t('cheque'));
         }
         if (paymentType === 'cash') {
-            return new Handlebars.SafeString('espèces');
+            return new Handlebars.SafeString(i18next.t('cash'));
         }
         if (paymentType === 'levy') {
-            return new Handlebars.SafeString('prélèvement');
+            return new Handlebars.SafeString(i18next.t('levy'));
         }
         if (paymentType === 'transfer') {
-            return new Handlebars.SafeString('virement');
+            return new Handlebars.SafeString(i18next.t('transfer'));
         }
-        return new Handlebars.SafeString('inconnu?');
+        return new Handlebars.SafeString(i18next.t('unknown'));
     });
     Handlebars.registerHelper('paymentStatus', function() {
         var html = '';
         if (this.status === 'paid') {
-            html = '<i class="fa fa-check"></i>'+' Payé';
+            html = '<i class="fa fa-check"></i>'+' '+i18next.t('Paid');
         }
         else if (this.status === 'notpaid') {
-            html = '<i class="fa fa-exclamation-triangle"></i>'+' Impayé';
+            html = '<i class="fa fa-exclamation-triangle"></i>'+' '+i18next.t('Not paid');
         }
         else if (this.status === 'partialypaid') {
-            html = '<i class="fa fa-exclamation"></i>'+' Payé (partiel)';
+            html = '<i class="fa fa-exclamation"></i>'+' '+i18next.t('Partially paid');
         }
         return new Handlebars.SafeString(html);
     });
@@ -164,15 +205,15 @@
         }
 
         if (propertyType === 'office') {
-            return new Handlebars.SafeString('Local');
+            return new Handlebars.SafeString(i18next.t('Room'));
         }
         if (propertyType === 'parking') {
-            return new Handlebars.SafeString('Parking');
+            return new Handlebars.SafeString(i18next.t('Car park'));
         }
         if (propertyType === 'letterbox') {
-            return new Handlebars.SafeString('Boîte aux lettres');
+            return new Handlebars.SafeString(i18next.t('Letterbox'));
         }
 
-        return new Handlebars.SafeString('inconnu?');
+        return new Handlebars.SafeString(i18next.t('unknown'));
     });
-})(window.Handlebars, window.moment, window.accounting);
+})(window.i18next, window.Handlebars, window.moment, window.accounting);

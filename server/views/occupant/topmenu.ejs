@@ -1,13 +1,13 @@
 <ul class="nav nav-pills">
     <li role="presentation">
-        <button type="button" class="btn btn-default user-action" data-id="list-action-add-occupant" data-toggle="tooltip" data-placement="bottom" title="Ajouter un locataire"><i class="fa fa-plus-circle"></i> Nouveau</button>
+        <button type="button" class="btn btn-default user-action" data-id="list-action-add-occupant" data-toggle="tooltip" data-placement="bottom" title="Ajouter un locataire"><i class="fa fa-plus-circle"></i> <%= t('New') %></button>
     </li>
     <li class="dropdown" role="presentation">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label">Tous (<span class="all-filter-label"></span>)</span> <span class="caret"></span></button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label"><%= t('All') %> (<span class="all-filter-label"></span>)</span> <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="#" class="user-action" data-id="list-filter">Tous (<span class="all-filter-label"></span>)</a></li>
-            <li><a href="#" class="user-action active" data-id="list-filter" data-value="Contrat en cours">En contrat (<span class="all-active-filter-label"></span>)</a></li>
-            <li><a href="#" class="user-action" data-id="list-filter" data-value="Contrat résilié">Resiliés (<span class="all-inactive-filter-label"></span>)</a></li>
+            <li><a href="#" class="user-action" data-id="list-filter"><%= t('All') %> (<span class="all-filter-label"></span>)</a></li>
+            <li><a href="#" class="user-action active" data-id="list-filter" data-value="<%= t('Lease in progress') %>"><%= t('Lease in progress') %> (<span class="all-active-filter-label"></span>)</a></li>
+            <li><a href="#" class="user-action" data-id="list-filter" data-value="<%= t('Lease terminated') %>"><%= t('Lease terminated') %> (<span class="all-inactive-filter-label"></span>)</a></li>
         </ul>
     </li>
 </ul>

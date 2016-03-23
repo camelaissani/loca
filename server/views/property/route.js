@@ -2,7 +2,7 @@ LOCA.routes.property = {
     url: function () {
         return '/page/property';
     },
-    title: 'Biens',
+    title: window.i18next.t('Properties'),
     change: function (callback) {
         if (!LOCA.propertyCtrl.alreadyLoaded) {
             LOCA.propertyCtrl.alreadyLoaded = true;

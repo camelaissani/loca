@@ -1,6 +1,7 @@
 'use strict';
 
-var moment = require('moment'),
+var i18next = require('i18next'),
+    moment = require('moment'),
     crypto = require('crypto'),
     occupantModel = require('../models/occupant'),
     notificationModel = require('../models/notification');
@@ -134,10 +135,10 @@ module.exports.feeders = [
                     occupant.documents.forEach(function(document) {
                         notifications.push({
                             type: 'expiredDocument',
-                            notificationId: module.exports.generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD/MM/YYYY') + document.name),
+                            notificationId: module.exports.generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format(i18next.t('__fmt_date__')) + document.name),
                             expirationDate: document.expirationDate,
                             title: occupant.name,
-                            description: document.name + ' a expiré le ' + moment(document.expirationDate).format('DD/MM/YYYY'),
+                            description: i18next.t('has expired', {document: document.name, date: moment(document.expirationDate).format(i18next.t('__fmt_date__'))}),
                             actionUrl: ''
                         });
                     });
@@ -148,7 +149,7 @@ module.exports.feeders = [
                                 type: 'warning',
                                 notificationId: module.exports.generateId(occupant._id.toString() + '_no_document'),
                                 title: occupant.name,
-                                description: 'Aucun document n\'est associé au contrat de bail. L\'assurance du bien loué est-elle manquante ?',
+                                description:  i18next.t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
                                 actionUrl: ''
                             });
                             return true;

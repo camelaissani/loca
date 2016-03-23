@@ -1,73 +1,73 @@
 <div class="form-card">
     <div id="parameter-form" class="clear grid-form">
         <fieldset>
-            <legend>Groupe</legend>
+            <legend><%= t('Organization') %></legend>
             <div data-row-span="1">
                 <div data-field-span="1">
-                    <label>Nom du groupe</label>
+                    <label>t('Organization name')</label>
                     <input type="text" id="realm.name" value="<%= realm.name?realm.name:''%>" disabled>
                 </div>
             </div>
             <div data-row-span="1">
                 <div data-field-span="1">
-                    <label>Administrateur</label>
+                    <label><%= t('Administrator') %></label>
                     <input type="text" id="realm.administrator" value="<%= realm.administrator?realm.administrator:''%>" disabled>
                 </div>
             </div>
             <div data-row-span="3">
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 1</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 1}) %></label>
                     <input id="realm.user1" class="" type="text" value="<%= realm.user1?realm.user1:''%>">
                     <span class="my-error-tip"></span>
                 </div>
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 2</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 2}) %></label>
                     <input id="realm.user2" class="" type="text" value="<%= realm.user2?realm.user2:''%>">
                     <span class="my-error-tip"></span>
                 </div>
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 3</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 3}) %></label>
                     <input id="realm.user3" class="" type="text" value="<%= realm.user3?realm.user3:''%>">
                     <span class="my-error-tip"></span>
                 </div>
             </div>
             <div data-row-span="3">
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 4</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 4}) %></label>
                     <input id="realm.user4" class="" type="text" value="<%= realm.user4?realm.user4:''%>">
                     <span class="my-error-tip"></span>
                 </div>
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 5</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 5}) %></label>
                     <input id="realm.user5" class="" type="text" value="<%= realm.user5?realm.user5:''%>">
                     <span class="my-error-tip"></span>
                 </div>
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 6</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 6}) %></label>
                     <input id="realm.user6" class="" type="text" value="<%= realm.user6?realm.user6:''%>">
                     <span class="my-error-tip"></span>
                 </div>
             </div>
             <div data-row-span="3">
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 7</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 7}) %></label>
                     <input id="realm.user7" class="" type="text" value="<%= realm.user7?realm.user7:''%>">
                     <span class="my-error-tip"></span>
                 </div>
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 8</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 8}) %></label>
                     <input id="realm.user8" class="" type="text" value="<%= realm.user8?realm.user8:''%>">
                     <span class="my-error-tip"></span>
                 </div>
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 9</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 9}) %></label>
                     <input id="realm.user9" class="" type="text" value="<%= realm.user9?realm.user9:''%>">
                     <span class="my-error-tip"></span>
                 </div>
             </div>
             <div data-row-span="3">
                 <div data-field-span="1">
-                    <label class="left">Utilisateur 10</label>
+                    <label class="left"><%= t('User') %> <%= t('#', {number: 10}) %></label>
                     <input id="realm.user10" class="" type="text" value="<%= realm.user10?realm.user10:''%>">
                     <span class="my-error-tip"></span>
                 </div>

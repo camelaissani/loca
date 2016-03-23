@@ -1,8 +1,8 @@
  <div class="form-card">
     <div id="rent-vat-form" class="grid-form">
         <div class="form-action">
-            <h1>Taux de TVA</h1>
-            <input type="button" id="rentvatform-send" value="Enregistrer">
+            <h1><%= t('VAT ratio') %></h1>
+            <input type="button" id="rentvatform-send" value="<%= t('Save') %>">
         </div>
         <input type="hidden" id="rent._id" value="<%= occupant._id %>" />
         <input type="hidden" id="rent.month" value="<%= rent.month %>" disabled/>
@@ -12,18 +12,18 @@
                 <!--
                 <div data-field-span="2">
                     <label>à partir de</label>
-                  	<input id="rent.vatStartTime" type="text" value="<%= frMonthLabels[rent.month-1]+" "+rent.year %>" disabled/>  
+                    <input id="rent.vatStartTime" type="text" value="<%= frMonthLabels[rent.month-1]+" "+rent.year %>" disabled/>
                     <span class="my-error-tip"></span>
                 </div>
                 -->
                 <div data-field-span="5">
-                    <label>Taux de T.V.A. en %</label>
-        			<input type="text" id="rent.vatRatio" value="<%=  rent.vatRatio?Number(rent.vatRatio*100).toFixed(2):'' %>"/>
+                    <label><%= t('VAT ratio in %') %></label>
+                    <input type="text" id="rent.vatRatio" value="<%=  rent.vatRatio?Number(rent.vatRatio*100).toFixed(2):'' %>"/>
                     <span class="my-error-tip"></span>
                 </div>
             </div>
         </fieldset>
 
-        <span class="errormsg"></span>                    
+        <span class="errormsg"></span>
     </div>
 </div>

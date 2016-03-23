@@ -2,7 +2,7 @@ LOCA.routes.rent = {
     url: function () {
         return '/page/rent';
     },
-    title: 'Loyers',
+    title: window.i18next.t('Rents'),
     change: function (callback) {
         if (!LOCA.rentCtrl.alreadyLoaded) {
             LOCA.rentCtrl.alreadyLoaded = true;

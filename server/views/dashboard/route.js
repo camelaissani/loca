@@ -2,7 +2,7 @@ LOCA.routes.dashboard = {
     url: function () {
         return '/page/dashboard';
     },
-    title: 'Tableau de bord',
+    title: window.i18next.t('Dashboard'),
     change: function (callback) {
         if (!LOCA.dashboardCtrl.alreadyLoaded) {
             LOCA.dashboardCtrl.alreadyLoaded = true;

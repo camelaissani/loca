@@ -2,6 +2,11 @@
 <script id="view-occupant-list-row-template" type="text/x-handlebars-template">
     <div id="{{_id}}" class="list-row">
         <div class="list-col">
+            {{#if terminationDate}}
+            <div class="list-label list-value notpaid"><%= t('Lease terminated') %></div>
+            {{else}}
+            <div class="list-label list-value paid"><%= t('Lease in progress') %></div>
+            {{/if}}
             <div class="clearfix">
                 <div class="list-avatar-col pull-left">
                     {{#if isCompany}}
@@ -16,21 +21,19 @@
             </div>
         </div>
         <div class="list-col">
-            <div>
-                {{#if terminationDate}}<span class="list-value notpaid">Contrat résilié</span>{{else}}<span class="list-value paid">Contrat en cours</span>{{/if}}
-            </div>
+            <div><%= t('Lease contract') %></div>
             <div>
                 {{#if terminationDate}}
-                    {{beginDate}} au {{terminationDate}}
+                    {{formatDate beginDate}} <i class="fa fa-long-arrow-right"></i> {{formatDate terminationDate}}
                 {{else}}
-                    {{beginDate}} au {{endDate}}
+                    {{formatDate beginDate}} <i class="fa fa-long-arrow-right"></i> {{formatDate endDate}}
                 {{/if}}
             </div>
             {{#each properties}}
-                <div>{{Image property.type}} {{property.name}}</div>
+                <div>{{Image property.type}} {{propertyName property.type}}</div>
             {{/each}}
         </div>
-        <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+        <div class="list-selection-overlay"></div>
     </div>
 </script>
 

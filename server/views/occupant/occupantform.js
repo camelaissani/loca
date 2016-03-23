@@ -1,4 +1,4 @@
-LOCA.OccupantForm = (function($, Handlebars, moment) {
+LOCA.OccupantForm = (function($, Handlebars, moment, i18next) {
 
     function OccupantForm() {
         LOCA.Form.call(this, {
@@ -111,15 +111,15 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
             'contract': 'required',
             'beginDate': {
                 required: true,
-                fdate: ['DD/MM/YYYY']
+                fdate: [i18next.t('__fmt_date__')]
             },
             'endDate': {
                 required: true,
-                fdate: ['DD/MM/YYYY'],
+                fdate: [i18next.t('__fmt_date__')],
                 maxcontractdate: [self.getDomSelector(), 'contract', 'beginDate']
             },
             'terminationDate': {
-                fdate: ['DD/MM/YYYY'],
+                fdate: [i18next.t('__fmt_date__')],
                 mindate: [self.getDomSelector(), 'beginDate']
             },
             'guarantyPayback': {
@@ -171,8 +171,26 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
         this.contactRowCount=0;
 
         if (occupant) {
+            if (occupant.beginDate) {
+                occupant.beginDate = moment(occupant.beginDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+            }
+
+            if (occupant.endDate) {
+                occupant.endDate = moment(occupant.endDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+            }
+
+            if (occupant.terminationDate) {
+                occupant.terminationDate = moment(occupant.terminationDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+            }
+
             if (occupant.properties) {
                 occupant.properties.forEach(function(property, index) {
+                    if (property.entryDate) {
+                        property.entryDate = moment(property.entryDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                    }
+                    if (property.exitDate) {
+                        property.exitDate = moment(property.exitDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                    }
                     if (index !==0) {
                         self.addPropertyRow();
                     }
@@ -222,7 +240,7 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
             }
         }
         else {
-            $(this.getDomSelector() + ' #occupantNameLabel').html('Locataire');
+            $(this.getDomSelector() + ' #occupantNameLabel').html(i18next.t('Tenant'));
             //$(this.getDomSelector() + ' .form-field-not-editable').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
             $(this.getDomSelector() + ' #termination-row').hide();
             $('.user-action[data-id="list-action-remove-occupant"]').hide();
@@ -242,6 +260,28 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
         else {
             data.vatRatio = data.vatRatio / 100;
         }
+
+        if (data.beginDate) {
+            data.beginDate = moment(data.beginDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+        }
+
+        if (data.endDate) {
+            data.endDate = moment(data.endDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+        }
+
+        if (data.terminationDate) {
+            data.terminationDate = moment(data.terminationDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+        }
+
+        data.properties.forEach(function(property) {
+            if (property.entryDate) {
+                property.entryDate = moment(property.entryDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+            }
+
+            if (property.exitDate) {
+                property.exitDate = moment(property.exitDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+            }
+        });
 
         return data;
     };
@@ -275,14 +315,14 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
 
         $('#'+itemEntryDateName, $newRow).rules('add', {
             required: true,
-            fdate: ['DD/MM/YYYY'],
+            fdate: [i18next.t('__fmt_date__')],
             mindate: [self.getDomSelector(), 'beginDate'],
             maxdate: [self.getDomSelector(), 'endDate']
         });
 
         $('#'+itemExitDateName, $newRow).rules('add', {
             required: true,
-            fdate: ['DD/MM/YYYY'],
+            fdate: [i18next.t('__fmt_date__')],
             mindate: [self.getDomSelector(), itemEntryDateName],
             maxdate: [self.getDomSelector(), 'endDate']
         });
@@ -409,12 +449,12 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
         if (selection === 'true') {
             $('#occupant-form .private-fields').hide();
             $('#occupant-form .company-fields').show();
-            $('#occupant-form #manager-label').html('Le dirigeant de la société (Prénom et nom)');
+            $('#occupant-form #manager-label').html(i18next.t('Effective manager (first and last name)'));
         }
         else {
             $('#occupant-form .company-fields').hide();
             $('#occupant-form .private-fields').show();
-            $('#occupant-form #manager-label').html('Prénom et nom');
+            $('#occupant-form #manager-label').html(i18next.t('First and last name'));
         }
     }
 
@@ -432,12 +472,12 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
         var beginDate = $element.val();
         var contract = $('#occupant-form #contract').val();
         var contractDuration = moment.duration(9, 'years');
-        var momentBegin = moment(beginDate, 'DD/MM/YYYY', true);
+        var momentBegin = moment(beginDate, i18next.t('__fmt_date__'), true);
         var momentEnd;
 
         if (momentBegin.isValid() && contract !== 'custom') {
             momentEnd = moment(momentBegin).add(contractDuration).subtract('days', 1);
-            $('#occupant-form #endDate').val(momentEnd.format('DD/MM/YYYY'));
+            $('#occupant-form #endDate').val(momentEnd.format(i18next.t('__fmt_date__')));
         }
     }
 
@@ -510,4 +550,4 @@ LOCA.OccupantForm = (function($, Handlebars, moment) {
     }
 
     return OccupantForm;
-})(window.$, window.Handlebars, window.moment);
+})(window.$, window.Handlebars, window.moment, window.i18next);

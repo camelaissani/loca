@@ -1,7 +1,11 @@
 'use strict';
 
 // Express web app requirements
-var express = require('express'),
+var i18n = require('i18next'),
+    i18nMiddleware = require('i18next-express-middleware'),
+    i18nFS = require('i18next-node-fs-backend'),
+    i18nSprintf = require('i18next-sprintf-postprocessor'),
+    express = require('express'),
     favicon = require('serve-favicon'),
     methodOverride = require('method-override'),
     cookieParser = require('cookie-parser'),
@@ -22,17 +26,41 @@ var path = require('path'),
 
 // Server constants
 var http_port = process.env.SELFHOSTED_NODEJS_PORT || 8081,
-    basedir = __dirname;
+    debugMode = process.env.NODE_ENV !== 'production';
 
 // Reconfigure default logger
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
-    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+    level: debugMode ? 'debug' : 'info',
     colorize: true
 });
 
 // Init locale
-moment.locale('fr');
+i18n.on('languageChanged', function(lng) {
+    var splitedLanguage = lng.split('-');
+    moment.locale(splitedLanguage[0]);
+    logger.debug('language set to', lng);
+});
+
+i18n.use(i18nMiddleware.LanguageDetector)
+    .use(i18nFS)
+    .use(i18nSprintf)
+    .init({
+        debug: debugMode,
+        fallbackLng: 'en',
+        pluralSeparator: '_',
+        keySeparator: '::',
+        nsSeparator: ':::',
+        detection: {
+            order: [ /*'path', 'session', 'querystring',*/ 'cookie', 'header'],
+            lookupCookie: 'locaI18next',
+            cookieDomain: 'loca',
+            caches: ['cookie']
+        },
+        backend: {
+            loadPath: path.join(__dirname, '/public/locales/{{lng}}.json')
+        }
+    });
 
 // Init express
 app.use(bodyParser.urlencoded({
@@ -47,20 +75,22 @@ app.use(cookieSession({
         maxAge: 3600000
     }
 }));
+app.use(i18nMiddleware.handle(i18n));
 // Icon / static files
-app.use(favicon(path.join(basedir, '/public/images/favicon.png'), {
+app.use(favicon(path.join(__dirname, '/public/images/favicon.png'), {
     maxAge: 2592000000
 }));
-app.use('/bower_components', express.static(path.join(basedir, '/bower_components')));
-app.use('/public', express.static(path.join(basedir, '/public')));
-app.use('/public/image', express.static(path.join(basedir, '/public/images')));
-app.use('/public/images', express.static(path.join(basedir, '/public/images')));
-app.use('/public/fonts', express.static(path.join(basedir, '/bower_components/bootstrap/fonts')));
-app.use('/public/pdf', express.static(path.join(basedir, '/public/pdf')));
-app.use('/robots.txt', express.static(path.join(basedir, '/public/robots.txt')));
-app.use('/sitemap.xml', express.static(path.join(basedir, '/public/sitemap.xml')));
+app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
+//app.use('/locales', express.static(path.join(__dirname, '/public/locales')));
+app.use('/public', express.static(path.join(__dirname, '/public')));
+app.use('/public/image', express.static(path.join(__dirname, '/public/images')));
+app.use('/public/images', express.static(path.join(__dirname, '/public/images')));
+app.use('/public/fonts', express.static(path.join(__dirname, '/bower_components/bootstrap/fonts')));
+app.use('/public/pdf', express.static(path.join(__dirname, '/public/pdf')));
+app.use('/robots.txt', express.static(path.join(__dirname, '/public/robots.txt')));
+app.use('/sitemap.xml', express.static(path.join(__dirname, '/public/sitemap.xml')));
 
-app.set('views', basedir + '/server/views');
+app.set('views', __dirname + '/server/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
@@ -85,6 +115,7 @@ app.use(expressWinston.logger({
 app.use(router);
 apiRoutes(router);
 pageRoutes(router);
+//app.get('/locales/resources.json', i18nMiddleware.getResourcesHandler(i18n)); // serves resources for consumers (browser)
 
 app.use(expressWinston.errorLogger({
     transports: [
@@ -98,7 +129,7 @@ app.use(expressWinston.errorLogger({
 // Init connection to database
 db.init();
 
-if (process.env.NODE_ENV === 'production') {
+if (!debugMode) {
     logger.info('In production mode');
 } else {
     // Create new middleware to handle errors and respond with content negotiation.

@@ -216,7 +216,7 @@ gulp.task('test', /*['eslint'],*/ function() {
 gulp.task('dev', ['build'], function() {
     nodemon({
         script: 'server.js',
-        ext: 'ejs html js'
+        ext: 'ejs html js json'
     });
 });
 

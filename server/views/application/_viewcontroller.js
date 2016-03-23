@@ -1,4 +1,4 @@
-LOCA.ViewController = (function() {
+LOCA.ViewController = (function(i18next) {
 
     function ViewController(config) {
         this.config = config;
@@ -17,18 +17,19 @@ LOCA.ViewController = (function() {
         if (self.list) {
             self.list.on('list.selection.changed', function(selection) {
                 var $monoSelectionActions,
+                    selectionCount = (selection && selection.length>0)?selection.length:0,
                     $selectionCardLabel = $(self.config.domViewId + ' .list-selection-menu-label');
 
-                if (selection && selection.length>0) {
+                if (selectionCount>0) {
                     $monoSelectionActions = $(self.config.domViewId + ' .user-action.only-mono-selection');
 
-                    if (selection.length>1) {
+                    if (selectionCount>1) {
                         $monoSelectionActions.addClass('disabled');
-                        $selectionCardLabel.html('Locataires sélectionnés');
+                        $selectionCardLabel.html(i18next.t(self.config.listSelectionLabel, {count: selectionCount})+' ('+selectionCount+')');
                     }
                     else {
                         $monoSelectionActions.removeClass('disabled');
-                        $selectionCardLabel.html('Locataire sélectionné');
+                        $selectionCardLabel.html(i18next.t(self.config.listSelectionLabel, {count: selectionCount}));
                     }
 
                     $(self.config.domViewId + ' .list-selected-elements').html(self.templateSelectedRow({rows: selection}));
@@ -208,9 +209,6 @@ LOCA.ViewController = (function() {
 
     ViewController.prototype.closeForm = function(callback) {
         var self = this;
-        if (self.list) {
-            $(self.config.domListId + ' .list-content-selection-label').velocity('transition.bounceRightOut');
-        }
         LOCA.layoutManager.hideSheet();
         if (self.list) {
             $('.filterbar').show();
@@ -240,4 +238,4 @@ LOCA.ViewController = (function() {
 
     return ViewController;
 
-})();
+})(window.i18next);

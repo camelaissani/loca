@@ -16,33 +16,32 @@
             <div class="list-form-view">
                 <div class="list-group">
                     <a id="rentcall" href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Avis d'échéance</h4>
-                        <p class="list-group-item-text">Simple demande de paiement de loyer</p>
+                        <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Rent notice') %></h4>
+                        <p class="list-group-item-text"><%= t('Notice letter for rent payment') %></p>
                     </a>
                     <a id="recovery1" href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading"><i class="fa fa-bell-o"></i> Avis d'échéance - 1er rappel</h4>
-                        <p class="list-group-item-text">Première relance de l'avis d'échéance avec tampon "LOYER IMPAYE"</p>
+                        <h4 class="list-group-item-heading"><i class="fa fa-bell-o"></i> <%= t('Late rent - First reminder') %></h4>
+                        <p class="list-group-item-text"><%= t('Friendly reminder for rent payment') %></p>
                     </a>
                     <a id="recovery2" href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading"><i class="fa fa-bullhorn"></i> Avis d'échéance - 2ème rappel</h4>
-                        <p class="list-group-item-text">Deuxième relance de l'avis d'échéance avec tampon "AVANT HUISSIER"</p>
+                        <h4 class="list-group-item-heading"><i class="fa fa-bullhorn"></i> <%= t('Late rent - Second reminder') %></h4>
+                        <p class="list-group-item-text"><%= t('Unfriendly reminder for rent payment') %></p>
                     </a>
                     <a id="recovery3" href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> Courrier locataire loyer impayé - Dernier rappel</h4>
-                        <p class="list-group-item-text">Courrier adressé au locataire pour demande de règlement de loyer impayé sous peine d'expulsion</p>
+                        <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> <%= t('Late rent - Last reminder') %></h4>
+                        <p class="list-group-item-text"><%= t('Order to pay or vacate') %></p>
                     </a>
                     <a id="paymentorder" href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading"><i class="fa fa-gavel"></i> Courrier huissier loyer impayé</h4>
-                        <p class="list-group-item-text">Courrier adressé à huissier de justice pour demande de commandement de payer</p>
+                        <h4 class="list-group-item-heading"><i class="fa fa-gavel"></i> <%= t('Recovery of unpaid rents') %></h4>
+                        <p class="list-group-item-text"><%= t('Request rent recovery by a third party (company, justice)') %></p>
                     </a>
                     <a id="printinvoices" href="#" class="list-group-item">
-                        <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> Quittance</h4>
-                        <p class="list-group-item-text">Facture attestant le bon règlement du loyer</p>
+                        <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Rental invoice') %></h4>
+                        <p class="list-group-item-text"><%= t('Invoice stating the payment of the rent') %></p>
                     </a>
                 </div>
             </div>
         </div>
     </div> <!-- /.form-content -->
-    <h4 class="list-content-selection-label">Loyer(s)</h4>
     <div class="list-content"></div>
 </div>

@@ -1,14 +1,14 @@
 <ul class="nav nav-pills">
     <li role="presentation">
-        <button type="button" class="btn btn-default user-action" data-id="list-action-add-property" data-toggle="tooltip" data-placement="bottom" title="Ajouter un bien"><i class="fa fa-plus-circle"></i> Nouveau</button>
+        <button type="button" class="btn btn-default user-action" data-id="list-action-add-property" data-toggle="tooltip" data-placement="bottom" title="<%= t('Add a property') %>"><i class="fa fa-plus-circle"></i> <%= t('New') %></button>
     </li>
     <li class="dropdown" role="presentation">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label">Tous (<span class="all-filter-label"></span>)</span> <span class="caret"></span>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="selection-filter-label"><%= t('All') %> (<span class="all-filter-label"></span>)</span> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu">
-            <li><a href="#" class="user-action" data-id="list-filter">Tous (<span class="all-filter-label"></span>)</a></li>
-            <li><a href="#" class="user-action" data-id="list-filter" data-value="loué">Loués (<span class="all-active-filter-label"></span>)</a></li>
-            <li><a href="#" class="user-action" data-id="list-filter" data-value="disponible">Disponibles (<span class="all-inactive-filter-label"></span>)</a></li>
+            <li><a href="#" class="user-action" data-id="list-filter"><%= t('All') %> (<span class="all-filter-label"></span>)</a></li>
+            <li><a href="#" class="user-action" data-id="list-filter" data-value="<%= t('Leased') %>"><%= t('Leased') %> (<span class="all-active-filter-label"></span>)</a></li>
+            <li><a href="#" class="user-action" data-id="list-filter" data-value="<%= t('Available') %>"><%= t('Available') %> (<span class="all-inactive-filter-label"></span>)</a></li>
         </ul>
     </li>
 </ul>

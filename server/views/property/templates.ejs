@@ -2,39 +2,37 @@
 <script id="view-property-list-row-template" type="text/x-handlebars-template">
     <div id="{{_id}}" class="list-row">
         <div class="list-col">
+            {{#if available}}
+                <div class="list-label list-value paid"><%= t('Available') %></div>
+            {{else}}
+                <div class="list-label list-value">{{i18next key='Leased by' name=occupantLabel}}</div>
+            {{/if}}
             <div class="clearfix">
                 <div class="list-avatar-col pull-left">
-                    {{Image cssClass='fa-3x'}}
+                    {{Image cssClass='fa-2x'}}
                 </div>
                 <div class="pull-left">
                     <div class="list-title list-value">{{name}}</div>
-                    <div>
-                        {{propertyName}}
-                        {{#if surface}}
-                            <span>{{formatSurface surface}}</span>
-                        {{/if}}
-                    </div>
                 </div>
             </div>
+            <list-label>
+                {{propertyName}}
+                {{#if surface}}
+                    <span>{{formatSurface surface}}</span>
+                {{/if}}
+            </list-label>
         </div>
         <div class="list-col">
             <div class="list-label clearfix">
-                <small>
-                <div class="hidden-xs pull-left">Loyer c.c.</div>
-                {{#if available}}
-                    <div class="list-value pull-right paid">disponible</div>
-                {{else}}
-                    <div class="list-value pull-right">loué par {{occupantLabel}}</div>
-                {{/if}}
-                </small>
+                <div class="hidden-xs pull-left"><%= t('Rent with CAM fees') %></div>
             </div>
             <div class="list-payment-price text-right">{{formatMoney priceWithExpenses}}</div>
-            <div class="clearfix">
-                <div class="pull-left">Loyer h.c</div>
+            <div class="list-label clearfix">
+                <div class="pull-left"><%= t('Rent without CAM fees') %></div>
                 <div class="pull-right">{{formatMoney price}}</div>
             </div>
         </div>
-        <div class="list-selection-overlay"><i class="fa fa-check-square-o"></i><i class="fa fa-square-o"></i></div>
+        <div class="list-selection-overlay"></i></div>
     </div>
 </script>
 
@@ -52,9 +50,9 @@
                 <div class="pull-right fa fa-times text-right"></div>
             </div>
             {{#if surface}}
-                <div><small>{{formatMoney priceWithExpenses}} c.c. - {{formatSurface surface}}</small></div>
+                <div><small>{{formatMoney priceWithExpenses}} <%= t('ICAMEVAT') %> - {{formatSurface surface}}</small></div>
             {{else}}
-                <div><small>{{formatMoney priceWithExpenses}} c.c.</small></div>
+                <div><small>{{formatMoney priceWithExpenses}} <%= t('ICAMEVAT') %></small></div>
             {{/if}}
         </a>
     {{/each}}

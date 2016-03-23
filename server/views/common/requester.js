@@ -1,4 +1,4 @@
-LOCA.requester = (function($) {
+LOCA.requester = (function($, i18next) {
     function Requester() {
         this.responseFailListeners = [];
         this.afterListeners = [];
@@ -61,27 +61,26 @@ LOCA.requester = (function($) {
         if (result.httpError) {
             result.errors = result.errors?result.errors:[];
             if (result.httpError.jqXHR.status === 0) {
-                result.errors.push('Problème d\'accès au serveur.');
-                result.errors.push('Vérifiez votre connexion reseau.');
+                result.errors.push(i18next('Server access problem. Check your network connection'));
             } else if (result.httpError.jqXHR.status == 401) {
                 needAuthentication = true;
-                result.errors.push('Votre session a expiré, merci de vous reconnecter.');
-                result.errors.push('[code : 401]');
+                result.errors.push(i18next.t('Your session has expired, Please reconnect'));
+                result.errors.push(i18next.t('[code: ]', {code: 401}));
             } else if (result.httpError.jqXHR.status == 404) {
-                result.errors.push('Demande serveur sur une page inconnue.');
-                result.errors.push('[code : 404]');
+                result.errors.push(i18next.t('Page not found on server'));
+                result.errors.push(i18next.t('[code: ]', {code: 404}));
             } else if (result.httpError.jqXHR.status == 500) {
-                result.errors.push('Erreur interne serveur.');
-                result.errors.push('[code : 500]');
+                result.errors.push(i18next.t('Internal server error'));
+                result.errors.push(i18next.t('[code: ]', {code: 500}));
             } else if (result.httpError.errorThrown === 'parsererror') {
-                result.errors.push('Problème lors du décodage des données. [JSON]');
+                result.errors.push(i18next.t('Problem during data decoding [JSON]'));
             } else if (result.httpError.errorThrown === 'timeout') {
-                result.errors.push('Reponse trop longue du serveur.');
-                result.errors.push('Le délais d\'attente maximum est dépassée');
+                result.errors.push(i18next.t('Server is taking too long to reply'));
             } else if (result.httpError.errorThrown === 'abort') {
-                result.errors.push('Demande serveur annulée.');
+                result.errors.push(i18next.t('Request cancelled on server'));
             } else {
-                result.errors.push('Erreur non répertoriée : '+ result.httpError.jqXHR.responseText);
+                result.errors.push(i18next.t('Unknown error'));
+                result.errors.push(result.httpError.jqXHR.responseText);
             }
         }
         if (result.errors && result.errors.length>0) {
@@ -95,4 +94,4 @@ LOCA.requester = (function($) {
     };
 
     return new Requester();
-})(window.$);
+})(window.$, window.i18next);

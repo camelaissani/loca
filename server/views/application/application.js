@@ -1,5 +1,5 @@
 // Application
-LOCA.application = (function($, History) {
+LOCA.application = (function($, History, bootbox, i18next) {
     var self;
     var waitCounter = 0;
 
@@ -16,7 +16,7 @@ LOCA.application = (function($, History) {
         // Wait / error dialog management
         LOCA.requester.beforeListener(function() {
             self.showWaitMessage();
-            window.bootbox.hideAll();
+            bootbox.hideAll();
         });
 
         LOCA.requester.afterListener(function() {
@@ -25,10 +25,10 @@ LOCA.application = (function($, History) {
 
         LOCA.requester.responseFailListener(function(errors) {
             if (!errors) {
-                window.bootbox.alert({title: 'Oups...', message:'Problème d\'accès au serveur. Vérifiez votre connexion reseau.'});
+                bootbox.alert({title: i18next.t('Uh-oh!'), message: i18next.t('Server access problem. Check your network connection')});
             }
             else if (errors.length > 0) {
-                window.bootbox.alert({title: 'Oups...', message: errors.join(' ')});
+                bootbox.alert({title: i18next.t('Uh-oh!'), message: errors.join(' ')});
             }
         });
 
@@ -191,4 +191,4 @@ LOCA.application = (function($, History) {
     };
 
     return new Loca();
-})(window.$, window.History);
+})(window.$, window.History, window.bootbox, window.i18next);
