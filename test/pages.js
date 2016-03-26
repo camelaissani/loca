@@ -39,7 +39,8 @@ var testSet = [{
     mockedPackages: [{
         relativePath: '../config',
         instance: {
-            productive: true
+            productive: true,
+            demomode: true
         }
     }, {
         relativePath: './managers/loginmanager',
@@ -54,7 +55,7 @@ var testSet = [{
         ensureCallMethods: ['mustSessionLessArea']
     }],
     httpMethod: 'get',
-    route: '/logindemo'
+    route: '/login'
 }, {
     mockedPackages: [
         configPackage, loggerPackage, {
