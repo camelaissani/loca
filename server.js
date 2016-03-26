@@ -15,7 +15,8 @@ var i18n = require('i18next'),
     router = express.Router(),
     app = express(),
     logger = require('winston'),
-    expressWinston = require('express-winston');
+    expressWinston = require('express-winston'),
+    config = require('./config');
 
 // App requirements
 var path = require('path'),
@@ -46,7 +47,7 @@ i18n.use(i18nMiddleware.LanguageDetector)
     .use(i18nFS)
     .use(i18nSprintf)
     .init({
-        debug: debugMode,
+        debug: false,
         fallbackLng: 'en',
         pluralSeparator: '_',
         keySeparator: '::',
@@ -126,9 +127,6 @@ app.use(expressWinston.errorLogger({
     ]
 }));
 
-// Init connection to database
-db.init();
-
 if (!debugMode) {
     logger.info('In production mode');
 } else {
@@ -138,6 +136,13 @@ if (!debugMode) {
     app.use(errorHandler());
     logger.info('In development mode');
 }
+
+if (config.demomode) {
+    logger.info('In demo mode (no login)');
+}
+
+// Init connection to database
+db.init();
 
 // Start web app
 app.listen(http_port, function() {

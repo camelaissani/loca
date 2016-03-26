@@ -1,7 +1,6 @@
 'use strict';
 
-var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname + '/../..',
-    config = require(configdir + '/config'),
+var config = require('../../config'),
     mongojs = require('mongojs'),
     logger = require('winston'),
     collections = [],
@@ -100,17 +99,16 @@ module.exports.list = function(realm, collection, callback) {
 };
 
 module.exports.add = function(realm, collection, item, callback) {
-    var _id = new mongojs.ObjectId(),
-        itemToSave;
+    var _id = new mongojs.ObjectId();
 
     item._id = _id;
-    itemToSave = Object.merge(item, {
-        realmName: realm.name,
-        realmId: realm._id
-    });
+    if (realm) {
+        item.realmName = realm.name;
+        item.realmId = realm._id;
+    }
     logger.info('insert item in collection', collection, 'in realm:', realm ? realm.name : '');
-    logger.debug('\titem is', itemToSave);
-    db[collection].save(itemToSave, function(err, saved) {
+    logger.debug('\titem is', item);
+    db[collection].save(item, function(err, saved) {
         if (err || !saved) {
             callback(['Element non ajouté en base de données']);
         } else {

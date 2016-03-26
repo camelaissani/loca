@@ -1,7 +1,6 @@
 'use strict';
 
-var configdir = process.env.SELFHOSTED_CONFIG_DIR || '..',
-    config = require(configdir + '/config'),
+var config = require('../config'),
     logger = require('winston'),
     rs = require('./requeststrategy'),
     Helper = require('./managers/helper'),
@@ -17,7 +16,9 @@ function API(router) {
     if (config.productive) {
         router.route('/signup').post(loginManager.signup);
     }
-    router.route('/login').post(loginManager.login);
+    if (!config.demomode) {
+        router.route('/login').post(loginManager.login);
+    }
     router.route('/logout').get(rs.restrictedAreaAndRedirect, loginManager.logout);
 
     router.route('/api/selectrealm').post(rs.restrictedArea, loginManager.selectRealm);

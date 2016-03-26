@@ -1,0 +1,48 @@
+{
+    "website": {
+        "company": {
+            "name": "",
+            "website": ""
+        },
+        "product": {
+            "name": "Loca",
+            "slogan": "Real estate management",
+            "website": "https://demo.nuageprive.fr/",
+            "imageUrl": "http://demo.nuageprive.fr/public/images/1.jpg"
+        },
+        "contact": {
+            "phone": "01.99.99.99.99",
+            "email": "camel.aissani@nuageprive.fr",
+            "address": {
+                "street1": "",
+                "street2": "",
+                "zipCode": "",
+                "city": ""
+            }
+        },
+        "metatags": {
+            "type": "website",
+            "title": "Open source real estate management",
+            "description": "",
+            "keywords": "open source software, free software, real estate management, online management, rent management, invoices, rent notices",
+            "location": "Paris, France",
+            "rating": "General",
+            "author": {
+                "name": "Camel Aissani",
+                "twitter": "@camelaissani"
+            }
+        },
+        "author": {
+            "name": "Camel Aissani",
+            "website": "http://www.nuageprive.fr",
+            "twitter": {
+                "url": "https://twitter.com/camelaissani",
+                "id": "@camelaissani"
+            },
+            "github": {
+                "url": "https://github.com/camelaissani",
+                "id": "camelaissani"
+            }
+        }
+    }
+}

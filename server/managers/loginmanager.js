@@ -2,6 +2,7 @@
 
 var bcrypt = require('bcryptjs'),
     logger = require('winston'),
+    config = require('../../config'),
     accountModel = require('../models/account'),
     realmModel = require('../models/realm'),
     ResponseTypes = {
@@ -49,6 +50,25 @@ var checkUserMemberOfRealm = function(email, realms) {
         }
     });
     return realmsFound;
+};
+
+var checkRealmAccess = function(email, callback) {
+    realmModel.findAll(function(err, realms) {
+        var realmsFound;
+
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        if (!realms) {
+            realms = [];
+        }
+
+        realmsFound = checkUserMemberOfRealm(email, realms);
+
+        callback(null, realmsFound);
+    });
 };
 
 module.exports.signup = function(req, res) {
@@ -141,131 +161,139 @@ module.exports.signup = function(req, res) {
     });
 };
 
-module.exports.loginDemo = function(req, res) {
-    module.exports.login({
-        body: {
-            email: 'demo@demo.com',
-            secretword: 'demo'
-        },
-        session: req.session
-    }, {
-        json: function(result) {
-            if (result.status == ResponseTypes.SUCCESS) {
-                res.redirect('/loggedin');
-            } else {
-                res.redirect('/logout');
-            }
-        }
-    });
-};
+if (config.demomode) {
+    module.exports.loginDemo = function(req, res) {
+        var email = 'demo@demo.com';
 
-module.exports.login = function(req, res) {
-    var email = req.body.email,
-        password = req.body.secretword;
-
-    logger.info('Check login ' + email);
-
-    if (!email || !password) {
-        logger.info('Login failed ' + ResponseTypes.MISSING_FIELD);
-        res.json({
-            status: ResponseTypes.MISSING_FIELD
-        });
-        return;
-    }
-
-    email = email.toLowerCase();
-
-    var checkEmailPassword = function(grantedAccess) {
-        accountModel.findOne(email, function(err, account) {
-            if (err) {
-                logger.info('Login failed ' + ResponseTypes.DB_ERROR);
-                res.json({
-                    status: ResponseTypes.DB_ERROR
-                });
-                return;
-            }
-
-            if (!account) {
-                logger.info('Login failed ' + ResponseTypes.USER_NOT_FOUND);
-                res.json({
-                    status: ResponseTypes.USER_NOT_FOUND
-                });
-                return;
-            }
-
-            bcrypt.compare(password, account.password, function(error, status) {
-                if (error) {
-                    logger.info('Login failed ' + ResponseTypes.ENCRYPT_ERROR);
-                    res.json({
-                        status: ResponseTypes.ENCRYPT_ERROR
-                    });
-                    return;
-                }
-
-                if (status !== true) {
-                    logger.info('Login failed ' + ResponseTypes.INVALID_PASSWORD);
-                    res.json({
-                        status: ResponseTypes.INVALID_PASSWORD
-                    });
-                    return;
-                }
-                grantedAccess(account);
-            });
-        });
-    };
-
-    var checkRealmAccess = function(account, grantedAccess) {
-        realmModel.findAll(function(err, realms) {
-            var realmsFound;
-
-            if (err) {
-                logger.info('Login failed ' + ResponseTypes.DB_ERROR);
-                res.json({
-                    status: ResponseTypes.DB_ERROR
-                });
-                return;
-            }
-
-            if (!realms) {
-                realms = [];
-            }
-
-            realmsFound = checkUserMemberOfRealm(email, realms);
-
-            grantedAccess(realmsFound);
-        });
-    };
-
-    checkEmailPassword(function(account) {
-        logger.info('Login successful ' + email);
-        checkRealmAccess(account, function(realms) {
-            if (!realms || realms.length === 0) {
-                res.json({
-                    status: ResponseTypes.REALM_NOT_FOUND
-                });
-                logger.error('No realm found for ' + email);
-                return;
-            }
-
+        var success = function(realms) {
             req.session.user = {
-                firstname: account.firstname,
-                lastname: account.lastname,
+                firstname: 'Michael',
+                lastname: 'Jackson',
                 email: email,
                 realms: realms
             };
-            if (realms.length === 1) {
-                req.session.user.realm = realms[0];
-                logger.info('Only 1 realm found. Select realm ' + req.session.user.realm.name + ' for ' + email);
-            } else {
-                delete req.session.user.realm;
-                logger.info('Found ' + realms.length + ' realms for ' + email);
+
+            req.session.user.realm = realms[0];
+            logger.info('Login successful ' + email);
+            res.redirect('/loggedin');
+        };
+
+        checkRealmAccess(email, function(err, realms) {
+            if (err) {
+                logger.info('Login failed', ResponseTypes.DB_ERROR, err);
+                res.redirect('/');
+                return;
             }
+
+            if (realms.length === 0) {
+                createRealm('demo', 'demo@demo.com', function(err, realm) {
+                    if (err) {
+                        logger.info('failed to create realm ' + ResponseTypes.DB_ERROR);
+                        res.redirect('/');
+                        return;
+                    }
+                    success([realm]);
+                });
+                return;
+            }
+            success(realms);
+        });
+    };
+} else {
+    module.exports.login = function(req, res) {
+        var email = req.body.email,
+            password = req.body.secretword;
+
+        logger.info('Check login ' + email);
+
+        if (!email || !password) {
+            logger.info('Login failed ' + ResponseTypes.MISSING_FIELD);
             res.json({
-                status: ResponseTypes.SUCCESS
+                status: ResponseTypes.MISSING_FIELD
+            });
+            return;
+        }
+
+        email = email.toLowerCase();
+
+        var checkEmailPassword = function(grantedAccess) {
+            accountModel.findOne(email, function(err, account) {
+                if (err) {
+                    logger.info('Login failed ' + ResponseTypes.DB_ERROR);
+                    res.json({
+                        status: ResponseTypes.DB_ERROR
+                    });
+                    return;
+                }
+
+                if (!account) {
+                    logger.info('Login failed ' + ResponseTypes.USER_NOT_FOUND);
+                    res.json({
+                        status: ResponseTypes.USER_NOT_FOUND
+                    });
+                    return;
+                }
+
+                bcrypt.compare(password, account.password, function(error, status) {
+                    if (error) {
+                        logger.info('Login failed ' + ResponseTypes.ENCRYPT_ERROR);
+                        res.json({
+                            status: ResponseTypes.ENCRYPT_ERROR
+                        });
+                        return;
+                    }
+
+                    if (status !== true) {
+                        logger.info('Login failed ' + ResponseTypes.INVALID_PASSWORD);
+                        res.json({
+                            status: ResponseTypes.INVALID_PASSWORD
+                        });
+                        return;
+                    }
+                    grantedAccess(account);
+                });
+            });
+        };
+
+        checkEmailPassword(function(account) {
+            logger.info('Login successful ' + email);
+            checkRealmAccess(email, function(err, realms) {
+                if (err) {
+                    res.json({
+                        status: ResponseTypes.DB_ERROR
+                    });
+                    logger.error(ResponseTypes.DB_ERROR + ': ' + err);
+                    return;
+                }
+
+                if (realms.length === 0) {
+                    res.json({
+                        status: ResponseTypes.REALM_NOT_FOUND
+                    });
+                    logger.error('No realm found for ' + email);
+                    return;
+                }
+
+                req.session.user = {
+                    firstname: account.firstname,
+                    lastname: account.lastname,
+                    email: email,
+                    realms: realms
+                };
+                if (realms.length === 1) {
+                    req.session.user.realm = realms[0];
+                    logger.info('Only 1 realm found. Select realm ' + req.session.user.realm.name + ' for ' + email);
+                } else {
+                    delete req.session.user.realm;
+                    logger.info('Found ' + realms.length + ' realms for ' + email);
+                }
+                res.json({
+                    status: ResponseTypes.SUCCESS
+                });
             });
         });
-    });
-};
+    };
+}
 
 module.exports.logout = function(req, res) {
     req.session = null;

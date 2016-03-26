@@ -214,6 +214,9 @@ gulp.task('test', /*['eslint'],*/ function() {
 });
 
 gulp.task('dev', ['build'], function() {
+    if (!process.env.SELFHOSTED_DEMOMODE) {
+        process.env.SELFHOSTED_DEMOMODE = true;
+    }
     nodemon({
         script: 'server.js',
         ext: 'ejs html js json'

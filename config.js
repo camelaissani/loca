@@ -1,51 +1,19 @@
-module.exports = {
-    productive: false,
-    demomode: process.env.SELFHOSTED_DEMOMODE,
-    database: process.env.SELFHOSTED_DBNAME || 'demodb',
-    website: {
-        company: {
-            name: '',
-            website: ''
-        },
-        product: {
-            name: 'Loca',
-            slogan: 'Real estate management',
-            website: 'https://demo.nuageprive.fr/',
-            imageUrl: 'http://demo.nuageprive.fr/public/images/1.jpg'
-        },
-        contact: {
-            phone: '01.99.99.99.99',
-            email: 'camel.aissani@nuageprive.fr',
-            address: {
-                street1: '',
-                street2: '',
-                zipCode: '',
-                city: ''
-            }
-        },
-        metatags: {
-            type: 'website',
-            title: 'Open source real estate management',
-            description: '',
-            keywords: 'open source software, free software, real estate management, online management, rent management, invoices, rent notices',
-            location: 'Paris, France',
-            rating: 'General',
-            author: {
-                name: 'Camel Aissani',
-                twitter: '@camelaissani'
-            }
-        },
-        author: {
-            name: 'Camel Aissani',
-            website: 'http://www.nuageprive.fr',
-            twitter: {
-                url: 'https://twitter.com/camelaissani',
-                id: '@camelaissani'
-            },
-            github: {
-                url: 'https://github.com/camelaissani',
-                id: 'camelaissani'
-            }
-        }
-    }
-};
+var logger = require('winston'),
+    configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
+    config = require(configdir + '/config.json');
+
+config.productive = process.env.SELFHOSTED_PRODUCTIVE === 'true' || process.env.SELFHOSTED_PRODUCTIVE === 'TRUE' || process.env.SELFHOSTED_PRODUCTIVE === true;
+
+config.demomode = process.env.SELFHOSTED_DEMOMODE === 'true' || process.env.SELFHOSTED_DEMOMODE === 'TRUE' || process.env.SELFHOSTED_DEMOMODE === true;
+
+if (config.demomode) {
+    config.database = 'demodb';
+}
+else {
+    config.database = process.env.SELFHOSTED_DBNAME || 'demodb';
+}
+
+logger.debug('Loaded configuration from', configdir + '/config');
+logger.silly('Configuration content:', config);
+
+module.exports = config;

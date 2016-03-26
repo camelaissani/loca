@@ -1,7 +1,6 @@
 'use strict';
 
-var configdir = process.env.SELFHOSTED_CONFIG_DIR || '..',
-    config = require(configdir + '/config'),
+var config = require('../config'),
     rs = require('./requeststrategy'),
     loginManager = require('./managers/loginmanager'),
     printManager = require('./managers/printmanager'),
@@ -18,9 +17,6 @@ function render(model, res) {
 }
 
 function PAGES(router) {
-    logger.debug('Loaded configuration from', configdir + '/config');
-    logger.silly('Configuration content:', config);
-
     router.route('/').get(rs.mustSessionLessArea, function(req, res) {
         render({
             view: 'website',
@@ -29,17 +25,19 @@ function PAGES(router) {
         }, res);
     });
 
-    router.route('/login').get(rs.mustSessionLessArea, function(req, res) {
-        render({
-            view: 'login',
-            account: null,
-            errors: null
-        }, res);
-    });
-
-    router.route('/logindemo').get(rs.mustSessionLessArea, function(req, res) {
-        loginManager.loginDemo(req, res);
-    });
+    if (config.demomode) {
+        router.route('/login').get(rs.mustSessionLessArea, function(req, res) {
+            loginManager.loginDemo(req, res);
+        });
+    } else {
+        router.route('/login').get(rs.mustSessionLessArea, function(req, res) {
+            render({
+                view: 'login',
+                account: null,
+                errors: null
+            }, res);
+        });
+    }
 
     if (config.productive) {
         router.route('/signup').get(rs.mustSessionLessArea, function(req, res) {

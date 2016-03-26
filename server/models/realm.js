@@ -60,13 +60,12 @@ RealmModel.prototype.findOne = function(id, callback) {
     });
 };
 
-
 RealmModel.prototype.findAll = function(callback) {
     Model.prototype.findAll.call(this, null, function(errors, realms) {
         if (errors) {
             callback(errors);
         } else if (!realms || realms.length === 0) {
-            callback(['realm not found']);
+            callback(null, null);
         } else {
             callback(null, realms);
         }

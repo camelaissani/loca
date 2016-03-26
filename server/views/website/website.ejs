@@ -2,7 +2,7 @@
 <div class="centeredbtn">
     <% if (config.demomode) {%>
     <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
-    <a href="/logindemo" class="btn btn-success btn-lg"><%= t('Demonstration') %></a>
+    <a href="/login" class="btn btn-success btn-lg"><%= t('Demonstration') %></a>
     <% } else { %>
     <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
     <% } %>
