@@ -1,6 +1,7 @@
 var logger = require('winston'),
     configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
-    config = require(configdir + '/config.json');
+    //config = require(configdir + '/config.json');
+    config = JSON.parse(require('fs').readFileSync(configdir + '/config.json', 'utf8'));
 
 config.productive = process.env.SELFHOSTED_PRODUCTIVE === 'true' || process.env.SELFHOSTED_PRODUCTIVE === 'TRUE' || process.env.SELFHOSTED_PRODUCTIVE === true;
 
