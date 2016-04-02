@@ -4,17 +4,14 @@ LOCA.currentYear = LOCA.now.getFullYear();
 
 (function($, moment, i18next) {
 
-    i18next.on('languageChanged', function(lng) {
-        var splitedLanguage = lng.split('-');
-        moment.locale(splitedLanguage[0]);
+    document.addEventListener('languageChanged', function(/*event*/) {
+        moment.locale(LOCA.countryCode);
     });
 
     document.addEventListener('applicationReady', function(/*event*/) {
-        var splitedLanguage = i18next.language.split('-');
-        var viewId = LOCA.application.getViewFromQueryString(window.location);
+        var viewId = LOCA.getViewFromQueryString(window.location);
         var $demoPopover = $('#demo-popover');
 
-        moment.locale(splitedLanguage[0]);
         LOCA.application.updateData(viewId, function() {
             if ($demoPopover.length) {
                 window.bootbox.alert({

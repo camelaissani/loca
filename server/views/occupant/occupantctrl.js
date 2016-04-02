@@ -11,6 +11,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
         LOCA.ViewController.call(this, {
             domViewId: '#view-occupant',
             domListId: '#occupants',
+            defaultMenuId: 'occupants-menu',
             listSelectionLabel: 'Selected tenant',
             listSelectionMenuId: '#occupants-selection-menu',
             urls: {
@@ -23,7 +24,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
     OccupantCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     OccupantCtrl.prototype.constructor = OccupantCtrl;
 
-    OccupantCtrl.prototype.initTemplates = function() {
+    OccupantCtrl.prototype.onInitTemplates = function() {
         // Handlebars templates
         Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
         this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
@@ -94,10 +95,8 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
             self.form.submit(function(data) {
                 self.closeForm(function() {
                     self.loadList(function() {
-                        self.closeForm(function() {
-                            self.list.select($('.list-row#'+data._id), true);
-                            self.scrollToVisible();
-                        });
+                        self.list.select($('.list-row#'+data._id), true);
+                        self.scrollToVisible();
                     });
                 });
             });
@@ -118,9 +117,9 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
                             var countAll = occupantsOverview.countAll;
                             var countActive = occupantsOverview.countActive;
                             var countInactive = occupantsOverview.countInactive;
-                            $('#view-occupant .all-filter-label').html(countAll);
-                            $('#view-occupant .all-active-filter-label').html(countActive);
-                            $('#view-occupant .all-inactive-filter-label').html(countInactive);
+                            $('#view-occupant .all-filter-label').html('('+countAll+')');
+                            $('#view-occupant .all-active-filter-label').html('('+countActive+')');
+                            $('#view-occupant .all-inactive-filter-label').html('('+countInactive+')');
 
                             self.list.update(data);
                             self.list.showAllRows(function () {
@@ -147,10 +146,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
         }
     };
 
-    OccupantCtrl.prototype.initListeners = function() {
-        // Call parent
-        LOCA.ViewController.prototype.initListeners.call(this);
-
+    OccupantCtrl.prototype.onInitListeners = function() {
         $(document).on('click', '#view-occupant #printofficechecklist', function() {
             //LOCA.application.openPrintPreview('/public/pdf/checklist.pdf');
             var selection = self.getSelectedIds();
@@ -202,7 +198,7 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
 
     };
 
-    OccupantCtrl.prototype.onLoadData = function(callback) {
+    OccupantCtrl.prototype.onDataChanged = function(callback) {
         this.form.bindForm();
         this.documentsForm.bindForm();
         if (callback) {

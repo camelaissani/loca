@@ -7,7 +7,7 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
     batch = require('gulp-batch'),
     gulpif = require('gulp-if'),
     gulpsync = require('gulp-sync')(gulp),
-    babel = require('gulp-babel'),
+    //babel = require('gulp-babel'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
     imagemin = require('gulp-imagemin'),
@@ -23,9 +23,9 @@ var configdir = process.env.SELFHOSTED_CONFIG_DIR || __dirname,
     nodemon = require('gulp-nodemon'),
     mongobackup = require('mongobackup');
 
-var babelOptions = {
-    presets: ['es2015']
-};
+// var babelOptions = {
+//     presets: ['es2015']
+// };
 
 var uglifyOptions = {};
 
@@ -41,7 +41,7 @@ var paths = {
     backendScripts: ['server/*.js', 'server/models/**/*.js', 'server/managers/**/*.js'],
     htmlFiles: ['server/views/**/*.ejs'],
     scriptsToLint: ['*.js', 'server/**/*.js'],
-    purifyCssScripts: ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js', 'bower_components/bootstrap/js/carousel.js', 'bower_components/bootbox/bootbox.js'],
+    purifyCssScripts: ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js', 'bower_components/bootstrap/js/carousel.js', 'bower_components/bootbox/bootbox.js', 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'],
     testScripts: ['test/**/*.js']
 };
 
@@ -93,7 +93,7 @@ gulp.task('clean-print-scripts', function(cb) {
 gulp.task('publicScripts', ['clean-public-scripts'], function() {
     return gulp.src(paths.publicScripts)
         .pipe(gulpif(!isProd, sourcemaps.init()))
-        .pipe(babel(babelOptions))
+        //.pipe(babel(babelOptions))
         .pipe(concat('public.min.js'))
         .pipe(gulpif(isProd, uglify(uglifyOptions)))
         .pipe(gulpif(!isProd, sourcemaps.write()))
@@ -103,7 +103,7 @@ gulp.task('publicScripts', ['clean-public-scripts'], function() {
 gulp.task('restrictedScripts', ['clean-restricted-scripts'], function() {
     return gulp.src(paths.restrictedScripts)
         .pipe(gulpif(!isProd, sourcemaps.init()))
-        .pipe(babel(babelOptions))
+        //.pipe(babel(babelOptions))
         .pipe(concat('restricted.min.js'))
         .pipe(gulpif(isProd, uglify(uglifyOptions)))
         .pipe(gulpif(!isProd, sourcemaps.write()))
@@ -113,7 +113,7 @@ gulp.task('restrictedScripts', ['clean-restricted-scripts'], function() {
 gulp.task('printScripts', ['clean-print-scripts'], function() {
     return gulp.src(paths.printScripts)
         .pipe(gulpif(!isProd, sourcemaps.init()))
-        .pipe(babel(babelOptions))
+        //.pipe(babel(babelOptions))
         .pipe(concat('print.min.js'))
         .pipe(gulpif(isProd, uglify(uglifyOptions)))
         .pipe(gulpif(!isProd, sourcemaps.write()))

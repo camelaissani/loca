@@ -3,11 +3,10 @@ LOCA.routes.owner = {
         return '/page/owner';
     },
     title: window.i18next.t('Landloard'),
-    change: function (callback) {
-        if (!LOCA.ownerCtrl.alreadyLoaded) {
-            LOCA.ownerCtrl.alreadyLoaded = true;
-            LOCA.ownerCtrl.startUp();
-        }
-        LOCA.ownerCtrl.loadData(callback);
+    pageInitialized: function(callback) {
+        LOCA.ownerCtrl.pageInitialized(callback);
+    },
+    dataChanged: function (callback) {
+        LOCA.ownerCtrl.dataChanged(callback);
     }
 };

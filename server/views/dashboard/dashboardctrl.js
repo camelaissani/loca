@@ -12,21 +12,15 @@ LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
     DashboardCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     DashboardCtrl.prototype.constructor = DashboardCtrl;
 
-    DashboardCtrl.prototype.initTemplates = function() {
+    DashboardCtrl.prototype.onInitTemplates = function() {
         this.notificationListTemplate = Handlebars.compile($('#notification-list-template').html());
     };
 
-    DashboardCtrl.prototype.pageExit = function(callback) {
-        // Call parent
-        LOCA.ViewController.prototype.pageExit.call(this, function() {
-            $('#view-dashboard .carousel').carousel('pause');
-            if (callback) {
-                callback();
-            }
-        });
+    DashboardCtrl.prototype.onPageExited = function() {
+        $('#view-dashboard .carousel').carousel('pause');
     };
 
-    DashboardCtrl.prototype.loadData = function(callback) {
+    DashboardCtrl.prototype.dataChanged = function(callback) {
         var currentMoment = moment();
         $('#view-dashboard #current-day').html(currentMoment.format('Do'));
         $('#view-dashboard .current-month').html(currentMoment.format('MMMM YYYY'));

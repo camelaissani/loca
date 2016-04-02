@@ -3,8 +3,8 @@ var LOCA = {};
 LOCA.routes = {};
 
 (function($, i18next) {
-    function updateJQueryValidateLanguage(lang) {
-        var fileref = document.getElementById('jquery-validate-language');
+    function updateLanguageScript(lang, id, src) {
+        var fileref = document.getElementById(id);
 
         if (fileref) {
             document.getElementsByTagName('head')[0].removeChild(fileref);
@@ -12,13 +12,13 @@ LOCA.routes = {};
 
         if (lang !== 'en') {
             fileref = document.createElement('script');
-            fileref.setAttribute('id', 'jquery-validate-language');
+            fileref.setAttribute('id', id);
             fileref.setAttribute('type', 'text/javascript');
-            fileref.setAttribute('src', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + lang + '.js');
+            fileref.setAttribute('src', src);
             document.getElementsByTagName('head')[0].appendChild(fileref);
         }
     }
-
+    
     $(document).ready(function() {
         // Init locale
         i18next
@@ -28,7 +28,7 @@ LOCA.routes = {};
             .use(window.i18nextSprintfPostProcessor)
             .init({
                 fallbackLng: 'en',
-                debug: true,
+                debug: false,
                 pluralSeparator: '_',
                 keySeparator: '::',
                 nsSeparator: ':::',
@@ -53,7 +53,13 @@ LOCA.routes = {};
 
         i18next.on('languageChanged', function(lng) {
             var splitedLanguage = lng.split('-');
-            updateJQueryValidateLanguage(splitedLanguage[0]);
+            if (splitedLanguage && splitedLanguage.length >0) {
+                LOCA.countryCode = splitedLanguage[0].toLowerCase();
+                updateLanguageScript(LOCA.countryCode, 'moment-language', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/' + LOCA.countryCode + '.js');
+                updateLanguageScript(LOCA.countryCode, 'jquery-validate-language', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + LOCA.countryCode + '.js');
+                updateLanguageScript(LOCA.countryCode, 'bootstrap-datepicker-language', '/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' + LOCA.countryCode + '.min.js');
+            }
+            document.dispatchEvent(new CustomEvent('languageChanged'));
         });
 
         i18next.on('loaded', function(/*loaded*/) {
@@ -65,6 +71,11 @@ LOCA.routes = {};
         });
     });
 
+    // Header menu management
+    $(document).on('click', '.nav-action', function() {
+        var viewId = $(this).data('id');
+        LOCA.application.updateView(viewId, null, true);
+    });
     $(document).on('click', '.navbar-collapse.collapse.in a:not(.dropdown-toggle)', function() {
         $(this).closest('.navbar-collapse').collapse('hide');
     });

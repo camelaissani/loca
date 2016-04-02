@@ -3,14 +3,13 @@ LOCA.routes.property = {
         return '/page/property';
     },
     title: window.i18next.t('Properties'),
-    change: function (callback) {
-        if (!LOCA.propertyCtrl.alreadyLoaded) {
-            LOCA.propertyCtrl.alreadyLoaded = true;
-            LOCA.propertyCtrl.startUp();
-        }
-        LOCA.propertyCtrl.loadData(callback);
+    pageInitialized: function(callback) {
+        LOCA.propertyCtrl.pageInitialized(callback);
     },
-    pageExit: function (callback) {
-        LOCA.propertyCtrl.pageExit(callback);
+    dataChanged: function (callback) {
+        LOCA.propertyCtrl.dataChanged(callback);
+    },
+    pageExited: function (callback) {
+        LOCA.propertyCtrl.pageExited(callback);
     }
 };

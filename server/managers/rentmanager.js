@@ -161,7 +161,15 @@ module.exports._buildViewData = function (occupant, rent, month, year) {
         rentMoment,
         rentUnpaid,
         rentUnpaidMoment,
+        countPaymentStatus,
         countMonthNotPaid;
+
+    function updatePaymentStatus(rentMoment, status, rent) {
+        if (!rent.paymentStatus) {
+            rent.paymentStatus = [];
+        }
+        rent.paymentStatus.push({month: rentMoment.get('month') + 1, status:status});
+    }
 
     if (occupant) {
         rent.occupant = Object.clone(occupant);
@@ -203,13 +211,19 @@ module.exports._buildViewData = function (occupant, rent, month, year) {
             if (rent.occupant.rents) {
                 rentUnpaid = rent;
                 countMonthNotPaid = 0;
+                countPaymentStatus = 0;
                 do {
+                    countPaymentStatus++;
                     rentUnpaid.totalAmount = rentUnpaid.totalAmount ? Number(rentUnpaid.totalAmount) : 0;
                     rentUnpaid.payment = rentUnpaid.payment ? Number(rentUnpaid.payment) : 0;
                     rentUnpaid.newBalance =  Number((rentUnpaid.payment - rentUnpaid.totalAmount));
                     if (rentUnpaid.newBalance < 0 && rentUnpaid.payment <= 0) {
                         countMonthNotPaid++;
+                        updatePaymentStatus(rentMoment, 'notpaid', rent);
                     } else {
+                        if (rentUnpaid.newBalance < 0) {
+                            updatePaymentStatus(rentMoment, 'partialypaid', rent);
+                        }
                         break;
                     }
                     rentUnpaid = null;

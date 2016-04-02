@@ -1,5 +1,14 @@
 (function(i18next, Handlebars, moment, accounting) {
     // Method helpers
+    LOCA.getViewFromQueryString = function(location) {
+        var queryString = Object.fromQueryString(location),
+            view = (queryString && queryString.view) ? queryString.view : '',
+            hashIndex = view.indexOf('#'),
+            viewId = hashIndex >= 0 ? view.substr(0, hashIndex) : view;
+
+        return viewId;
+    };
+
     LOCA.formatSurface = function(text, hideUnit, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
@@ -23,6 +32,10 @@
 
     LOCA.formatMonth = function(text) {
         return moment.months()[parseInt(text, 10)-1];
+    };
+
+    LOCA.formatMonthYear = function(month, year) {
+        return moment.months()[parseInt(month, 10)-1] + ' ' + year;
     };
 
     LOCA.formatDate = function(text) {
@@ -150,16 +163,42 @@
         }
         return new Handlebars.SafeString(i18next.t('unknown'));
     });
+    Handlebars.registerHelper('cssClassPaymentStatus', function() {
+        var html = '';
+        if (this.status === 'paid') {
+            html = 'text-success';
+        }
+        else if (this.status === 'notpaid') {
+            html = 'text-danger';
+        }
+        else if (this.status === 'partialypaid') {
+            html = 'text-warning';
+        }
+        return new Handlebars.SafeString(html);
+    });
     Handlebars.registerHelper('paymentStatus', function() {
         var html = '';
         if (this.status === 'paid') {
-            html = '<i class="fa fa-check"></i>'+' '+i18next.t('Paid');
+            html = i18next.t('Paid');
         }
         else if (this.status === 'notpaid') {
-            html = '<i class="fa fa-exclamation-triangle"></i>'+' '+i18next.t('Not paid');
+            html = i18next.t('Not paid');
         }
         else if (this.status === 'partialypaid') {
-            html = '<i class="fa fa-exclamation"></i>'+' '+i18next.t('Partially paid');
+            html = i18next.t('Partially paid');
+        }
+        return new Handlebars.SafeString(html);
+    });
+    Handlebars.registerHelper('paymentBadgeStatus', function() {
+        var html = '';
+        if (this.status === 'paid') {
+            html = '<span class="label label-success"><i class="fa fa-check"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
+        }
+        else if (this.status === 'partialypaid') {
+            html = '<span class="label label-warning"><i class="fa fa-check"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
+        }
+        else if (this.status === 'notpaid') {
+            html = '<span class="label label-danger"><i class="fa fa-exclamation-triangle"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
         }
         return new Handlebars.SafeString(html);
     });

@@ -11,6 +11,7 @@
         "accountingjs": "0.3.2",
         "bootstrap": "^3.3.2",
         "bootbox": "*",
+        "bootstrap-datepicker": "*",
         "i18next": "*",
         "i18next-xhr-backend": "*",
         "i18next-browser-languagedetector": "*",

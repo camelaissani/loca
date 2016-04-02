@@ -3,14 +3,13 @@ LOCA.routes.dashboard = {
         return '/page/dashboard';
     },
     title: window.i18next.t('Dashboard'),
-    change: function (callback) {
-        if (!LOCA.dashboardCtrl.alreadyLoaded) {
-            LOCA.dashboardCtrl.alreadyLoaded = true;
-            LOCA.dashboardCtrl.startUp();
-        }
-        LOCA.dashboardCtrl.loadData(callback);
+    pageInitialized: function(callback) {
+        LOCA.dashboardCtrl.pageInitialized(callback);
     },
-    pageExit: function (callback) {
-        LOCA.dashboardCtrl.pageExit(callback);
+    dataChanged: function (callback) {
+        LOCA.dashboardCtrl.dataChanged(callback);
+    },
+    pageExited: function (callback) {
+        LOCA.dashboardCtrl.pageExited(callback);
     }
 };

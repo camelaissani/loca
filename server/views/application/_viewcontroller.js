@@ -37,11 +37,20 @@ LOCA.ViewController = (function(i18next) {
                     LOCA.layoutManager.showMenu(self.config.listSelectionMenuId);
                 }
                 else {
-                    LOCA.layoutManager.hideMenu();
+                    if (!self.config.defaultMenuId) {
+                        LOCA.layoutManager.hideMenu();
+                    } else if (!LOCA.layoutManager.isMenuVisible(self.config.defaultMenuId)) {
+                        LOCA.layoutManager.hideMenu(function() {
+                            if (self.config.defaultMenuId) {
+                                LOCA.layoutManager.showMenu(self.config.defaultMenuId);
+                            }
+                        });
+                    }
                 }
             });
         }
 
+        // Manage click on view (form and list)
         $(document).on('click', self.config.domViewId + ' .user-action', function() {
             var $action = $(this),
                 actionId = $action.data('id');
@@ -73,10 +82,14 @@ LOCA.ViewController = (function(i18next) {
             if (self.list) {
                 if (actionId==='list-filter') {
                     self.list.unselectAll();
-                    self.list.filter($action.data('value'));
-                    $action.closest('.dropdown').removeClass('open');
                     self.filterValue = $action.data('value');
-                    $(self.config.domViewId + ' .selection-filter-label').html($action.text());
+                    self.list.filter(self.filterValue);
+                    $(self.config.domViewId + ' .filterbar .user-action').removeClass('active');
+                    if (self.filterValue) {
+                        $(self.config.domViewId + ' .filterbar .user-action[data-value="'+self.filterValue+'"]').addClass('active');
+                    } else {
+                        $(self.config.domViewId + ' .filterbar .default-filter.user-action').addClass('active');
+                    }
                 }
                 else if (actionId==='remove-item-from-selection') {
                     if (!$action.parent().hasClass('fixed')) {
@@ -92,20 +105,33 @@ LOCA.ViewController = (function(i18next) {
             }
             return false;
         });
+
+        if (self.onInitListeners) {
+            self.onInitListeners();
+        }
     };
 
-    ViewController.prototype.loadData = function(callback) {
+    ViewController.prototype.dataChanged = function(callback) {
         var self = this;
+
+        var callbackEx = function() {
+            if (callback) {
+                callback();
+            }
+            if (self.onDataChanged) {
+                self.onDataChanged();
+            }
+            if (self.config.defaultMenuId) {
+                LOCA.layoutManager.showMenu(self.config.defaultMenuId);
+            }
+        };
+
         if (self.list) {
             self.list.bindDom();
-            self.loadList(function() {
-                self.onLoadData(callback);
-            });
+            self.loadList(callbackEx);
             return;
         }
-        if (callback) {
-            callback();
-        }
+        callbackEx();
     };
 
     ViewController.prototype.loadList = function (callback) {
@@ -119,12 +145,21 @@ LOCA.ViewController = (function(i18next) {
             var countAll = overviewItems.countAll;
             var countFree = overviewItems.countFree | overviewItems.countInactive;
             var countBusy = overviewItems.countBusy | overviewItems.countActive;
-            $(self.config.domViewId + ' .all-filter-label').html(countAll);
-            $(self.config.domViewId + ' .all-active-filter-label').html(countBusy);
-            $(self.config.domViewId + ' .all-inactive-filter-label').html(countFree);
+            $(self.config.domViewId + ' .all-filter-label').html('('+countAll+')');
+            $(self.config.domViewId + ' .all-active-filter-label').html('('+countBusy+')');
+            $(self.config.domViewId + ' .all-inactive-filter-label').html('('+countFree+')');
 
+            // if (self.filterValue) {
+            //     $(self.config.domViewId + ' .filterbar .user-action').removeClass('active');
+            //     $(self.config.domViewId + ' .filterbar .user-action[data-value="'+self.filterValue+'"]').addClass('active');
+            // } else {
+            //     $(self.config.domViewId + ' .filterbar .user-action[data-value=""]').addClass('active');
+            // }
+            $(self.config.domViewId + ' .filterbar .user-action').removeClass('active');
             if (self.filterValue) {
-                $(self.config.domViewId + ' .selection-filter-label').html($(self.config.domViewId + ' .filterbar .user-action[data-value="'+self.filterValue+'"]').text());
+                $(self.config.domViewId + ' .filterbar .user-action[data-value="'+self.filterValue+'"]').addClass('active');
+            } else {
+                $(self.config.domViewId + ' .filterbar .default-filter.user-action').addClass('active');
             }
 
             LOCA.requester.ajax({
@@ -142,20 +177,20 @@ LOCA.ViewController = (function(i18next) {
         });
     };
 
-    ViewController.prototype.initTemplates = function() {
-        // Handlebars templates
-    };
-
-    ViewController.prototype.startUp = function(callback) {
+    ViewController.prototype.pageInitialized = function(callback) {
         var self = this;
 
-        if (self.initTemplates) {
-            self.initTemplates();
-        }
+        if (!self.loaded) {
+            if (self.onInitTemplates) {
+                self.onInitTemplates();
+            }
 
-        if (self.list) {
-            self.filterValue = $(self.config.domViewId + ' .filterbar .active.user-action').data('value');
-            self.list.setFilterText(self.filterValue);
+            if (self.list) {
+                self.filterValue = $(self.config.domViewId + ' .filterbar .active.user-action').data('value');
+                self.list.setFilterText(self.filterValue);
+            }
+
+            self.loaded = true;
         }
 
         if (callback) {
@@ -163,16 +198,38 @@ LOCA.ViewController = (function(i18next) {
         }
     };
 
-    ViewController.prototype.pageExit = function (callback) {
+    ViewController.prototype.pageEntered = function (callback) {
         var self = this;
-        if (self.list) {
-            $(self.config.domViewId + ' .filterbar').hide();
-        }
-        LOCA.layoutManager.hideMenu(function () {
-            if (self.list) {
-                self.list.hideAllRows(callback);
-            } else if (callback) {
+        var callbackEx = function() {
+            if (callback) {
                 callback();
+            }
+            if (self.onPageEntered) {
+                self.onPageEntered();
+            }
+        };
+
+        callbackEx();
+    };
+
+    ViewController.prototype.pageExited = function (callback) {
+        var self = this;
+        var callbackEx = function() {
+            if (callback) {
+                callback();
+            }
+            if (self.onPageExited) {
+                self.onPageExited();
+            }
+        };
+
+        LOCA.layoutManager.hideMenu(function() {
+            if (self.list) {
+                self.list.hideAllRows(function() {
+                    callbackEx();
+                });
+            } else {
+                callbackEx();
             }
         });
     };
@@ -196,30 +253,35 @@ LOCA.ViewController = (function(i18next) {
     ViewController.prototype.openForm = function(formId) {
         var self = this;
 
-        if (self.list) {
-            $('.filterbar').hide();
-        }
-        LOCA.layoutManager.showMenu(formId+'-menu');
-        if (self.list) {
-            self.list.hideAllRows(function() {
-                LOCA.layoutManager.showSheet(formId);
-            });
-        }
+        LOCA.layoutManager.hideMenu(function() {
+            LOCA.layoutManager.showMenu(formId+'-menu');
+            if (self.list) {
+                self.list.hideAllRows(function() {
+                    LOCA.layoutManager.showSheet(formId);
+                });
+            }
+        });
     };
 
     ViewController.prototype.closeForm = function(callback) {
         var self = this;
         LOCA.layoutManager.hideSheet();
-        if (self.list) {
-            $('.filterbar').show();
-        }
         if (self.list && self.list.getSelection().length>0) {
-            LOCA.layoutManager.showMenu(self.config.listSelectionMenuId);
-            if (callback) {
-                callback();
-            }
+            LOCA.layoutManager.hideMenu(function() {
+                LOCA.layoutManager.showMenu(self.config.listSelectionMenuId);
+                if (callback) {
+                    callback();
+                }
+            });
         } else {
-            LOCA.layoutManager.hideMenu(callback);
+            LOCA.layoutManager.hideMenu(function() {
+                if (self.config.defaultMenuId) {
+                    LOCA.layoutManager.showMenu(self.config.defaultMenuId);
+                }
+                if (callback) {
+                    callback();
+                }
+            });
         }
     };
 

@@ -9,10 +9,7 @@ LOCA.SelectRealmCtrl = (function() {
     SelectRealmCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     SelectRealmCtrl.prototype.constructor = SelectRealmCtrl;
 
-    SelectRealmCtrl.prototype.initListeners = function() {
-        // Call parent
-        LOCA.ViewController.prototype.initListeners.call(this);
-
+    SelectRealmCtrl.prototype.onInitListeners = function() {
         $(document).on('click', '.realm-action', function() {
             var $action = $(this),
                 realmId = $action.data('id'),
@@ -28,7 +25,7 @@ LOCA.SelectRealmCtrl = (function() {
                     if (window.location.pathname ===  '/selectrealm') {
                         window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index';
                     } else {
-                        viewId = LOCA.application.getViewFromQueryString(window.location);
+                        viewId = LOCA.getViewFromQueryString(window.location);
                         window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index?view='+viewId;
                     }
                 }

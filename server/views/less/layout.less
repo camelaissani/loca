@@ -5,10 +5,10 @@ html {
 
 body {
     overflow-x: hidden;
-    margin-bottom: @footer-height;
     background-color: @body-bg;
 
     &.covered-body {
+        margin-bottom: @footer-height;
         background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
         webkit-background-size: cover;
         moz-background-size: cover;
@@ -33,6 +33,10 @@ body {
     }
 }
 
+// .well {
+//     margin-bottom: 0;
+// }
+
 .footer {
     position: absolute;
     bottom: 0;
@@ -53,16 +57,12 @@ body {
 }
 
 .view-container {
-    padding-top: @navbar-height + 10;
-    padding-bottom: 10px;
+    padding-top: @navbar-height + 20px;
+    padding-bottom: 5px;
 }
 
 .sheet {
     display: none;
-}
-
-.filterbar {
-    padding-bottom: 10px;
 }
 
 .modal {
@@ -96,23 +96,28 @@ body {
         color: @component-active-color;
         font-weight: normal;
     }
-
     .view-container {
-        padding-top: @main-mini-menu-bar-height + 10;
+        .view-content-with-menu {
+            padding-top: @navbar-height - 10px;
+        }
+    }
+
+    .main-col[class*="col-"] {
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
 /* Medium devices (desktops, 991px and up) */
 @media (max-width: 991px) {
     body {
-        margin-bottom: @xs-footer-height;
+        &.covered-body {
+            margin-bottom: @xs-footer-height;
+        }
     }
     .footer {
         z-index: 0;
         height: @xs-footer-height;
-    }
-    .view-container {
-        padding-top: @main-mini-menu-bar-height + 10;
     }
 }
 

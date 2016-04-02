@@ -3,7 +3,9 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
 
         <title><%=config.website.productName%> <%=config.website.productSlogan%></title>
         <% if (!isLogged) { %>
@@ -11,15 +13,11 @@
         <% } %>
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-
+       
         <% if (!isLogged) { %>
-
             <link href="/public/css/main-public.css" rel="stylesheet">
-
         <% } else { %>
-
             <link href="/public/css/main-restricted.css" rel="stylesheet">
-
         <% } %>
 
         <script src="/bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
@@ -44,11 +42,12 @@
         <div id="demo-popover" style="display:none;"></div>
         <%}%>
 
-        <%- include website/footer.ejs %>
         <% if (isLogged) { %>
             <div id="waitwindow" class="alert" style="display:none;">
                 <i class="fa fa-refresh fa-spin fa-2x"></i><span class="loading"><%= t('Loading') %>...</span>
             </div>
+        <% } else { %>
+            <%- include website/footer.ejs %>
         <% } %>
     </body>
         <script src="/bower_components/i18next/i18next.min.js" type="text/javascript"></script>
@@ -67,9 +66,9 @@
     <% } else { %>
         <script src="//cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js" type="text/javascript"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js" type="text/javascript"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/fr.js" type="text/javascript"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.min.js" type="text/javascript"></script>
         <script src="/bower_components/minivents-cuzzo/dist/minivents.min.js" type="text/javascript"></script>
+        <script src="/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
         <script src="/bower_components/accountingjs/accounting.min.js" type="text/javascript"></script>
         <script src="/public/js/restricted.min.js" type="text/javascript"></script>
     <% } %>

@@ -3,14 +3,13 @@ LOCA.routes.occupant = {
         return '/page/occupant';
     },
     title: window.i18next.t('Tenants'),
-    change: function (callback) {
-        if (!LOCA.occupantCtrl.alreadyLoaded) {
-            LOCA.occupantCtrl.alreadyLoaded = true;
-            LOCA.occupantCtrl.startUp();
-        }
-        LOCA.occupantCtrl.loadData(callback);
+    pageInitialized: function(callback) {
+        LOCA.occupantCtrl.pageInitialized(callback);
     },
-    pageExit: function (callback) {
-        LOCA.occupantCtrl.pageExit(callback);
+    dataChanged: function (callback) {
+        LOCA.occupantCtrl.dataChanged(callback);
+    },
+    pageExited: function (callback) {
+        LOCA.occupantCtrl.pageExited(callback);
     }
 };

@@ -1,4 +1,4 @@
-// Cerulean 3.3.2
+// Cerulean 3.3.6
 // Variables
 // --------------------------------------------------
 
@@ -19,7 +19,6 @@
 @brand-info:            #033C73;
 @brand-warning:         #DD5600;
 @brand-danger:          #C71C22;
-
 
 //== Scaffolding
 //
@@ -67,7 +66,7 @@
 //** By default, this inherits from the `<body>`.
 @headings-font-family:    @font-family-base;
 @headings-font-weight:    500;
-@headings-line-height:    1.1;
+@headings-line-height:    1.2;
 @headings-color:          #317EAC;
 
 
@@ -170,6 +169,11 @@
 
 @btn-link-disabled-color:        @gray-light;
 
+// Allows for customizing button radius independently from global border radius
+@btn-border-radius-base:         @border-radius-base;
+@btn-border-radius-large:        @border-radius-large;
+@btn-border-radius-small:        @border-radius-small;
+
 
 //== Forms
 //
@@ -206,6 +210,9 @@
 @input-height-large:             (ceil(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 2);
 //** Small `.form-control` height
 @input-height-small:             (floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 2);
+
+//** `.form-group` margin
+@form-group-margin-bottom:       15px;
 
 @legend-color:                   @text-color;
 @legend-border-color:            #e5e5e5;
@@ -266,7 +273,8 @@
 @zindex-popover:           1060;
 @zindex-tooltip:           1070;
 @zindex-navbar-fixed:      1030;
-@zindex-modal:             1040;
+@zindex-modal-background:  1040;
+@zindex-modal:             1050;
 
 
 //== Media queries breakpoints
@@ -379,7 +387,7 @@
 @navbar-default-toggle-border-color:       darken(@navbar-default-bg, 10%);
 
 
-// Inverted navbar
+//=== Inverted navbar
 // Reset inverted navbar basics
 @navbar-inverse-color:                      #fff;
 @navbar-inverse-bg:                         @brand-info;
@@ -480,6 +488,7 @@
 @jumbotron-bg:                   @gray-lighter;
 @jumbotron-heading-color:        inherit;
 @jumbotron-font-size:            ceil((@font-size-base * 1.5));
+@jumbotron-heading-font-size:    ceil((@font-size-base * 4.5));
 
 
 //== Form states and alerts
@@ -853,5 +862,7 @@
 @page-header-border-color:    @gray-lighter;
 //** Width of horizontal description list titles
 @dl-horizontal-offset:        @component-offset-horizontal;
+//** Point at which .dl-horizontal becomes horizontal
+@dl-horizontal-breakpoint:    @grid-float-breakpoint;
 //** Horizontal line color.
 @hr-border:                   @gray-lighter;

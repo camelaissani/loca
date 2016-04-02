@@ -1,12 +1,21 @@
-.paid {
-    color: @brand-success;
+.label {
+    border-radius: 10px;
+    color: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 2px;
+
+    &.label-danger {
+        background-color: lighten(@brand-danger, 20%);
+    }
+    &.label-warning {
+        background-color: lighten(@brand-warning, 20%);
+    }
+    &.label-success {
+        background-color: lighten(@brand-success, 10%);
+    }
 }
-.notpaid {
-    color: @brand-danger;
-}
-.partialypaid {
-    color: @brand-warning;
-}
+
 .price-content {
     position: relative;
 

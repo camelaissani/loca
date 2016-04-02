@@ -9,6 +9,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
         LOCA.ViewController.call(this, {
             domViewId: '#view-property',
             domListId: '#properties',
+            defaultMenuId: 'properties-menu',
             listSelectionLabel: 'Selected property',
             listSelectionMenuId: 'properties-selection-menu',
             urls: {
@@ -20,7 +21,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
     PropertyCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     PropertyCtrl.prototype.constructor = PropertyCtrl;
 
-    PropertyCtrl.prototype.initTemplates = function() {
+    PropertyCtrl.prototype.onInitTemplates = function() {
         // Handlebars templates
         var $propertiesSelected = $('#view-property-selected-list-template');
         if ($propertiesSelected.length >0) {
@@ -73,17 +74,15 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
             self.form.submit(function(data) {
                 self.closeForm(function() {
                     self.loadList(function() {
-                        self.closeForm(function() {
-                            self.list.select($('.list-row#'+data._id), true);
-                            self.scrollToVisible();
-                        });
+                        self.list.select($('.list-row#'+data._id), true);
+                        self.scrollToVisible();
                     });
                 });
             });
         }
     };
 
-    PropertyCtrl.prototype.onLoadData = function(callback) {
+    PropertyCtrl.prototype.onDataChanged = function(callback) {
         self.form.bindForm();
         if (callback) {
             callback();

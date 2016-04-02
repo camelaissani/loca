@@ -9,7 +9,6 @@
     position: relative;
 
     width: 100%;
-    height: 120px;
 
     padding: 5px 20px;
     white-space: nowrap;
@@ -29,15 +28,18 @@
         width: 66.6666%;
     }
 
+    .label {
+        font-size: ceil((@font-size-small * 0.59));
+    }
+
     &:not(.fixed) {
         cursor: pointer;
     }
 
     &:not(:last-child) {
-        margin-bottom: 4px;
+        margin-bottom: 20px;
     }
 
-    //&:focus,
     .list-selection-overlay {
         position: absolute;
         display: none;
@@ -54,8 +56,6 @@
             display: block;
             height: 100%;
             width: 100%;
-            //background-color: @well-bg;
-            //opacity: 0.3;
         }
 
         .fa {
@@ -68,43 +68,29 @@
             left: 20px;
         }
     }
-    &:not(.active):not(.fixed):hover {
-        //background-color: @list-hover-background;
-        // .list-selection-overlay {
-        //     display: block;
-        //     i.fa-square-o {
-        //         display: block;
-        //     }
-        // }
-
-        // .list-avatar-col {
-        //     opacity: 0;
-        // }
-    }
+    // &:not(.active):not(.fixed):hover {
+    // }
     &.active:not(.fixed) {
-        // border: solid 1px @well-border;
-        // background-color: @well-bg;
         color: white;
         .list-payment-price {
             color: @text-color;
 
         }
-        .paid, .notpaid, .partialypaid {
-            color: white;
+        .text-success, .text-danger, .text-warning {
+            color: #fff;
         }
-        //.list-selection-overlay {
-        //    display: block;
-        //    .fa-check-square-o {
-        //        display: block;
-        //        color: white;
-        //    }
-        //}
+
+        .label, .list-payment-price {
+            color: #fff;
+            border: 1px solid #fff;
+            background-color: transparent;
+        }
 
         .list-avatar-col .fa {
             color: white;
         }
 
-        background-color: @input-border-focus; // @navbar-default-link-active-bg; //darken(@well-bg, 5%);
+        background-color: lighten(@navbar-default-link-active-bg, 25%);
     }
     a, a:hover {
         text-transform: lowercase;
@@ -187,12 +173,14 @@
 
 @media (max-width: 767px) {
     .list-row {
-        //font-size: ceil((@font-size-base * 0.65));
+        padding: 2px 5px;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
 
         .list-title {
             padding-top: 5px;
             padding-bottom: 10px;
-            font-size: ceil((@list-title-font-size * 0.85));
         }
 
         .list-avatar-col {
@@ -200,18 +188,17 @@
         }
         .list-col {
             display: block;
-            width: auto;
+            width: 100%;
+            &:first-child {
+                width: 100%;
+            }
         }
 
-        //&.active:not(.fixed) {
-        //    .list-selection-overlay {
-        //        display: block;
-        //        .fa-check-square-o {
-        //            display: none;
-        //        }
-        //    }
-        //}
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
     }
+
 
 
     // .list-balance-price .price-symbol {

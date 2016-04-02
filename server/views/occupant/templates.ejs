@@ -3,9 +3,9 @@
     <div id="{{_id}}" class="list-row">
         <div class="list-col">
             {{#if terminationDate}}
-            <div class="list-label list-value notpaid"><%= t('Lease terminated') %></div>
+            <div class="list-label list-value text-danger hidden-xs"><%= t('Lease terminated') %></div>
             {{else}}
-            <div class="list-label list-value paid"><%= t('Lease in progress') %></div>
+            <div class="list-label list-value text-success hidden-xs"><%= t('Lease in progress') %></div>
             {{/if}}
             <div class="clearfix">
                 <div class="list-avatar-col pull-left">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="list-col">
-            <div><%= t('Lease contract') %></div>
+            <div class="hidden-xs"><%= t('Lease contract') %></div>
             <div>
                 {{#if terminationDate}}
                     {{formatDate beginDate}} <i class="fa fa-long-arrow-right"></i> {{formatDate terminationDate}}
@@ -29,9 +29,23 @@
                     {{formatDate beginDate}} <i class="fa fa-long-arrow-right"></i> {{formatDate endDate}}
                 {{/if}}
             </div>
-            {{#each properties}}
-                <div>{{Image property.type}} {{propertyName property.type}}</div>
-            {{/each}}
+            <div class="hidden-xs">
+                {{#each properties}}
+                    <div>{{Image property.type}} {{propertyName property.type}}</div>
+                {{/each}}
+            </div>
+            <div class="visible-xs clearfix">
+                <div class="pull-left">
+                    {{#each properties}} {{Image property.type}} {{propertyName property.type}}{{#unless @last}} - {{/unless}} {{/each}}
+                </div>
+                <div class="pull-right">
+                    {{#if terminationDate}}
+                    <div class="list-label list-value text-danger"><%= t('Lease terminated') %></div>
+                    {{else}}
+                    <div class="list-label list-value text-success"><%= t('Lease in progress') %></div>
+                    {{/if}}
+                </div>
+            </div>
         </div>
         <div class="list-selection-overlay"></div>
     </div>

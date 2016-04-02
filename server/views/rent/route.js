@@ -3,14 +3,13 @@ LOCA.routes.rent = {
         return '/page/rent';
     },
     title: window.i18next.t('Rents'),
-    change: function (callback) {
-        if (!LOCA.rentCtrl.alreadyLoaded) {
-            LOCA.rentCtrl.alreadyLoaded = true;
-            LOCA.rentCtrl.startUp();
-        }
-        LOCA.rentCtrl.loadData(callback);
+    pageInitialized: function(callback) {
+        LOCA.rentCtrl.pageInitialized(callback);
     },
-    pageExit: function (callback) {
-        LOCA.rentCtrl.pageExit(callback);
+    dataChanged: function (callback) {
+        LOCA.rentCtrl.dataChanged(callback);
+    },
+    pageExited: function (callback) {
+        LOCA.rentCtrl.pageExited(callback);
     }
 };

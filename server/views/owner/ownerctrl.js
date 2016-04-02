@@ -14,7 +14,7 @@ LOCA.ownerCtrl = (function($) {
     OwnerCtrl.prototype = Object.create(LOCA.ViewController.prototype);
     OwnerCtrl.prototype.constructor = OwnerCtrl;
 
-    OwnerCtrl.prototype.loadData = function(callback) {
+    OwnerCtrl.prototype.dataChanged = function(callback) {
         var data;
         self.form.bindForm();
 

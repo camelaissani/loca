@@ -31,12 +31,6 @@ LOCA.application = (function($, History, bootbox, i18next) {
                 bootbox.alert({title: i18next.t('Uh-oh!'), message: errors.join(' ')});
             }
         });
-
-        // Header menu management
-        $(document).on('click', '.nav-action', function() {
-            var viewId = $(this).data('id');
-            self.updateView(viewId, null, true);
-        });
     }
 
     function _getViewAndUpdateData(data, noGetView, callback) {
@@ -61,7 +55,12 @@ LOCA.application = (function($, History, bootbox, i18next) {
             $mainPhoneBar.find('.main-mini-menu-bar-title.active').removeClass('active');
             $mainPhoneBar.find('.main-mini-menu-bar-title[data-id="' + data.menuId + '"]').addClass('active');
 
-            _updateDataInCurrentView(data, callback);
+            navMapItem.pageInitialized(function() {
+                if (navMapItem.pageEntered) {
+                    navMapItem.pageEntered();
+                }
+                _updateDataInCurrentView(data, callback);
+            });
         }
 
         function requestPage() {
@@ -76,8 +75,8 @@ LOCA.application = (function($, History, bootbox, i18next) {
             if ($oldHeaderMenuItem) {
                 oldViewId = $oldHeaderMenuItem.find('.nav-action').data('id');
                 oldNavMapItem = LOCA.routes[oldViewId];
-                if (oldNavMapItem.pageExit) {
-                    oldNavMapItem.pageExit(function () {
+                if (oldNavMapItem.pageExited) {
+                    oldNavMapItem.pageExited(function () {
                         $container.css('visibility', 'hidden');
                         $container.css('opacity', 0);
                         requestPage();
@@ -102,8 +101,8 @@ LOCA.application = (function($, History, bootbox, i18next) {
         $container.css('visibility', 'hidden');
         $container.css('opacity', 0);
 
-        if (navMapItem.change) {
-            navMapItem.change(function() {
+        if (navMapItem.dataChanged) {
+            navMapItem.dataChanged(function() {
                 $container.css('visibility', 'visible');
                 $container.css('opacity', 1);
                 if (callback) {
@@ -179,15 +178,6 @@ LOCA.application = (function($, History, bootbox, i18next) {
             waitCounter = 0;
             $('#waitwindow').hide();
         }
-    };
-
-    Loca.prototype.getViewFromQueryString = function(location) {
-        var queryString = Object.fromQueryString(location),
-            view = (queryString && queryString.view) ? queryString.view : '',
-            hashIndex = view.indexOf('#'),
-            viewId = hashIndex >= 0 ? view.substr(0, hashIndex) : view;
-
-        return viewId;
     };
 
     return new Loca();

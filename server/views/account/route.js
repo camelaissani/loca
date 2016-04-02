@@ -3,7 +3,10 @@ LOCA.routes.account = {
         return '/page/account';
     },
     title: window.i18next.t('Account'),
-    change: function (callback) {
-        LOCA.accountCtrl.loadData(callback);
+    pageInitialized: function(callback) {
+        LOCA.accountCtrl.pageInitialized(callback);
+    },
+    dataChanged: function (callback) {
+        LOCA.accountCtrl.dataChanged(callback);
     }
 };

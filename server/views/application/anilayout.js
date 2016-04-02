@@ -64,6 +64,11 @@ LOCA.layoutManager = (function($){
         }
     };
 
+    Layout.prototype.isMenuVisible = function (dataId) {
+        dataId = dataId.startsWith('#')?dataId.slice(1, dataId.length):dataId;
+        return $('.menu-card[data-id="' + dataId + '"]').hasClass('active');
+    };
+
     Layout.prototype.showMenu = function (dataId, callback) {
         var $cardToSelect;
 

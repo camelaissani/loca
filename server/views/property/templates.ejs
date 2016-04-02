@@ -3,9 +3,9 @@
     <div id="{{_id}}" class="list-row">
         <div class="list-col">
             {{#if available}}
-                <div class="list-label list-value paid"><%= t('Available') %></div>
+                <div class="list-label list-value text-success hidden-xs"><%= t('Available') %></div>
             {{else}}
-                <div class="list-label list-value">{{i18next key='Leased by' name=occupantLabel}}</div>
+                <div class="list-label list-value hidden-xs">{{i18next key='Leased by' name=occupantLabel}}</div>
             {{/if}}
             <div class="clearfix">
                 <div class="list-avatar-col pull-left">
@@ -15,12 +15,27 @@
                     <div class="list-title list-value">{{name}}</div>
                 </div>
             </div>
-            <list-label>
+            <div class="list-label hidden-xs">
                 {{propertyName}}
                 {{#if surface}}
                     <span>{{formatSurface surface}}</span>
                 {{/if}}
-            </list-label>
+            </div>
+            <div class="visible-xs clearfix">
+                <div class="list-label pull-left">
+                    {{propertyName}}
+                    {{#if surface}}
+                        <span>{{formatSurface surface}}</span>
+                    {{/if}}
+                </div>
+                <div class="pull-right">
+                    {{#if available}}
+                        <div class="list-label list-value text-success"><%= t('Available') %></div>
+                    {{else}}
+                        <div class="list-label list-value">{{i18next key='Leased by' name=occupantLabel}}</div>
+                    {{/if}}
+                </div>
+            </div>
         </div>
         <div class="list-col">
             <div class="list-label clearfix">

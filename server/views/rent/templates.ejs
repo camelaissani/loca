@@ -1,24 +1,19 @@
 <!-- HANDLEBAR TEMPLATES -->
-<script id="view-rent-month-selector-template" type="text/x-handlebars-template">
-    {{#each months}}
-    <li><a href="#" class="user-action" data-id="monthselector" data-value="{{monthNumber}}">{{monthLabel}}</a></li>
-    {{/each}}
-</script>
-
-<script id="view-rent-year-selector-template" type="text/x-handlebars-template">
-    {{#each years}}
-    <li><a href="#" class="user-action" data-id="yearselector" data-value="{{.}}">{{.}}</a></li>
-    {{/each}}
-</script>
-
 <script id="view-rent-list-row-template" type="text/x-handlebars-template">
     <div id="{{_id}}" class="list-row">
         <div class="list-col">
-            {{#if status}}
-            <div class="{{status}} list-label list-value">
-                {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
+            <div class="list-label hidden-xs">
+                {{#if status}}
+                <div class="{{cssClassPaymentStatus}} list-value">
+                    {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
+                </div>
+                {{/if}}
+                <div class="">
+                    {{#each paymentStatus}}
+                        {{paymentBadgeStatus}}
+                    {{/each}}
+                </div>
             </div>
-            {{/if}}
             <div class="clearfix">
                 <div class="pull-left list-avatar-col">
                     <span class="fa-stack fa-lg">
@@ -30,8 +25,18 @@
                     <div class="list-title list-value">{{occupant.name}}</div>
                 </div>
             </div>
-            <div class='list-label'>
-            {{#each occupant.properties}} {{Image property.type}} {{propertyName property.type}}{{#unless @last}} - {{/unless}} {{/each}}
+            <div class='list-label hidden-xs'>
+                {{#each occupant.properties}} {{Image property.type}} {{propertyName property.type}}{{#unless @last}} - {{/unless}} {{/each}}
+            </div>
+            <div class="visible-xs">
+                <div class='list-label'>
+                    {{#each occupant.properties}} {{Image property.type}} {{propertyName property.type}}{{#unless @last}} - {{/unless}} {{/each}}
+                </div>
+                <div>
+                    {{#each paymentStatus}}
+                        {{paymentBadgeStatus}}
+                    {{/each}}
+                </div>
             </div>
         </div>
         <div class="list-col">
@@ -65,14 +70,20 @@
         <div class="list-group-item">
             <div class="clearfix">
                 <div class="pull-left">
-                    <h4 class="">{{occupant.name}}</h4>
-                    <small class="{{status}}">{{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}</small>
+                    <h5>{{occupant.name}}</h5>
                 </div>
                 <div id="{{_id}}" class="pull-right user-action" data-id="remove-item-from-selection">
                     <i class="fa fa-times"></i>
                 </div>
+            </div>
+            <small>
+                <div class="{{cssClassPaymentStatus}}">
+                    {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
+                </div>
+            </small>
+            <div class="clearfix">
                 <div class="pull-right">
-                    <h3>{{formatMoney totalToPay hideCurrency=false}}</h3>
+                    <h4>{{formatMoney totalToPay hideCurrency=false}}</h4>
                 </div>
             </div>
         </div>

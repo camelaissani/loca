@@ -1,10 +1,9 @@
 <h1><center><%= t(config.website.product.slogan) %></center></h1>
 <div class="centeredbtn">
-    <% if (config.demomode) {%>
-    <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
+    <% if (config.demomode) { %>
     <a href="/login" class="btn btn-success btn-lg"><%= t('Demonstration') %></a>
     <% } else { %>
     <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
-    <% } %>
     <p><%= t('You already have an account?') %> <a href="/login"><%= t('Sign in') %></a></p>
+    <% } %>
 </div>
