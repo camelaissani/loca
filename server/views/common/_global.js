@@ -24,6 +24,9 @@ LOCA.updateLanguageScript = function(lang, id, src, callback) {
         }
         document.getElementsByTagName('head')[0].appendChild(fileref);
     }
+    else if (callback) {
+        callback();
+    }
 };
 
 (function($, i18next) {
@@ -65,7 +68,10 @@ LOCA.updateLanguageScript = function(lang, id, src, callback) {
             if (splitedLanguage && splitedLanguage.length >0) {
                 LOCA.countryCode = splitedLanguage[0].toLowerCase();
             }
-            document.dispatchEvent(new CustomEvent('languageChanged'));
+            document.dispatchEvent(new CustomEvent('languageChanged', {
+                'bubbles': true,
+                'cancelable': false
+            }));
         });
     });
 

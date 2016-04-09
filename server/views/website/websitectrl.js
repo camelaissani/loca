@@ -1,5 +1,5 @@
 (function($, i18next) {
-    document.addEventListener('applicationReady', function(/*event*/) {
+    function applicationReady(/*event*/) {
         var $container,
             location,
             loginForm,
@@ -63,5 +63,11 @@
         }
         $container.css('visibility','visible');
         $container.css('opacity',1);
+    }
+
+    document.addEventListener('languageChanged', function(/*event*/) {
+        LOCA.updateLanguageScript(LOCA.countryCode, 'jquery-validate-language', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + LOCA.countryCode + '.js', function() {
+            applicationReady();
+        });
     });
 })(window.$, window.i18next);

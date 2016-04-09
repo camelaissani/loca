@@ -34,21 +34,67 @@ var paths = {
     publicLessFile: 'server/views/less/main-public.less',
     restrictedLessFile: 'server/views/less/main-restricted.less',
     printLessFile: 'server/views/less/main-print.less',
-    publicScripts: ['public/js/*analytics.js', 'server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/website/**/*.js', 'server/views/login/**/*.js', 'server/views/signup/**/*.js'],
-    restrictedScripts: ['server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/**/_*.js', 'server/views/**/*form.js', 'server/views/**/*.js'],
-    printScripts: ['server/views/common/**/_*.js', 'server/views/common/**/*.js', 'server/views/printable/**/*.js'],
-    frontendScripts: ['server/views/**/*.js'],
-    backendScripts: ['server/*.js', 'server/models/**/*.js', 'server/managers/**/*.js'],
-    htmlFiles: ['server/views/**/*.ejs'],
-    scriptsToLint: ['*.js', 'server/**/*.js'],
-    purifyCssScripts: ['bower_components/bootstrap/js/tooltip.js', 'bower_components/bootstrap/js/popover.js', 'bower_components/bootstrap/js/carousel.js', 'bower_components/bootbox/bootbox.js', 'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'],
-    testScripts: ['test/**/*.js']
+    publicScripts: [
+        'public/js/*analytics.js',
+        'server/views/common/**/_*.js',
+        'server/views/common/**/*.js',
+        'server/views/website/**/*.js',
+        'server/views/login/**/*.js',
+        'server/views/signup/**/*.js'
+    ],
+    restrictedScripts: [
+        'server/views/common/**/_*.js',
+        'server/views/common/**/*.js',
+        'server/views/**/_*.js',
+        'server/views/**/*form.js',
+        'server/views/**/*.js',
+        '!' + 'server/views/printable/**',
+        '!' + 'server/views/website/**/*.js',
+        '!' + 'server/views/login/**/*.js',
+        '!' + 'server/views/signup/**/*.js'
+    ],
+    printScripts: [
+        'server/views/common/**/_*.js',
+        'server/views/common/**/*.js',
+        'server/views/printable/**/*.js'
+    ],
+    frontendScripts: [
+        'server/views/**/*.js'
+    ],
+    backendScripts: [
+        'server/*.js',
+        'server/models/**/*.js',
+        'server/managers/**/*.js'
+    ],
+    htmlFiles: [
+        'server/views/**/*.ejs'
+    ],
+    scriptsToLint: [
+        '*.js',
+        'server/**/*.js'
+    ],
+    purifyCssScripts: [
+        'bower_components/bootstrap/js/tooltip.js',
+        'bower_components/bootstrap/js/popover.js',
+        'bower_components/bootstrap/js/carousel.js',
+        'bower_components/bootbox/bootbox.js',
+        'bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
+    ],
+    testScripts: [
+        'test/**/*.js'
+    ]
 };
 
 var watchPaths = {
-    imageFiles: ['server/views/images/**/*'],
-    lessFiles: ['server/views/**/*.less'],
-    scriptFiles: ['server/views/**/*.js']
+    imageFiles: [
+        'server/views/images/**/*'
+    ],
+    lessFiles: [
+        'server/views/**/*.less'
+    ],
+    scriptFiles: [
+        'server/views/**/*.js'
+    ]
 };
 
 var isProd = function() {
