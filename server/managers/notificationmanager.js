@@ -1,7 +1,6 @@
 'use strict';
 
-var i18next = require('i18next'),
-    moment = require('moment'),
+var moment = require('moment'),
     crypto = require('crypto'),
     occupantModel = require('../models/occupant'),
     notificationModel = require('../models/notification');
@@ -36,7 +35,7 @@ module.exports.findAll = function(req, res) {
         var feederFct;
         if (index < module.exports.feeders.length) {
             feederFct = module.exports.feeders[index];
-            feederFct(realm, function(foundNotifications) {
+            feederFct(req.t, realm, function(foundNotifications) {
                 foundNotifications.forEach(function(notification) {
                     notifications.push(notification);
                 });
@@ -118,7 +117,7 @@ module.exports.update = function(req, res) {
 
 module.exports.feeders = [
 
-    function expiredDocuments(realm, callback) {
+    function expiredDocuments(t, realm, callback) {
         var notifications = [];
         occupantModel.findFilter(realm, {
             $orderby: {
@@ -135,10 +134,10 @@ module.exports.feeders = [
                     occupant.documents.forEach(function(document) {
                         notifications.push({
                             type: 'expiredDocument',
-                            notificationId: module.exports.generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format(i18next.t('__fmt_date__')) + document.name),
+                            notificationId: module.exports.generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD-MM-YYYY') + document.name),
                             expirationDate: document.expirationDate,
                             title: occupant.name,
-                            description: i18next.t('has expired', {document: document.name, date: moment(document.expirationDate).format(i18next.t('__fmt_date__'))}),
+                            description: t('has expired', {document: document.name, date: moment(document.expirationDate).format(t('__fmt_date__')), interpolation: {escape: false}}),
                             actionUrl: ''
                         });
                     });
@@ -149,7 +148,7 @@ module.exports.feeders = [
                                 type: 'warning',
                                 notificationId: module.exports.generateId(occupant._id.toString() + '_no_document'),
                                 title: occupant.name,
-                                description:  i18next.t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
+                                description:  t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
                                 actionUrl: ''
                             });
                             return true;
@@ -162,7 +161,7 @@ module.exports.feeders = [
 
         });
     },
-    function chequesToCollect(realm, callback) {
+    function chequesToCollect(t, realm, callback) {
         callback([]);
     }
 ];

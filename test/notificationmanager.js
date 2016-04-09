@@ -43,7 +43,7 @@ describe('notificationmanager', function() {
 
         manager.feeders = [
 
-            function expiredDocuments(realmName, callback) {
+            function expiredDocuments(t, realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     documentDescription = "assurance 2014";
@@ -55,7 +55,7 @@ describe('notificationmanager', function() {
                     actionUrl: ''
                 }]);
             },
-            function chequesToCollect(realmName, callback) {
+            function chequesToCollect(t, realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     chequeNumber = "XXXXX";
@@ -95,7 +95,7 @@ describe('notificationmanager', function() {
 
         manager.feeders = [
 
-            function expiredDocuments(realmName, callback) {
+            function expiredDocuments(t, realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     documentDescription = "assurance 2014",
@@ -110,7 +110,7 @@ describe('notificationmanager', function() {
                     actionUrl: ''
                 }]);
             },
-            function chequesToCollect(realmName, callback) {
+            function chequesToCollect(t, realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     chequeNumber = "XXXXX",
@@ -125,7 +125,7 @@ describe('notificationmanager', function() {
                     actionUrl: ''
                 }]);
             },
-            function chequesToCollect(realmName, callback) {
+            function chequesToCollect(t, realmName, callback) {
                 var occupantId = "123",
                     occupantName = "Mike",
                     chequeNumber = "XXXXX",

@@ -2,22 +2,31 @@
 var LOCA = {};
 LOCA.routes = {};
 
-(function($, i18next) {
-    function updateLanguageScript(lang, id, src) {
-        var fileref = document.getElementById(id);
+LOCA.updateLanguageScript = function(lang, id, src, callback) {
+    var fileref = document.getElementById(id);
 
-        if (fileref) {
-            document.getElementsByTagName('head')[0].removeChild(fileref);
-        }
-
-        if (lang !== 'en') {
-            fileref = document.createElement('script');
-            fileref.setAttribute('id', id);
-            fileref.setAttribute('type', 'text/javascript');
-            fileref.setAttribute('src', src);
-            document.getElementsByTagName('head')[0].appendChild(fileref);
-        }
+    if (fileref) {
+        document.getElementsByTagName('head')[0].removeChild(fileref);
     }
+
+    if (lang !== 'en') {
+        fileref = document.createElement('script');
+        fileref.setAttribute('id', id);
+        fileref.setAttribute('type', 'text/javascript');
+        fileref.setAttribute('src', src);
+        if (callback) {
+            fileref.async = true;
+            fileref.onreadystatechange = fileref.onload = function() {
+                if (!fileref.readyState || /loaded|complete/.test(fileref.readyState)) {
+                    callback();
+                }
+            };
+        }
+        document.getElementsByTagName('head')[0].appendChild(fileref);
+    }
+};
+
+(function($, i18next) {
     
     $(document).ready(function() {
         // Init locale
@@ -55,19 +64,8 @@ LOCA.routes = {};
             var splitedLanguage = lng.split('-');
             if (splitedLanguage && splitedLanguage.length >0) {
                 LOCA.countryCode = splitedLanguage[0].toLowerCase();
-                updateLanguageScript(LOCA.countryCode, 'moment-language', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/' + LOCA.countryCode + '.js');
-                updateLanguageScript(LOCA.countryCode, 'jquery-validate-language', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + LOCA.countryCode + '.js');
-                updateLanguageScript(LOCA.countryCode, 'bootstrap-datepicker-language', '/bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' + LOCA.countryCode + '.min.js');
             }
             document.dispatchEvent(new CustomEvent('languageChanged'));
-        });
-
-        i18next.on('loaded', function(/*loaded*/) {
-            document.dispatchEvent(new CustomEvent('applicationReady', {
-                detail: {},
-                bubbles: false,
-                cancelable: false
-            }));
         });
     });
 

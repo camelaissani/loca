@@ -1,7 +1,7 @@
 'use strict';
 
 // Express web app requirements
-var i18n = require('i18next'),
+var i18next = require('i18next'),
     i18nMiddleware = require('i18next-express-middleware'),
     i18nFS = require('i18next-node-fs-backend'),
     i18nSprintf = require('i18next-sprintf-postprocessor'),
@@ -37,13 +37,7 @@ logger.add(logger.transports.Console, {
 });
 
 // Init locale
-i18n.on('languageChanged', function(lng) {
-    var splitedLanguage = lng.split('-');
-    moment.locale(splitedLanguage[0]);
-    logger.debug('language set to', lng);
-});
-
-i18n.use(i18nMiddleware.LanguageDetector)
+i18next.use(i18nMiddleware.LanguageDetector)
     .use(i18nFS)
     .use(i18nSprintf)
     .init({
@@ -76,7 +70,12 @@ app.use(cookieSession({
         maxAge: 3600000
     }
 }));
-app.use(i18nMiddleware.handle(i18n));
+app.use(i18nMiddleware.handle(i18next));
+app.use(function(req, res, next) {
+    var splitedLanguage = req.language.split('-');
+    moment.locale(splitedLanguage[0]);
+    next();
+});
 // Icon / static files
 app.use(favicon(path.join(__dirname, '/public/images/favicon.png'), {
     maxAge: 2592000000

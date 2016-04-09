@@ -167,8 +167,8 @@ if (config.demomode) {
 
         var success = function(realms) {
             req.session.user = {
-                firstname: 'Michael',
-                lastname: 'Jackson',
+                firstname: 'Camel',
+                lastname: 'Aissani',
                 email: email,
                 realms: realms
             };
