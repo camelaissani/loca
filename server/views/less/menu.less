@@ -106,11 +106,6 @@ a.main-menu-button {
 
 .menu-card {
     display: none;
-    // position: fixed;
-    // top:  @navbar-height + 5px;
-    // right: 0;
-    // bottom: 5px;
-    // width: 33%;
     padding: 19px;
     background-color: @well-bg;
     border: 1px solid @well-border;
@@ -127,8 +122,6 @@ a.main-menu-button {
         text-align: left;
     }
     .list-group.list-group-selection {
-        // max-height: 404px;
-        // overflow-y: auto;
         &.fixed .list-group-item {
             .fa-times {
                 display: none;
@@ -175,16 +168,22 @@ a.main-menu-button {
         border-radius: 0;
         border-left: 0;
         border-right: 0;
+        box-shadow: 0 4px 4px -2px darken(@well-bg, 40%);
 
-        .btn {
-            text-align: center;
-        }
         .fa {
             font-size: @main-mini-menu-button-font-size;
         }
         .btn-group {
             height: @navbar-height - 2px;
             .btn {
+                text-align: center;
+                border-radius: 0;
+                padding: 0 2px;
+                min-width: 75px;
+                box-shadow: none;
+                border-top: none;
+                border-bottom: none;
+                text-shadow: none;
                 height: 100%;
                 font-size: ceil((@font-size-base * 0.85));
             }

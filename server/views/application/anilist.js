@@ -3,9 +3,9 @@ LOCA.List = (function($, Handlebars, Events){
     // PRIVATE ATTRIBUTES
     // -----------------------------------------------------------------------
     var EVENT_TYPE_SELECTION_CHANGED = 'list.selection.changed';
-    var TRANSITION_ROW_DURATION = 100;
-    var TRANSITION_ROW_STAGGER_DURATION = 50;
-    var TRANSITION_MAXROW = 10;
+    // var TRANSITION_ROW_DURATION = 100;
+    // var TRANSITION_ROW_STAGGER_DURATION = 50;
+    // var TRANSITION_MAXROW = 10;
 
     // -----------------------------------------------------------------------
     // CONSTRUCTOR
@@ -32,19 +32,6 @@ LOCA.List = (function($, Handlebars, Events){
     // -----------------------------------------------------------------------
     // PRIVATE METHODS
     // -----------------------------------------------------------------------
-    // function _cloneObject(obj) {
-    //     var clone = {};
-    //     for(var i in obj) {
-    //         if(typeof(obj[i])=='object' && obj[i] !== null) {
-    //             clone[i] = _cloneObject(obj[i]);
-    //         }
-    //         else {
-    //             clone[i] = obj[i];
-    //         }
-    //     }
-    //     return clone;
-    // }
-
     function _cloneObject(obj) {
         var copy;
 
@@ -234,7 +221,7 @@ LOCA.List = (function($, Handlebars, Events){
         this.dataRows.rows[dataRowIndex] = newDataRow;
     };
 
-    List.prototype.remove = function(dataRow, noAnimation) {
+    List.prototype.remove = function(dataRow/*, noAnimation*/) {
         var $rowToRemove = this.$list.find('#'+dataRow._id+'.list-row');
 
         // Find data in array and remove it
@@ -246,18 +233,18 @@ LOCA.List = (function($, Handlebars, Events){
         }
 
         // Animate remove
-        if (!noAnimation) {
-            $rowToRemove.velocity('transition.swoopOut', {complete: function() {
-                // Remove row from DOM
-                $rowToRemove.remove();
-            }});
-        }
-        else {
-            $rowToRemove.remove();
-        }
+        // if (!noAnimation) {
+        //     $rowToRemove.velocity('transition.swoopOut', {complete: function() {
+        //         // Remove row from DOM
+        //         $rowToRemove.remove();
+        //     }});
+        // }
+        // else {
+        $rowToRemove.remove();
+        // }
     };
 
-    List.prototype.add = function(dataRow, noAnimation) {
+    List.prototype.add = function(dataRow/*, noAnimation*/) {
         var templateRow = Handlebars.compile(this.sourceTemplateRow);
         var htmlRow = templateRow(dataRow);
         var $newRow;
@@ -271,12 +258,12 @@ LOCA.List = (function($, Handlebars, Events){
 
         // Animate add
         $newRow.find('[data-toggle=tooltip]').tooltip();
-        if (!noAnimation) {
-            $newRow.velocity('transition.swoopIn');
-        }
-        else {
-            this.show($newRow);
-        }
+        // if (!noAnimation) {
+        //     $newRow.velocity('transition.swoopIn');
+        // }
+        // else {
+        this.show($newRow);
+        // }
     };
 
     List.prototype.init = function(dataRows, noAnimation, callback) {
@@ -309,7 +296,7 @@ LOCA.List = (function($, Handlebars, Events){
     };
 
     List.prototype.filter = function(text, noAnimation, callback) {
-        var that = this;
+        // var that = this;
         var $allRows;
         var $rowsToFilter;
         var $rowsToShow;
@@ -331,33 +318,33 @@ LOCA.List = (function($, Handlebars, Events){
                 $rowsToFilter.addClass('list-element-filtered');
             }
 
-            if (!noAnimation) {
-                $rowsToHide = $allRows.not('.list-element-filtered').not(':hidden');
-                $rowsToShow = this.$list.find('.list-row.list-element-filtered:hidden');
+            $rowsToHide = $allRows.not('.list-element-filtered').not(':hidden');
+            $rowsToShow = this.$list.find('.list-row.list-element-filtered:hidden');
+            // if (!noAnimation) {
 
-                this.hideRows($rowsToHide, function() {
-                    that.showRows($rowsToShow, callback);
-                });
+            // this.hideRows($rowsToHide, function() {
+            //     that.showRows($rowsToShow, callback);
+            // });
+            // }
+            // else {
+            $rowsToHide.hide();
+            $rowsToShow.show();
+            if (callback) {
+                callback();
             }
-            else {
-                this.hide($allRows);
-                this.show($rowsToFilter);
-                if (callback) {
-                    callback();
-                }
-            }
+            // }
         }
         else {
             $rowsToShow = this.$list.find('.list-row:hidden');
-            if (!noAnimation) {
-                this.showRows($rowsToShow, callback);
+            // if (!noAnimation) {
+                // this.showRows($rowsToShow, callback);
+            // }
+            // else {
+            $rowsToShow.show();
+            if (callback) {
+                callback();
             }
-            else {
-                this.show($rowsToShow);
-                if (callback) {
-                    callback();
-                }
-            }
+            // }
         }
     };
 
@@ -374,7 +361,7 @@ LOCA.List = (function($, Handlebars, Events){
     };
 
     List.prototype.hideRows = function($rows, callback) {
-        var $rowsWithTransition, $rowsWithoutTransition;
+        // var $rowsWithTransition, $rowsWithoutTransition;
 
         if ($rows.length === 0) {
             if (callback) {
@@ -383,29 +370,33 @@ LOCA.List = (function($, Handlebars, Events){
             return;
         }
 
-        if ($rows.length > TRANSITION_MAXROW) {
-            $rowsWithTransition = $rows.slice(0, TRANSITION_MAXROW);
-            $rowsWithoutTransition = $rows.slice(TRANSITION_MAXROW, $rows.length);
+        // if ($rows.length > TRANSITION_MAXROW) {
+        //     $rowsWithTransition = $rows.slice(0, TRANSITION_MAXROW);
+        //     $rowsWithoutTransition = $rows.slice(TRANSITION_MAXROW, $rows.length);
 
-            this.hide($rowsWithoutTransition);
-            $rowsWithTransition.velocity('transition.bounceRightOut', {duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
-                if (callback) {
-                    callback();
-                }
-            }});
-        }
-        else {
-            $rows.velocity('transition.bounceRightOut', {duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
-                if (callback) {
-                    callback();
-                }
-            }});
+        //     this.hide($rowsWithoutTransition);
+        //     $rowsWithTransition.velocity('transition.bounceRightOut', {duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
+        //         if (callback) {
+        //             callback();
+        //         }
+        //     }});
+        // }
+        // else {
+        //     $rows.velocity('transition.bounceRightOut', {duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
+        //         if (callback) {
+        //             callback();
+        //         }
+        //     }});
+        // }
+        $rows.hide();
+        if (callback) {
+            callback();
         }
     };
 
     List.prototype.showRows = function($rows, callback) {
-        var $rowsWithTransition, $rowsWithoutTransition,
-            self = this;
+        // var $rowsWithTransition, $rowsWithoutTransition,
+        //     self = this;
 
         if ($rows.length === 0) {
             if (callback) {
@@ -414,30 +405,34 @@ LOCA.List = (function($, Handlebars, Events){
             return;
         }
 
-        if ($rows.length > TRANSITION_MAXROW) {
-            $rowsWithTransition = $rows.slice(0, TRANSITION_MAXROW);
-            $rowsWithoutTransition = $rows.slice(TRANSITION_MAXROW, $rows.length);
+        // if ($rows.length > TRANSITION_MAXROW) {
+        //     $rowsWithTransition = $rows.slice(0, TRANSITION_MAXROW);
+        //     $rowsWithoutTransition = $rows.slice(TRANSITION_MAXROW, $rows.length);
 
-            $rowsWithTransition.velocity('transition.bounceRightIn', {display: 'table', duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
-                self.show($rowsWithoutTransition);
-                if (callback) {
-                    callback();
-                }
-            }});
-        }
-        else {
-            if ($rows.length>0) {
-                $rows.velocity('transition.bounceRightIn', {display: 'table', duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
-                    if (callback) {
-                        callback();
-                    }
-                }});
-            }
-            else {
-                if (callback) {
-                    callback();
-                }
-            }
+        //     $rowsWithTransition.velocity('transition.bounceRightIn', {display: 'table', duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
+        //         self.show($rowsWithoutTransition);
+        //         if (callback) {
+        //             callback();
+        //         }
+        //     }});
+        // }
+        // else {
+        //     if ($rows.length>0) {
+        //         $rows.velocity('transition.bounceRightIn', {display: 'table', duration: TRANSITION_ROW_DURATION, stagger: TRANSITION_ROW_STAGGER_DURATION, complete: function(){
+        //             if (callback) {
+        //                 callback();
+        //             }
+        //         }});
+        //     }
+        //     else {
+        //         if (callback) {
+        //             callback();
+        //         }
+        //     }
+        // }
+        $rows.show();
+        if (callback) {
+            callback();
         }
     };
 

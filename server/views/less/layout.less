@@ -33,10 +33,6 @@ body {
     }
 }
 
-// .well {
-//     margin-bottom: 0;
-// }
-
 .footer {
     position: absolute;
     bottom: 0;
@@ -89,16 +85,30 @@ body {
 }
 
 // RESPONSIVE
-
 // Phone devices
 @media (max-width: 767px) {
+    body {
+        background-color: lighten(@well-bg, 1%);
+    }
+
     label {
         color: @component-active-color;
         font-weight: normal;
     }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0
+    }
+
     .view-container {
+        padding: @navbar-height 10px 0 10px;
+        .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }    
         .view-content-with-menu {
-            padding-top: @navbar-height - 10px;
+            padding-top: @navbar-height + 10px;
         }
     }
 
