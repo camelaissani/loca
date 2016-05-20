@@ -43,8 +43,6 @@ npm run watch
 ```
 It will automatically build when the source code changes.
 
-Sorry guys but currently the application is in french...
-
 Why I created this application?
 -------------------------------
 Simply to help my best friend and I to manage properties that we rent.
