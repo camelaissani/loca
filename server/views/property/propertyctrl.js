@@ -61,7 +61,7 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
                     dataType: 'json'
                 },
                 function(response) {
-                    if (response.errors.length===0) {
+                    if (!response.errors || response.errors.length===0) {
                         self.list.unselectAll();
                         self.loadList(function() {
                             self.closeForm();

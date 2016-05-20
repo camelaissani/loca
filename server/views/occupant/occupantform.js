@@ -120,7 +120,7 @@ LOCA.OccupantForm = (function($, Handlebars, moment, i18next) {
             },
             'terminationDate': {
                 fdate: [i18next.t('__fmt_date__')],
-                mindate: [self.getDomSelector(), 'beginDate']
+                mindate: [{domSelector: self.getDomSelector() + ' #beginDate'}]
             },
             'guarantyPayback': {
                 number: true,
@@ -150,13 +150,13 @@ LOCA.OccupantForm = (function($, Handlebars, moment, i18next) {
             },
             'entryDate_0': {
                 required: true,
-                mindate: [self.getDomSelector(), 'beginDate'],
-                maxdate: [self.getDomSelector(), 'endDate']
+                mindate: [{domSelector: self.getDomSelector() + ' #beginDate'}],
+                maxdate: [{domSelector: self.getDomSelector() + ' #endDate'}]
             },
             'exitDate_0': {
                 required: true,
-                mindate: [self.getDomSelector(), 'entryDate_0'],
-                maxdate: [self.getDomSelector(), 'endDate']
+                mindate: [{domSelector: self.getDomSelector() + ' #entryDate_0'}],
+                maxdate: [{domSelector: self.getDomSelector() + ' #endDate'}]
             }
         };
     };
@@ -316,15 +316,15 @@ LOCA.OccupantForm = (function($, Handlebars, moment, i18next) {
         $('#'+itemEntryDateName, $newRow).rules('add', {
             required: true,
             fdate: [i18next.t('__fmt_date__')],
-            mindate: [self.getDomSelector(), 'beginDate'],
-            maxdate: [self.getDomSelector(), 'endDate']
+            mindate: [{domSelector: self.getDomSelector() + ' #beginDate'}],
+            maxdate: [{domSelector: self.getDomSelector() + ' #endDate'}]
         });
 
         $('#'+itemExitDateName, $newRow).rules('add', {
             required: true,
             fdate: [i18next.t('__fmt_date__')],
-            mindate: [self.getDomSelector(), itemEntryDateName],
-            maxdate: [self.getDomSelector(), 'endDate']
+            mindate: [{domSelector: self.getDomSelector() + ' #' +itemEntryDateName}],
+            maxdate: [{domSelector: self.getDomSelector() + ' #endDate'}]
         });
     };
 

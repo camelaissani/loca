@@ -67,6 +67,8 @@ LOCA.rentCtrl = (function($, Handlebars, moment) {
         var $rentsSelected;
 
         Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
+        Handlebars.registerPartial('view-rent-payment-badges-template', $('#view-rent-payment-badges-template').html());
+
         this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
 
         $rentsSelected = $('#view-rent-selected-list-template');
@@ -136,6 +138,7 @@ LOCA.rentCtrl = (function($, Handlebars, moment) {
         selection = self.list.getSelectedData();
 
         if (actionId==='list-action-pay-rent') {
+            self.form.bindForm();
             self.form.setData(selection[0]);
             self.openForm('pay-rent-form');
         }
@@ -190,8 +193,6 @@ LOCA.rentCtrl = (function($, Handlebars, moment) {
     RentCtrl.prototype.onDataChanged = function(callback) {
         var self = this,
             $monthPicker;
-
-        self.form.bindForm();
 
         $monthPicker = $('#view-rent .month-picker');
         $monthPicker.datepicker({

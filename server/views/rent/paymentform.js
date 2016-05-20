@@ -71,7 +71,10 @@ LOCA.PaymentForm = (function($, moment, i18next) {
 
 
     PaymentForm.prototype.getManifest = function() {
-        var self = this;
+        var self = this,
+            period = moment.months()[Number(LOCA.currentMonth)-1],
+            minDate = moment({day:0, month: Number(LOCA.currentMonth)-1, year: Number(LOCA.currentYear)}).startOf('month'),
+            maxDate = moment({day:0, month: Number(LOCA.currentMonth)-1, year: Number(LOCA.currentYear)}).endOf('month');
         return {
             'payment': {
                 number: true,
@@ -84,7 +87,15 @@ LOCA.PaymentForm = (function($, moment, i18next) {
                         return amount>0;
                     }
                 },
-                fdate: [i18next.t('__fmt_date__')]
+                fdate: [i18next.t('__fmt_date__')],
+                mindate: [{
+                    minDate: minDate,
+                    message: i18next.t('Only the payment of rent period are authorized. Please enter a date between', {period: period, minDate: minDate.format(i18next.t('__fmt_date__')), maxDate: maxDate.format(i18next.t('__fmt_date__'))})
+                }],
+                maxdate: [{
+                    maxDate: maxDate,
+                    message: i18next.t('Only the payment of rent period are authorized. Please enter a date between', {period: period, minDate: minDate.format(i18next.t('__fmt_date__')), maxDate: maxDate.format(i18next.t('__fmt_date__'))})
+                }]
             },
             'paymentType': {
                 required: {

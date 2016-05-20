@@ -41,7 +41,7 @@ function addComputedProperties(items, occupants) {
             // Find all occupant of properties
             occupantsOfProperty = occupants.filter(function (occupant) {
                 var properties = occupant.properties.filter(function (property) {
-                    if (property.propertyId === item._id.toString()) {
+                    if (item._id && property.propertyId === item._id.toString()) {
                         return true;
                     }
                     return false;

@@ -43,6 +43,11 @@
     };
 
     //Handlebars helpers
+    Handlebars.registerHelper('ifIsNthItem', function(params) {
+        var index = params.data.index,
+            nth = params.hash.nth;
+        return (index % nth === 0) ? params.fn(this) : params.inverse(this);
+    });
     Handlebars.registerHelper('i18next', function(params) {
         var attr,
             options,

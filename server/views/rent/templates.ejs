@@ -8,11 +8,7 @@
                     {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
                 </div>
                 {{/if}}
-                <div class="">
-                    {{#each paymentStatus}}
-                        {{paymentBadgeStatus}}
-                    {{/each}}
-                </div>
+                {{> view-rent-payment-badges-template}}
             </div>
             <div class="clearfix">
                 <div class="pull-left list-avatar-col">
@@ -32,11 +28,7 @@
                 <div class='list-label'>
                     {{#each occupant.properties}} {{Image property.type}} {{propertyName property.type}}{{#unless @last}} - {{/unless}} {{/each}}
                 </div>
-                <div>
-                    {{#each paymentStatus}}
-                        {{paymentBadgeStatus}}
-                    {{/each}}
-                </div>
+                {{> view-rent-payment-badges-template}}
             </div>
         </div>
         <div class="list-col">
@@ -57,6 +49,20 @@
         </div>
         <div class="list-selection-overlay"></i></div>
     </div>
+</script>
+
+<script id="view-rent-payment-badges-template" type="text/x-handlebars-template">
+        {{#each paymentStatus}}
+            {{#ifIsNthItem nth=5}}
+                <div class="row">
+                    <div class="col-xs-12">
+            {{/ifIsNthItem}}
+                        {{paymentBadgeStatus}}
+            {{#ifIsNthItem nth=5}}
+                    </div>
+                </div>
+            {{/ifIsNthItem}}
+        {{/each}}
 </script>
 
 <script id="view-rent-list-content-template" type="text/x-handlebars-template">

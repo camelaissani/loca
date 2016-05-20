@@ -1,22 +1,46 @@
 LOCA.Form = (function($, moment, i18next) {
     // VALIDATORS
     $.validator.addMethod('mindate', function(value, element, params) {
-        var minDate = $(params[0] + ' #' + params[1]).val();
-        var momentMin = moment(minDate, i18next.t('__fmt_date__'), true);
-        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
-        params[2] = minDate;
+        var minDate,
+            momentMin,
+            momentValue;
+
+        minDate = params[0].domSelector?$(params[0].domSelector).val():params[0].minDate;
+        if (moment.isMoment(minDate)) {
+            momentMin = minDate;
+        } else if (moment.isDate(minDate)) {
+            momentMin = moment(minDate);
+        } else {
+            momentMin = moment(minDate, i18next.t('__fmt_date__'), true);
+        }
+
+        momentValue = moment(value, i18next.t('__fmt_date__'), true);
+
+        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date after the', {date: momentMin.format(i18next.t('__fmt_date__'))});
         return this.optional(element) || (momentValue.isValid() && momentMin.isValid() && (momentValue.isSame(momentMin) || momentValue.isAfter(momentMin)));
     },
-    i18next.t('Please set a date after the', {date: '{2}'}));
+    '{1}');
 
     $.validator.addMethod('maxdate', function(value, element, params) {
-        var maxDate = $(params[0] + ' #' + params[1]).val();
-        var momentMax = moment(maxDate, i18next.t('__fmt_date__'), true);
-        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
-        params[2] = maxDate;
+        var maxDate,
+            momentMax,
+            momentValue;
+
+        maxDate = params[0].domSelector?$(params[0].domSelector).val():params[0].maxDate;
+        if (moment.isMoment(maxDate)) {
+            momentMax = maxDate;
+        } else if (moment.isDate(maxDate)) {
+            momentMax = moment(maxDate);
+        } else {
+            momentMax = moment(maxDate, i18next.t('__fmt_date__'), true);
+        }
+
+        momentValue = moment(value, i18next.t('__fmt_date__'), true);
+
+        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date before the', {date: momentMax.format(i18next.t('__fmt_date__'))});
         return this.optional(element) || (momentValue.isValid() && momentMax.isValid() && (momentValue.isSame(momentMax) || momentValue.isBefore(momentMax)));
     },
-    i18next.t('Please set a date before the', {date: '{2}'}));
+    '{1}');
 
     $.validator.addMethod('maxcontractdate', function(value, element, params) {
         var contract = $(params[0] + ' #' + params[1]).val();
@@ -267,6 +291,9 @@ LOCA.Form = (function($, moment, i18next) {
             // }
         });
 
+        if (self.validator) {
+            self.$form.off('.validate').removeData('validator');
+        }
         self.validator = self.$form.validate( {
             debug: true,
             ignore: 'hidden',
