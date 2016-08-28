@@ -6,7 +6,7 @@ var moment = require('moment'),
     rentManager = require('./rentmanager');
 //    logger = require('winston');
 
-require('sugar');
+require('sugar').extend();
 
 function rentBuildViewData(occupant, month, year) {
     var rent = occupant.rents[year][month],

@@ -7,19 +7,20 @@ var sugar = require('sugar'),
     sinon = require('sinon'),
     proxyquire = require('proxyquire');
 
+sugar.extend();
 module.exports = {
     testRoutes: function(packagePath, testSet) {
-        testSet.each(function(test) {
+        testSet.forEach(function(test) {
             it('['+test.httpMethod.toUpperCase()+'] ' + test.route, function (done) {
                 var app = express();
                 var router = express.Router();
                 var API;
                 var mocks = {};
 
-                test.mockedPackages.each(function(mock) {
+                test.mockedPackages.forEach(function(mock) {
                     mocks[mock.relativePath] = mock.instance;
                     if (mock.ensureCallMethods) {
-                        mock.ensureCallMethods.each(function(methodName) {
+                        mock.ensureCallMethods.forEach(function(methodName) {
                             sinon.spy(mock.instance, methodName);
                         });
                     }
@@ -37,9 +38,9 @@ module.exports = {
                 request(app)[test.httpMethod](test.route)
                 .expect(200)
                 .end(function(err, res) {
-                    test.mockedPackages.each(function(mock) {
+                    test.mockedPackages.forEach(function(mock) {
                         if (mock.ensureCallMethods) {
-                            mock.ensureCallMethods.each(function(methodName) {
+                            mock.ensureCallMethods.forEach(function(methodName) {
                                 assert(mock.instance[methodName].called, 'Ensure call of method ' + methodName);
                             });
                         }

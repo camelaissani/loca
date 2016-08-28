@@ -1,6 +1,6 @@
 'use strict';
 
-require('sugar');
+require('sugar').extend();
 
 function ObjectFilter(schema) {
     this.schema = schema;
@@ -8,11 +8,13 @@ function ObjectFilter(schema) {
 
 ObjectFilter.prototype.filter = function(data) {
     var self = this;
-    var filteredData = {};
+    var filteredData = {}, index, key, type, value, number;
+    var keys = Object.keys(self.schema);
 
-    Object.keys(self.schema, function(key, type) {
-        var value = data[key];
-        var number;
+    for (index=0; index<keys.length; index++) {
+        key = keys[index];
+        type = self.schema[key];
+        value = data[key];
         if (typeof value != 'undefined') {
             if (type === Boolean) {
                 if (typeof value == 'string' && (value === 'true' || value === 'false')) {
@@ -48,7 +50,7 @@ ObjectFilter.prototype.filter = function(data) {
                 throw new Error('Cannot valid schema type unsupported ' + type);
             }
         }
-    });
+    }
 
     return filteredData;
 };

@@ -5,7 +5,7 @@ var assert = require('assert'),
     proxyquire = require('proxyquire'),
     mocks = require('./mocks');
 
-require('sugar');
+require('sugar').extend();
 
 describe('model', function() {
     it('findOne', function(done) {
@@ -122,7 +122,7 @@ describe('model', function() {
 
         model.findFilter = function(realm, filter, callback) {
             assert(realm === 'myrealm');
-            assert(Object.equal(filter, {}));
+            assert(Object.isEqual(filter, {}));
             callback(null, ['myitem']);
         };
         sinon.spy(model, 'findFilter');
@@ -147,7 +147,7 @@ describe('model', function() {
         mockedDB.listWithFilter = function(realm, collection, filter, callback) {
             assert(realm === 'myrealm');
             assert(collection === 'mycollection');
-            assert(Object.equal(filter, {
+            assert(Object.isEqual(filter, {
                 my: 'filter'
             }));
             callback(null, ['itemtoreturn']);
@@ -181,7 +181,7 @@ describe('model', function() {
         mockedDB.listWithFilter = function(realm, collection, filter, callback) {
             assert(realm === 'myrealm');
             assert(collection === 'mycollection');
-            assert(Object.equal(filter, {
+            assert(Object.isEqual(filter, {
                 my: 'filter'
             }));
             callback(null, ['itemtoreturn']);
@@ -209,7 +209,7 @@ describe('model', function() {
         mockedDB.listWithFilter = function(realm, collection, filter, callback) {
             assert(realm === 'myrealm');
             assert(collection === 'mycollection');
-            assert(Object.equal(filter, {
+            assert(Object.isEqual(filter, {
                 my: 'filter'
             }));
             callback(null, []);
@@ -237,7 +237,7 @@ describe('model', function() {
         mockedDB.listWithFilter = function(realm, collection, filter, callback) {
             assert(realm === 'myrealm');
             assert(collection === 'mycollection');
-            assert(Object.equal(filter, {
+            assert(Object.isEqual(filter, {
                 my: 'filter'
             }));
             callback(null, null);
@@ -265,7 +265,7 @@ describe('model', function() {
         mockedDB.listWithFilter = function(realm, collection, filter, callback) {
             assert(realm === 'myrealm');
             assert(collection === 'mycollection');
-            assert(Object.equal(filter, {
+            assert(Object.isEqual(filter, {
                 my: 'filter'
             }));
             callback(['error!!!']);

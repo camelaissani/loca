@@ -7,7 +7,7 @@ var mongojs = require('mongojs'),
     Helper = require('./helper'),
     rentManager = require('./rentmanager');
 
-require('sugar');
+require('sugar').extend();
 
 function buildPropertyMap(realm, callback) {
     var index, property;

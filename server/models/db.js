@@ -6,7 +6,7 @@ var config = require('../../config'),
     collections = [],
     db;
 
-require('sugar');
+require('sugar').extend();
 
 function buildFilter(realm, filter) {
     var andArray = filter.$query ? filter.$query.$and : null,

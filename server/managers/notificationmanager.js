@@ -5,7 +5,7 @@ var moment = require('moment'),
     occupantModel = require('../models/occupant'),
     notificationModel = require('../models/notification');
 
-require('sugar');
+require('sugar').extend();
 
 module.exports.generateId = function(name) {
     return crypto.createHash('md5').update(name).digest('hex');
