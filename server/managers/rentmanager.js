@@ -161,7 +161,7 @@ module.exports._buildViewData = function (occupant, rent, month, year) {
         rentMoment,
         rentUnpaid,
         rentUnpaidMoment,
-        countPaymentStatus,
+        //countPaymentStatus,
         countMonthNotPaid;
 
     function updatePaymentStatus(rentMoment, status, rent) {
@@ -211,9 +211,9 @@ module.exports._buildViewData = function (occupant, rent, month, year) {
             if (rent.occupant.rents) {
                 rentUnpaid = rent;
                 countMonthNotPaid = 0;
-                countPaymentStatus = 0;
+                //countPaymentStatus = 0;
                 do {
-                    countPaymentStatus++;
+                    //countPaymentStatus++;
                     rentUnpaid.totalAmount = rentUnpaid.totalAmount ? Number(rentUnpaid.totalAmount) : 0;
                     rentUnpaid.payment = rentUnpaid.payment ? Number(rentUnpaid.payment) : 0;
                     rentUnpaid.newBalance =  Number((rentUnpaid.payment - rentUnpaid.totalAmount));

@@ -34,9 +34,9 @@ Model.prototype.findFilter = function(realm, filter, callback) {
         } else {
             items = dbItems ? dbItems : [];
             if (self.schema) {
-                items.forEach(function(item) {
+                items.forEach(function(item, index) {
 
-                    item = self.schema.filter(item);
+                    items[index] = self.schema.filter(item);
                 });
             }
             callback(null, items);
