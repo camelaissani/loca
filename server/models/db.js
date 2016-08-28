@@ -39,10 +39,10 @@ module.exports.init = function() {
 };
 
 module.exports.addCollection = function(collection) {
-    var index = collections.findIndex(collection.toLowerCase());
+    var index = collections.indexOf(collection.toLowerCase());
 
     if (index < 0) {
-        collections.add(collection.toLowerCase());
+        collections.push(collection.toLowerCase());
         logger.silly('db collections have been updated', collections);
     }
 };
