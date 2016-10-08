@@ -1,30 +1,32 @@
-LOCA.PaymentForm = (function($, moment, i18next) {
+import $ from 'jquery';
+import moment from 'moment';
+import i18next from 'i18next';
+import Form from '../common/form';
+import {LOCA} from '../application/main';
 
-    function PaymentForm() {
-        LOCA.Form.call(this, {
+class PaymentForm extends Form {
+
+    constructor() {
+        super({
             alertOnFieldError: true
         });
     }
 
-    // SUBOBJECT OF FORM
-    PaymentForm.prototype = Object.create(LOCA.Form.prototype);
-    PaymentForm.prototype.constructor = PaymentForm;
-
     // METHODS TO OVERRIDE
-    PaymentForm.prototype.getDomSelector = function() {
+    getDomSelector() {
         return '#rent-payment-form';
-    };
+    }
 
     // No add possibility
-    // PaymentForm.prototype.getAddUrl = function() {
+    // getAddUrl() {
     //     return '/properties/add';
     // };
 
-    PaymentForm.prototype.getUpdateUrl = function() {
+    getUpdateUrl() {
         return '/rents/update';
-    };
+    }
 
-    PaymentForm.prototype.getDefaultData = function() {
+    getDefaultData() {
         return {
             _id: '',
             month: '',
@@ -37,10 +39,10 @@ LOCA.PaymentForm = (function($, moment, i18next) {
             promo: '',
             notepromo: ''
         };
-    };
+    }
 
-    PaymentForm.prototype.beforeSetData = function(args) {
-        var payment = args[0];
+    beforeSetData(args) {
+        const payment = args[0];
         if (!payment.payment) {
             payment.payment= '';
         }
@@ -51,28 +53,26 @@ LOCA.PaymentForm = (function($, moment, i18next) {
         if (payment.paymentDate) {
             payment.paymentDate = moment(payment.paymentDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //db formtat to display one
         }
-    };
+    }
 
-    PaymentForm.prototype.afterSetData = function(args) {
-        var payment = args[0],
-            paymentPeriod;
+    afterSetData(args) {
+        const payment = args[0],
+            paymentPeriod = moment.months()[payment.month-1] + ' ' + payment.year;
 
-        paymentPeriod = moment.months()[payment.month-1] + ' ' + payment.year;
         $(this.getDomSelector() + ' #occupantNameLabel').html(payment.occupant.name);
         $(this.getDomSelector() + ' #paymentPeriod').html(paymentPeriod);
-    };
+    }
 
-    PaymentForm.prototype.onGetData = function(data) {
+    onGetData(data) {
         if (data.paymentDate) {
             data.paymentDate = moment(data.paymentDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
         }
         return data;
-    };
+    }
 
 
-    PaymentForm.prototype.getManifest = function() {
-        var self = this,
-            period = moment.months()[Number(LOCA.currentMonth)-1],
+    getManifest() {
+        const period = moment.months()[Number(LOCA.currentMonth)-1],
             minDate = moment({day:0, month: Number(LOCA.currentMonth)-1, year: Number(LOCA.currentYear)}).startOf('month'),
             maxDate = moment({day:0, month: Number(LOCA.currentMonth)-1, year: Number(LOCA.currentYear)}).endOf('month');
         return {
@@ -82,8 +82,8 @@ LOCA.PaymentForm = (function($, moment, i18next) {
             },
             'paymentDate': {
                 required: {
-                    depends: function(/*element*/) {
-                        var amount = Number($(self.getDomSelector() + ' #payment').val());
+                    depends: (/*element*/) => {
+                        const amount = Number($(this.getDomSelector() + ' #payment').val());
                         return amount>0;
                     }
                 },
@@ -99,16 +99,16 @@ LOCA.PaymentForm = (function($, moment, i18next) {
             },
             'paymentType': {
                 required: {
-                    depends: function(/*element*/) {
-                        var amount = Number($(self.getDomSelector() + ' #payment').val());
+                    depends: (/*element*/) => {
+                        const amount = Number($(this.getDomSelector() + ' #payment').val());
                         return amount>0;
                     }
                 }
             },
             'paymentReference': {
                 required: {
-                    depends: function(/*element*/) {
-                        var ref = $(self.getDomSelector() + ' #paymentType').val();
+                    depends: (/*element*/) => {
+                        const ref = $(this.getDomSelector() + ' #paymentType').val();
                         return (ref && ref!=='cash');
                     }
                 }
@@ -120,14 +120,14 @@ LOCA.PaymentForm = (function($, moment, i18next) {
             'notepromo': {
                 minlength: 2,
                 required: {
-                    depends: function(/*element*/) {
-                        var amount = Number($(self.getDomSelector() + ' #promo').val());
+                    depends: (/*element*/) => {
+                        const amount = Number($(this.getDomSelector() + ' #promo').val());
                         return amount>0;
                     }
                 }
             }
         };
-    };
+    }
+}
 
-    return PaymentForm;
-})(window.$, window.moment, window.i18next);
+export default PaymentForm;

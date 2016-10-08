@@ -1,21 +1,17 @@
-LOCA.signupCtrl = (function() {
-    function SignupCtrl() {}
+import Form from '../common/form';
 
-    // SUBOBJECT OF FORM
-    SignupCtrl.prototype = Object.create(LOCA.Form.prototype);
-    SignupCtrl.prototype.constructor = SignupCtrl;
-
+class SignupForm extends Form {
 
     // METHODS TO OVERRIDE
-    SignupCtrl.prototype.getDomSelector = function() {
+    getDomSelector() {
         return '#signup-form';
-    };
+    }
 
-    SignupCtrl.prototype.getAddUrl = function() {
+    getAddUrl() {
         return '/signup';
-    };
+    }
 
-    SignupCtrl.prototype.getManifest = function() {
+    getManifest() {
         return {
             'firstname': {
                 required: true
@@ -31,7 +27,7 @@ LOCA.signupCtrl = (function() {
                 required: true
             }
         };
-    };
+    }
+}
 
-    return SignupCtrl;
-})();
+export default SignupForm;

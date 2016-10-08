@@ -39,7 +39,7 @@ function PAGES(router) {
         });
     }
 
-    if (config.productive) {
+    if (config.subscription) {
         router.route('/signup').get(rs.mustSessionLessArea, function(req, res) {
             render({
                 view: 'signup',
@@ -68,7 +68,7 @@ function PAGES(router) {
         }
     );
 
-    if (config.productive) {
+    if (config.subscription) {
         router.route('/signedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
             function(req, res) {
                 res.redirect('/login');
@@ -122,6 +122,7 @@ function PAGES(router) {
     // Print
     router.route('/invoice').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/invoice';
             res.render(model.view, model);
         });
@@ -129,6 +130,7 @@ function PAGES(router) {
 
     router.route('/rentcall').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/rentcall';
             res.render(model.view, model);
         });
@@ -136,6 +138,7 @@ function PAGES(router) {
 
     router.route('/recovery1').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/recovery1';
             res.render(model.view, model);
         });
@@ -143,6 +146,7 @@ function PAGES(router) {
 
     router.route('/recovery2').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/recovery2';
             res.render(model.view, model);
         });
@@ -150,6 +154,7 @@ function PAGES(router) {
 
     router.route('/recovery3').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/recovery3';
             res.render(model.view, model);
         });
@@ -157,6 +162,7 @@ function PAGES(router) {
 
     router.route('/paymentorder').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/paymentorder';
             res.render(model.view, model);
         });
@@ -164,6 +170,7 @@ function PAGES(router) {
 
     router.route('/insurance').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/insurance';
             res.render(model.view, model);
         });
@@ -171,6 +178,7 @@ function PAGES(router) {
 
     router.route('/guarantycertificate').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/guarantycertificate';
             res.render(model.view, model);
         });
@@ -178,6 +186,7 @@ function PAGES(router) {
 
     router.route('/guarantypaybackcertificate').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/guarantypaybackcertificate';
             res.render(model.view, model);
         });
@@ -185,6 +194,7 @@ function PAGES(router) {
 
     router.route('/guarantyrequest').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/guarantyrequest';
             res.render(model.view, model);
         });
@@ -192,6 +202,7 @@ function PAGES(router) {
 
     router.route('/contract').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/contract';
             res.render(model.view, model);
         });
@@ -199,6 +210,7 @@ function PAGES(router) {
 
     router.route('/customcontract').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/customcontract';
             res.render(model.view, model);
         });
@@ -206,6 +218,7 @@ function PAGES(router) {
 
     router.route('/domcontract').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/domcontract';
             res.render(model.view, model);
         });
@@ -213,6 +226,7 @@ function PAGES(router) {
 
     router.route('/checklist').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
         printManager.renderModel(req, res, function(errors, model) {
+            model.config = config;
             model.view = 'printable/checklist';
             res.render(model.view, model);
         });

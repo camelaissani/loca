@@ -1,29 +1,34 @@
-// Application
-LOCA.application = (function($, History, bootbox, i18next) {
-    var self;
-    var waitCounter = 0;
+import $ from 'jquery';
+import i18next from 'i18next';
+import bootbox from 'bootbox';
+import History from 'historyjs';
+import Sugar from 'sugar';
+import requester from '../common/requester';
+import {LOCA} from '../application/main';
 
-    function Loca() {
-        self = this;
+class Application {
+
+    constructor() {
+        this.waitCounter = 0;
         // History management only on html 5 browser
         if (History.enabled) {
-            History.Adapter.bind(window, 'statechange', function() {
-                var state = History.getState();
-                _getViewAndUpdateData(state.data, false);
+            History.Adapter.bind(window, 'statechange', () => {
+                const state = History.getState();
+                this._getViewAndUpdateData(state.data, false);
             });
         }
 
         // Wait / error dialog management
-        LOCA.requester.beforeListener(function() {
-            self.showWaitMessage();
+        requester.beforeListener(() => {
+            this.showWaitMessage();
             bootbox.hideAll();
         });
 
-        LOCA.requester.afterListener(function() {
-            self.hideWaitMessage();
+        requester.afterListener(() => {
+            this.hideWaitMessage();
         });
 
-        LOCA.requester.responseFailListener(function(errors) {
+        requester.responseFailListener((errors) => {
             if (!errors) {
                 bootbox.alert({title: i18next.t('Uh-oh!'), message: i18next.t('Server access problem. Check your network connection')});
             }
@@ -33,17 +38,24 @@ LOCA.application = (function($, History, bootbox, i18next) {
         });
     }
 
-    function _getViewAndUpdateData(data, noGetView, callback) {
-        var oldNavMapItem,
-            oldViewId,
-            navMapItem = LOCA.routes[data.viewId],
+    getViewFromQueryString(location) {
+        const queryString = Sugar.Object.fromQueryString(location),
+            view = (queryString && queryString.view) ? queryString.view : '',
+            hashIndex = view.indexOf('#'),
+            viewId = hashIndex >= 0 ? view.substr(0, hashIndex) : view;
+
+        return viewId;
+    }
+
+    _getViewAndUpdateData(data, noGetView, callback) {
+        const navMapItem = LOCA.routes[data.viewId],
             ajaxUrl = navMapItem.url(),
             $oldHeaderMenuItem = $('.nav li.active'),
             $newHeaderMenuItem = $('.nav li .nav-action[data-id="' + data.menuId + '"]').closest('li'),
             $mainPhoneBar = $('.main-mini-menu-bar'),
             $container = $('.view-container');
 
-        function updateView(contentHtml) {
+        const updateView = (contentHtml) => {
             if (contentHtml) {
                 $container.html(contentHtml);
             }
@@ -55,17 +67,17 @@ LOCA.application = (function($, History, bootbox, i18next) {
             $mainPhoneBar.find('.main-mini-menu-bar-title.active').removeClass('active');
             $mainPhoneBar.find('.main-mini-menu-bar-title[data-id="' + data.menuId + '"]').addClass('active');
 
-            navMapItem.pageInitialized(function() {
+            navMapItem.pageInitialized(() => {
                 if (navMapItem.pageEntered) {
                     navMapItem.pageEntered();
                 }
-                _updateDataInCurrentView(data, callback);
+                this._updateDataInCurrentView(data, callback);
             });
-        }
+        };
 
-        function requestPage() {
-            LOCA.requester.ajax({type: 'GET', url: ajaxUrl}, updateView);
-        }
+        const requestPage = () => {
+            requester.ajax({type: 'GET', url: ajaxUrl}, updateView);
+        };
 
         if (noGetView) {
             $container.css('visibility', 'hidden');
@@ -73,10 +85,10 @@ LOCA.application = (function($, History, bootbox, i18next) {
             updateView();
         } else {
             if ($oldHeaderMenuItem) {
-                oldViewId = $oldHeaderMenuItem.find('.nav-action').data('id');
-                oldNavMapItem = LOCA.routes[oldViewId];
+                const oldViewId = $oldHeaderMenuItem.find('.nav-action').data('id');
+                const oldNavMapItem = LOCA.routes[oldViewId];
                 if (oldNavMapItem.pageExited) {
-                    oldNavMapItem.pageExited(function () {
+                    oldNavMapItem.pageExited(() => {
                         $container.css('visibility', 'hidden');
                         $container.css('opacity', 0);
                         requestPage();
@@ -94,15 +106,15 @@ LOCA.application = (function($, History, bootbox, i18next) {
         }
     }
 
-    function _updateDataInCurrentView(data, callback) {
-        var navMapItem = LOCA.routes[data.viewId],
+    _updateDataInCurrentView(data, callback) {
+        const navMapItem = LOCA.routes[data.viewId],
             $container = $('.view-container');
 
         $container.css('visibility', 'hidden');
         $container.css('opacity', 0);
 
         if (navMapItem.dataChanged) {
-            navMapItem.dataChanged(function() {
+            navMapItem.dataChanged(() => {
                 $container.css('visibility', 'visible');
                 $container.css('opacity', 1);
                 if (callback) {
@@ -112,41 +124,39 @@ LOCA.application = (function($, History, bootbox, i18next) {
         }
     }
 
-    Loca.prototype.openPrintPreview = function(url) {
+    openPrintPreview(url) {
         window.open(url, '_blank', 'location=no,menubar=yes,status=no,titlebar=yes,toolbar=yes,scrollbars=yes,resizable=yes,width=1000,height=700');
-    };
+    }
 
-    Loca.prototype.updateData = function(viewId, callback) {
-        var navMapItem = LOCA.routes[viewId],
-            navData,
-            $container;
+    updateData(viewId, callback) {
+        const navMapItem = LOCA.routes[viewId];
 
         if (navMapItem) {
+            const navData = {
+                menuId: navMapItem.menuId?navMapItem.menuId:viewId,
+                viewId: viewId
+            };
+            this._getViewAndUpdateData(navData, true, callback);
+        } else {
+            this.hideWaitMessage();
+            const $container = $('.view-container');
+            $container.css('visibility', 'visible');
+            $container.css('opacity', 1);
+        }
+    }
+
+    updateView(viewId, qs, addToHistory) {
+        const navMapItem = LOCA.routes[viewId],
             navData = {
                 menuId: navMapItem.menuId?navMapItem.menuId:viewId,
                 viewId: viewId
             };
-            _getViewAndUpdateData(navData, true, callback);
-        } else {
-            this.hideWaitMessage();
-            $container = $('.view-container');
-            $container.css('visibility', 'visible');
-            $container.css('opacity', 1);
-        }
-    };
 
-    Loca.prototype.updateView = function(viewId, qs, addToHistory) {
-        var navMapItem = LOCA.routes[viewId],
-            navData = {
-                menuId: navMapItem.menuId?navMapItem.menuId:viewId,
-                viewId: viewId
-            },
-            url = navMapItem.url(),
-            facingUrl = '/index?view='+viewId,
-            qsAsString;
+        let facingUrl = '/index?view='+viewId;
 
         if (qs) {
-            qsAsString = Object.toQueryString(qs);
+            let url = navMapItem.url();
+            const qsAsString = Sugar.Object.toQueryString(qs);
 
             if (url.indexOf('?')!==-1) {
                 url += '?';
@@ -163,22 +173,22 @@ LOCA.application = (function($, History, bootbox, i18next) {
         if (addToHistory && History.enabled) {
             History.pushState(navData, navMapItem.title, facingUrl);
         } else {
-            _getViewAndUpdateData(navData, false);
+            this._getViewAndUpdateData(navData, false);
         }
-    };
+    }
 
-    Loca.prototype.showWaitMessage = function() {
-        waitCounter++;
+    showWaitMessage() {
+        this.waitCounter++;
         $('#waitwindow').show();
-    };
+    }
 
-    Loca.prototype.hideWaitMessage = function() {
-        waitCounter--;
-        if (waitCounter <= 0) {
-            waitCounter = 0;
+    hideWaitMessage() {
+        this.waitCounter--;
+        if (this.waitCounter <= 0) {
+            this.waitCounter = 0;
             $('#waitwindow').hide();
         }
-    };
+    }
+}
 
-    return new Loca();
-})(window.$, window.History, window.bootbox, window.i18next);
+export default new Application();

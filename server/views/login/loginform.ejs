@@ -11,7 +11,7 @@
 </form>
 <div class="text-center">
     <button id="login-send" type="button" class="btn btn-primary"><%= t('Sign in') %></button>
-    <%if (config.productive) {%>
+    <%if (config.subscription) {%>
     <p><%= t('No account yet?') %><a href="/signup"><%= t('Free subscription') %></a>
     <%} else {%>
     <p>&nbsp;</p>

@@ -1,23 +1,29 @@
-LOCA.requester = (function($, i18next) {
-    function Requester() {
+import $ from 'jquery';
+import i18next from 'i18next';
+
+let requester;
+
+class Requester {
+
+    constructor() {
         this.responseFailListeners = [];
         this.afterListeners = [];
         this.beforeListeners = [];
     }
 
-    Requester.prototype.responseFailListener = function(listener) {
+    responseFailListener(listener) {
         this.responseFailListeners.push(listener);
-    };
+    }
 
-    Requester.prototype.beforeListener = function(listener) {
+    beforeListener(listener) {
         this.beforeListeners.push(listener);
-    };
+    }
 
-    Requester.prototype.afterListener = function(listener) {
+    afterListener(listener) {
         this.afterListeners.push(listener);
-    };
+    }
 
-    Requester.prototype.callListeners = function(listeners, data) {
+    callListeners(listeners, data) {
         var listener;
         for (var j=0; j<listeners.length; j++) {
             listener = listeners[j];
@@ -25,9 +31,9 @@ LOCA.requester = (function($, i18next) {
                 listener(data);
             }
         }
-    };
+    }
 
-    Requester.prototype.ajax = function(data, doneCallback, failCallback) {
+    ajax(data, doneCallback, failCallback) {
         var that = this;
 
         this.callListeners(this.beforeListeners);
@@ -54,9 +60,9 @@ LOCA.requester = (function($, i18next) {
             that.analyseResponse(result);
             that.callListeners(that.afterListeners);
         });
-    };
+    }
 
-    Requester.prototype.analyseResponse = function(result) {
+    analyseResponse(result) {
         var needAuthentication = false;
         if (result.httpError) {
             result.errors = result.errors?result.errors:[];
@@ -91,7 +97,11 @@ LOCA.requester = (function($, i18next) {
                 window.location.replace(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/login');
             }, 2000);
         }
-    };
+    }
+}
 
-    return new Requester();
-})(window.$, window.i18next);
+if (!requester) {
+    requester = new Requester();
+}
+
+export default requester;

@@ -1,4 +1,6 @@
-LOCA.VatForm = (function(/*$, i18next*/) {
+import Form from '../common/form';
+
+class VatForm extends Form {
     // function VatForm() {
     // }
 
@@ -119,4 +121,6 @@ LOCA.VatForm = (function(/*$, i18next*/) {
 
     //     return this.$form;
     // };
-})(window.$, window.i18next);
+}
+
+export default VatForm;

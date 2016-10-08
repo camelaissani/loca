@@ -1,4 +1,6 @@
-LOCA.RealmForm = (function(/*$*/) {
+import Form from '../common/form';
+
+class RealmForm extends Form {
     // function RealmForm() {
     // }
 
@@ -272,4 +274,6 @@ LOCA.RealmForm = (function(/*$*/) {
 
     //     return this.$form;
     // };
-})(window.$);
+}
+
+export default RealmForm;

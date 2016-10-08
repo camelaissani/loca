@@ -1,8 +1,10 @@
-'use strict';
-var LOCA = {};
-LOCA.routes = {};
+import $ from 'jquery';
+import moment from 'moment';
+import i18next from 'i18next';
+import {LOCA} from '../application/main';
 
-LOCA.updateLanguageScript = function(lang, id, src, callback) {
+
+function updateLanguageScript(lang, id, src, callback) {
     var fileref = document.getElementById(id);
 
     if (fileref) {
@@ -16,7 +18,7 @@ LOCA.updateLanguageScript = function(lang, id, src, callback) {
         fileref.setAttribute('src', src);
         if (callback) {
             fileref.async = true;
-            fileref.onreadystatechange = fileref.onload = function() {
+            fileref.onreadystatechange = fileref.onload = () => {
                 if (!fileref.readyState || /loaded|complete/.test(fileref.readyState)) {
                     callback();
                 }
@@ -27,10 +29,9 @@ LOCA.updateLanguageScript = function(lang, id, src, callback) {
     else if (callback) {
         callback();
     }
-};
+}
 
-(function($, i18next) {
-    
+export default () => {
     $(document).ready(function() {
         // Init locale
         i18next
@@ -68,22 +69,18 @@ LOCA.updateLanguageScript = function(lang, id, src, callback) {
             if (splitedLanguage && splitedLanguage.length >0) {
                 LOCA.countryCode = splitedLanguage[0].toLowerCase();
             }
-            document.dispatchEvent(new CustomEvent('languageChanged', {
-                'bubbles': true,
-                'cancelable': false
-            }));
+
+            updateLanguageScript(LOCA.countryCode, 'moment-language', '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/' + LOCA.countryCode + '.js', function() {
+                updateLanguageScript(LOCA.countryCode, 'jquery-validate-language', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + LOCA.countryCode + '.js', function() {
+                    updateLanguageScript(LOCA.countryCode, 'bootstrap-datepicker-language', '/node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.' + LOCA.countryCode + '.min.js', function() {
+                        moment.locale(LOCA.countryCode);
+                        document.dispatchEvent(new CustomEvent('applicationReady', {
+                            'bubbles': true,
+                            'cancelable': false
+                        }));
+                    });
+                });
+            });
         });
     });
-
-    // Header menu management
-    $(document).on('click', '.nav-action', function() {
-        var viewId = $(this).data('id');
-        LOCA.application.updateView(viewId, null, true);
-    });
-    $(document).on('click', '.navbar-collapse.collapse.in a:not(.dropdown-toggle)', function() {
-        $(this).closest('.navbar-collapse').collapse('hide');
-    });
-    $(document).on('click', '.navbar-collapse.collapse.in button:not(.navbar-toggle)', function() {
-        $(this).closest('.navbar-collapse').collapse('hide');
-    });
-})(window.$, window.i18next);
+};

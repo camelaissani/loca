@@ -1,13 +1,12 @@
-LOCA.accountCtrl = (function() {
+import ViewController from '../application/_viewcontroller';
 
-    // AccountCtrl extends Controller
-    function AccountCtrl() {
-        LOCA.ViewController.call(this, {
+class AccountCtrl extends ViewController {
+
+    constructor() {
+        super({
             domViewId: '#view-account'
         });
     }
-    AccountCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    AccountCtrl.prototype.constructor = AccountCtrl;
+}
 
-    return new AccountCtrl();
-})();
+export default new AccountCtrl();

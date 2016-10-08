@@ -1,20 +1,23 @@
-LOCA.SelectRealmCtrl = (function() {
+import $ from 'jquery';
+import requester from '../common/requester';
+import ViewController from '../application/_viewcontroller';
+import application from '../application/application';
+
+class SelectRealmCtrl extends ViewController {
 
     // SelectRealmCtrl extends Controller
-    function SelectRealmCtrl() {
-        LOCA.ViewController.call(this, {
+    constructor() {
+        super({
             domViewId : '#view-selectrealm'
         });
     }
-    SelectRealmCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    SelectRealmCtrl.prototype.constructor = SelectRealmCtrl;
 
-    SelectRealmCtrl.prototype.onInitListeners = function() {
+    onInitListeners() {
         $(document).on('click', '.realm-action', function() {
             var $action = $(this),
                 realmId = $action.data('id'),
                 viewId;
-            LOCA.requester.ajax({
+            requester.ajax({
                 type: 'POST',
                 url: '/api/selectrealm',
                 dataType: 'json',
@@ -25,14 +28,13 @@ LOCA.SelectRealmCtrl = (function() {
                     if (window.location.pathname ===  '/selectrealm') {
                         window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index';
                     } else {
-                        viewId = LOCA.getViewFromQueryString(window.location);
+                        viewId = application.getViewFromQueryString(window.location);
                         window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index?view='+viewId;
                     }
                 }
             });
         });
-    };
+    }
+}
 
-
-    return new SelectRealmCtrl();
-})();
+export default new SelectRealmCtrl();

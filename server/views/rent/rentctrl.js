@@ -1,10 +1,18 @@
-LOCA.rentCtrl = (function($, Handlebars, moment) {
+import $ from 'jquery';
+import moment from 'moment';
+import Handlebars from 'handlebars';
+import {LOCA} from '../application/main';
+import ViewController from '../application/_viewcontroller';
+import requester from '../common/requester';
+import application from '../application/application';
+import Helper from '../application/helper';
+import PaymentForm from './paymentform';
+
+class RentCtrl extends ViewController {
 
     // RentCtrl extends Controller
-    function RentCtrl() {
-        this.form = new LOCA.PaymentForm();
-        // Call super constructor
-        LOCA.ViewController.call(this, {
+    constructor() {
+        super({
             domViewId: '#view-rent',
             domListId: '#rents',
             defaultMenuId: 'rents-menu',
@@ -15,109 +23,102 @@ LOCA.rentCtrl = (function($, Handlebars, moment) {
                 items: '/api/rents'
             }
         });
+        this.form = new PaymentForm();
     }
-    RentCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    RentCtrl.prototype.constructor = RentCtrl;
 
-    RentCtrl.prototype.loadList = function (callback) {
-        var self = this;
-
-        LOCA.requester.ajax({
+    loadList(callback) {
+        requester.ajax({
             type: 'GET',
             url: '/api/rents/overview?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
         },
-        function(rentsOverview) {
-            var countAll = rentsOverview.countAll;
-            var countPaid = rentsOverview.countPaid;
-            var countPartiallyPaid = rentsOverview.countPartiallyPaid;
-            var countNotPaid = rentsOverview.countNotPaid;
-            var totalToPay = rentsOverview.totalToPay;
-            var totalNotPaid = rentsOverview.totalNotPaid;
-            var totalPaid = rentsOverview.totalPaid;
+        (rentsOverview) => {
+            const countAll = rentsOverview.countAll;
+            const countPaid = rentsOverview.countPaid;
+            const countPartiallyPaid = rentsOverview.countPartiallyPaid;
+            const countNotPaid = rentsOverview.countNotPaid;
+            const totalToPay = rentsOverview.totalToPay;
+            const totalNotPaid = rentsOverview.totalNotPaid;
+            const totalPaid = rentsOverview.totalPaid;
             $('.all-filter-label').html('('+countAll+')');
             $('.paid-filter-label').html('('+(countPaid + countPartiallyPaid)+')');
             $('.not-paid-filter-label').html('('+countNotPaid+')');
             //$('.partially-paid-filter-label').html(countPartiallyPaid);
-            $('.total-topay').html(LOCA.formatMoney(totalToPay));
-            $('.total-notpaid').html(LOCA.formatMoney(totalNotPaid));
-            $('.total-paid').html(LOCA.formatMoney(totalPaid));
+            $('.total-topay').html(Helper.formatMoney(totalToPay));
+            $('.total-notpaid').html(Helper.formatMoney(totalNotPaid));
+            $('.total-paid').html(Helper.formatMoney(totalPaid));
 
             $('#view-rent .filterbar .user-action').removeClass('active');
-            if (self.filterValue) {
-                $('#view-rent .filterbar .user-action[data-value="'+self.filterValue+'"]').addClass('active');
+            if (this.filterValue) {
+                $('#view-rent .filterbar .user-action[data-value="'+this.filterValue+'"]').addClass('active');
             } else {
                 $('#view-rent .filterbar .default-filter.user-action').addClass('active');
             }
 
-            LOCA.requester.ajax({
+            requester.ajax({
                 type: 'GET',
                 url: '/api/rents?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
             },
-            function(jsonRents) {
-                self.list.init({rows: jsonRents});
+            (jsonRents) => {
+                this.list.init({rows: jsonRents});
                 if (callback) {
                     callback();
                 }
             });
         });
-    };
+    }
 
-    RentCtrl.prototype.onInitTemplates = function() {
+    onInitTemplates() {
         // Handlebars templates
-        var $rentsSelected;
-
         Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
         Handlebars.registerPartial('view-rent-payment-badges-template', $('#view-rent-payment-badges-template').html());
 
         this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
 
-        $rentsSelected = $('#view-rent-selected-list-template');
+        const $rentsSelected = $('#view-rent-selected-list-template');
         if ($rentsSelected.length >0) {
             this.templateSelectedRow = Handlebars.compile($rentsSelected.html());
         }
-    };
+    }
 
-    RentCtrl.prototype.onInitListeners = function() {
-        var self = this;
-
-        $(document).on('click', '#view-rent #printinvoices', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/invoice?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+    onInitListeners() {
+        $(document).on('click', '#view-rent #printinvoices', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/invoice?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-rent #rentcall', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/rentcall?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-rent #rentcall', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/rentcall?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-rent #recovery1', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/recovery1?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-rent #recovery1', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/recovery1?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-rent #recovery2', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/recovery2?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-rent #recovery2', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/recovery2?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-rent #recovery3', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/recovery3?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-rent #recovery3', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/recovery3?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-rent #paymentorder', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/paymentorder?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-rent #paymentorder', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/paymentorder?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-rent .rent-period', function() {
-            var $monthButton = $(this),
+            const $monthButton = $(this),
                 $monthPicker = $('#view-rent .month-picker');
             if ($monthPicker.is(':visible')) {
                 $monthPicker.hide();
@@ -129,72 +130,67 @@ LOCA.rentCtrl = (function($, Handlebars, moment) {
             }
             return false;
         });
-    };
+    }
 
-    RentCtrl.prototype.onUserAction = function($action, actionId) {
-        var self = this,
-            selection = [];
-
-        selection = self.list.getSelectedData();
+    onUserAction($action, actionId) {
+        const selection = this.list.getSelectedData();
 
         if (actionId==='list-action-pay-rent') {
-            self.form.bindForm();
-            self.form.setData(selection[0]);
-            self.openForm('pay-rent-form');
+            this.form.bindForm();
+            this.form.setData(selection[0]);
+            this.openForm('pay-rent-form');
         }
         else if (actionId==='list-action-rents-history') {
             $('#history-rents-table').html('');
-            LOCA.requester.ajax({
+            requester.ajax({
                 type: 'GET',
                 url: '/api/rents/occupant?id='+selection[0]._id
             },
-            function(rentsHistory) {
-                $('#history-rents-table').html(self.templateHistoryRents(rentsHistory));
-                self.scrollToVisible('#renttable .active');
+            (rentsHistory) => {
+                $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
+                this.scrollToVisible('#renttable .active');
             });
-            self.openForm('rents-history', true);
+            this.openForm('rents-history', true);
         }
         else if (actionId==='list-action-print') {
-            self.openForm('print-doc-selector');
+            this.openForm('print-doc-selector');
         }
         else if (actionId==='list-action-save-form') {
-            self.form.submit(function(data) {
-                self.closeForm(function() {
-                    LOCA.requester.ajax({
+            this.form.submit((data) => {
+                this.closeForm(() => {
+                    requester.ajax({
                         type: 'GET',
                         url: '/api/rents/overview?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
                     },
-                    function(rentsOverview) {
-                        var countAll = rentsOverview.countAll;
-                        var countPaid = rentsOverview.countPaid;
-                        var countPartiallyPaid = rentsOverview.countPartiallyPaid;
-                        var countNotPaid = rentsOverview.countNotPaid;
-                        var totalToPay = rentsOverview.totalToPay;
-                        var totalNotPaid = rentsOverview.totalNotPaid;
-                        var totalPaid = rentsOverview.totalPaid;
+                    (rentsOverview) => {
+                        const countAll = rentsOverview.countAll;
+                        const countPaid = rentsOverview.countPaid;
+                        const countPartiallyPaid = rentsOverview.countPartiallyPaid;
+                        const countNotPaid = rentsOverview.countNotPaid;
+                        const totalToPay = rentsOverview.totalToPay;
+                        const totalNotPaid = rentsOverview.totalNotPaid;
+                        const totalPaid = rentsOverview.totalPaid;
                         $('.all-filter-label').html('('+countAll+')');
                         $('.paid-filter-label').html('('+(countPaid + countPartiallyPaid)+')');
                         $('.not-paid-filter-label').html('('+countNotPaid+')');
                         //$('.partially-paid-filter-label').html(countPartiallyPaid);
-                        $('.total-topay').html(LOCA.formatMoney(totalToPay));
-                        $('.total-notpaid').html(LOCA.formatMoney(totalNotPaid));
-                        $('.total-paid').html(LOCA.formatMoney(totalPaid));
+                        $('.total-topay').html(Helper.formatMoney(totalToPay));
+                        $('.total-notpaid').html(Helper.formatMoney(totalNotPaid));
+                        $('.total-paid').html(Helper.formatMoney(totalPaid));
 
-                        self.list.update(data);
-                        self.list.showAllRows(function () {
-                            self.scrollToVisible();
+                        this.list.update(data);
+                        this.list.showAllRows(() => {
+                            this.scrollToVisible();
                         });
                     });
                 });
             });
         }
-    };
+    }
 
-    RentCtrl.prototype.onDataChanged = function(callback) {
-        var self = this,
-            $monthPicker;
-
-        $monthPicker = $('#view-rent .month-picker');
+    onDataChanged(callback) {
+        const that = this;
+        const $monthPicker = $('#view-rent .month-picker');
         $monthPicker.datepicker({
             language: LOCA.countryCode,
             autoclose: true,
@@ -204,20 +200,20 @@ LOCA.rentCtrl = (function($, Handlebars, moment) {
         });
 
         $monthPicker.datepicker('setDate', moment('01/'+LOCA.currentMonth+'/'+LOCA.currentYear, 'DD/MM/YYYY').toDate());
-        $('#view-rent .rent-period').html(LOCA.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase());
+        $('#view-rent .rent-period').html(Helper.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase());
         $monthPicker.on('changeDate', function() {
-            var selection = moment($(this).datepicker('getDate'));
+            const selection = moment($(this).datepicker('getDate'));
             LOCA.currentYear = selection.get('year');
             LOCA.currentMonth = selection.get('month')+1;
             $monthPicker.hide();
-            $('#view-rent .rent-period').html(LOCA.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase()).show();
-            self.loadList();
+            $('#view-rent .rent-period').html(Helper.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase()).show();
+            that.loadList();
         });
 
         if (callback) {
             callback();
         }
-    };
+    }
+}
 
-    return new RentCtrl();
-})(window.$, window.Handlebars, window.moment);
+export default new RentCtrl();

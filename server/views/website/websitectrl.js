@@ -1,19 +1,20 @@
-(function($, i18next) {
-    function applicationReady(/*event*/) {
-        var $container,
-            location,
-            loginForm,
-            signupForm;
+import $ from 'jquery';
+import i18next from 'i18next';
 
-        $container = $('.view-container');
-        location = window.location;
+import LoginForm from '../login/loginform';
+import SignupForm from '../signup/signupform';
+
+export default {
+    applicationReady(/*event*/) {
+        const $container = $('.view-container');
+        const location = window.location;
 
         if (location.pathname ===  '/login')  {
-            loginForm = new LOCA.loginCtrl();
+            const loginForm = new LoginForm();
             loginForm.bindForm();
-            $('#login-send').click(function() {
-                loginForm.submit(function(response) {
-                    var message;
+            $('#login-send').click(() => {
+                loginForm.submit((response) => {
+                    let message;
 
                     if (response.status === 'success') {
                         $('#login-form').submit(); // Add this to allow browsers to store username and password. Also I do redirect to home page server side look at /loggedin
@@ -37,11 +38,11 @@
             });
         }
         else if (location.pathname === '/signup') {
-            signupForm = new LOCA.signupCtrl();
+            const signupForm = new SignupForm();
             signupForm.bindForm();
-            $('#signup-send').click(function() {
-                signupForm.submit(function(response) {
-                    var message;
+            $('#signup-send').click(() => {
+                signupForm.submit((response) => {
+                    let message;
 
                     if (response.status === 'success') {
                         $('#signup-form').submit(); // Add this to allow browsers to store username and password. Also I do redirect to home page server side look at /signededin
@@ -64,10 +65,4 @@
         $container.css('visibility','visible');
         $container.css('opacity',1);
     }
-
-    document.addEventListener('languageChanged', function(/*event*/) {
-        LOCA.updateLanguageScript(LOCA.countryCode, 'jquery-validate-language', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + LOCA.countryCode + '.js', function() {
-            applicationReady();
-        });
-    });
-})(window.$, window.i18next);
+};

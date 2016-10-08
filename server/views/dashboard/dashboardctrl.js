@@ -1,38 +1,40 @@
-LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
-    var self;
+import $ from 'jquery';
+import moment from 'moment';
+import Handlebars from 'handlebars';
+import i18next from 'i18next';
+import requester from '../common/requester';
+import Helper from '../application/helper';
+import ViewController from '../application/_viewcontroller';
 
-    // DashboardCtrl extends Controller
-    function DashboardCtrl() {
-        self = this;
-        // Call super constructor
-        LOCA.ViewController.call(this, {
+class DashboardCtrl extends ViewController {
+
+    constructor() {
+        super({
             domViewId: '#view-dashboard'
         });
     }
-    DashboardCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    DashboardCtrl.prototype.constructor = DashboardCtrl;
 
-    DashboardCtrl.prototype.onInitTemplates = function() {
+    onInitTemplates() {
         this.notificationListTemplate = Handlebars.compile($('#notification-list-template').html());
-    };
+    }
 
-    DashboardCtrl.prototype.onPageExited = function() {
+    onPageExited() {
         $('#view-dashboard .carousel').carousel('pause');
-    };
+    }
 
-    DashboardCtrl.prototype.dataChanged = function(callback) {
-        var currentMoment = moment();
+    dataChanged(callback) {
+        const currentMoment = moment();
         $('#view-dashboard #current-day').html(currentMoment.format('Do'));
         $('#view-dashboard .current-month').html(currentMoment.format('MMMM YYYY'));
 
-        loadRentsOverview(function() {
-            loadOccupantsOverview(function() {
-                loadPropertiesOverview(function() {
-                    loadNotifications(function() {
+        this._loadRentsOverview(() => {
+            this._loadOccupantsOverview(() => {
+                this._loadPropertiesOverview(() => {
+                    this._loadNotifications(() => {
                         $('#view-dashboard .carousel').each(function(index) {
-                            var $carousel = $(this);
+                            const $carousel = $(this);
                             if (index % 2) {
-                                setTimeout(function() {
+                                setTimeout(() => {
                                     $carousel.carousel({
                                         interval: 8000
                                     });
@@ -50,17 +52,17 @@ LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
                 });
             });
         });
-    };
+    }
 
-    function loadOccupantsOverview(callback) {
-        LOCA.requester.ajax({
+    _loadOccupantsOverview(callback) {
+        requester.ajax({
             type: 'GET',
             url: '/api/occupants/overview'
         },
-        function(occupantsOverview) {
-            var countAll = occupantsOverview.countAll;
-            var countActive = occupantsOverview.countActive;
-            var countInactive = occupantsOverview.countInactive;
+        (occupantsOverview) => {
+            const countAll = occupantsOverview.countAll;
+            const countActive = occupantsOverview.countActive;
+            const countInactive = occupantsOverview.countInactive;
             $('#view-dashboard #count-all-occupants').html(countAll);
             $('#view-dashboard #count-active-occupants').html(countActive);
             $('#view-dashboard #count-inactive-occupants').html(countInactive);
@@ -73,15 +75,15 @@ LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
         });
     }
 
-    function loadPropertiesOverview(callback) {
-        LOCA.requester.ajax({
+    _loadPropertiesOverview(callback) {
+        requester.ajax({
             type: 'GET',
             url: '/api/properties/overview'
         },
-        function(propertiesOverview) {
-            var countAll = propertiesOverview.countAll;
-            var countFree = propertiesOverview.countFree;
-            var countBusy = propertiesOverview.countBusy;
+        (propertiesOverview) => {
+            const countAll = propertiesOverview.countAll;
+            const countFree = propertiesOverview.countFree;
+            const countBusy = propertiesOverview.countBusy;
             $('#view-dashboard #count-all-properties').html(countAll);
             $('#view-dashboard #count-active-properties').html(countBusy);
             $('#view-dashboard #count-inactive-properties').html(countFree);
@@ -94,55 +96,55 @@ LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
         });
     }
 
-    function loadRentsOverview(callback) {
-        LOCA.requester.ajax({
+    _loadRentsOverview(callback) {
+        requester.ajax({
             type: 'GET',
             url: '/api/rents/overview'
         },
-        function(rentsOverview) {
-            var countAll = rentsOverview.countAll;
-            var countPaid = rentsOverview.countPaid;
-            var countPartiallyPaid = rentsOverview.countPartiallyPaid;
-            var countNotPaid = rentsOverview.countNotPaid;
-            var countPaidAndPartiallyPaid = countPaid + countPartiallyPaid;
-            var totalToPay = rentsOverview.totalToPay;
-            var totalNotPaid = rentsOverview.totalNotPaid;
-            var totalPaid = rentsOverview.totalPaid;
+        (rentsOverview) => {
+            const countAll = rentsOverview.countAll;
+            const countPaid = rentsOverview.countPaid;
+            const countPartiallyPaid = rentsOverview.countPartiallyPaid;
+            const countNotPaid = rentsOverview.countNotPaid;
+            const countPaidAndPartiallyPaid = countPaid + countPartiallyPaid;
+            const totalToPay = rentsOverview.totalToPay;
+            const totalNotPaid = rentsOverview.totalNotPaid;
+            const totalPaid = rentsOverview.totalPaid;
             $('#view-dashboard #count-all-rents').html(countAll);
             $('#view-dashboard #count-all-rents-label').html(i18next.t('Rent', {count: countAll}));
             $('#view-dashboard #count-paid-rents').html(countPaidAndPartiallyPaid + ' ' + i18next.t('Rent', {count: countPaidAndPartiallyPaid}));
             $('#view-dashboard #count-not-paid-rents').html(countNotPaid + ' ' +  i18next.t('Rent', {count: countNotPaid}));
             //$('#view-dashboard #count-partially-paid-rents').html(countPartiallyPaid);
-            $('#view-dashboard #count-total-topay-rents').html(LOCA.formatMoney(totalToPay));
-            $('#view-dashboard #count-total-notpaid-rents').html(LOCA.formatMoney(totalNotPaid * (-1)));
-            $('#view-dashboard #count-total-paid-rents').html(LOCA.formatMoney(totalPaid));
+            $('#view-dashboard #count-total-topay-rents').html(Helper.formatMoney(totalToPay));
+            $('#view-dashboard #count-total-notpaid-rents').html(Helper.formatMoney(totalNotPaid * (-1)));
+            $('#view-dashboard #count-total-paid-rents').html(Helper.formatMoney(totalPaid));
             if (callback) {
                 callback();
             }
         });
     }
 
-    function loadNotifications(callback) {
-        LOCA.requester.ajax({
+    _loadNotifications(callback) {
+        requester.ajax({
             type: 'GET',
             url: '/api/notifications'
         },
-        function(notifications) {
-            var notificationsToDisplay,
-                emptyNotifications = [{
-                    type: 'ok',
-                    description: 'Rien à signaler'
-                }];
+        (notifications) => {
+            let notificationsToDisplay;
+            const emptyNotifications = [{
+                type: 'ok',
+                description: 'Rien à signaler'
+            }];
 
             if (notifications && notifications.length > 0) {
-                notificationsToDisplay = notifications.filter(function(notification) {
+                notificationsToDisplay = notifications.filter((notification) => {
                     return notification.expired;
                 });
             }
             if (!notificationsToDisplay || notificationsToDisplay.length === 0) {
                 notificationsToDisplay = emptyNotifications;
             }
-            $('#view-dashboard #carousel-notifications').html(self.notificationListTemplate({
+            $('#view-dashboard #carousel-notifications').html(this.notificationListTemplate({
                 notifications: notificationsToDisplay
             }));
             if (callback) {
@@ -150,6 +152,6 @@ LOCA.dashboardCtrl = (function($, moment, Handlebars, i18next) {
             }
         });
     }
+}
 
-    return new DashboardCtrl();
-})(window.$, window.moment, window.Handlebars, window.i18next);
+export default new DashboardCtrl();

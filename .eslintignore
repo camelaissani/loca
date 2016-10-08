@@ -1,1 +1,6 @@
-migrate.js
+bkp
+coverage
+public
+node_modules
+test
+gulpfile.js

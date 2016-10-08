@@ -3,7 +3,7 @@
     <% if (config.demomode) { %>
     <a href="/login" class="btn btn-success btn-lg"><%= t('Demonstration') %></a>
     <% } else { %>
-    <a <%if (!config.productive) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
+    <a <%if (!config.subscription) {%>disabled<%} else { %>href="/signup"<%}%> class="btn btn-primary btn-lg"><%= t('Free subscription') %></a>
     <p><%= t('You already have an account?') %> <a href="/login"><%= t('Sign in') %></a></p>
     <% } %>
 </div>

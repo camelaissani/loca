@@ -1,12 +1,15 @@
-LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
-    var self;
+import $ from 'jquery';
+import Handlebars from 'handlebars';
+import bootbox from 'bootbox';
+import i18next from 'i18next';
+import requester from '../common/requester';
+import ViewController from '../application/_viewcontroller';
+import PropertyForm from './propertyform';
 
+class PropertyCtrl extends ViewController {
     // PropertyCtrl extends Controller
-    function PropertyCtrl() {
-        self = this;
-        self.form = new LOCA.PropertyForm();
-        // Call super constructor
-        LOCA.ViewController.call(this, {
+    constructor() {
+        super({
             domViewId: '#view-property',
             domListId: '#properties',
             defaultMenuId: 'properties-menu',
@@ -17,36 +20,35 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
                 items: '/api/properties'
             }
         });
+        this.form = new PropertyForm();
     }
-    PropertyCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    PropertyCtrl.prototype.constructor = PropertyCtrl;
 
-    PropertyCtrl.prototype.onInitTemplates = function() {
+    onInitTemplates() {
         // Handlebars templates
         var $propertiesSelected = $('#view-property-selected-list-template');
         if ($propertiesSelected.length >0) {
-            self.templateSelectedRow = Handlebars.compile($propertiesSelected.html());
+            this.templateSelectedRow = Handlebars.compile($propertiesSelected.html());
         }
-    };
+    }
 
-    PropertyCtrl.prototype.onUserAction = function($action, actionId) {
+    onUserAction($action, actionId) {
         var selection = [];
         var selectionIds;
 
 
-        selection = self.list.getSelectedData();
+        selection = this.list.getSelectedData();
 
         if (actionId==='list-action-edit-property') {
-            self.form.setData(selection[0]);
-            self.openForm('property-form');
+            this.form.setData(selection[0]);
+            this.openForm('property-form');
         }
         else if (actionId==='list-action-add-property') {
-            self.list.unselectAll();
-            self.form.setData(null);
-            self.openForm('property-form');
+            this.list.unselectAll();
+            this.form.setData(null);
+            this.openForm('property-form');
         }
         else if (actionId==='list-action-remove-property') {
-            bootbox.confirm(i18next.t('Are you sure to remove this property'), function(result) {
+            bootbox.confirm(i18next.t('Are you sure to remove this property'), (result) => {
                 if (!result) {
                     return;
                 }
@@ -54,40 +56,41 @@ LOCA.propertyCtrl = (function($, Handlebars, bootbox, i18next){
                 for (var index=0; index < selection.length; ++index) {
                     selectionIds.push(selection[index]._id);
                 }
-                LOCA.requester.ajax({
+                requester.ajax({
                     type: 'POST',
                     url: '/properties/remove',
                     data: {ids: selectionIds},
                     dataType: 'json'
                 },
-                function(response) {
+                (response) => {
                     if (!response.errors || response.errors.length===0) {
-                        self.list.unselectAll();
-                        self.loadList(function() {
-                            self.closeForm();
+                        this.list.unselectAll();
+                        this.loadList(() => {
+                            this.closeForm();
                         });
                     }
                 });
             });
         }
         else if (actionId==='list-action-save-form') {
-            self.form.submit(function(data) {
-                self.closeForm(function() {
-                    self.loadList(function() {
-                        self.list.select($('.list-row#'+data._id), true);
-                        self.scrollToVisible();
+            this.form.submit((data) => {
+                this.closeForm(() => {
+                    this.loadList(() => {
+                        this.list.select($('.list-row#'+data._id), true);
+                        this.scrollToVisible();
                     });
                 });
             });
         }
-    };
+    }
 
-    PropertyCtrl.prototype.onDataChanged = function(callback) {
-        self.form.bindForm();
+    onDataChanged(callback) {
+        this.form.bindForm();
         if (callback) {
             callback();
         }
-    };
+    }
 
-    return new PropertyCtrl();
-})(window.$, window.Handlebars, window.bootbox, window.i18next);
+}
+
+export default new PropertyCtrl();

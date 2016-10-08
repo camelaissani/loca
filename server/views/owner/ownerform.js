@@ -1,30 +1,30 @@
-LOCA.OwnerForm = (function($, i18next) {
+import $ from 'jquery';
+import i18next from 'i18next';
+import Form from '../common/form';
 
-    function OwnerForm() {
-        LOCA.Form.call(this, {
+class OwnerForm extends Form {
+
+    constructor() {
+        super({
             alertOnFieldError: true
         });
     }
 
-    // SUBOBJECT OF FORM
-    OwnerForm.prototype = Object.create(LOCA.Form.prototype);
-    OwnerForm.prototype.constructor = OwnerForm;
-
     // METHODS TO OVERRIDE
-    OwnerForm.prototype.getDomSelector = function() {
+    getDomSelector() {
         return '#owner-form';
-    };
+    }
 
     // Only one owner
-    OwnerForm.prototype.getAddUrl = function() {
+    getAddUrl() {
         return this.getUpdateUrl();
-    };
+    }
 
-    OwnerForm.prototype.getUpdateUrl = function() {
+    getUpdateUrl() {
         return '/owner/update';
-    };
+    }
 
-    OwnerForm.prototype.getDefaultData = function() {
+    getDefaultData() {
         return {
             _id: '',
             isCompany: false,
@@ -45,10 +45,9 @@ LOCA.OwnerForm = (function($, i18next) {
             bank: '',
             rib: ''
         };
-    };
+    }
 
-    OwnerForm.prototype.getManifest = function() {
-        var self = this;
+    getManifest() {
         return {
             'isCompany': {
                 required: true
@@ -60,34 +59,26 @@ LOCA.OwnerForm = (function($, i18next) {
             'company': {
                 minlength: 2,
                 required: {
-                    depends: function(/*element*/) {
-                        return $(self.getDomSelector() + ' #isCompany option:selected').val()==='company';
-                    }
+                    depends: () => $(this.getDomSelector() + ' #isCompany option:selected').val()==='company'
                 }
             },
             'legalForm': {
                 minlength: 2,
                 required: {
-                    depends: function(/*element*/) {
-                        return $(self.getDomSelector() + ' #isCompany option:selected').val()==='company';
-                    }
+                    depends: () => $(this.getDomSelector() + ' #isCompany option:selected').val()==='company'
                 }
             },
             'siret': {
                 minlength: 2,
                 required: {
-                    depends: function(/*element*/) {
-                        return $(self.getDomSelector() + ' #isCompany option:selected').val()==='company';
-                    }
+                    depends: () => $(this.getDomSelector() + ' #isCompany option:selected').val()==='company'
                 }
             },
             'capital': {
                 number: true,
                 min: 0,
                 required: {
-                    depends: function(/*element*/) {
-                        return $(self.getDomSelector() + ' #isCompany option:selected').val()==='company';
-                    }
+                    depends: () => $(this.getDomSelector() + ' #isCompany option:selected').val()==='company'
                 }
             },
             'street1': {
@@ -123,9 +114,9 @@ LOCA.OwnerForm = (function($, i18next) {
                 minlength: 2
             }
         };
-    };
+    }
 
-    OwnerForm.prototype.onGetData = function(data) {
+    onGetData(data) {
         if (!data.isCompany) {
             data.company = null;
             data.legalForm = null;
@@ -135,24 +126,24 @@ LOCA.OwnerForm = (function($, i18next) {
         }
 
         return data;
-    };
+    }
 
-    OwnerForm.prototype.afterSetData = function(/*args*/) {
-        companyChanged(this.getDomSelector(), $(this.getDomSelector() + ' #isCompany'));
-    };
+    afterSetData(/*args*/) {
+        this._companyChanged(this.getDomSelector(), $(this.getDomSelector() + ' #isCompany'));
+    }
 
-    OwnerForm.prototype.onBind = function() {
-        var self = this;
+    onBind() {
+        const that = this;
         $(this.getDomSelector() + ' #isCompany').change(function() {
-            companyChanged(self.getDomSelector(), $(this));
+            that._companyChanged(that.getDomSelector(), $(this));
         });
-    };
+    }
 
     //----------------------------------------
     // Helpers
     //----------------------------------------
-    function companyChanged(domSelector, $select) {
-        var selection = $select.find(':selected').val();
+    _companyChanged(domSelector, $select) {
+        const selection = $select.find(':selected').val();
         if (selection === 'true') {
             $(domSelector + ' .private-fields').hide();
             $(domSelector + ' .company-fields').show();
@@ -164,6 +155,6 @@ LOCA.OwnerForm = (function($, i18next) {
             $(domSelector + ' #manager-label').html(i18next.t('First and last name'));
         }
     }
+}
 
-    return OwnerForm;
-})(window.$, window.i18next);
+export default OwnerForm;

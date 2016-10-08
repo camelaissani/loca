@@ -1,29 +1,30 @@
-LOCA.PropertyForm = (function($, i18next) {
+import $ from 'jquery';
+import i18next from 'i18next';
+import Form from '../common/form';
+import Helper from '../application/helper';
 
-    function PropertyForm() {
-        LOCA.Form.call(this, {
+class PropertyForm extends Form {
+
+    constructor() {
+        super({
             alertOnFieldError: true
         });
     }
 
-    // SUBOBJECT OF FORM
-    PropertyForm.prototype = Object.create(LOCA.Form.prototype);
-    PropertyForm.prototype.constructor = PropertyForm;
-
     // METHODS TO OVERRIDE
-    PropertyForm.prototype.getDomSelector = function() {
+    getDomSelector() {
         return '#property-form';
-    };
+    }
 
-    PropertyForm.prototype.getAddUrl = function() {
+    getAddUrl() {
         return '/properties/add';
-    };
+    }
 
-    PropertyForm.prototype.getUpdateUrl = function() {
+    getUpdateUrl() {
         return '/properties/update';
-    };
+    }
 
-    PropertyForm.prototype.getDefaultData = function() {
+    getDefaultData() {
         return {
             _id: '',
             type: 'office',
@@ -37,10 +38,9 @@ LOCA.PropertyForm = (function($, i18next) {
             price: '',
             expense: ''
         };
-    };
+    }
 
-    PropertyForm.prototype.getManifest = function() {
-        var self = this;
+    getManifest() {
         return {
             'type': {
                 required: true
@@ -63,8 +63,8 @@ LOCA.PropertyForm = (function($, i18next) {
             },
             'expense': {
                 required: {
-                    depends: function() {
-                        var type = $(self.getDomSelector() + ' #type').val();
+                    depends: () => {
+                        const type = $(this.getDomSelector() + ' #type').val();
                         return (type==='office');
                     }
                 },
@@ -72,10 +72,10 @@ LOCA.PropertyForm = (function($, i18next) {
                 min: 0
             }
         };
-    };
+    }
 
-    PropertyForm.prototype.beforeSetData = function(args) {
-        var property = args[0];
+    beforeSetData(args) {
+        const property = args[0];
         if (property) {
             if (!property.phone) {
                 property.phone = '';
@@ -87,10 +87,10 @@ LOCA.PropertyForm = (function($, i18next) {
                 property.expense = '';
             }
         }
-    };
+    }
 
-    PropertyForm.prototype.afterSetData = function(args) {
-        var property = args[0];
+    afterSetData(args) {
+        const property = args[0];
 
         if (property && property._id) {
             $(this.getDomSelector() + ' #propertyNameLabel').html(property.name);
@@ -101,27 +101,27 @@ LOCA.PropertyForm = (function($, i18next) {
             $('.user-action[data-id="list-action-remove-property"]').hide();
         }
 
-        typeChanged($(this.getDomSelector()+ ' #type'));
-        computeRent(this);
-    };
+        this._typeChanged($(this.getDomSelector()+ ' #type'));
+        this._computeRent();
+    }
 
-    PropertyForm.prototype.onBind = function() {
-        var self = this;
+    onBind() {
+        const that = this;
 
         $(this.getDomSelector() + ' #type').change(function() {
-            typeChanged($(this));
+            that._typeChanged($(this));
         });
 
-        $(this.getDomSelector() + ' #price').keyup(function() {
-            computeRent(self);
+        $(this.getDomSelector() + ' #price').keyup(() => {
+            this._computeRent();
         });
-    };
+    }
 
     //----------------------------------------
     // Helpers
     //----------------------------------------
-    function typeChanged($select) {
-        var selection = $select.find(':selected').val();
+    _typeChanged($select) {
+        const selection = $select.find(':selected').val();
         if (selection !== 'office') {
             $('.property-no-expense').hide();
         }
@@ -130,14 +130,15 @@ LOCA.PropertyForm = (function($, i18next) {
         }
     }
 
-    function computeRent(form) {
-        var data = form.getData();
-        var rentWithExpenses = Number(data.price) + Number(data.expense);
+    _computeRent() {
+        const data = this.getData();
+        const rentWithExpenses = Number(data.price) + Number(data.expense);
 
-        $('#property-form-summary-rent').html(LOCA.formatMoney(data.price, false, false));
-        $('#property-form-summary-expense').html(LOCA.formatMoney(data.expense, false, false));
-        $('#property-form-summary-totla-rentwithexpenses').html(LOCA.formatMoney(rentWithExpenses, false, false));
+        $('#property-form-summary-rent').html(Helper.formatMoney(data.price, false, false));
+        $('#property-form-summary-expense').html(Helper.formatMoney(data.expense, false, false));
+        $('#property-form-summary-totla-rentwithexpenses').html(Helper.formatMoney(rentWithExpenses, false, false));
     }
 
-    return PropertyForm;
-})(window.$, window.i18next);
+}
+
+export default PropertyForm;

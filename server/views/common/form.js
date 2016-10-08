@@ -1,86 +1,87 @@
-LOCA.Form = (function($, moment, i18next) {
-    // VALIDATORS
-    $.validator.addMethod('mindate', function(value, element, params) {
-        var minDate,
-            momentMin,
-            momentValue;
+import $ from 'jquery';
+import moment from 'moment';
+import i18next from 'i18next';
+import Sugar from 'sugar';
+import ObjectFilter from './objectfilter';
+import requester from './requester';
 
-        minDate = params[0].domSelector?$(params[0].domSelector).val():params[0].minDate;
-        if (moment.isMoment(minDate)) {
-            momentMin = minDate;
-        } else if (moment.isDate(minDate)) {
-            momentMin = moment(minDate);
-        } else {
-            momentMin = moment(minDate, i18next.t('__fmt_date__'), true);
+// VALIDATORS
+$.validator.addMethod('mindate', function(value, element, params) {
+    var minDate,
+        momentMin,
+        momentValue;
+
+    minDate = params[0].domSelector?$(params[0].domSelector).val():params[0].minDate;
+    if (moment.isMoment(minDate)) {
+        momentMin = minDate;
+    } else if (moment.isDate(minDate)) {
+        momentMin = moment(minDate);
+    } else {
+        momentMin = moment(minDate, i18next.t('__fmt_date__'), true);
+    }
+
+    momentValue = moment(value, i18next.t('__fmt_date__'), true);
+
+    params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date after the', {date: momentMin.format(i18next.t('__fmt_date__'))});
+    return this.optional(element) || (momentValue.isValid() && momentMin.isValid() && (momentValue.isSame(momentMin) || momentValue.isAfter(momentMin)));
+}, '{1}');
+
+$.validator.addMethod('maxdate', function(value, element, params) {
+    var maxDate,
+        momentMax,
+        momentValue;
+
+    maxDate = params[0].domSelector?$(params[0].domSelector).val():params[0].maxDate;
+    if (moment.isMoment(maxDate)) {
+        momentMax = maxDate;
+    } else if (moment.isDate(maxDate)) {
+        momentMax = moment(maxDate);
+    } else {
+        momentMax = moment(maxDate, i18next.t('__fmt_date__'), true);
+    }
+
+    momentValue = moment(value, i18next.t('__fmt_date__'), true);
+
+    params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date before the', {date: momentMax.format(i18next.t('__fmt_date__'))});
+    return this.optional(element) || (momentValue.isValid() && momentMax.isValid() && (momentValue.isSame(momentMax) || momentValue.isBefore(momentMax)));
+}, '{1}');
+
+$.validator.addMethod('maxcontractdate', function(value, element, params) {
+    var contract = $(params[0] + ' #' + params[1]).val();
+    var beginDate = $(params[0] + ' #' + params[2]).val();
+    var endDate;
+    var momentBegin, momentEnd;
+    var contractDuration;
+    var momentValue = moment(value, i18next.t('__fmt_date__'), true);
+
+    momentBegin = moment(beginDate, i18next.t('__fmt_date__'), true);
+    if (momentBegin.isValid()) {
+        if (contract === 'custom') {
+            contractDuration = moment.duration(2, 'years');
+            momentEnd = moment(momentBegin).add(contractDuration).subtract(1, 'days');
+            return momentValue.isValid() && momentValue.isAfter(momentBegin) && (momentValue.isSame(momentEnd) || momentValue.isBefore(momentEnd));
         }
+        contractDuration = moment.duration(9, 'years');
+        momentEnd = moment(momentBegin).add(contractDuration).subtract(1, 'days');
+        endDate = momentEnd.format(i18next.t('__fmt_date__'));
+        return endDate === value;
+    }
+    return this.optional(element);
+}, i18next.t('The end date of contract is not compatible with contract selected'));
 
-        momentValue = moment(value, i18next.t('__fmt_date__'), true);
+$.validator.addMethod('fdate', function(value, element, params) {
+    var pattern = params[0];
+    params[1] = moment(new Date()).format(pattern);
+    return this.optional(element) || moment(value, pattern, true).isValid();
+}, i18next.t('The date is not valid (Sample date:)', {date: '{1}'}));
 
-        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date after the', {date: momentMin.format(i18next.t('__fmt_date__'))});
-        return this.optional(element) || (momentValue.isValid() && momentMin.isValid() && (momentValue.isSame(momentMin) || momentValue.isAfter(momentMin)));
-    },
-    '{1}');
+$.validator.addMethod('phoneFR', function(phone_number, element) {
+    phone_number = phone_number.replace(/\(|\)|\s+|-/g, '');
+    return this.optional(element) || phone_number.length > 9 && phone_number.match(/^(?:(?:(?:00\s?|\+)33\s?)|(?:\(?0))(?:\d{2}\)?\s?\d{4}\s?\d{4}|\d{3}\)?\s?\d{3}\s?\d{3,4}|\d{4}\)?\s?(?:\d{5}|\d{3}\s?\d{3})|\d{5}\)?\s?\d{4,5})$/);
+}, i18next.t('Please enter a valid phone number'));
 
-    $.validator.addMethod('maxdate', function(value, element, params) {
-        var maxDate,
-            momentMax,
-            momentValue;
-
-        maxDate = params[0].domSelector?$(params[0].domSelector).val():params[0].maxDate;
-        if (moment.isMoment(maxDate)) {
-            momentMax = maxDate;
-        } else if (moment.isDate(maxDate)) {
-            momentMax = moment(maxDate);
-        } else {
-            momentMax = moment(maxDate, i18next.t('__fmt_date__'), true);
-        }
-
-        momentValue = moment(value, i18next.t('__fmt_date__'), true);
-
-        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date before the', {date: momentMax.format(i18next.t('__fmt_date__'))});
-        return this.optional(element) || (momentValue.isValid() && momentMax.isValid() && (momentValue.isSame(momentMax) || momentValue.isBefore(momentMax)));
-    },
-    '{1}');
-
-    $.validator.addMethod('maxcontractdate', function(value, element, params) {
-        var contract = $(params[0] + ' #' + params[1]).val();
-        var beginDate = $(params[0] + ' #' + params[2]).val();
-        var endDate;
-        var momentBegin, momentEnd;
-        var contractDuration;
-        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
-
-        momentBegin = moment(beginDate, i18next.t('__fmt_date__'), true);
-        if (momentBegin.isValid()) {
-            if (contract === 'custom') {
-                contractDuration = moment.duration(2, 'years');
-                momentEnd = moment(momentBegin).add(contractDuration).subtract('days', 1);
-                return momentValue.isValid() && momentValue.isAfter(momentBegin) && (momentValue.isSame(momentEnd) || momentValue.isBefore(momentEnd));
-            }
-            contractDuration = moment.duration(9, 'years');
-            momentEnd = moment(momentBegin).add(contractDuration).subtract('days', 1);
-            endDate = momentEnd.format(i18next.t('__fmt_date__'));
-            return endDate === value;
-        }
-        return this.optional(element);
-    },
-    i18next.t('The end date of contract is not compatible with contract selected'));
-
-    $.validator.addMethod('fdate', function(value, element, params) {
-        var pattern = params[0];
-        params[1] = moment(new Date()).format(pattern);
-        return this.optional(element) || moment(value, pattern, true).isValid();
-    },
-    i18next.t('The date is not valid (Sample date:)', {date: '{1}'}));
-
-    $.validator.addMethod('phoneFR', function(phone_number, element) {
-        phone_number = phone_number.replace(/\(|\)|\s+|-/g, '');
-        return this.optional(element) || phone_number.length > 9 && phone_number.match(/^(?:(?:(?:00\s?|\+)33\s?)|(?:\(?0))(?:\d{2}\)?\s?\d{4}\s?\d{4}|\d{3}\)?\s?\d{3}\s?\d{3,4}|\d{4}\)?\s?(?:\d{5}|\d{3}\s?\d{3})|\d{5}\)?\s?\d{4,5})$/);
-    },
-    i18next.t('Please enter a valid phone number'));
-
-
-    function Form(options) {
+class Form {
+    constructor(options) {
         if (!options) {
             this.options = {
                 alertOnFieldError: false
@@ -92,56 +93,56 @@ LOCA.Form = (function($, moment, i18next) {
     }
 
     // METHODS TO OVERRIDE
-    Form.prototype.getDomSelector = function() {
+    getDomSelector() {
         return '';
-    };
+    }
 
-    Form.prototype.getAddUrl = function() {
+    getAddUrl() {
         return '';
-    };
+    }
 
-    Form.prototype.getUpdateUrl = function() {
+    getUpdateUrl() {
         return '';
-    };
+    }
 
-    Form.prototype.getDefaultData = function() {
+    getDefaultData() {
         return {};
-    };
+    }
 
-    Form.prototype.getManifest = function() {
+    getManifest() {
         return {};
-    };
+    }
 
-    Form.prototype.beforeSetData = function() {};
+    beforeSetData() {}
 
-    Form.prototype.afterSetData = function() {};
+    afterSetData() {}
 
-    Form.prototype.onGetData = function(data) {
+    onGetData(data) {
         return data;
-    };
+    }
 
-    Form.prototype.onBind = function() {};
+    onBind() {}
 
-    Form.prototype.onSubmit = function(response, callback) {
+    onSubmit(response, callback) {
         if (callback) {
             callback(response);
         }
-    };
+    }
 
     // METHODS THAT MAKE THE JOB
-    Form.prototype.showErrorMessage = function (message) {
+    showErrorMessage (message) {
         this.$alertMsg.html(message);
         this.$alert.show();
-    };
+    }
 
-    Form.prototype.setData = function(formData) {
+    setData(formData) {
         var self = this;
         var filteredData;
         var updateFormWithData = function (data, keyPostfix) {
             if (!keyPostfix) {
                 keyPostfix = '';
             }
-            Object.keys(data, function(key, value) {
+            Sugar.Object.forEach(data, function(value, key) {
                 // var keyToFilter;
                 //var values;
                 if (!Array.isArray(value)) {
@@ -180,13 +181,13 @@ LOCA.Form = (function($, moment, i18next) {
         if (!formData) {
             formData = self.getDefaultData();
         }
-        filteredData = LOCA.ObjectFilter.filter(this.getDefaultData(), formData);
+        filteredData = ObjectFilter.filter(this.getDefaultData(), formData);
         updateFormWithData(filteredData);
 
         this.afterSetData(arguments);
-    };
+    }
 
-    Form.prototype.getData = function() {
+    getData() {
         var data = {};
         var values;
         var key, value;
@@ -224,15 +225,15 @@ LOCA.Form = (function($, moment, i18next) {
             }
         }
         return this.onGetData(data);
-    };
+    }
 
-    Form.prototype.validate = function() {
+    validate() {
         this.validator.resetForm();
         this.$alert.hide();
         return this.$form.valid();
-    };
+    }
 
-    Form.prototype.submit = function(callback) {
+    submit(callback) {
         var self = this;
         if (self.validate()) {
             var data = self.getData();
@@ -243,7 +244,7 @@ LOCA.Form = (function($, moment, i18next) {
                 url = self.getAddUrl();
             }
 
-            LOCA.requester.ajax({
+            requester.ajax({
                 type: 'POST',
                 url: url,
                 dataType: 'json',
@@ -260,13 +261,13 @@ LOCA.Form = (function($, moment, i18next) {
                 self.showErrorMessage(i18next.t('A technical issue has occured (-_-\')'));
             });
         }
-    };
+    }
 
-    Form.prototype.getPropertyFilters = function() {
-        return Object.keys(this.getDefaultData());
-    };
+    getPropertyFilters() {
+        return Sugar.Object.keys(this.getDefaultData());
+    }
 
-    Form.prototype.bindForm = function() {
+    bindForm() {
         var self = this;
         var $input, id;
 
@@ -282,7 +283,7 @@ LOCA.Form = (function($, moment, i18next) {
 
         $(self.getDomSelector() + ' input, ' + self.getDomSelector() + ' select, ' + self.getDomSelector() + ' textarea').each(function(/*index*/) {
             $input = $(this);
-            id = $(this).attr('id');
+            id = $input.attr('id');
             if (!$input.attr('name')) {
                 $input.attr('name', id);
             }
@@ -325,8 +326,7 @@ LOCA.Form = (function($, moment, i18next) {
             }
         });
         return self.$form;
-    };
+    }
+}
 
-    return Form;
-
-})(window.$, window.moment, window.i18next);
+export default Form;

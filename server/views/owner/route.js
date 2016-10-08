@@ -1,12 +1,18 @@
-LOCA.routes.owner = {
-    url: function () {
-        return '/page/owner';
-    },
-    title: window.i18next.t('Landloard'),
-    pageInitialized: function(callback) {
-        LOCA.ownerCtrl.pageInitialized(callback);
-    },
-    dataChanged: function (callback) {
-        LOCA.ownerCtrl.dataChanged(callback);
-    }
+import i18next from 'i18next';
+import {LOCA} from '../application/main';
+import ownerCtrl from './ownerctrl';
+
+export default () => {
+    LOCA.routes.owner = {
+        url() {
+            return '/page/owner';
+        },
+        title: i18next.t('Landloard'),
+        pageInitialized(callback) {
+            ownerCtrl.pageInitialized(callback);
+        },
+        dataChanged(callback) {
+            ownerCtrl.dataChanged(callback);
+        }
+    };
 };

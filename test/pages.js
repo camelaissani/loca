@@ -6,7 +6,7 @@ var helpers = require('./helpers'),
 var configPackage = {
     relativePath: '../config',
     instance: {
-        productive: true
+        subscription: true
     }
 };
 

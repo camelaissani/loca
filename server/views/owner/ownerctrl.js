@@ -1,80 +1,73 @@
-LOCA.ownerCtrl = (function($) {
-    var self;
+import $ from 'jquery';
+import ViewController from '../application/_viewcontroller';
+import anilayout from '../application/anilayout';
+import requester from '../common/requester';
+import OwnerForm from './ownerform';
 
-    // SelectRealmCtrl extends Controller
-    function OwnerCtrl() {
-        self = this;
-        this.form = new LOCA.OwnerForm();
-        this.edited = false;
-         // Call super constructor
-        LOCA.ViewController.call(this, {
+class OwnerCtrl extends ViewController {
+
+    constructor() {
+        super({
             domViewId: '#view-owner'
         });
+        this.form = new OwnerForm();
+        this.edited = false;
     }
-    OwnerCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    OwnerCtrl.prototype.constructor = OwnerCtrl;
 
-    OwnerCtrl.prototype.dataChanged = function(callback) {
+    dataChanged(callback) {
         var data;
-        self.form.bindForm();
+        this.form.bindForm();
 
-        loadOwner(function() {
-            data = self.form.getData();
-            if (!self.edited) {
-                if (data._id && data._id !== '') {
-                    self.closeForm();
-                }
-                else {
-                    self.openForm();
-                }
-            }
-            else {
-                self.openForm();
-            }
-
-            if (callback) {
-                callback();
-            }
-        });
-    };
-
-    OwnerCtrl.prototype.openForm = function() {
-        self.edited = true;
-        $('#owner-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
-        $('#owner-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
-        LOCA.layoutManager.showMenu('owner-form-menu');
-    };
-
-    OwnerCtrl.prototype.closeForm = function() {
-        self.edited = false;
-        $('#owner-form select').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
-        $('#owner-form input').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
-        LOCA.layoutManager.showMenu('owner-menu');
-    };
-
-    function loadOwner(callback) {
-        LOCA.requester.ajax({
+        requester.ajax({
             type: 'GET',
             url: '/api/owner'
         },
-        function(owner) {
-            self.form.setData(owner);
+        (owner) => {
+            this.form.setData(owner);
+            data = this.form.getData();
+            if (!this.edited) {
+                if (data._id && data._id !== '') {
+                    this.closeForm();
+                }
+                else {
+                    this.openForm();
+                }
+            }
+            else {
+                this.openForm();
+            }
+
             if (callback) {
                 callback();
             }
         });
     }
 
-    OwnerCtrl.prototype.onUserAction = function($action, actionId) {
+    openForm() {
+        this.edited = true;
+        $('#owner-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+        $('#owner-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+        anilayout.showMenu('owner-form-menu');
+    }
+
+    closeForm() {
+        this.edited = false;
+        $('#owner-form select').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+        $('#owner-form input').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+        anilayout.showMenu('owner-menu');
+    }
+
+    onUserAction($action, actionId) {
         if (actionId==='edit-owner') {
-            self.openForm();
+            this.openForm();
         }
         else if (actionId==='save-form') {
-            self.form.submit(function(/*errors*/) {
-                self.closeForm();
+            this.form.submit((/*errors*/) => {
+                this.closeForm();
             });
         }
-    };
+    }
 
-    return new OwnerCtrl();
-})(window.$);
+}
+
+export default new OwnerCtrl();

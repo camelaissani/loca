@@ -26,7 +26,7 @@ var path = require('path'),
     pageRoutes = require('./server/pages');
 
 // Server constants
-var http_port = process.env.SELFHOSTED_NODEJS_PORT || 8081,
+var http_port = process.env.LOCA_NODEJS_PORT || 8081,
     debugMode = process.env.NODE_ENV !== 'production';
 
 // Reconfigure default logger
@@ -80,12 +80,12 @@ app.use(function(req, res, next) {
 app.use(favicon(path.join(__dirname, '/public/images/favicon.png'), {
     maxAge: 2592000000
 }));
-app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
+app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));
 //app.use('/locales', express.static(path.join(__dirname, '/public/locales')));
 app.use('/public', express.static(path.join(__dirname, '/public')));
 app.use('/public/image', express.static(path.join(__dirname, '/public/images')));
 app.use('/public/images', express.static(path.join(__dirname, '/public/images')));
-app.use('/public/fonts', express.static(path.join(__dirname, '/bower_components/bootstrap/fonts')));
+app.use('/public/fonts', express.static(path.join(__dirname, '/node_modules/bootstrap/fonts')));
 app.use('/public/pdf', express.static(path.join(__dirname, '/public/pdf')));
 app.use('/robots.txt', express.static(path.join(__dirname, '/public/robots.txt')));
 app.use('/sitemap.xml', express.static(path.join(__dirname, '/public/sitemap.xml')));

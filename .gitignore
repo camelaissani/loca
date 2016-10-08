@@ -11,7 +11,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-unit-test-coverage
+coverage
 
 # node-waf configuration
 .lock-wscript
@@ -26,5 +26,5 @@ node_modules
 bower_components
 public/css/
 public/images/
-public/js/*.min.js
+public/js/
 bkp

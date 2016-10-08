@@ -1,7 +1,6 @@
-LOCA.ObjectFilter = (function(){
-    function ObjectFilter() {}
+class ObjectFilter {
 
-    ObjectFilter.prototype.filter = function(schema, data) {
+    static filter(schema, data) {
         var self = this;
         var filteredData = {};
         var key;
@@ -26,7 +25,7 @@ LOCA.ObjectFilter = (function(){
             }
         }
         return filteredData;
-    };
+    }
 
-    return new ObjectFilter();
-})();
+}
+export default ObjectFilter;

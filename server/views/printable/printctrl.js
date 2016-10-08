@@ -1,5 +1,8 @@
-(function($, i18next) {
-    function applicationReady(/*event*/) {
+import $ from 'jquery';
+import i18next from 'i18next';
+
+export default {
+    applicationReady(/*event*/) {
         $('#printbutton').click(function() {
             var error = false;
             $('[contenteditable]').each(function() {
@@ -19,12 +22,5 @@
             }
         });
     }
-
-    document.addEventListener('languageChanged', function(/*event*/) {
-        LOCA.updateLanguageScript(LOCA.countryCode, 'jquery-validate-language', '//ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/localization/messages_' + LOCA.countryCode + '.js', function() {
-            applicationReady();
-        });
-    });
-
-})(window.$, window.i18next);
+};
 

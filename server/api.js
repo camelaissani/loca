@@ -13,7 +13,7 @@ var config = require('../config'),
     notificationManager = require('./managers/notificationmanager');
 
 function API(router) {
-    if (config.productive) {
+    if (config.subscription) {
         router.route('/signup').post(loginManager.signup);
     }
     if (!config.demomode) {

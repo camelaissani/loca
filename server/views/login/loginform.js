@@ -1,22 +1,16 @@
-LOCA.loginCtrl = (function() {
-    function LoginCtrl() {
-        LOCA.Form.call(this);
+import Form from '../common/form';
+
+class LoginForm extends Form {
+    // METHODS TO OVERRIDE
+    getDomSelector() {
+        return '#login-form';
     }
 
-    // SUBOBJECT OF FORM
-    LoginCtrl.prototype = Object.create(LOCA.Form.prototype);
-    LoginCtrl.prototype.constructor = LoginCtrl;
-
-    // METHODS TO OVERRIDE
-    LoginCtrl.prototype.getDomSelector = function() {
-        return '#login-form';
-    };
-
-    LoginCtrl.prototype.getAddUrl = function() {
+    getAddUrl() {
         return '/login';
-    };
+    }
 
-    LoginCtrl.prototype.getManifest = function() {
+    getManifest() {
         return {
             'username': {
                 required: true,
@@ -26,9 +20,9 @@ LOCA.loginCtrl = (function() {
                 required: true
             }
         };
-    };
+    }
 
-    LoginCtrl.prototype.onGetData = function(data) {
+    onGetData(data) {
         if (data.username) {
             data.email = data.username;
             delete data.username;
@@ -38,7 +32,7 @@ LOCA.loginCtrl = (function() {
             delete data.password;
         }
         return data;
-    };
+    }
+}
 
-    return LoginCtrl;
-})();
+export default LoginForm;

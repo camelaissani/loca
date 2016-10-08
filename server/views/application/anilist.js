@@ -1,8 +1,14 @@
-LOCA.List = (function($, Handlebars, Events){
+import $ from 'jquery';
+import Handlebars from 'handlebars';
+import Events from 'minivents';
+import Helper from './helper';
+
+const EVENT_TYPE_SELECTION_CHANGED = 'list.selection.changed';
+
+class Anilist{
     // -----------------------------------------------------------------------
     // PRIVATE ATTRIBUTES
     // -----------------------------------------------------------------------
-    var EVENT_TYPE_SELECTION_CHANGED = 'list.selection.changed';
     // var TRANSITION_ROW_DURATION = 100;
     // var TRANSITION_ROW_STAGGER_DURATION = 50;
     // var TRANSITION_MAXROW = 10;
@@ -10,7 +16,7 @@ LOCA.List = (function($, Handlebars, Events){
     // -----------------------------------------------------------------------
     // CONSTRUCTOR
     // -----------------------------------------------------------------------
-    function List(listId, rowTemplateId, contentTemplateId) {
+    constructor(listId, rowTemplateId, contentTemplateId) {
         var self = this;
 
         // Use minivents
@@ -32,7 +38,7 @@ LOCA.List = (function($, Handlebars, Events){
     // -----------------------------------------------------------------------
     // PRIVATE METHODS
     // -----------------------------------------------------------------------
-    function _cloneObject(obj) {
+    _cloneObject(obj) {
         var copy;
 
         // Handle the 3 simple types, and null or undefined
@@ -51,7 +57,7 @@ LOCA.List = (function($, Handlebars, Events){
         if (obj instanceof Array) {
             copy = [];
             for (var i = 0, len = obj.length; i < len; i++) {
-                copy[i] = _cloneObject(obj[i]);
+                copy[i] = this._cloneObject(obj[i]);
             }
             return copy;
         }
@@ -60,7 +66,7 @@ LOCA.List = (function($, Handlebars, Events){
         if (obj instanceof Object) {
             copy = {};
             for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = _cloneObject(obj[attr]);
+                if (obj.hasOwnProperty(attr)) copy[attr] = this._cloneObject(obj[attr]);
             }
             return copy;
         }
@@ -68,7 +74,7 @@ LOCA.List = (function($, Handlebars, Events){
         throw new Error('Unable to copy obj! Its type isn\'t supported.');
     }
 
-    function _ref(obj, str) {
+    _ref(obj, str) {
         str = str.split('.');
         for (var i = 0; i < str.length; i++) {
             obj = obj[str[i]];
@@ -76,7 +82,7 @@ LOCA.List = (function($, Handlebars, Events){
         return obj;
     }
 
-    function _set(obj, str, val) {
+    _set(obj, str, val) {
         str = str.split('.');
         while (str.length > 1) {
             obj = obj[str.shift()];
@@ -84,7 +90,7 @@ LOCA.List = (function($, Handlebars, Events){
         obj[str.shift()] = val;
     }
 
-    function _animateValue($element, start, end, duration) {
+    _animateValue($element, start, end, duration) {
         var nbLoop = 20;
         var range = end - start;
         var current = start;
@@ -100,12 +106,12 @@ LOCA.List = (function($, Handlebars, Events){
             if ((range>0 && current >= end) ||
                 (range<0 && current <= end)) {
                 // TODO: manage number format
-                $element.html(LOCA.formatMoney(end, true));
+                $element.html(Helper.formatMoney(end, true));
                 clearInterval(timer);
             }
             else {
                 // TODO: manage number format
-                $element.html(LOCA.formatMoney(current, true));
+                $element.html(Helper.formatMoney(current, true));
             }
         }, stepTime);
     }
@@ -113,7 +119,7 @@ LOCA.List = (function($, Handlebars, Events){
     // -----------------------------------------------------------------------
     // PUBLIC METHODS
     // -----------------------------------------------------------------------
-    List.prototype.bindDom = function() {
+    bindDom() {
         this.$list = $('#'+this.listId);
         this.$rowsContainer = this.$list.find('.list-content');
 
@@ -124,24 +130,24 @@ LOCA.List = (function($, Handlebars, Events){
             Handlebars.registerPartial(this.rowTemplateId, this.sourceTemplateRow);
             this.templateRowsContainer = Handlebars.compile($('#' + this.contentTemplateId).html());
         }
-    };
+    }
 
     // -----------------------------------------------------------------------
     // ROW MANAGEMENT
     // -----------------------------------------------------------------------
-    List.prototype.unselectAll = function() {
+    unselectAll() {
         this.$list.find('.list-row').removeClass('active');
         this.emit(EVENT_TYPE_SELECTION_CHANGED);
-    };
+    }
 
-    List.prototype.unselect = function(id) {
+    unselect(id) {
         var selection;
         $('#'+id).removeClass('active');
         selection = this.getSelectedData();
         this.emit(EVENT_TYPE_SELECTION_CHANGED, selection.length>0?selection:null);
-    };
+    }
 
-    List.prototype.select = function($selectedRow, dontUnselectIfSelected) {
+    select($selectedRow, dontUnselectIfSelected) {
         var $entireSelectedRows;
         if ($selectedRow.hasClass('fixed')) {
             return;
@@ -160,16 +166,17 @@ LOCA.List = (function($, Handlebars, Events){
         else {
             this.emit(EVENT_TYPE_SELECTION_CHANGED);
         }
-    };
+    }
 
-    List.prototype.getSelection = function() {
+    getSelection() {
         return this.$list.find('.list-row.active');
-    };
+    }
 
-    List.prototype.update = function(newDataRow) {
-        var templateRow,
+    update(newDataRow) {
+        var self = this,
+            templateRow,
             $htmlRow,
-            newDataRowWithoutOdometerValues = _cloneObject(newDataRow),
+            newDataRowWithoutOdometerValues = this._cloneObject(newDataRow),
             oldDataRow,
             $oldRow,
             $newRow,
@@ -189,7 +196,7 @@ LOCA.List = (function($, Handlebars, Events){
         $oldRow= this.$list.find('#'+newDataRow._id+'.list-row');
         $oldRow.find('.odometer').each(function() {
             var key = $(this).data('key');
-            _set(newDataRowWithoutOdometerValues, key, _ref(oldDataRow, key));
+            self._set(newDataRowWithoutOdometerValues, key, self._ref(oldDataRow, key));
         });
 
         templateRow = Handlebars.compile(this.sourceTemplateRow);
@@ -214,14 +221,14 @@ LOCA.List = (function($, Handlebars, Events){
         $newRow.find('.odometer').each(function() {
             var $odometer = $(this);
             var key = $odometer.data('key');
-            _animateValue($odometer, _ref(oldDataRow, key), _ref(newDataRow, key), 1000);
+            self._animateValue($odometer, self._ref(oldDataRow, key), self._ref(newDataRow, key), 1000);
         });
 
         // update data
         this.dataRows.rows[dataRowIndex] = newDataRow;
-    };
+    }
 
-    List.prototype.remove = function(dataRow/*, noAnimation*/) {
+    remove(dataRow/*, noAnimation*/) {
         var $rowToRemove = this.$list.find('#'+dataRow._id+'.list-row');
 
         // Find data in array and remove it
@@ -242,9 +249,9 @@ LOCA.List = (function($, Handlebars, Events){
         // else {
         $rowToRemove.remove();
         // }
-    };
+    }
 
-    List.prototype.add = function(dataRow/*, noAnimation*/) {
+    add(dataRow/*, noAnimation*/) {
         var templateRow = Handlebars.compile(this.sourceTemplateRow);
         var htmlRow = templateRow(dataRow);
         var $newRow;
@@ -264,9 +271,9 @@ LOCA.List = (function($, Handlebars, Events){
         // else {
         this.show($newRow);
         // }
-    };
+    }
 
-    List.prototype.init = function(dataRows, noAnimation, callback) {
+    init(dataRows, noAnimation, callback) {
         var htmlRows, $htmlRows;
 
          // Add initial rows
@@ -289,13 +296,13 @@ LOCA.List = (function($, Handlebars, Events){
         else if (callback) {
             callback();
         }
-    };
+    }
 
-    List.prototype.setFilterText = function(text) {
+    setFilterText(text) {
         this.filterText = text;
-    };
+    }
 
-    List.prototype.filter = function(text, noAnimation, callback) {
+    filter(text, noAnimation, callback) {
         // var that = this;
         var $allRows;
         var $rowsToFilter;
@@ -346,21 +353,21 @@ LOCA.List = (function($, Handlebars, Events){
             }
             // }
         }
-    };
+    }
 
-    List.prototype.hide = function($rows) {
+    hide($rows) {
         $rows.hide();
-    };
+    }
 
-    List.prototype.show = function($rows) {
+    show($rows) {
         var $rowsToShow = $rows;
         if (this.filterText) {
             $rowsToShow = $rows.find('.list-value').filter(':contains("'+this.filterText+'")').closest('.list-row:hidden');
         }
         $rowsToShow.show();
-    };
+    }
 
-    List.prototype.hideRows = function($rows, callback) {
+    hideRows($rows, callback) {
         // var $rowsWithTransition, $rowsWithoutTransition;
 
         if ($rows.length === 0) {
@@ -392,9 +399,9 @@ LOCA.List = (function($, Handlebars, Events){
         if (callback) {
             callback();
         }
-    };
+    }
 
-    List.prototype.showRows = function($rows, callback) {
+    showRows($rows, callback) {
         // var $rowsWithTransition, $rowsWithoutTransition,
         //     self = this;
 
@@ -434,20 +441,20 @@ LOCA.List = (function($, Handlebars, Events){
         if (callback) {
             callback();
         }
-    };
+    }
 
-    List.prototype.showAllRows = function(callback) {
+    showAllRows(callback) {
         this.filter(this.filterText, false, callback);
-    };
+    }
 
-    List.prototype.hideAllRows = function(callback) {
+    hideAllRows(callback) {
         this.hideRows(this.$list.find('.list-row').not(':hidden'), callback);
-    };
+    }
 
     // -----------------------------------------------------------------------
     // DATA ACCESS
     // -----------------------------------------------------------------------
-    List.prototype.getSelectedData = function() {
+    getSelectedData() {
         var self = this;
         var data = [];
 
@@ -456,13 +463,13 @@ LOCA.List = (function($, Handlebars, Events){
             var id = $(this).attr('id');
             for (var i = 0; i < self.dataRows.rows.length; i++) {
                 if (self.dataRows.rows[i]._id === id) {
-                    data.push(_cloneObject(self.dataRows.rows[i]));
+                    data.push(self._cloneObject(self.dataRows.rows[i]));
                     break;
                 }
             }
         });
         return data;
-    };
+    }
+}
 
-    return List;
-})(window.jQuery, window.Handlebars, window.Events);
+export default Anilist;

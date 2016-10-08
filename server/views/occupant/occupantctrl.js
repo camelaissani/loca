@@ -1,14 +1,18 @@
-LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
+import $ from 'jquery';
+import Handlebars from 'handlebars';
+import bootbox from 'bootbox';
+import i18next from 'i18next';
+import ViewController from '../application/_viewcontroller';
+import requester from '../common/requester';
+import {LOCA} from '../application/main';
+import application from '../application/application';
+import OccupantForm from './occupantform';
+import ContractDocumentsForm from './contractdocumentsform';
 
-    var self;
+class OccupantCtrl extends ViewController {
 
-    // OccupantCtrl extends Controller
-    function OccupantCtrl() {
-        self = this;
-        self.form = new LOCA.OccupantForm();
-        self.documentsForm = new LOCA.ContractDocumentsForm();
-        // Call super constructor
-        LOCA.ViewController.call(this, {
+    constructor() {
+        super({
             domViewId: '#view-occupant',
             domListId: '#occupants',
             defaultMenuId: 'occupants-menu',
@@ -19,111 +23,107 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
                 items: '/api/occupants'
             }
         });
+        this.form = new OccupantForm();
+        this.documentsForm = new ContractDocumentsForm();
     }
-    // Inheritance stuff
-    OccupantCtrl.prototype = Object.create(LOCA.ViewController.prototype);
-    OccupantCtrl.prototype.constructor = OccupantCtrl;
 
-    OccupantCtrl.prototype.onInitTemplates = function() {
+    onInitTemplates() {
         // Handlebars templates
         Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
         this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
 
-        var $occupantsSelected = $('#view-occupant-selected-list-template');
+        const $occupantsSelected = $('#view-occupant-selected-list-template');
         if ($occupantsSelected.length >0) {
-            self.templateSelectedRow = Handlebars.compile($occupantsSelected.html());
+            this.templateSelectedRow = Handlebars.compile($occupantsSelected.html());
         }
-    };
+    }
 
-    function loadPropertyList(callback) {
-        LOCA.requester.ajax({
+    _loadPropertyList(callback) {
+        requester.ajax({
             type: 'GET',
             url: '/api/properties?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
         },
-        function(properties) {
+        (properties) => {
             if (callback) {
                 callback(properties);
             }
         });
     }
 
-    OccupantCtrl.prototype.onUserAction = function($action, actionId) {
-        var selection = [];
-        var selectionIds;
-
-        selection = self.list.getSelectedData();
+    onUserAction($action, actionId) {
+        const selection = this.list.getSelectedData();
 
         if (actionId==='list-action-edit-occupant') {
-            loadPropertyList(function(properties) {
-                self.form.setData(selection[0], properties);
-                self.openForm('occupant-form');
+            this._loadPropertyList((properties) => {
+                this.form.setData(selection[0], properties);
+                this.openForm('occupant-form');
             });
         }
         else if (actionId==='list-action-add-occupant') {
-            self.list.unselectAll();
-            loadPropertyList(function(properties) {
-                self.form.setData(null, properties);
-                self.openForm('occupant-form');
+            this.list.unselectAll();
+            this._loadPropertyList((properties) => {
+                this.form.setData(null, properties);
+                this.openForm('occupant-form');
             });
         }
         else if (actionId==='list-action-remove-occupant') {
-            bootbox.confirm(i18next.t('Are you sure to remove this tenant?'), function(result) {
+            bootbox.confirm(i18next.t('Are you sure to remove this tenant?'), (result) => {
                 if (!result) {
                     return;
                 }
-                selectionIds = [];
-                for (var index=0; index < selection.length; ++index) {
+                const selectionIds = [];
+                for (let index=0; index < selection.length; ++index) {
                     selectionIds.push(selection[index]._id);
                 }
-                LOCA.requester.ajax({
+                requester.ajax({
                     type: 'POST',
                     url: '/occupants/remove',
                     data: {ids: selectionIds},
                     dataType: 'json'
                 },
-                function(response) {
+                (response) => {
                     if (!response.errors || response.errors.length===0) {
-                        self.list.unselectAll();
-                        self.loadList(function() {
-                            self.closeForm();
+                        this.list.unselectAll();
+                        this.loadList(() => {
+                            this.closeForm();
                         });
                     }
                 });
             });
         }
         else if (actionId==='list-action-save-form') {
-            self.form.submit(function(data) {
-                self.closeForm(function() {
-                    self.loadList(function() {
-                        self.list.select($('.list-row#'+data._id), true);
-                        self.scrollToVisible();
+            this.form.submit((data) => {
+                this.closeForm(() => {
+                    this.loadList(() => {
+                        this.list.select($('.list-row#'+data._id), true);
+                        this.scrollToVisible();
                     });
                 });
             });
         }
         else if (actionId==='list-action-manage-documents') {
-            self.documentsForm.setData(selection[0]);
-            self.openForm('contract-documents-form');
+            this.documentsForm.setData(selection[0]);
+            this.openForm('contract-documents-form');
         }
         else if (actionId==='list-action-save-contract-documents') {
-            self.documentsForm.submit(function(data) {
-                self.closeForm(function() {
+            this.documentsForm.submit((data) => {
+                this.closeForm(() => {
                     if (data._id) {
-                        LOCA.requester.ajax({
+                        requester.ajax({
                             type: 'GET',
                             url: '/api/occupants/overview?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
                         },
-                        function(occupantsOverview) {
-                            var countAll = occupantsOverview.countAll;
-                            var countActive = occupantsOverview.countActive;
-                            var countInactive = occupantsOverview.countInactive;
+                        (occupantsOverview) => {
+                            const countAll = occupantsOverview.countAll;
+                            const countActive = occupantsOverview.countActive;
+                            const countInactive = occupantsOverview.countInactive;
                             $('#view-occupant .all-filter-label').html('('+countAll+')');
                             $('#view-occupant .all-active-filter-label').html('('+countActive+')');
                             $('#view-occupant .all-inactive-filter-label').html('('+countInactive+')');
 
-                            self.list.update(data);
-                            self.list.showAllRows(function () {
-                                self.scrollToVisible();
+                            this.list.update(data);
+                            this.list.showAllRows(() => {
+                                this.scrollToVisible();
                             });
                         });
                     }
@@ -132,79 +132,79 @@ LOCA.occupantCtrl = (function($, Handlebars, bootbox, i18next) {
         }
         else if (actionId==='list-action-rents-history') {
             $('#history-rents-table').html('');
-            LOCA.requester.ajax({
+            requester.ajax({
                 type: 'GET',
                 url: '/api/rents/occupant?id='+selection[0]._id
             },
-            function(rentsHistory) {
-                $('#history-rents-table').html(self.templateHistoryRents(rentsHistory));
+            (rentsHistory) => {
+                $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
             });
-            self.openForm('rents-history', true);
+            this.openForm('rents-history', true);
         }
         else if (actionId==='list-action-print') {
-            self.openForm('print-doc-selector');
+            this.openForm('print-doc-selector');
         }
-    };
+    }
 
-    OccupantCtrl.prototype.onInitListeners = function() {
-        $(document).on('click', '#view-occupant #printofficechecklist', function() {
-            //LOCA.application.openPrintPreview('/public/pdf/checklist.pdf');
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/checklist?occupants=' + selection);
+    onInitListeners() {
+        $(document).on('click', '#view-occupant #printofficechecklist', () => {
+            //application.openPrintPreview('/public/pdf/checklist.pdf');
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/checklist?occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printcontract', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/contract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printcontract', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/contract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printcustomcontract', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/customcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printcustomcontract', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/customcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printdomcontract', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/domcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printdomcontract', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/domcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printguarantycertificate', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/guarantycertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printguarantycertificate', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/guarantycertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printguarantypayback', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/guarantypaybackcertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printguarantypayback', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/guarantypaybackcertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printguarantyrequest', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/guarantyrequest?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printguarantyrequest', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/guarantyrequest?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-        $(document).on('click', '#view-occupant #printinsurancerequest', function() {
-            var selection = self.getSelectedIds();
-            LOCA.application.openPrintPreview('/insurance?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+        $(document).on('click', '#view-occupant #printinsurancerequest', () => {
+            const selection = this.getSelectedIds();
+            application.openPrintPreview('/insurance?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
-    };
+    }
 
-    OccupantCtrl.prototype.onDataChanged = function(callback) {
+    onDataChanged(callback) {
         this.form.bindForm();
         this.documentsForm.bindForm();
         if (callback) {
             callback();
         }
-    };
+    }
+}
 
-    return new OccupantCtrl();
-})(window.$, window.Handlebars, window.bootbox, window.i18next);
+export default new OccupantCtrl();
