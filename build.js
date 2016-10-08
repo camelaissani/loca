@@ -92,7 +92,9 @@ const js_directory = path.join(__dirname, 'public', 'js');
 
 const plugins = () => {
     const list = [
-        babel(babelrc())
+        babel(babelrc({
+            addExternalHelpersPlugin: false
+        }))
     ];
 
     if (process.env.NODE_ENV === 'production') {
