@@ -205,6 +205,7 @@ module.exports.update = function(req, res) {
         return;
     }
 
+
     if (!occupant.isCompany) {
         occupant.company = null;
         occupant.legalForm = null;
@@ -254,6 +255,9 @@ module.exports.update = function(req, res) {
                             entryDate: item.entryDate,
                             exitDate: item.exitDate
                         };
+                    } else {
+                        itemToKeep.entryDate = item.entryDate;
+                        itemToKeep.exitDate = item.exitDate;
                     }
                     properties.push(itemToKeep);
                 });

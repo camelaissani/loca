@@ -13,8 +13,19 @@ function rentBuildViewData(occupant, month, year) {
         rentPrice,
         beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY'),
         endMoment = moment(occupant.endDate, 'DD/MM/YYYY'),
-        beginRentMoment = moment('01/' + month + '/' + year, 'DD/MM/YYYY').startOf('day'),
-        endRentMoment = moment(beginRentMoment).endOf('month').endOf('day');
+        beginRentMoment,
+        endRentMoment;
+
+    // find first day of renting in period
+    beginRentMoment = moment('01/' + month + '/' + year, 'DD/MM/YYYY').startOf('day');
+    if (beginMoment.month() === Number(month)-1 && beginMoment.year() === Number(year)) {
+        beginRentMoment = moment(beginMoment).startOf('day');
+    }
+    // find last day of renting in period
+    endRentMoment = moment(beginRentMoment).endOf('month').endOf('day');
+    if (endMoment.month() === Number(month)-1 && endMoment.year() === Number(year)) {
+        endRentMoment = moment(endMoment).endOf('day');
+    }
 
     occupant.durationInMonth = Math.round(moment.duration(endMoment.diff(beginMoment)).asMonths());
     rent.occupant = Object.clone(occupant);
