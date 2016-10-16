@@ -10,6 +10,7 @@ import occupantRoute from './occupant/route';
 import propertyRoute from './property/route';
 import ownerRoute from './owner/route';
 import accountRoute from './account/route';
+import accountingRoute from './accounting/route';
 import selectRealmCtrl from './selectrealm/selectrealmctrl';
 import logoutCtrl from './login/logoutctrl';
 
@@ -40,6 +41,7 @@ occupantRoute();
 propertyRoute();
 ownerRoute();
 accountRoute();
+accountingRoute();
 selectRealmCtrl.pageInitialized();
 logoutCtrl();
 

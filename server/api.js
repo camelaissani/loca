@@ -2,6 +2,7 @@
 
 var config = require('../config'),
     logger = require('winston'),
+    moment = require('moment'),
     rs = require('./requeststrategy'),
     Helper = require('./managers/helper'),
     loginManager = require('./managers/loginmanager'),
@@ -219,6 +220,71 @@ function API(router) {
                     countBusy: countBusy
                 });
             }
+        });
+    });
+
+    router.route('/api/accounting').get(rs.restrictedArea, function(req, res) {
+        var year = req.query.year;
+        var beginInterval = moment('01/01/'+year, 'DD/MM/YYYY'),
+            endInterval = moment('31/12/'+year, 'DD/MM/YYYY');
+
+        occupantManager.findAllOccupants(req.session.user.realm, function(errors, occupants) {
+            var occupantsOfYear = occupants.filter(function(occupant) {
+                var beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY'),
+                    endMoment = moment(occupant.terminationDate?occupant.terminationDate:occupant.endDate, 'DD/MM/YYYY');
+                return beginInterval.isBetween(beginMoment, endMoment, '[]') || endInterval.isBetween(beginMoment, endMoment, '[]')
+                    || ( beginMoment.isBetween(beginInterval, endInterval, '[]') && endMoment.isBetween(beginInterval, endInterval, '[]') );
+            }) || [];
+            res.json({
+                payments: {
+                    occupants: occupantsOfYear.map(function(occupant) {
+                        return {
+                            name: occupant.name,
+                            beginDate: occupant.beginDate,
+                            endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
+                            rents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map(function(month) {
+                                return occupant.rents[year][month] || {inactive: true};
+                            })
+
+                        };
+                    })
+                },
+                entriesExists: {
+                    entries: {
+                        occupants: occupantsOfYear.filter(function(occupant) {
+                            var beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
+                            return beginMoment.isBetween(beginInterval, endInterval, '[]');
+                        }).map(function(occupant) {
+                            return {
+                                name: occupant.name,
+                                beginDate: occupant.beginDate,
+                                deposit: occupant.guaranty
+                            };
+                        })
+                    },
+                    exits: {
+                        occupants: occupantsOfYear.filter(function(occupant) {
+                            var endMoment = moment(occupant.terminationDate?occupant.terminationDate:occupant.endDate, 'DD/MM/YYYY');
+                            return endMoment.isBetween(beginInterval, endInterval, '[]');
+                        }).map(function(occupant) {
+                            var balance = Object.keys(occupant.rents[year]).reduce(function(prev, cur) {
+                                var b = occupant.rents[year][cur].balance;
+                                return b!==0?b*-1:b;
+                            });
+
+                            return {
+                                name: occupant.name,
+                                leaseBroken: occupant.terminationDate && occupant.terminationDate!==occupant.endDate,
+                                endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
+                                deposit: occupant.guaranty,
+                                depositRefund: occupant.guarantyPayback,
+                                balance: balance,
+                                toPay: Number(occupant.guarantyPayback?0:occupant.guaranty) + Number(balance)
+                            };
+                        })
+                    }
+                }
+            });
         });
     });
 

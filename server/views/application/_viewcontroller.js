@@ -100,11 +100,11 @@ class ViewController {
                         that.list.unselect($action.attr('id'));
                     }
                 }
-                else {
+                else if (that.onUserAction) {
                     that.onUserAction($action, actionId);
                 }
             }
-            else {
+            else if (that.onUserAction) {
                 that.onUserAction($action, actionId);
             }
             return false;
@@ -117,11 +117,10 @@ class ViewController {
 
     dataChanged(callback) {
         const callbackEx = () => {
-            if (callback) {
-                callback();
-            }
             if (this.onDataChanged) {
-                this.onDataChanged();
+                this.onDataChanged(callback);
+            } else if (callback) {
+                callback();
             }
             if (this.config.defaultMenuId) {
                 anilayout.showMenu(this.config.defaultMenuId);

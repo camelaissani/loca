@@ -1,23 +1,25 @@
 <script id="history-rents-template" type="text/x-handlebars-template">
     <h1>{{ occupant.name }}</h1>
-
-    <table id="renttable" class="table table-hover table-bordered table-responsive">
-        <thead>
-            <tr>
-                <td class="hidden-xs hidden-sm"><%= t('Year') %></td>
-                <td><%= t('Month') %></td>
-                <td class="hidden-xs hidden-sm text-right"><%= t('VAT ratio') %></td>
-                <td class="text-right"><%= t('Rent to pay') %></td>
-                <td class="text-right"><%= t('Payment') %></td>
-                <td class="hidden-xs hidden-sm text-left"><%= t('Status') %></td>
-            </tr>
-        </thead>
-        <tbody>
-        {{#each rents}}
-            {{> history-rent-row-template}}
-        {{/each}}
-        </tbody>
-    </table>
+    <div class='table-responsive'>
+        <table id="renttable" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <td class="hidden-xs hidden-sm"><%= t('Year') %></td>
+                    <td class="hidden-xs hidden-sm"><%= t('Month') %></td>
+                    <td class="visible-xs"><%= t('Period') %></td>
+                    <td class="hidden-xs hidden-sm text-right"><%= t('VAT ratio') %></td>
+                    <td class="text-right"><%= t('Rent to pay') %></td>
+                    <td class="text-right"><%= t('Payment') %></td>
+                    <td class="hidden-xs hidden-sm text-left"><%= t('Status') %></td>
+                </tr>
+            </thead>
+            <tbody>
+            {{#each rents}}
+                {{> history-rent-row-template}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
 </script>
 
 <script id="history-rent-row-template" type="text/x-handlebars-template">

@@ -1,0 +1,110 @@
+<script id="accounting-payments-template" type="text/x-handlebars-template">
+    <h3><%= t('Payments') %></h3>
+    <div class='table-responsive'>
+        <table id="accounting-payments-table" class="table table-condensed table-bordered table-hover">
+            <thead>
+                <tr>
+                    <td class="text-left"><%= t('Occupant') %></td>
+                    {{#each months}}
+                    <td>{{this}}</td>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+            {{#each occupants}}
+                {{> accounting-payments-row-template}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+
+<script id="accounting-payments-row-template" type="text/x-handlebars-template">
+    <tr>
+        <td>
+            {{name}}<br>
+            <small>
+                {{formatDate beginDate}} - {{formatDate endDate}}
+            </small>
+        </td>
+        {{#each rents}}
+        {{#if inactive}}
+            <td class="inactive"></td>
+        {{else}}
+            <td>
+                {{#if payment}}
+                    {{formatMoney payment emptyForZero=true}}
+                    <small>
+                    {{#if paymentType}}
+                        <br>{{paymentType paymentType}}
+                        {{#if paymentReference}}
+                            <br>{{i18next key='#' number=paymentReference}}
+                        {{/if}}
+                    {{/if}}
+                    {{#if paymentDate}}
+                        <br>{{formatDate paymentDate}}
+                    {{/if}}
+                    </small>
+                {{/if}}
+            </td>
+        {{/if}}
+        {{/each}}
+    </tr>
+</script>
+
+<script id="accounting-entries-exits-template" type="text/x-handlebars-template">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3><%= t('Entries') %></h3>
+            <div class='table-responsive'>
+                <table id="accounting-entries-table" class="table table-condensed table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td class="text-left"><%= t('Occupant') %></td>
+                            <td><%= t('Entry date') %></td>
+                            <td class="text-right"><%= t('Deposit') %></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each entries.occupants}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{formatDate beginDate}}</td>
+                            <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <h3><%= t('Exits') %></h3>
+            <div class='table-responsive'>
+                <table id="accounting-exits-table" class="table table-condensed table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <td class="text-left"><%= t('Occupant') %></td>
+                            <td><%= t('Exit date') %></td>
+                            <td class="text-right"><%= t('Deposit') %></td>
+                            <td class="text-right"><%= t('Deposit refund') %></td>
+                            <td class="text-right"><%= t('Balance') %></td>
+                            <td class="text-right"><%= t('Deposit') %> - <%= t('Balance') %></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each exits.occupants}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td>{{formatDate endDate}} ({{#if leaseBroken}}{{i18next key='Lease broken'}}{{else}}{{i18next key='Lease terminated'}}{{/if}})</td>
+                            <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
+                            <td class="text-right">{{formatMoney depositRefund emptyForZero=false}}</td>
+                            <td class="text-right">{{formatMoney balance emptyForZero=false}}</td>
+                            <td class="text-right {{#ifNeg toPay}}danger{{/ifNeg}}">{{formatMoney toPay emptyForZero=false}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</script>

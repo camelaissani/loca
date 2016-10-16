@@ -8,7 +8,7 @@ var config = require('../config'),
 
 function render(model, res) {
     model.config = config;
-    model.isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'login', 'signup'].indexOf(model.view) !== -1;
+    model.isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'accounting', 'login', 'signup'].indexOf(model.view) !== -1;
     model.isLogged = model.account ? true : false;
     model.isRealmSelected = model.account && model.account.realm;
     model.isDefaultRealmSelected = model.isRealmSelected && model.account.realm.name === '__default_';
@@ -82,7 +82,7 @@ function PAGES(router) {
                     view: req.query.view,
                     account: req.session.user
                 },
-                authorizedViews = ['dashboard', 'rent', 'occupant', 'property', 'account', 'owner', 'website'],
+                authorizedViews = ['dashboard', 'rent', 'occupant', 'property', 'account', 'accounting', 'owner', 'website'],
                 isCurrentViewAuthorized = (authorizedViews.indexOf(model.view) !== -1);
 
             if (!isCurrentViewAuthorized) {
@@ -105,6 +105,10 @@ function PAGES(router) {
 
     router.route('/page/occupant').get(rs.restrictedArea, rs.mustRealmSet, function(req, res) {
         res.render('occupant/index');
+    });
+
+    router.route('/page/accounting').get(rs.restrictedArea, rs.mustRealmSet, function(req, res) {
+        res.render('accounting/index');
     });
 
     router.route('/page/property').get(rs.restrictedArea, rs.mustRealmSet, function(req, res) {

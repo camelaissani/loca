@@ -40,6 +40,13 @@ class Helper {
 }
 
 //Handlebars helpers
+Handlebars.registerHelper('ifNeg', function(value, options) {
+    if(value<0) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});
+
 Handlebars.registerHelper('ifIsNthItem', function(params) {
     var index = params.data.index,
         nth = params.hash.nth;
