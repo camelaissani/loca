@@ -4,7 +4,7 @@
         <table id="accounting-payments-table" class="table table-condensed table-bordered table-hover">
             <thead>
                 <tr>
-                    <td class="text-left"><%= t('Occupant') %></td>
+                    <td class="text-left"><%= t('Tenant') %></td>
                     {{#each months}}
                     <td>{{this}}</td>
                     {{/each}}
@@ -24,7 +24,10 @@
         <td>
             {{name}}<br>
             <small>
-                {{formatDate beginDate}} - {{formatDate endDate}}
+                {{reference}}<br>{{formatDate beginDate}} - {{formatDate endDate}}<br>
+                {{#each properties}}
+                    {{Image type}} {{name}}{{#if @index}}<br>{{/if}}
+                {{/each}}
             </small>
         </td>
         {{#each rents}}
@@ -60,7 +63,8 @@
                 <table id="accounting-entries-table" class="table table-condensed table-bordered table-hover">
                     <thead>
                         <tr>
-                            <td class="text-left"><%= t('Occupant') %></td>
+                            <td class="text-left"><%= t('Tenant') %></td>
+                            <td><%= t('Properties') %></td>
                             <td><%= t('Entry date') %></td>
                             <td class="text-right"><%= t('Deposit') %></td>
                         </tr>
@@ -68,7 +72,12 @@
                     <tbody>
                         {{#each entries.occupants}}
                         <tr>
-                            <td>{{name}}</td>
+                            <td>{{name}}<br><small>{{reference}}</small></td>
+                            <td>
+                                {{#each properties}}
+                                {{Image type}}{{name}}{{#if @index}}<br>{{/if}}
+                                {{/each}}
+                            </td>
                             <td>{{formatDate beginDate}}</td>
                             <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
                         </tr>
@@ -83,7 +92,8 @@
                 <table id="accounting-exits-table" class="table table-condensed table-bordered table-hover">
                     <thead>
                         <tr>
-                            <td class="text-left"><%= t('Occupant') %></td>
+                            <td class="text-left"><%= t('Tenant') %></td>
+                            <td><%= t('Properties') %></td>
                             <td><%= t('Exit date') %></td>
                             <td class="text-right"><%= t('Deposit') %></td>
                             <td class="text-right"><%= t('Deposit refund') %></td>
@@ -94,7 +104,12 @@
                     <tbody>
                         {{#each exits.occupants}}
                         <tr>
-                            <td>{{name}}</td>
+                            <td>{{name}}<br><small>{{reference}}</small></td>
+                            <td>
+                                {{#each properties}}
+                                {{Image type}}{{name}}{{#if @index}}<br>{{/if}}
+                                {{/each}}
+                            </td>
                             <td>{{formatDate endDate}} ({{#if leaseBroken}}{{i18next key='Lease broken'}}{{else}}{{i18next key='Lease terminated'}}{{/if}})</td>
                             <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
                             <td class="text-right">{{formatMoney depositRefund emptyForZero=false}}</td>

@@ -240,8 +240,11 @@ function API(router) {
                     occupants: occupantsOfYear.map(function(occupant) {
                         return {
                             name: occupant.name,
+                            reference: occupant.reference,
+                            properties: occupant.properties.map((p) => { return {name: p.property.name, type: p.property.type};}),
                             beginDate: occupant.beginDate,
                             endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
+                            deposit: occupant.guaranty,
                             rents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map(function(month) {
                                 return occupant.rents[year][month] || {inactive: true};
                             })
@@ -257,6 +260,8 @@ function API(router) {
                         }).map(function(occupant) {
                             return {
                                 name: occupant.name,
+                                reference: occupant.reference,
+                                properties: occupant.properties.map((p) => { return {name: p.property.name, type: p.property.type};}),
                                 beginDate: occupant.beginDate,
                                 deposit: occupant.guaranty
                             };
@@ -274,6 +279,8 @@ function API(router) {
 
                             return {
                                 name: occupant.name,
+                                reference: occupant.reference,
+                                properties: occupant.properties.map((p) => { return {name: p.property.name, type: p.property.type};}),
                                 leaseBroken: occupant.terminationDate && occupant.terminationDate!==occupant.endDate,
                                 endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
                                 deposit: occupant.guaranty,
