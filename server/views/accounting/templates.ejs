@@ -25,8 +25,9 @@
             {{name}}<br>
             <small>
                 {{reference}}<br>{{formatDate beginDate}} - {{formatDate endDate}}<br>
+                <%= t('Deposit') %> {{formatMoney deposit emptyForZero=false}}<br>
                 {{#each properties}}
-                    {{Image type}} {{name}}{{#if @index}}<br>{{/if}}
+                    {{Image type}} {{name}}<br>
                 {{/each}}
             </small>
         </td>
@@ -64,7 +65,6 @@
                     <thead>
                         <tr>
                             <td class="text-left"><%= t('Tenant') %></td>
-                            <td><%= t('Properties') %></td>
                             <td><%= t('Entry date') %></td>
                             <td class="text-right"><%= t('Deposit') %></td>
                         </tr>
@@ -72,11 +72,13 @@
                     <tbody>
                         {{#each entries.occupants}}
                         <tr>
-                            <td>{{name}}<br><small>{{reference}}</small></td>
-                            <td>
-                                {{#each properties}}
-                                {{Image type}}{{name}}{{#if @index}}<br>{{/if}}
-                                {{/each}}
+                            <td>{{name}}<br>
+                                <small>
+                                    {{reference}}<br>
+                                    {{#each properties}}
+                                        {{Image type}} {{name}}<br>
+                                    {{/each}}
+                                </small>
                             </td>
                             <td>{{formatDate beginDate}}</td>
                             <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
@@ -93,7 +95,6 @@
                     <thead>
                         <tr>
                             <td class="text-left"><%= t('Tenant') %></td>
-                            <td><%= t('Properties') %></td>
                             <td><%= t('Exit date') %></td>
                             <td class="text-right"><%= t('Deposit') %></td>
                             <td class="text-right"><%= t('Deposit refund') %></td>
@@ -104,13 +105,21 @@
                     <tbody>
                         {{#each exits.occupants}}
                         <tr>
-                            <td>{{name}}<br><small>{{reference}}</small></td>
                             <td>
-                                {{#each properties}}
-                                {{Image type}}{{name}}{{#if @index}}<br>{{/if}}
-                                {{/each}}
+                                {{name}}<br>
+                                <small>
+                                    {{reference}}<br>
+                                    {{#each properties}}
+                                        {{Image type}} {{name}}<br>
+                                    {{/each}}
+                                </small>
                             </td>
-                            <td>{{formatDate endDate}} ({{#if leaseBroken}}{{i18next key='Lease broken'}}{{else}}{{i18next key='Lease terminated'}}{{/if}})</td>
+                            <td>
+                                {{formatDate endDate}}<br>
+                                <small>
+                                    {{#if leaseBroken}}{{i18next key='Lease broken'}}{{else}}{{i18next key='Lease terminated'}}{{/if}}
+                                </small>
+                            </td>
                             <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
                             <td class="text-right">{{formatMoney depositRefund emptyForZero=false}}</td>
                             <td class="text-right">{{formatMoney balance emptyForZero=false}}</td>

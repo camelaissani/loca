@@ -225,15 +225,16 @@ function API(router) {
 
     router.route('/api/accounting').get(rs.restrictedArea, function(req, res) {
         var year = req.query.year;
-        var beginInterval = moment('01/01/'+year, 'DD/MM/YYYY'),
-            endInterval = moment('31/12/'+year, 'DD/MM/YYYY');
+        var beginOfYear = moment('01/01/'+year, 'DD/MM/YYYY').startOf('day'),
+            endOfYear = moment('31/12/'+year, 'DD/MM/YYYY').endOf('day');
 
         occupantManager.findAllOccupants(req.session.user.realm, function(errors, occupants) {
             var occupantsOfYear = occupants.filter(function(occupant) {
                 var beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY'),
                     endMoment = moment(occupant.terminationDate?occupant.terminationDate:occupant.endDate, 'DD/MM/YYYY');
-                return beginInterval.isBetween(beginMoment, endMoment, '[]') || endInterval.isBetween(beginMoment, endMoment, '[]')
-                    || ( beginMoment.isBetween(beginInterval, endInterval, '[]') && endMoment.isBetween(beginInterval, endInterval, '[]') );
+                return beginMoment.isBetween(beginOfYear, endOfYear, '[]') ||
+                       endMoment.isBetween(beginOfYear, endOfYear, '[]')   ||
+                       (beginMoment.isSameOrBefore(beginOfYear) && endMoment.isSameOrAfter(endOfYear));
             }) || [];
             res.json({
                 payments: {
@@ -256,7 +257,7 @@ function API(router) {
                     entries: {
                         occupants: occupantsOfYear.filter(function(occupant) {
                             var beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
-                            return beginMoment.isBetween(beginInterval, endInterval, '[]');
+                            return beginMoment.isBetween(beginOfYear, endOfYear, '[]');
                         }).map(function(occupant) {
                             return {
                                 name: occupant.name,
@@ -270,7 +271,7 @@ function API(router) {
                     exits: {
                         occupants: occupantsOfYear.filter(function(occupant) {
                             var endMoment = moment(occupant.terminationDate?occupant.terminationDate:occupant.endDate, 'DD/MM/YYYY');
-                            return endMoment.isBetween(beginInterval, endInterval, '[]');
+                            return endMoment.isBetween(beginOfYear, endOfYear, '[]');
                         }).map(function(occupant) {
                             var balance = Object.keys(occupant.rents[year]).reduce(function(prev, cur) {
                                 var b = occupant.rents[year][cur].balance;
