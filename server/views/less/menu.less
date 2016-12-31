@@ -121,6 +121,20 @@ a.main-menu-button {
     .btn {
         text-align: left;
     }
+
+    .list-group {
+        max-height: 350px;
+        overflow-y: auto;
+    }
+
+    .list-group.list-group-selection {
+        .list-group-item {
+            .fa-times {
+                cursor: pointer;
+            }
+        }
+    }
+
     .list-group.list-group-selection {
         &.fixed .list-group-item {
             .fa-times {
