@@ -25,7 +25,7 @@
                 <div class="pull-left">
                     <%= t('All') %> <span class="all-filter-label text-muted"></span>
                 </div>
-                <div class="pull-right"> 
+                <div class="pull-right">
                     <span class="text-right total-topay"></span>
                 </div>
             </div>
@@ -35,16 +35,16 @@
                 <div class="pull-left">
                     <%= t('Paid') %> <span class="paid-filter-label text-muted"></span>
                 </div>
-                <div class="pull-right"> 
-                    <span class="total-paid text-success strong"></span> 
-                </div>            
+                <div class="pull-right">
+                    <span class="total-paid text-success strong"></span>
+                </div>
         </button>
         <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Not paid') %>" data-toggle="button" role="button">
             <div class="clearfix">
                 <div class="pull-left">
                     <%= t('Not paid') %> <span class="not-paid-filter-label text-muted"></span>
                 </div>
-                <div class="pull-right"> 
+                <div class="pull-right">
                     <span class="total-notpaid text-danger strong"></span>
                 </div>
         </button>
@@ -66,6 +66,7 @@
     </div>
 
     <div class="hidden-xs">
+        <h4><%= t('Period') %> <span class="rent-period"></span></h4>
         <button type="button" class="btn btn-default btn-block user-action cancel-selection" role="button"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
         <button type="button" data-id="list-action-pay-rent" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-credit-card"></i> <%= t('Payment') %></button>
         <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
@@ -117,6 +118,7 @@
         </div>
     </div>
     <div class="hidden-xs">
+        <h4><%= t('Period') %> <span class="rent-period"></span></h4>
         <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
         <h4 class="title-card list-selection-menu-label"></h4>
         <div class="list-selected-elements fixed list-group"></div>
