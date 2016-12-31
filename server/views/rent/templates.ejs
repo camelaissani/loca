@@ -52,17 +52,13 @@
 </script>
 
 <script id="view-rent-payment-badges-template" type="text/x-handlebars-template">
-        {{#each paymentStatus}}
-            {{#ifIsNthItem nth=5}}
-                <div class="row">
-                    <div class="col-xs-12">
-            {{/ifIsNthItem}}
-                        {{paymentBadgeStatus}}
-            {{#ifIsNthItem nth=5}}
-                    </div>
-                </div>
-            {{/ifIsNthItem}}
-        {{/each}}
+        <ul class="list-inline">
+            {{#each paymentStatus}}
+            <li>
+                    {{paymentBadgeStatus}}
+            </li>
+            {{/each}}
+        </ul>
 </script>
 
 <script id="view-rent-list-content-template" type="text/x-handlebars-template">
