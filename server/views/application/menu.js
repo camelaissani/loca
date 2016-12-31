@@ -15,7 +15,7 @@ export default () => {
 
     // affix management for menu-card
     $(document).on('before-show-card', '.menu-card', function() {
-        $(this).affix();
+        $(this).affix({offset: { top: 0 }});
     });
 
     $(document).on('after-show-card', '.menu-card', function() {
