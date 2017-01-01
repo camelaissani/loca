@@ -133,11 +133,11 @@ if (!debugMode) {
     // This middleware is only intended to be used in a development environment,
     // as the full error stack traces will be sent back to the client when an error occurs.
     app.use(errorHandler());
-    logger.info('In development mode');
+    logger.info('In development mode (no minify/no uglify)');
 }
 
 if (config.demomode) {
-    logger.info('In demo mode (no login)');
+    logger.info('In demo mode (login disabled)');
 }
 
 // Init connection to database

@@ -12,6 +12,13 @@
             </div>
         </div>
 
+         <div data-id="invoices" class="sheet">
+            <h2 class="page-header"><%= t('Rental invoices') %></h2>
+            <div class="list-form-view">
+                <% include invoices.ejs %>
+            </div>
+        </div>
+
         <div data-id="rents-history" class="sheet">
             <div class="list-form-view">
                 <% include ../rent/rentshistory.ejs %>

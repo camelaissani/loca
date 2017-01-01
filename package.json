@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run buildprod && NODE_ENV=production node server.js",
-    "dev": "npm run builddev && LOCA_DEMOMODE=true node server.js",
+    "dev": "npm run builddev && node server.js",
     "lint": "eslint .",
     "builddev": "babel-node build.js",
     "buildprod": "NODE_ENV=production babel-node build.js",

@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Handlebars from 'handlebars';
 import bootbox from 'bootbox';
 import i18next from 'i18next';
+import moment from 'moment';
 import ViewController from '../application/_viewcontroller';
 import requester from '../common/requester';
 import {LOCA} from '../application/main';
@@ -31,6 +32,9 @@ class OccupantCtrl extends ViewController {
         // Handlebars templates
         Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
         this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
+
+        Handlebars.registerPartial('occupant-invoice-links-template', $('#occupant-invoice-links-template').html());
+        this.templateInvoices = Handlebars.compile($('#occupant-invoices-template').html());
 
         const $occupantsSelected = $('#view-occupant-selected-list-template');
         if ($occupantsSelected.length >0) {
@@ -101,6 +105,43 @@ class OccupantCtrl extends ViewController {
                 });
             });
         }
+        else if (actionId==='list-action-invoices') {
+            $('#occupant-invoices').html('');
+            this.openForm('invoices');
+            requester.ajax({
+                type: 'GET',
+                url: '/api/rents/occupant?id='+selection[0]._id
+            }, (rentsHistory) => {
+                const current = moment();
+                let count = 0;
+                const rents = rentsHistory.rents.reverse().filter((rent) => {
+                    if (moment(`${rent.year}-${rent.month}-01`).isSameOrBefore(current)) {
+                        count++;
+                        return count <= 48; // view last 48 months
+                    }
+                    return false;
+                }).reduce((result, rent) => {
+                    let foundYears = result.years.filter(year => year.year === rent.year);
+                    if (!foundYears || foundYears.length===0) {
+                        const yearObject = {year: rent.year, months:[]};
+                        result.years.push(yearObject);
+                        foundYears = [yearObject];
+                    }
+                    foundYears[0].months.push({
+                        occupantId: selection[0]._id,
+                        year: Number(rent.year),
+                        month: Number(rent.month),
+                        totalToPay: rent.totalToPay,
+                        payment: rent.payment
+                    });
+                    return result;
+                }, {years:[]});
+                $('#occupant-invoices').html(this.templateInvoices(rents));
+            });
+        }
+        else if (actionId==='invoice-link') {
+            application.openPrintPreview('/invoice?month=' + $action.data('month') + '&year=' + $action.data('year') + '&occupants=' + $action.data('occupantId'));
+        }
         else if (actionId==='list-action-manage-documents') {
             this.documentsForm.setData(selection[0]);
             this.openForm('contract-documents-form');
@@ -132,14 +173,13 @@ class OccupantCtrl extends ViewController {
         }
         else if (actionId==='list-action-rents-history') {
             $('#history-rents-table').html('');
+            this.openForm('rents-history', true);
             requester.ajax({
                 type: 'GET',
                 url: '/api/rents/occupant?id='+selection[0]._id
-            },
-            (rentsHistory) => {
+            }, (rentsHistory) => {
                 $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
             });
-            this.openForm('rents-history', true);
         }
         else if (actionId==='list-action-print') {
             this.openForm('print-doc-selector');

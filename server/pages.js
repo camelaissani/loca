@@ -1,10 +1,13 @@
 'use strict';
 
-var config = require('../config'),
+var moment = require('moment'),
+    config = require('../config'),
     rs = require('./requeststrategy'),
     loginManager = require('./managers/loginmanager'),
     printManager = require('./managers/printmanager'),
     logger = require('winston');
+
+var authorizedViews = ['dashboard', 'rent', 'occupant', 'property', 'account', 'accounting', 'owner', 'website'];
 
 function render(model, res) {
     model.config = config;
@@ -56,42 +59,34 @@ function PAGES(router) {
         }, res);
     });
 
-    router.route('/loggedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
-        function(req, res) {
-            res.redirect('/index');
-        }
-    );
+    router.route('/loggedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
+        res.redirect('/index');
+    });
 
-    router.route('/loggedin').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
-        function(req, res) {
-            res.redirect('/index');
-        }
-    );
+    router.route('/loggedin').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
+        res.redirect('/index');
+    });
 
     if (config.subscription) {
-        router.route('/signedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
-            function(req, res) {
-                res.redirect('/login');
-            }
-        );
+        router.route('/signedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
+            res.redirect('/login');
+        });
     }
 
-    router.route('/index').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect,
-        function(req, res) {
-            var model = {
-                    view: req.query.view,
-                    account: req.session.user
-                },
-                authorizedViews = ['dashboard', 'rent', 'occupant', 'property', 'account', 'accounting', 'owner', 'website'],
-                isCurrentViewAuthorized = (authorizedViews.indexOf(model.view) !== -1);
+    router.route('/index').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
+        var model = {
+                view: req.query.view,
+                account: req.session.user
+            },
+            isCurrentViewAuthorized = (authorizedViews.indexOf(model.view) !== -1);
 
-            if (!isCurrentViewAuthorized) {
-                res.redirect('/index?view=' + authorizedViews[0]);
-                logger.info('View ' + model.view + ' not authorized. Redirect to ' + '/index?view=' + authorizedViews[0]);
-                return;
-            }
-            render(model, res);
-        });
+        if (!isCurrentViewAuthorized) {
+            res.redirect('/index?view=' + authorizedViews[0]);
+            logger.info('View ' + model.view + ' not authorized. Redirect to ' + '/index?view=' + authorizedViews[0]);
+            return;
+        }
+        render(model, res);
+    });
 
     router.route('/page/dashboard').get(rs.restrictedArea, rs.mustRealmSet, function(req, res) {
         res.render('dashboard/index', {
@@ -128,6 +123,7 @@ function PAGES(router) {
         printManager.renderModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/invoice';
+            model.today = moment(`${model.year}-${model.month}-20`).format('LL');
             res.render(model.view, model);
         });
     });
@@ -136,6 +132,7 @@ function PAGES(router) {
         printManager.renderModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/rentcall';
+            model.today = moment(`${model.year}-${model.month}-20`).subtract('1', 'months').format('LL');
             res.render(model.view, model);
         });
     });

@@ -1,0 +1,15 @@
+<script id="occupant-invoices-template" type="text/x-handlebars-template">
+    {{#each years}}
+        <h3 class="page-header">{{year}}</h3>
+        <div class="list-group">
+            {{#each months}}
+                <a href="#" class="list-group-item user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-month="{{month}}" data-year="{{year}}">
+                    {{formatMonth month}} <span class="text-muted">({{i18next key='Rent'}} {{formatMoney totalToPay hideCurrency=false}})</span>
+                    <span class="pull-right">{{formatMoney payment hideCurrency=false}}</span>
+                </a>
+            {{/each}}
+        </div>
+    {{/each}}
+</script>
+
+<div id="occupant-invoices"></div>

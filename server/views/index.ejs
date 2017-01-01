@@ -67,11 +67,13 @@ if (config.productive) {
         <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="/node_modules/sugar/dist/sugar.min.js" type="text/javascript"></script>
         <script src="/node_modules/jquery-validation/dist/jquery.validate.js" type="text/javascript"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js" type="text/javascript"></script>
+        <script src="//cdn.jsdelivr.net/momentjs/2.17.1/moment.min.js" type="text/javascript"></script>
     <% if (!isLogged) { %>
         <script src="/public/js/public<%=min%>.js" type="text/javascript"></script>
     <% } else { %>
         <script src="/node_modules/bootbox/bootbox.min.js" type="text/javascript"></script>
+        <!--script src="//cdn.jsdelivr.net/history.js/1.8.0b2/history.js" type="text/javascript"></script-->
+        <!--script src="//cdn.jsdelivr.net/handlebarsjs/4.0.5/handlebars.min.js" type="text/javascript"></script-->
         <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.4/handlebars.min.js" type="text/javascript"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js" type="text/javascript"></script>
         <script src="/node_modules/minivents/dist/minivents.min.js" type="text/javascript"></script>

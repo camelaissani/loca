@@ -103,7 +103,9 @@ function API(router) {
                     if (Number(currentRent.year) === date.year && Number(currentRent.month) === date.month) {
                         currentRent.active = 'active';
                     }
+                    delete currentRent.occupant;
                 }
+                delete occupant.rents;
                 res.json({
                     occupant: occupant,
                     rents: rents

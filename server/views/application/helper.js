@@ -138,6 +138,14 @@ Handlebars.registerHelper('formatMonth', function(text/*, options*/) {
     text = Helper.formatMonth(text);
     return new Handlebars.SafeString(text);
 });
+Handlebars.registerHelper('formatMonthYear', function(params) {
+    if (params.hash && params.hash.month && params.hash.year) {
+        return new Handlebars.SafeString(
+            Helper.formatMonthYear(params.hash.month, params.hash.year)
+        );
+    }
+    return new Handlebars.SafeString('???');
+});
 Handlebars.registerHelper('breaklines', function(text) {
     text = Handlebars.Utils.escapeExpression(text);
     text = text.replace(/(\r\n|\n|\r)/gm, '<br>');
