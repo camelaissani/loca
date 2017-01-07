@@ -10,6 +10,9 @@ var configPackage = {
     }
 };
 
+var loginConfigPackage = JSON.parse(JSON.stringify(configPackage));
+loginConfigPackage.instance.demomode = false;
+
 var testSet = [{
     mockedPackages: [{
             relativePath: './managers/loginmanager',
@@ -26,7 +29,7 @@ var testSet = [{
             instance: new mocks.LoginManager(),
             ensureCallMethods: ['login']
         },
-        configPackage
+        loginConfigPackage
     ],
     httpMethod: 'post',
     route: '/login'

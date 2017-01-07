@@ -10,6 +10,9 @@ var configPackage = {
     }
 };
 
+var loginConfigPackage = JSON.parse(JSON.stringify(configPackage));
+loginConfigPackage.instance.demomode = false;
+
 var loggerPackage = {
     relativePath: 'winston',
     instance: new mocks.Logger()
@@ -27,7 +30,13 @@ var testSet = [{
     route: '/'
 }, {
     mockedPackages: [
-        configPackage, loggerPackage, {
+        loginConfigPackage, {
+            relativePath: './managers/loginmanager',
+            instance: new mocks.LoginManager()
+        }, {
+            relativePath: 'winston',
+            instance: new mocks.Logger()
+        }, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['mustSessionLessArea']
@@ -36,24 +45,20 @@ var testSet = [{
     httpMethod: 'get',
     route: '/login'
 }, {
-    mockedPackages: [{
-        relativePath: '../config',
-        instance: {
-            productive: true,
-            demomode: true
+    mockedPackages: [
+        configPackage, {
+            relativePath: './managers/loginmanager',
+            instance: new mocks.LoginManager(),
+            ensureCallMethods: ['loginDemo']
+        }, {
+            relativePath: 'winston',
+            instance: new mocks.Logger()
+        }, {
+            relativePath: './requeststrategy',
+            instance: new mocks.RequestStrategy(),
+            ensureCallMethods: ['mustSessionLessArea']
         }
-    }, {
-        relativePath: './managers/loginmanager',
-        instance: new mocks.LoginManager(),
-        ensureCallMethods: ['loginDemo']
-    }, {
-        relativePath: 'winston',
-        instance: new mocks.Logger()
-    }, {
-        relativePath: './requeststrategy',
-        instance: new mocks.RequestStrategy(),
-        ensureCallMethods: ['mustSessionLessArea']
-    }],
+    ],
     httpMethod: 'get',
     route: '/login'
 }, {
