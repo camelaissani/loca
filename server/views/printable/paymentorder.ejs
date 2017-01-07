@@ -3,7 +3,10 @@
  	<% include partials/htmlhead.ejs %>
 
 	<body>
-		<% occupants.forEach(function(occupant, index) { %>
+		<%
+		rents.forEach(function(rent) {
+			var occupant = rent.occupant;
+		%>
 
 		<div class="page">
 			<% include partials/header.ejs %>

@@ -190,4 +190,8 @@ module.exports.PrintManager = function() {
     this.renderModel = function(req, res, callback) {
         res.render('', {});
     };
+
+    this.rentModel = function(req, res, callback) {
+        res.render('', {});
+    };
 };

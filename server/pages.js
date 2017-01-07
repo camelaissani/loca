@@ -120,7 +120,7 @@ function PAGES(router) {
 
     // Print
     router.route('/invoice').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        printManager.renderModel(req, res, function(errors, model) {
+        printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/invoice';
             model.today = moment(`${model.year}-${model.month}-20`).format('LL');
@@ -129,7 +129,7 @@ function PAGES(router) {
     });
 
     router.route('/rentcall').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        printManager.renderModel(req, res, function(errors, model) {
+        printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/rentcall';
             model.today = moment(`${model.year}-${model.month}-20`).subtract('1', 'months').format('LL');
@@ -138,7 +138,7 @@ function PAGES(router) {
     });
 
     router.route('/recovery1').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        printManager.renderModel(req, res, function(errors, model) {
+        printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/recovery1';
             res.render(model.view, model);
@@ -146,7 +146,7 @@ function PAGES(router) {
     });
 
     router.route('/recovery2').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        printManager.renderModel(req, res, function(errors, model) {
+        printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/recovery2';
             res.render(model.view, model);
@@ -154,7 +154,7 @@ function PAGES(router) {
     });
 
     router.route('/recovery3').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        printManager.renderModel(req, res, function(errors, model) {
+        printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/recovery3';
             res.render(model.view, model);
@@ -162,7 +162,7 @@ function PAGES(router) {
     });
 
     router.route('/paymentorder').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        printManager.renderModel(req, res, function(errors, model) {
+        printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/paymentorder';
             res.render(model.view, model);

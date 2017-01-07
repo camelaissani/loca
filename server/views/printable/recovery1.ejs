@@ -3,7 +3,10 @@
 	<% include partials/htmlhead.ejs %>
 
 	<body>
-	<% occupants.forEach(function(occupant, index) { %>
+	<%
+	rents.forEach(function(rent) {
+			var occupant = rent.occupant;
+	%>
 
 		<div class="page">
 			<% include partials/header.ejs %>
@@ -17,7 +20,7 @@
 	        <div class="title">Avis d'échéance</div>
 
 			<div class="limit">
-				Montant total de <strong><%= occupant.rent.totalAmount %> euros</strong> était à nous faire parvenir avant le <strong>5 <%= months[month-1] + " " + year %></strong>.
+				Montant total de <strong><%= rent.totalAmount %> euros</strong> était à nous faire parvenir avant le <strong><%= rent.dueDate %></strong>.
 			</div>
 
 			<div class="items">

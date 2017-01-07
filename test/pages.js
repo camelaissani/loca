@@ -200,7 +200,7 @@ var testSet = [{
         }, {
             relativePath: './managers/printmanager',
             instance: new mocks.PrintManager(),
-            ensureCallMethods: ['renderModel']
+            ensureCallMethods: ['rentModel']
         }
     ],
     httpMethod: 'get',
@@ -214,7 +214,7 @@ var testSet = [{
         }, {
             relativePath: './managers/printmanager',
             instance: new mocks.PrintManager(),
-            ensureCallMethods: ['renderModel']
+            ensureCallMethods: ['rentModel']
         }
     ],
     httpMethod: 'get',
@@ -228,7 +228,7 @@ var testSet = [{
         }, {
             relativePath: './managers/printmanager',
             instance: new mocks.PrintManager(),
-            ensureCallMethods: ['renderModel']
+            ensureCallMethods: ['rentModel']
         }
     ],
     httpMethod: 'get',
@@ -242,7 +242,7 @@ var testSet = [{
         }, {
             relativePath: './managers/printmanager',
             instance: new mocks.PrintManager(),
-            ensureCallMethods: ['renderModel']
+            ensureCallMethods: ['rentModel']
         }
     ],
     httpMethod: 'get',
@@ -256,7 +256,7 @@ var testSet = [{
         }, {
             relativePath: './managers/printmanager',
             instance: new mocks.PrintManager(),
-            ensureCallMethods: ['renderModel']
+            ensureCallMethods: ['rentModel']
         }
     ],
     httpMethod: 'get',
@@ -270,7 +270,7 @@ var testSet = [{
         }, {
             relativePath: './managers/printmanager',
             instance: new mocks.PrintManager(),
-            ensureCallMethods: ['renderModel']
+            ensureCallMethods: ['rentModel']
         }
     ],
     httpMethod: 'get',
