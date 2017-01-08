@@ -6,8 +6,10 @@ var config = require('../config'),
     printManager = require('./managers/printmanager'),
     logger = require('winston');
 
+const defaultAdminView = 'dashboard';
+
 const adminViews = [
-    'account',
+    // 'account',
     'accounting',
     'dashboard',
     'occupant',
@@ -18,7 +20,7 @@ const adminViews = [
 ];
 
 const allViews = [
-    'account',
+    // 'account',
     'accounting',
     'dashboard',
     'login',
@@ -38,6 +40,7 @@ function render(model, res) {
     model.isRealmSelected = model.account && model.account.realm;
     model.isDefaultRealmSelected = model.isRealmSelected && model.account.realm.name === '__default_';
     model.isMultipleRealmsAvailable = model.account && model.account.realms && model.account.realms.length > 1;
+    logger.debug(model);
     res.render('index', model);
 }
 
@@ -96,15 +99,13 @@ function PAGES(router) {
     }
 
     router.route('/index').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        var model = {
-                view: req.query.view,
-                account: req.session.user
-            },
-            isCurrentViewAuthorized = (adminViews.indexOf(model.view) !== -1);
-
-        if (!isCurrentViewAuthorized) {
-            res.redirect('/index?view=' + adminViews[0]);
-            logger.info('View ' + model.view + ' not authorized. Redirect to ' + '/index?view=' + adminViews[0]);
+        const model = {
+            view: req.query.view,
+            account: req.session.user
+        };
+        if (!model.view || adminViews.indexOf(model.view) === -1) {
+            res.redirect(`/index?view=${defaultAdminView}`);
+            logger.info(`View ${model.view} is not valid. Redirecting to /index?view=${defaultAdminView}`);
             return;
         }
         render(model, res);
