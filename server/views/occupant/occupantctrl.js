@@ -123,7 +123,11 @@ class OccupantCtrl extends ViewController {
                 }).reduce((result, rent) => {
                     let foundYears = result.years.filter(year => year.year === rent.year);
                     if (!foundYears || foundYears.length===0) {
-                        const yearObject = {year: rent.year, months:[]};
+                        const yearObject = {
+                            occupantId: selection[0]._id,
+                            year: rent.year,
+                            months:[]
+                        };
                         result.years.push(yearObject);
                         foundYears = [yearObject];
                     }
@@ -140,7 +144,14 @@ class OccupantCtrl extends ViewController {
             });
         }
         else if (actionId==='invoice-link') {
-            application.openPrintPreview('/invoice?month=' + $action.data('month') + '&year=' + $action.data('year') + '&occupants=' + $action.data('occupantId'));
+            const month = $action.data('month');
+            const year = $action.data('year');
+            const occupantId = $action.data('occupantId');
+            let url = `/invoice?occupants=${occupantId}&year=${year}`;
+            if (month) {
+                url += `&month=${month}`;
+            }
+            application.openPrintPreview(url);
         }
         else if (actionId==='list-action-manage-documents') {
             this.documentsForm.setData(selection[0]);

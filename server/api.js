@@ -242,6 +242,8 @@ function API(router) {
                 payments: {
                     occupants: occupantsOfYear.map(function(occupant) {
                         return {
+                            year,
+                            occupantId: occupant._id,
                             name: occupant.name,
                             reference: occupant.reference,
                             properties: occupant.properties.map((p) => { return {name: p.property.name, type: p.property.type};}),
@@ -249,7 +251,11 @@ function API(router) {
                             endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
                             deposit: occupant.guaranty,
                             rents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map(function(month) {
-                                return occupant.rents[year][month] || {inactive: true};
+                                const currentRent = occupant.rents[year][month];
+                                if (currentRent) {
+                                    currentRent.occupantId = occupant._id;
+                                }
+                                return currentRent || {inactive: true};
                             })
 
                         };

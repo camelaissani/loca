@@ -14,7 +14,7 @@ function rentBuildViewData(printableRent, occupant, month, year) {
     const fmonth = month > 9 ? month : '0' + Number(month);
 
     // find first day of renting in period
-    let beginRentMoment = moment('01/' + month + '/' + year, 'DD/MM/YYYY').startOf('day');
+    let beginRentMoment = moment(`01/${month}/${year}`, 'DD/MM/YYYY').startOf('day');
     if (beginMoment.month() === Number(month)-1 && beginMoment.year() === Number(year)) {
         beginRentMoment = moment(beginMoment).startOf('day');
     }
@@ -38,10 +38,10 @@ function rentBuildViewData(printableRent, occupant, month, year) {
 
     month = printableRent.month || month;
     year = printableRent.year || year;
-    printableRent.callDate = moment(`${year}-${month}-20`).subtract(1, 'months').format('LL');
-    printableRent.invoiceDate = moment(`${year}-${month}-20`).format('LL');
-    printableRent.period = moment(`${year}-${month}-1`).format('MMMM YYYY');
-    printableRent.dueDate = moment(`${year}-${month}-5`).format('LL');
+    printableRent.callDate = moment(`20/${month}/${year}`, 'DD/MM/YYYY').subtract(1, 'months').format('LL');
+    printableRent.invoiceDate = moment(`20/${month}/${year}`, 'DD/MM/YYYY').format('LL');
+    printableRent.period = moment(`1/${month}/${year}`, 'DD/MM/YYYY').format('MMMM YYYY');
+    printableRent.dueDate = moment(`5/${month}/${year}`, 'DD/MM/YYYY').format('LL');
     printableRent.occupant = occupant;
     printableRent.occupant.durationInMonth = Math.round(moment.duration(endMoment.diff(beginMoment)).asMonths());
     printableRent._id = occupant._id;
@@ -248,7 +248,7 @@ module.exports.rentModel = function(req, res, callback) {
             } else {
                 let months = [1,2,3,4,5,6,7,8,9,10,11,12];
                 if (month) {
-                    months = [month];
+                    months = [Number(month)];
                 }
                 if (fromMonth) {
                     months = [];

@@ -1,17 +1,39 @@
 'use strict';
 
-var moment = require('moment'),
-    config = require('../config'),
+var config = require('../config'),
     rs = require('./requeststrategy'),
     loginManager = require('./managers/loginmanager'),
     printManager = require('./managers/printmanager'),
     logger = require('winston');
 
-var authorizedViews = ['dashboard', 'rent', 'occupant', 'property', 'account', 'accounting', 'owner', 'website'];
+const adminViews = [
+    'account',
+    'accounting',
+    'dashboard',
+    'occupant',
+    'owner',
+    'property',
+    'rent',
+    'website'
+];
+
+const allViews = [
+    'account',
+    'accounting',
+    'dashboard',
+    'login',
+    'occupant',
+    'owner',
+    'property',
+    'rent',
+    'selectrealm',
+    'signup',
+    'website'
+];
 
 function render(model, res) {
     model.config = config;
-    model.isValidView = ['website', 'selectrealm', 'dashboard', 'rent', 'occupant', 'property', 'owner', 'account', 'accounting', 'login', 'signup'].indexOf(model.view) !== -1;
+    model.isValidView = allViews.indexOf(model.view) !== -1;
     model.isLogged = model.account ? true : false;
     model.isRealmSelected = model.account && model.account.realm;
     model.isDefaultRealmSelected = model.isRealmSelected && model.account.realm.name === '__default_';
@@ -78,11 +100,11 @@ function PAGES(router) {
                 view: req.query.view,
                 account: req.session.user
             },
-            isCurrentViewAuthorized = (authorizedViews.indexOf(model.view) !== -1);
+            isCurrentViewAuthorized = (adminViews.indexOf(model.view) !== -1);
 
         if (!isCurrentViewAuthorized) {
-            res.redirect('/index?view=' + authorizedViews[0]);
-            logger.info('View ' + model.view + ' not authorized. Redirect to ' + '/index?view=' + authorizedViews[0]);
+            res.redirect('/index?view=' + adminViews[0]);
+            logger.info('View ' + model.view + ' not authorized. Redirect to ' + '/index?view=' + adminViews[0]);
             return;
         }
         render(model, res);
@@ -123,7 +145,6 @@ function PAGES(router) {
         printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/invoice';
-            model.today = moment(`${model.year}-${model.month}-20`).format('LL');
             res.render(model.view, model);
         });
     });
@@ -132,7 +153,6 @@ function PAGES(router) {
         printManager.rentModel(req, res, function(errors, model) {
             model.config = config;
             model.view = 'printable/rentcall';
-            model.today = moment(`${model.year}-${model.month}-20`).subtract('1', 'months').format('LL');
             res.render(model.view, model);
         });
     });

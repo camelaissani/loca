@@ -1,6 +1,6 @@
 <script id="occupant-invoices-template" type="text/x-handlebars-template">
     {{#each years}}
-        <h3 class="page-header">{{year}}</h3>
+        <a href="#" class="h3 page-header user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-year="{{year}}">{{year}}</a>
         <div class="list-group">
             {{#each months}}
                 <a href="#" class="list-group-item user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-month="{{month}}" data-year="{{year}}">

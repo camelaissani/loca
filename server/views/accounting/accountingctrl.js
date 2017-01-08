@@ -3,6 +3,7 @@ import moment from 'moment';
 import requester from '../common/requester';
 import ViewController from '../application/_viewcontroller';
 import {LOCA} from '../application/main';
+import application from '../application/application';
 
 class AccountingCtrl extends ViewController {
 
@@ -60,6 +61,19 @@ class AccountingCtrl extends ViewController {
         $yearPicker.datepicker('setDate', moment('01/01/'+this.year, 'DD/MM/YYYY').toDate());
         $('#view-accounting .accounting-period').html(this.year);
         this.load(callback);
+    }
+
+    onUserAction($action, actionId) {
+        if (actionId==='invoice-link') {
+            const month = $action.data('month');
+            const year = $action.data('year');
+            const occupantId = $action.data('occupantId');
+            let url = `/invoice?occupants=${occupantId}&year=${year}`;
+            if (month) {
+                url += `&month=${month}`;
+            }
+            application.openPrintPreview(url);
+        }
     }
 
     load(callback) {
