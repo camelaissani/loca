@@ -5,7 +5,7 @@ var moment = require('moment'),
     documentModel = require('../models/document');
 
 module.exports.update = function(req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         occupant = documentModel.schema.filter(req.body);
 
     if (!occupant.documents) {

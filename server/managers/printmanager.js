@@ -109,7 +109,7 @@ function buildViewData(realm, months, year, occupants) {
 }
 
 module.exports.renderModel = function(req, res, callback) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         occupantIds = req.query.occupants ? req.query.occupants.split(',') : [],
         occupants = [],
         occupantIdsLoop;
@@ -191,7 +191,7 @@ module.exports.renderModel = function(req, res, callback) {
 };
 
 module.exports.rentModel = function(req, res, callback) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         month = req.query.month,
         fromMonth = req.query.fromMonth,
         year = req.query.year,

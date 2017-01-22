@@ -123,7 +123,7 @@ module.exports.findAllOccupants = function(realm, callback, filter) {
 };
 
 module.exports.one = function(req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         date = Helper.currentDate(req.query.month, req.query.year),
         id = req.body.id;
 
@@ -138,7 +138,7 @@ module.exports.one = function(req, res) {
 };
 
 module.exports.add = function(req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         occupant = occupantModel.schema.filter(req.body),
         momentBegin = moment(occupant.beginDate, 'DD/MM/YYYY'),
         momentEnd = moment(occupant.endDate, 'DD/MM/YYYY');
@@ -192,7 +192,7 @@ module.exports.add = function(req, res) {
 };
 
 module.exports.update = function(req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         occupant = occupantModel.schema.filter(req.body),
         momentBegin = moment(occupant.beginDate, 'DD/MM/YYYY'),
         momentEnd = occupant.terminationDate ? moment(occupant.terminationDate, 'DD/MM/YYYY') : moment(occupant.endDate, 'DD/MM/YYYY');
@@ -290,7 +290,7 @@ module.exports.update = function(req, res) {
 };
 
 module.exports.remove = function(req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         occupantIds = req.body['ids'];
 
     var releaseRent = function(callback) {

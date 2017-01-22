@@ -33,6 +33,7 @@ class SelectRealmCtrl extends ViewController {
                     }
                 }
             });
+            return false;
         });
     }
 }

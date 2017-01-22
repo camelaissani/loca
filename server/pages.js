@@ -33,55 +33,45 @@ const allViews = [
     'website'
 ];
 
-function render(model, res) {
-    model.config = config;
-    model.isValidView = allViews.indexOf(model.view) !== -1;
-    model.isLogged = model.account ? true : false;
-    model.isRealmSelected = model.account && model.account.realm;
-    model.isDefaultRealmSelected = model.isRealmSelected && model.account.realm.name === '__default_';
-    model.isMultipleRealmsAvailable = model.account && model.account.realms && model.account.realms.length > 1;
+function render(view, req, res) {
+    const model = {
+        config,
+        view,
+        isValidView: allViews.indexOf(view) !== -1,
+        isLogged: req.user ? true : false,
+        isRealmSelected: req.realm ? true : false,
+        isDefaultRealmSelected: req.realm && req.realm.name === '__default_',
+        isMultipleRealmsAvailable: req.realms && req.realms.length > 1,
+        user: req.user,
+        realm: req.realm,
+        realms: req.realms,
+        errors: null
+    };
     logger.debug(model);
     res.render('index', model);
 }
 
 function PAGES(router) {
     router.route('/').get(rs.mustSessionLessArea, function(req, res) {
-        render({
-            view: 'website',
-            account: null,
-            errors: null
-        }, res);
+        render('website', req, res);
     });
 
-    if (config.demomode) {
-        router.route('/login').get(rs.mustSessionLessArea, function(req, res) {
+    router.route('/login').get(rs.mustSessionLessArea, function(req, res) {
+        if (config.demomode) {
             loginManager.loginDemo(req, res);
-        });
-    } else {
-        router.route('/login').get(rs.mustSessionLessArea, function(req, res) {
-            render({
-                view: 'login',
-                account: null,
-                errors: null
-            }, res);
-        });
-    }
+            return;
+        }
+        render('login', req, res);
+    });
 
     if (config.subscription) {
         router.route('/signup').get(rs.mustSessionLessArea, function(req, res) {
-            render({
-                view: 'signup',
-                account: null,
-                errors: null
-            }, res);
+            render('signup', req, res);
         });
     }
 
     router.route('/selectrealm').get(rs.restrictedAreaAndRedirect, function(req, res) {
-        render({
-            view: 'selectrealm',
-            account: req.session.user
-        }, res);
+        render('selectrealm', req, res);
     });
 
     router.route('/loggedin').post(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
@@ -99,21 +89,17 @@ function PAGES(router) {
     }
 
     router.route('/index').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-        const model = {
-            view: req.query.view,
-            account: req.session.user
-        };
-        if (!model.view || adminViews.indexOf(model.view) === -1) {
+        if (!req.query.view || adminViews.indexOf(req.query.view) === -1) {
             res.redirect(`/index?view=${defaultAdminView}`);
-            logger.info(`View ${model.view} is not valid. Redirecting to /index?view=${defaultAdminView}`);
+            logger.info(`View ${req.query.view} is not valid. Redirecting to /index?view=${defaultAdminView}`);
             return;
         }
-        render(model, res);
+        render(req.query.view, req, res);
     });
 
     router.route('/page/dashboard').get(rs.restrictedArea, rs.mustRealmSet, function(req, res) {
         res.render('dashboard/index', {
-            account: req.session.user
+            account: req.user
         });
     });
 

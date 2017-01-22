@@ -27,7 +27,7 @@ module.exports._buildViewData = function(currentDate, notifications) {
 };
 
 module.exports.findAll = function(req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         notifications = [],
         feederLoop;
 
@@ -71,7 +71,7 @@ module.exports.findAll = function(req, res) {
 
 module.exports.update = function(req, res) {
     var date = new Date(),
-        user = req.session.user,
+        user = req.user,
         realm = user.realm,
         notification = notificationModel.schema.filter(req.body);
 

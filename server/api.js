@@ -20,7 +20,7 @@ function API(router) {
     if (!config.demomode) {
         router.route('/login').post(loginManager.login);
     }
-    router.route('/logout').get(rs.restrictedAreaAndRedirect, loginManager.logout);
+    router.route('/logout').get(loginManager.logout);
 
     router.route('/api/selectrealm').post(rs.restrictedArea, loginManager.selectRealm);
     router.route('/occupants/one').post(rs.restrictedArea, occupantManager.one);
@@ -28,7 +28,7 @@ function API(router) {
     router.route('/occupants/update').post(rs.restrictedArea, occupantManager.update);
     router.route('/occupants/remove').post(rs.restrictedArea, occupantManager.remove);
     router.route('/api/occupants').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm,
+        var realm = req.realm,
             occupantIdx;
         occupantManager.findAllOccupants(realm, function(errors, occupants) {
             if (errors && errors.length > 0) {
@@ -44,7 +44,7 @@ function API(router) {
         });
     });
     router.route('/api/occupants/overview').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm;
+        var realm = req.realm;
         var countAll = 0,
             countActive = 0,
             countInactive = 0,
@@ -86,7 +86,7 @@ function API(router) {
     router.route('/rents/one').post(rs.restrictedArea, rentManager.one);
     router.route('/rents/update').post(rs.restrictedArea, rentManager.update);
     router.route('/api/rents/occupant').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm,
+        var realm = req.realm,
             id = req.query.id,
             date = Helper.currentDate(req.query.month, req.query.year);
 
@@ -114,7 +114,7 @@ function API(router) {
         });
     });
     router.route('/api/rents').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm,
+        var realm = req.realm,
             date = Helper.currentDate(req.query.month, req.query.year);
 
         rentManager.findAllOccupantRents(realm, date.month, date.year, function(errors, rents) {
@@ -128,7 +128,7 @@ function API(router) {
         });
     });
     router.route('/api/rents/overview').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm,
+        var realm = req.realm,
             date = Helper.currentDate(req.query.month, req.query.year);
 
         rentManager.findAllOccupantRents(realm, date.month, date.year, function(errors, rents) {
@@ -182,7 +182,7 @@ function API(router) {
     router.route('/properties/remove').post(rs.restrictedArea, propertyManager.remove);
 
     router.route('/api/properties').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm;
+        var realm = req.realm;
         propertyManager.findAllResources(realm, function(errors, properties) {
             if (errors && errors.length > 0) {
                 res.json({
@@ -194,7 +194,7 @@ function API(router) {
         });
     });
     router.route('/api/properties/overview').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm,
+        var realm = req.realm,
             index,
             property,
             countAll = 0,
@@ -230,7 +230,7 @@ function API(router) {
         var beginOfYear = moment('01/01/'+year, 'DD/MM/YYYY').startOf('day'),
             endOfYear = moment('31/12/'+year, 'DD/MM/YYYY').endOf('day');
 
-        occupantManager.findAllOccupants(req.session.user.realm, function(errors, occupants) {
+        occupantManager.findAllOccupants(req.realm, function(errors, occupants) {
             var occupantsOfYear = occupants.filter(function(occupant) {
                 var beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY'),
                     endMoment = moment(occupant.terminationDate?occupant.terminationDate:occupant.endDate, 'DD/MM/YYYY');
@@ -281,8 +281,8 @@ function API(router) {
                             var endMoment = moment(occupant.terminationDate?occupant.terminationDate:occupant.endDate, 'DD/MM/YYYY');
                             return endMoment.isBetween(beginOfYear, endOfYear, '[]');
                         }).map(function(occupant) {
-                            var balance = Object.keys(occupant.rents[year]).reduce(function(prev, cur) {
-                                var b = occupant.rents[year][cur].balance;
+                            var totalAmount = Object.keys(occupant.rents[year]).reduce(function(prev, cur) {
+                                var b = occupant.rents[year][cur].totalAmount;
                                 return b!==0?b*-1:b;
                             });
 
@@ -294,8 +294,8 @@ function API(router) {
                                 endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
                                 deposit: occupant.guaranty,
                                 depositRefund: occupant.guarantyPayback,
-                                balance: balance,
-                                toPay: Number(occupant.guarantyPayback?0:occupant.guaranty) + Number(balance)
+                                totalAmount: totalAmount,
+                                toPay: Number(occupant.guarantyPayback?0:occupant.guaranty) + Number(totalAmount)
                             };
                         })
                     }
@@ -305,7 +305,7 @@ function API(router) {
     });
 
     router.route('/api/owner').get(rs.restrictedArea, function(req, res) {
-        var realm = req.session.user.realm;
+        var realm = req.realm;
         logger.silly('owner sent', realm);
         ownerManager.findOwner(realm, function(errors, realm) {
             if (errors && errors.length > 0) {

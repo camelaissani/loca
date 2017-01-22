@@ -72,6 +72,34 @@ RealmModel.prototype.findAll = function(callback) {
     });
 };
 
+RealmModel.prototype.findByEmail = function(email, callback) {
+    Model.prototype.findAll.call(this, null, function(errors, realms) {
+        if (errors) {
+            callback(errors);
+        } else if (!realms || realms.length === 0) {
+            callback(null, null);
+        } else {
+            const realmsFound = realms.filter(function(realm) {
+                if (realm.administrator === email ||
+                    realm.user1 === email ||
+                    realm.user2 === email ||
+                    realm.user3 === email ||
+                    realm.user4 === email ||
+                    realm.user5 === email ||
+                    realm.user6 === email ||
+                    realm.user7 === email ||
+                    realm.user8 === email ||
+                    realm.user9 === email ||
+                    realm.user10 === email) {
+                    return true;
+                }
+            });
+
+            callback(null, realmsFound);
+        }
+    });
+};
+
 RealmModel.prototype.add = function(realm, callback) {
     Model.prototype.add.call(this, null, realm, callback);
 };

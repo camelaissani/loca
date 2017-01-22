@@ -38,10 +38,6 @@ var testSet = [{
             relativePath: './managers/loginmanager',
             instance: new mocks.LoginManager(),
             ensureCallMethods: ['logout']
-        }, {
-            relativePath: './requeststrategy',
-            instance: new mocks.RequestStrategy(),
-            ensureCallMethods: ['restrictedAreaAndRedirect']
         },
         configPackage
     ],

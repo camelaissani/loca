@@ -72,11 +72,11 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <% if (isMultipleRealmsAvailable) { %>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %> <%if (!isDefaultRealmSelected) {%>@<%= account.realm.name %> <%}%><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= user.firstname + ' ' + user.lastname %> <%if (!isDefaultRealmSelected) {%>@<%= realm.name %> <%}%><span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <% for (index=0; index<account.realms.length; index++) { %>
+                            <% for (index=0; index<realms.length; index++) { %>
                                 <li>
-                                    <a href="#" class='realm-action' data-id="<%=account.realms[index]._id%>"><i class="fa fa-building-o"></i> <%= account.realms[index].name %> </a>
+                                    <a href="#" class='realm-action' data-id="<%=realms[index]._id%>"><i class="fa fa-building-o"></i> <%= realms[index].name %> </a>
                                 </li>
                             <% } %>
                             <!--li><a href="/selectrealm"><i class="fa fa-plus"></i> <%= t('New organization') %></a></li>
@@ -85,7 +85,7 @@
                             <li><a href="/logout"><i class="fa fa-sign-out"></i> <%= t('Sign out') %></a></li>
                         </ul>
                         <% } else { %>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= user.firstname + ' ' + user.lastname %><span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/logout"><i class="fa fa-sign-out"></i> <%= t('Sign out') %></a></li>
                         </ul>
@@ -95,7 +95,7 @@
                 <% } else if (isLogged) { %>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= account.firstname + ' ' + account.lastname %><span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= user.firstname + ' ' + user.lastname %><span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                             <li><a href="/logout"><i class="fa fa-sign-out"></i> <%= t('Sign out') %></a></li>
                         </ul>

@@ -5,7 +5,7 @@ var logger = require('winston');
 function RequestStrategy() {}
 
 RequestStrategy.prototype.mustSessionLessArea = function (req, res, next) {
-    if ((req.session && req.session.user && req.session.user)) {
+    if (req.session && req.user) {
         res.redirect('/index');
         logger.info('redirect to /index');
     } else {
@@ -14,7 +14,7 @@ RequestStrategy.prototype.mustSessionLessArea = function (req, res, next) {
 };
 
 RequestStrategy.prototype.restrictedArea = function (req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user) {
+    if (!req.session || !req.user) {
         res.send(401);
     } else {
         next();
@@ -22,7 +22,7 @@ RequestStrategy.prototype.restrictedArea = function (req, res, next) {
 };
 
 RequestStrategy.prototype.restrictedAreaAndRedirect = function (req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user) {
+    if (!req.session || !req.user) {
         res.redirect('/login');
         logger.info('User not defined redirect to /login');
     } else {
@@ -31,7 +31,7 @@ RequestStrategy.prototype.restrictedAreaAndRedirect = function (req, res, next) 
 };
 
 RequestStrategy.prototype.mustRealmSetAndRedirect = function (req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user.realm) {
+    if (!req.session || !req.user || !req.realm) {
         res.redirect('/selectrealm');
         logger.info('Realm not defined redirect to /selectrealm');
     } else {
@@ -40,7 +40,7 @@ RequestStrategy.prototype.mustRealmSetAndRedirect = function (req, res, next) {
 };
 
 RequestStrategy.prototype.mustRealmSet = function (req, res, next) {
-    if (!req.session || !req.session.user || !req.session.user.realm) {
+    if (!req.session || !req.user || !req.realm) {
         res.send(401);
     } else {
         next();

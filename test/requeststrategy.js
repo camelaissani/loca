@@ -24,9 +24,7 @@ describe('requeststartegy', function() {
         // check next
         res.redirect.reset();
         next.reset();
-        req.session = {
-            user: {}
-        };
+        req = {user:{}, session:{}};
         rs.mustSessionLessArea(req, res, next);
         assert(res.redirect.calledWith('/index'));
         assert(next.called === false);
@@ -48,9 +46,7 @@ describe('requeststartegy', function() {
         // check next
         res.send.reset();
         next.reset();
-        req.session = {
-            user: {}
-        };
+        req = {user:{}, session:{}};
         rs.restrictedArea(req, res, next);
         assert(res.send.called === false);
         assert(next.called);
@@ -72,9 +68,7 @@ describe('requeststartegy', function() {
         // check next
         res.redirect.reset();
         next.reset();
-        req.session = {
-            user: {}
-        };
+        req = {user:{}, session:{}};
         rs.restrictedAreaAndRedirect(req, res, next);
         assert(res.redirect.called === false);
         assert(next.called);
@@ -96,11 +90,7 @@ describe('requeststartegy', function() {
         // check next
         res.redirect.reset();
         next.reset();
-        req.session = {
-            user: {
-                realm: {}
-            }
-        };
+        req = {user:{}, session:{}, realm:{}};
         rs.mustRealmSetAndRedirect(req, res, next);
         assert(res.redirect.called === false);
         assert(next.called);
@@ -122,11 +112,7 @@ describe('requeststartegy', function() {
         // check next
         res.send.reset();
         next.reset();
-        req.session = {
-            user: {
-                realm: {}
-            }
-        };
+        req = {user:{}, session:{}, realm:{}};
         rs.mustRealmSet(req, res, next);
         assert(res.send.called === false);
         assert(next.called);

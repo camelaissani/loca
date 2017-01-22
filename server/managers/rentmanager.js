@@ -325,12 +325,12 @@ module.exports.findOccupantRents = function (realm, id, month, year, callback) {
 };
 
 module.exports.renderModel = function (req, res, callback) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         date = Helper.currentDate(req.query.month, req.query.year),
         action = req.query.action,
         id = req.query.id,
         model = {
-            account: req.session.user,
+            account: req.user,
             rent: null,
             rents: null,
             month: date.month,
@@ -360,7 +360,7 @@ module.exports.renderModel = function (req, res, callback) {
 };
 
 module.exports.one = function (req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         date = Helper.currentDate(req.body.month, req.body.year),
         id = req.body.id;
 
@@ -376,7 +376,7 @@ module.exports.one = function (req, res) {
 };
 
 module.exports.update = function (req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         date = Helper.currentDate(req.body.month, req.body.year),
         rent = rentModel.paymentSchema.filter(req.body);
 

@@ -12,10 +12,15 @@ var i18next = require('i18next'),
     bodyParser = require('body-parser'),
     cookieSession = require('cookie-session'),
     errorHandler = require('errorhandler'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy,
     router = express.Router(),
     app = express(),
     logger = require('winston'),
     expressWinston = require('express-winston'),
+    loginManager = require('./server/managers/loginmanager'),
+    accountModel = require('./server/models/account'),
+    realmModel = require('./server/models/realm'),
     config = require('./config');
 
 // App requirements
@@ -34,6 +39,33 @@ logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
     level: debugMode ? 'debug' : 'info',
     colorize: true
+});
+
+// Init passport local strategy
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'secretword'
+},
+(email, password, done) => {
+    loginManager.authenticate(email, password, (err, user) => {
+        if (err) {
+            return done(null, false, {message: err});
+        }
+        return done(null, user);
+    });
+}));
+passport.serializeUser((user, done) => {
+    done(null, user.email);
+});
+
+passport.deserializeUser((email, done) => {
+    accountModel.findOne(email, (err, user) => {
+        if (err) {
+            done(err);
+            return;
+        }
+        done(err, user);
+    });
 });
 
 // Init locale
@@ -70,6 +102,8 @@ app.use(cookieSession({
         maxAge: 3600000
     }
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(i18nMiddleware.handle(i18next));
 app.use(function(req, res, next) {
     var splitedLanguage = req.language.split('-');
@@ -112,6 +146,38 @@ app.use(expressWinston.logger({
 }));
 
 //Init routes
+// Retrieve all realms of user
+app.use((req, res, next) => {
+    if (req.user) {
+        realmModel.findByEmail(req.user.email, (err, realms) => {
+            if (err) {
+                next(err);
+                return;
+            }
+            req.realms = realms ? realms : [];
+            next();
+        });
+        return;
+    }
+    delete req.realms;
+    next();
+});
+// Retrieve realm selected by user
+app.use((req, res, next) => {
+    if (req.session && req.session.realmId) {
+        realmModel.findOne(req.session.realmId, (err, realm) => {
+            if (err) {
+                next(err);
+                return;
+            }
+            req.realm = realm;
+            next();
+        });
+        return;
+    }
+    delete req.realm;
+    next();
+});
 app.use(router);
 apiRoutes(router);
 pageRoutes(router);

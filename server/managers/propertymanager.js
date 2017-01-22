@@ -113,7 +113,7 @@ module.exports.findAllResources = function (realm, callback) {
 };
 
 module.exports.add = function (req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         property = propertyModel.schema.filter(req.body);
 
     propertyModel.add(realm, property,
@@ -137,7 +137,7 @@ module.exports.add = function (req, res) {
 };
 
 module.exports.update = function (req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         property = propertyModel.schema.filter(req.body);
 
     propertyModel.update(realm, property,
@@ -161,7 +161,7 @@ module.exports.update = function (req, res) {
 };
 
 module.exports.remove = function (req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         ids = req.body.ids;
 
     propertyModel.remove(realm, ids, function (errors) {

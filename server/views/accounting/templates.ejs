@@ -124,7 +124,7 @@
                             </td>
                             <td class="text-right">{{formatMoney deposit emptyForZero=false}}</td>
                             <td class="text-right">{{formatMoney depositRefund emptyForZero=false}}</td>
-                            <td class="text-right">{{formatMoney balance emptyForZero=false}}</td>
+                            <td class="text-right">{{formatMoney totalAmount emptyForZero=false}}</td>
                             <td class="text-right {{#ifNeg toPay}}danger{{/ifNeg}}">{{formatMoney toPay emptyForZero=false}}</td>
                         </tr>
                         {{/each}}

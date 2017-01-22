@@ -11,8 +11,8 @@ function buildViewData(realm) {
 }
 
 module.exports.renderModel = function (req, res, callback) {
-    var realm = req.session.user.realm,
-        model = {account: req.session.user},
+    var realm = req.realm,
+        model = {account: req.user},
         realmFound;
 
     ownerModel.findAll(realm, 'realms', function (errors, dbRealms) {
@@ -44,7 +44,7 @@ module.exports.findOwner = function (realm, callback) {
 };
 
 module.exports.update = function (req, res) {
-    var realm = req.session.user.realm,
+    var realm = req.realm,
         owner = ownerModel.schema.filter(req.body);
 
     if (!owner._id) {
