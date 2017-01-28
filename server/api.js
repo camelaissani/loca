@@ -282,8 +282,9 @@ function API(router) {
                             return endMoment.isBetween(beginOfYear, endOfYear, '[]');
                         }).map(function(occupant) {
                             var totalAmount = Object.keys(occupant.rents[year]).reduce(function(prev, cur) {
-                                var b = occupant.rents[year][cur].totalAmount;
-                                return b!==0?b*-1:b;
+                                const rent = occupant.rents[year][cur];
+                                let balance = rent.totalAmount - (rent.payment ? rent.payment : 0);
+                                return balance!==0?balance*-1:balance;
                             });
 
                             return {
