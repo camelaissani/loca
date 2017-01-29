@@ -83,37 +83,37 @@ class RentCtrl extends ViewController {
     onInitListeners() {
         $(document).on('click', '#view-rent #printinvoices', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/invoice?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/invoice?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-rent #rentcall', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/rentcall?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/rentcall?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery1', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/recovery1?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/recovery1?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery2', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/recovery2?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/recovery2?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery3', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/recovery3?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/recovery3?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-rent #paymentorder', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/paymentorder?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/paymentorder?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 

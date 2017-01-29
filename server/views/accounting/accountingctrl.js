@@ -68,7 +68,7 @@ class AccountingCtrl extends ViewController {
             const month = $action.data('month');
             const year = $action.data('year');
             const occupantId = $action.data('occupantId');
-            let url = `/invoice?occupants=${occupantId}&year=${year}`;
+            let url = `/print/invoice?occupants=${occupantId}&year=${year}`;
             if (month) {
                 url += `&month=${month}`;
             }

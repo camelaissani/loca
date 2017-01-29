@@ -6,8 +6,8 @@ function RequestStrategy() {}
 
 RequestStrategy.prototype.mustSessionLessArea = function (req, res, next) {
     if (req.session && req.user) {
-        res.redirect('/index');
         logger.info('redirect to /index');
+        res.redirect('/index');
     } else {
         next();
     }

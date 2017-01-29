@@ -256,10 +256,10 @@ if (config.demomode) {
 }
 
 module.exports.logout = function(req, res) {
+    logger.info('Logout and redirect to /');
     req.logout();
     req.session = null;
     res.redirect('/');
-    logger.info('Logout and redirect to /');
 };
 
 module.exports.selectRealm = function(req, res) {

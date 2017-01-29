@@ -4,7 +4,7 @@ var helpers = require('./helpers'),
     mocks = require('./mocks');
 
 var configPackage = {
-    relativePath: '../config',
+    relativePath: '../../config',
     instance: {
         subscription: true
     }
@@ -15,37 +15,7 @@ loginConfigPackage.instance.demomode = false;
 
 var testSet = [{
     mockedPackages: [{
-            relativePath: './managers/loginmanager',
-            instance: new mocks.LoginManager(),
-            ensureCallMethods: ['signup']
-        },
-        configPackage
-    ],
-    httpMethod: 'post',
-    route: '/signup'
-}, {
-    mockedPackages: [{
-            relativePath: './managers/loginmanager',
-            instance: new mocks.LoginManager(),
-            ensureCallMethods: ['login']
-        },
-        loginConfigPackage
-    ],
-    httpMethod: 'post',
-    route: '/login'
-}, {
-    mockedPackages: [{
-            relativePath: './managers/loginmanager',
-            instance: new mocks.LoginManager(),
-            ensureCallMethods: ['logout']
-        },
-        configPackage
-    ],
-    httpMethod: 'get',
-    route: '/logout'
-}, {
-    mockedPackages: [{
-            relativePath: './managers/loginmanager',
+            relativePath: '../managers/loginmanager',
             instance: new mocks.LoginManager(),
             ensureCallMethods: ['selectRealm']
         }, {
@@ -59,7 +29,7 @@ var testSet = [{
     route: '/api/selectrealm'
 }, {
     mockedPackages: [{
-            relativePath: './managers/occupantmanager',
+            relativePath: '../managers/occupantmanager',
             instance: new mocks.OccupantManager(),
             ensureCallMethods: ['one']
         }, {
@@ -70,10 +40,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/occupants/one'
+    route: '/api/occupants/one'
 }, {
     mockedPackages: [{
-            relativePath: './managers/occupantmanager',
+            relativePath: '../managers/occupantmanager',
             instance: new mocks.OccupantManager(),
             ensureCallMethods: ['add']
         }, {
@@ -84,10 +54,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/occupants/add'
+    route: '/api/occupants/add'
 }, {
     mockedPackages: [{
-            relativePath: './managers/occupantmanager',
+            relativePath: '../managers/occupantmanager',
             instance: new mocks.OccupantManager(),
             ensureCallMethods: ['update']
         }, {
@@ -98,10 +68,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/occupants/update'
+    route: '/api/occupants/update'
 }, {
     mockedPackages: [{
-            relativePath: './managers/occupantmanager',
+            relativePath: '../managers/occupantmanager',
             instance: new mocks.OccupantManager(),
             ensureCallMethods: ['remove']
         }, {
@@ -112,10 +82,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/occupants/remove'
+    route: '/api/occupants/remove'
 }, {
     mockedPackages: [{
-            relativePath: './managers/occupantmanager',
+            relativePath: '../managers/occupantmanager',
             instance: new mocks.OccupantManager(),
             ensureCallMethods: ['findAllOccupants']
         }, {
@@ -129,7 +99,7 @@ var testSet = [{
     route: '/api/occupants'
 }, {
     mockedPackages: [{
-            relativePath: './managers/occupantmanager',
+            relativePath: '../managers/occupantmanager',
             instance: new mocks.OccupantManager(),
             ensureCallMethods: ['findAllOccupants']
         }, {
@@ -143,7 +113,7 @@ var testSet = [{
     route: '/api/occupants/overview'
 }, {
     mockedPackages: [{
-            relativePath: './managers/documentmanager',
+            relativePath: '../managers/documentmanager',
             instance: new mocks.DocumentManager(),
             ensureCallMethods: ['update']
         }, {
@@ -154,10 +124,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/documents/update'
+    route: '/api/documents/update'
 }, {
     mockedPackages: [{
-            relativePath: './managers/notificationmanager',
+            relativePath: '../managers/notificationmanager',
             instance: new mocks.NotificationManager(),
             ensureCallMethods: ['findAll']
         }, {
@@ -171,7 +141,7 @@ var testSet = [{
     route: '/api/notifications'
 }, {
     mockedPackages: [{
-            relativePath: './managers/rentmanager',
+            relativePath: '../managers/rentmanager',
             instance: new mocks.RentManager(),
             ensureCallMethods: ['one']
         }, {
@@ -182,10 +152,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/rents/one'
+    route: '/api/rents/one'
 }, {
     mockedPackages: [{
-            relativePath: './managers/rentmanager',
+            relativePath: '../managers/rentmanager',
             instance: new mocks.RentManager(),
             ensureCallMethods: ['update']
         }, {
@@ -196,10 +166,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/rents/update'
+    route: '/api/rents/update'
 }, {
     mockedPackages: [{
-            relativePath: './managers/rentmanager',
+            relativePath: '../managers/rentmanager',
             instance: new mocks.RentManager(),
             ensureCallMethods: ['findOccupantRents']
         }, {
@@ -213,7 +183,7 @@ var testSet = [{
     route: '/api/rents/occupant'
 }, {
     mockedPackages: [{
-            relativePath: './managers/rentmanager',
+            relativePath: '../managers/rentmanager',
             instance: new mocks.RentManager(),
             ensureCallMethods: ['findAllOccupantRents']
         }, {
@@ -227,7 +197,7 @@ var testSet = [{
     route: '/api/rents'
 }, {
     mockedPackages: [{
-            relativePath: './managers/rentmanager',
+            relativePath: '../managers/rentmanager',
             instance: new mocks.RentManager(),
             ensureCallMethods: ['findAllOccupantRents']
         }, {
@@ -241,7 +211,7 @@ var testSet = [{
     route: '/api/rents/overview'
 }, {
     mockedPackages: [{
-            relativePath: './managers/propertymanager',
+            relativePath: '../managers/propertymanager',
             instance: new mocks.PropertyManager(),
             ensureCallMethods: ['add']
         }, {
@@ -252,10 +222,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/properties/add'
+    route: '/api/properties/add'
 }, {
     mockedPackages: [{
-            relativePath: './managers/propertymanager',
+            relativePath: '../managers/propertymanager',
             instance: new mocks.PropertyManager(),
             ensureCallMethods: ['update']
         }, {
@@ -266,10 +236,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/properties/update'
+    route: '/api/properties/update'
 }, {
     mockedPackages: [{
-            relativePath: './managers/propertymanager',
+            relativePath: '../managers/propertymanager',
             instance: new mocks.PropertyManager(),
             ensureCallMethods: ['remove']
         }, {
@@ -280,10 +250,10 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/properties/remove'
+    route: '/api/properties/remove'
 }, {
     mockedPackages: [{
-            relativePath: './managers/propertymanager',
+            relativePath: '../managers/propertymanager',
             instance: new mocks.PropertyManager(),
             ensureCallMethods: ['findAllResources']
         }, {
@@ -297,7 +267,7 @@ var testSet = [{
     route: '/api/properties'
 }, {
     mockedPackages: [{
-            relativePath: './managers/propertymanager',
+            relativePath: '../managers/propertymanager',
             instance: new mocks.PropertyManager(),
             ensureCallMethods: ['findAllResources']
         }, {
@@ -311,7 +281,7 @@ var testSet = [{
     route: '/api/properties/overview'
 }, {
     mockedPackages: [{
-            relativePath: './managers/ownermanager',
+            relativePath: '../managers/ownermanager',
             instance: new mocks.OwnerManager(),
             ensureCallMethods: ['findOwner']
         }, {
@@ -325,7 +295,7 @@ var testSet = [{
     route: '/api/owner'
 }, {
     mockedPackages: [{
-            relativePath: './managers/ownermanager',
+            relativePath: '../managers/ownermanager',
             instance: new mocks.OwnerManager(),
             ensureCallMethods: ['update']
         }, {
@@ -336,9 +306,9 @@ var testSet = [{
         configPackage
     ],
     httpMethod: 'post',
-    route: '/owner/update'
+    route: '/api/owner/update'
 }];
 
 describe('api', function() {
-    helpers.testRoutes('../server/api', testSet);
+    helpers.testRoutes('../server/routes/api', testSet);
 });

@@ -53,29 +53,23 @@ module.exports.RequestStrategy = function() {
     };
 
     this.restrictedArea = function(req, res, next) {
-        req.session = {
-            user: {
-                realm: {}
-            }
-        };
+        req.session = {};
+        req.user = {};
+        req.realm = {};
         next();
     };
 
     this.restrictedAreaAndRedirect = function(req, res, next) {
-        req.session = {
-            user: {
-                realm: {}
-            }
-        };
+        req.session = {};
+        req.user = {};
+        req.realm = {};
         next();
     };
 
     this.mustRealmSetAndRedirect = function(req, res, next) {
-        req.session = {
-            user: {
-                realm: {}
-            }
-        };
+        req.session = {};
+        req.user = {};
+        req.realm = {};
         next();
     };
 

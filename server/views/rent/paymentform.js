@@ -19,11 +19,11 @@ class PaymentForm extends Form {
 
     // No add possibility
     // getAddUrl() {
-    //     return '/properties/add';
+    //     return '/api/properties/add';
     // };
 
     getUpdateUrl() {
-        return '/rents/update';
+        return '/api/rents/update';
     }
 
     getDefaultData() {

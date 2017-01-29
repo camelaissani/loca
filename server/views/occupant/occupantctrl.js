@@ -81,7 +81,7 @@ class OccupantCtrl extends ViewController {
                 }
                 requester.ajax({
                     type: 'POST',
-                    url: '/occupants/remove',
+                    url: '/api/occupants/remove',
                     data: {ids: selectionIds},
                     dataType: 'json'
                 },
@@ -147,7 +147,7 @@ class OccupantCtrl extends ViewController {
             const month = $action.data('month');
             const year = $action.data('year');
             const occupantId = $action.data('occupantId');
-            let url = `/invoice?occupants=${occupantId}&year=${year}`;
+            let url = `/print/invoice?occupants=${occupantId}&year=${year}`;
             if (month) {
                 url += `&month=${month}`;
             }
@@ -199,51 +199,50 @@ class OccupantCtrl extends ViewController {
 
     onInitListeners() {
         $(document).on('click', '#view-occupant #printofficechecklist', () => {
-            //application.openPrintPreview('/public/pdf/checklist.pdf');
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/checklist?occupants=' + selection);
+            application.openPrintPreview('/print/checklist?occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/contract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/contract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printcustomcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/customcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/customcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printdomcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/domcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/domcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantycertificate', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/guarantycertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/guarantycertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantypayback', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/guarantypaybackcertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/guarantypaybackcertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantyrequest', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/guarantyrequest?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/guarantyrequest?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printinsurancerequest', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/insurance?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview('/print/insurance?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
             return false;
         });
 

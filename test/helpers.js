@@ -13,11 +13,12 @@ module.exports = {
         testSet.forEach(function(test) {
             it('['+test.httpMethod.toUpperCase()+'] ' + test.route, function (done) {
                 var app = express();
-                var router = express.Router();
-                var API;
                 var mocks = {};
 
                 test.mockedPackages.forEach(function(mock) {
+                    if (mock.toInstantiate) {
+                        mock.instance = new mock.toInstantiate();
+                    }
                     mocks[mock.relativePath] = mock.instance;
                     if (mock.ensureCallMethods) {
                         mock.ensureCallMethods.forEach(function(methodName) {
@@ -26,14 +27,12 @@ module.exports = {
                     }
                 });
 
-                app.use(router);
                 app.engine('ejs', function (filePath, options, callback) { // define the template engine
                     return callback(null, '');
                 });
                 app.set('views', __dirname + '/../server/views');
                 app.set('view engine', 'ejs');
-                API = proxyquire(packagePath, mocks);
-                API(router);
+                app.use(proxyquire(packagePath, mocks));
 
                 request(app)[test.httpMethod](test.route)
                 .expect(200)
