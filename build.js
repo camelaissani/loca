@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 import fs from 'fs-extra';
 import {rollup} from 'rollup';
-import path from 'path';
 import babel from 'rollup-plugin-babel';
-import less from 'less';
 import uglify from 'rollup-plugin-uglify';
+import includePaths from 'rollup-plugin-includepaths';
+import path from 'path';
+import less from 'less';
 import purify from 'purify-css';
 import cssnano from 'cssnano';
 import imagemin from 'imagemin';
@@ -150,6 +151,19 @@ const plugins = () => {
         babel({
             babelrc: false,
             presets: ['es2015-rollup']
+        }),
+        includePaths({
+            external: [
+                'accounting',
+                'bootbox',
+                'handlebars',
+                'historyjs',
+                'i18next',
+                'jquery',
+                'minivents',
+                'moment',
+                'sugar'
+            ]
         })
     ];
 
