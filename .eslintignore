@@ -1,6 +1,5 @@
 bkp
 coverage
-public
+dist
 node_modules
 test
-gulpfile.js

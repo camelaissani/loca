@@ -3,7 +3,6 @@ import fs from 'fs-extra';
 import {rollup} from 'rollup';
 import path from 'path';
 import babel from 'rollup-plugin-babel';
-import babelrc from 'babelrc-rollup';
 import less from 'less';
 import uglify from 'rollup-plugin-uglify';
 import purify from 'purify-css';
@@ -12,31 +11,47 @@ import imagemin from 'imagemin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
 
+// directories
+const frontend_directory = path.join(__dirname, 'frontend');
+const view_directory = path.join(frontend_directory, 'view');
+const less_directory = path.join(frontend_directory, 'less');
+const image_directory = path.join(frontend_directory, 'images');
+const locale_directory = path.join(frontend_directory, 'locales');
+const dist_directory = path.join(__dirname, 'dist');
+const dist_css_directory = path.join(dist_directory, 'css');
+const dist_images_directory = path.join(dist_directory, 'images');
+const dist_js_directory = path.join(dist_directory, 'js');
+const dist_locales_directory = path.join(dist_directory, 'locales');
+
+// pattern
+const templates_pattern = path.join(view_directory, '/**/*.ejs');
+const images_pattern = path.join(image_directory, '/**/*.{jpg,png}');
+
 const buildCss = (opts) => {
     return new Promise(function (resolve, reject) {
-        const code = fs.readFileSync(path.join(views_directory, 'less', `index_${opts.name}.less`), 'utf8');
+        fs.ensureDir(dist_css_directory);
+        const code = fs.readFileSync(path.join(less_directory, `index_${opts.name}.less`), 'utf8');
         less.render(code, {
-            paths: [path.join(views_directory, 'less')]
+            paths: [less_directory]
         }).then((output) => {
-
-            fs.writeFileSync(path.join(css_directory, `${opts.name}.css`), output.css);
+            fs.writeFileSync(path.join(dist_css_directory, `${opts.name}.css`), output.css);
 
             if (process.env.NODE_ENV !== 'production') {
                 resolve(output.css);
             }
 
-            const content = [opts.bundleOptions.dest, 'server/views/**/*.ejs'];
+            const content = [opts.bundleOptions.dest, templates_pattern];
             if (opts.extJs) {
                 content.push(...opts.extJs);
             }
-            const css = [path.join(css_directory, `${opts.name}.css`)];
+            const css = [path.join(dist_css_directory, `${opts.name}.css`)];
 
             const purified_css = purify(content, css);
             if (!purified_css) {
                 throw ('purify exited with an empty css');
             }
             cssnano.process(purified_css).then((result) => {
-                fs.writeFileSync(path.join(css_directory, `${opts.name}.min.css`), result.css);
+                fs.writeFileSync(path.join(dist_css_directory, `${opts.name}.min.css`), result.css);
                 resolve(result.css);
             }).catch((error) => {
                 reject(error);
@@ -50,6 +65,7 @@ const buildCss = (opts) => {
 
 const buildJs = (opts) => {
     return new Promise((resolve, reject) => {
+        fs.ensureDir(dist_js_directory);
         rollup(opts.options).then((bundle) => {
             bundle.write(opts.bundleOptions);
             resolve();
@@ -60,41 +76,81 @@ const buildJs = (opts) => {
 };
 
 const buildImg = () => {
-    return Promise.resolve({
-        then(resolve){
-            imagemin(['server/views/images/**/*.{jpg,png}'], images_directory, {
+    return new Promise((resolve, reject) => {
+        try {
+            fs.ensureDir(dist_images_directory);
+            imagemin([images_pattern], dist_images_directory, {
                 plugins: [
                     imageminMozjpeg(),
                     imageminPngquant({quality: '65-80'})
                 ]
             });
             resolve();
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const copyLocales= () => {
+    return new Promise((resolve, reject) => {
+        try {
+            fs.copySync(
+                locale_directory,
+                dist_locales_directory
+            );
+            resolve();
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const copyRobots= () => {
+    return new Promise((resolve, reject) => {
+        try {
+            fs.copySync(
+                path.join(frontend_directory, 'robots.txt'),
+                path.join(dist_directory, 'robots.txt')
+            );
+            resolve();
+        } catch (err) {
+            reject(err);
+        }
+    });
+};
+
+const copySitemap= () => {
+    return new Promise((resolve, reject) => {
+        try {
+            fs.copySync(
+                path.join(frontend_directory, 'sitemap.xml'),
+                path.join(dist_directory, 'sitemap.xml')
+            );
+            resolve();
+        } catch (err) {
+            reject(err);
         }
     });
 };
 
 const clean = () => {
-    return Promise.resolve({
-        then(resolve){
-            [css_directory, js_directory, images_directory].map((directory) => {
-                fs.emptydirSync(directory);
-            });
+    return new Promise((resolve, reject) => {
+        try {
+            fs.emptydirSync(dist_directory);
             resolve();
+        } catch (err) {
+            reject(err);
         }
     });
 };
 
-// Build struct
-const views_directory = path.join(__dirname, 'server', 'views');
-const css_directory = path.join(__dirname, 'public', 'css');
-const images_directory = path.join(__dirname, 'public', 'images');
-const js_directory = path.join(__dirname, 'public', 'js');
-
 const plugins = () => {
     const list = [
-        babel(babelrc({
-            addExternalHelpersPlugin: false
-        }))
+        babel({
+            babelrc: false,
+            presets: ['es2015-rollup']
+        })
     ];
 
     if (process.env.NODE_ENV === 'production') {
@@ -107,7 +163,7 @@ const plugins = () => {
 const bundleOptions = (name) => {
     const suffix = process.env.NODE_ENV === 'production' ? '.min' : '';
     const opts = {
-        dest: path.join(js_directory, `${name}${suffix}.js`),
+        dest: path.join(dist_js_directory, `${name}${suffix}.js`),
         format: 'umd',
         globals: {
             'accounting': 'accounting',
@@ -128,7 +184,7 @@ const bundleOptions = (name) => {
 const print = {
     name: 'print',
     options: {
-        entry: path.join(views_directory, 'index_print.js'),
+        entry: path.join(view_directory, 'index_print.js'),
         plugins: plugins()
     },
     bundleOptions: bundleOptions('print')
@@ -137,7 +193,7 @@ const print = {
 const ppublic = {
     name: 'public',
     options: {
-        entry: path.join(views_directory, 'index_public.js'),
+        entry: path.join(view_directory, 'index_public.js'),
         plugins: plugins()
     },
     bundleOptions: bundleOptions('public')
@@ -147,7 +203,7 @@ const restricted = {
     name: 'restricted',
     extJs: [path.join(__dirname, 'node_modules', 'bootbox', 'bootbox.js')],
     options: {
-        entry: path.join(views_directory, 'index_restricted.js'),
+        entry: path.join(view_directory, 'index_restricted.js'),
         plugins: plugins('restricted')
     },
     bundleOptions: bundleOptions('restricted')
@@ -162,6 +218,9 @@ clean()
 .then(buildCss(ppublic))
 .then(buildCss(restricted))
 .then(buildImg())
+.then(copyLocales())
+.then(copyRobots())
+.then(copySitemap())
 .catch((reason) => {
     throw reason;
 });

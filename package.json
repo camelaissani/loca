@@ -6,12 +6,12 @@
     "start": "npm run buildprod && NODE_ENV=production node server.js",
     "dev": "npm run builddev && babel-watch server.js",
     "lint": "eslint .",
+    "test-only": "babel-node node_modules/.bin/_mocha",
+    "test": "npm run lint && babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha",
     "builddev": "babel-node build.js",
     "buildprod": "NODE_ENV=production babel-node build.js",
-    "test": "npm run lint && babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha",
-    "test-only": "babel-node node_modules/.bin/_mocha",
-    "mongodump": "node mongodump.js",
-    "mongorestore": "node mongorestore.js"
+    "mongodump": "node scripts/mongodump.js",
+    "mongorestore": "node scripts/mongorestore.js"
   },
   "dependencies": {
     "accounting": "^0.4.1",
@@ -58,7 +58,6 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-es2015-rollup": "^1.2.0",
     "babel-watch": "^2.0.5",
-    "babelrc-rollup": "^3.0.0",
     "cssnano": "^3.7.6",
     "eslint": "^3.7.0",
     "fs-extra": "^0.30.0",

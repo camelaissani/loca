@@ -11,7 +11,7 @@ describe('model', function() {
     it('findOne', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -41,7 +41,7 @@ describe('model', function() {
     it('findOne without schema', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -65,7 +65,7 @@ describe('model', function() {
     it('findOne returns nothing', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -89,7 +89,7 @@ describe('model', function() {
     it('findOne returns errors', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -114,7 +114,7 @@ describe('model', function() {
     it('findAll', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -138,7 +138,7 @@ describe('model', function() {
     it('findFilter', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -172,7 +172,7 @@ describe('model', function() {
     it('findFilter without schema', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -200,7 +200,7 @@ describe('model', function() {
     it('findFilter returns nothing', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -228,7 +228,7 @@ describe('model', function() {
     it('findFilter returns null', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),
@@ -256,7 +256,7 @@ describe('model', function() {
     it('findFilter returns error', function(done) {
         var mockedDB = new mocks.DB(),
             mockedLogger = new mocks.Logger(),
-            Model = proxyquire('../server/models/model', {
+            Model = proxyquire('../backend/models/model', {
                 './db': mockedDB,
                 'winston': mockedLogger
             }),

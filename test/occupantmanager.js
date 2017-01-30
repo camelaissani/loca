@@ -64,7 +64,7 @@ describe('occupantmanager', function() {
         sinon.spy(mockedPropertyModel, 'findFilter');
         sinon.spy(mockedOccupantModel, 'add');
 
-        manager = proxyquire('../server/managers/occupantmanager', {
+        manager = proxyquire('../backend/managers/occupantmanager', {
             '../models/occupant': mockedOccupantModel,
             '../models/property': mockedPropertyModel
         });
@@ -140,7 +140,7 @@ describe('occupantmanager', function() {
         sinon.spy(mockedPropertyModel, 'findFilter');
         sinon.spy(mockedOccupantModel, 'update');
 
-        manager = proxyquire('../server/managers/occupantmanager', {
+        manager = proxyquire('../backend/managers/occupantmanager', {
             '../models/occupant': mockedOccupantModel,
             '../models/property': mockedPropertyModel
         });
@@ -198,7 +198,7 @@ describe('occupantmanager', function() {
         sinon.spy(mockedOccupantModel, 'findFilter');
         sinon.spy(mockedOccupantModel, 'remove');
 
-        manager = proxyquire('../server/managers/occupantmanager', {
+        manager = proxyquire('../backend/managers/occupantmanager', {
             'mongojs': {
                 ObjectId: function(t) {
                     return t;

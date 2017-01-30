@@ -30,7 +30,7 @@ module.exports = {
                 app.engine('ejs', function (filePath, options, callback) { // define the template engine
                     return callback(null, '');
                 });
-                app.set('views', __dirname + '/../server/views');
+                app.set('views', __dirname + '/../frontend/view');
                 app.set('view engine', 'ejs');
                 app.use(proxyquire(packagePath, mocks));
 

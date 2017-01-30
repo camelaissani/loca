@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert'),
-    OF = require('../server/models/objectfilter');
+    OF = require('../backend/models/objectfilter');
 
 describe('objectfilter', function() {
     var schema = new OF({

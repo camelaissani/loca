@@ -184,5 +184,5 @@ var testSet = [{
 }];
 
 describe('print routes', function() {
-    helpers.testRoutes('../server/routes/print', testSet);
+    helpers.testRoutes('../backend/routes/print', testSet);
 });

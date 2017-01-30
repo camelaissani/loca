@@ -10,7 +10,7 @@ config.demomode = !(process.env.LOCA_DEMOMODE !== undefined && process.env.LOCA_
 
 config.database = process.env.LOCA_DBNAME || 'demodb';
 
-logger.debug('Loaded configuration from', configdir + '/config');
-logger.silly('Configuration content:', config);
+logger.debug('loaded configuration from', configdir + '/config');
+logger.silly('configuration content:', config);
 
 module.exports = config;

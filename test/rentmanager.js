@@ -4,7 +4,7 @@ var assert = require('assert'),
     moment = require('moment'),
     proxyquire = require('proxyquire'),
     mocks = require('./mocks'),
-    manager = proxyquire('../server/managers/rentmanager', {'../modules/db': new mocks.DB()});
+    manager = proxyquire('../backend/managers/rentmanager', {'../modules/db': new mocks.DB()});
 
 describe('rentmanager', function() {
     describe('Compute one rent price - contract started first day of month', function() {

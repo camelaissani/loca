@@ -29,5 +29,5 @@ var testSet = [{
 }];
 
 describe('website routes', function() {
-    helpers.testRoutes('../server/routes/website', testSet);
+    helpers.testRoutes('../backend/routes/website', testSet);
 });

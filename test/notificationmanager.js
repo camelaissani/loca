@@ -13,7 +13,7 @@ describe('notificationmanager', function() {
         mockedModel.findAll = function(realm, callback) {
             callback(null, []);
         };
-        manager = proxyquire('../server/managers/notificationmanager', {
+        manager = proxyquire('../backend/managers/notificationmanager', {
             '../models/notification': mockedModel
         });
     });

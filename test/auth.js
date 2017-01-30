@@ -127,5 +127,5 @@ var testSet = [{
 }];
 
 describe('auth routes', function() {
-    helpers.testRoutes('../server/routes/auth', testSet);
+    helpers.testRoutes('../backend/routes/auth', testSet);
 });

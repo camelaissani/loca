@@ -17,10 +17,12 @@ const expressWinston = require('express-winston');
 const path = require('path');
 const moment = require('moment');
 const config = require('./config');
-const routes = require('./server/routes');
-const db = require('./server/models/db');
+const routes = require('./backend/routes');
+const db = require('./backend/models/db');
 
 const debugMode = process.env.NODE_ENV !== 'production';
+
+const dist_directory = path.join(__dirname, 'dist');
 
 // Reconfigure default logger
 logger.remove(logger.transports.Console);
@@ -46,7 +48,7 @@ i18next.use(i18nMiddleware.LanguageDetector)
             caches: ['cookie']
         },
         backend: {
-            loadPath: path.join(__dirname, '/public/locales/{{lng}}.json')
+            loadPath: path.join(dist_directory, 'locales', '{{lng}}.json')
         }
     });
 
@@ -73,19 +75,19 @@ app.use(function(req, res, next) {
     next();
 });
 // Icon / static files
-app.use(favicon(path.join(__dirname, '/public/images/favicon.png'), {
+app.use(favicon(path.join(dist_directory, 'images', 'favicon.png'), {
     maxAge: 2592000000
 }));
 app.use('/node_modules', express.static(path.join(__dirname, '/node_modules')));
-app.use('/public', express.static(path.join(__dirname, '/public')));
-app.use('/public/image', express.static(path.join(__dirname, '/public/images')));
-app.use('/public/images', express.static(path.join(__dirname, '/public/images')));
+app.use('/public', express.static(dist_directory));
+app.use('/public/image', express.static(path.join(dist_directory, 'images')));
+app.use('/public/images', express.static(path.join(dist_directory, 'images')));
 app.use('/public/fonts', express.static(path.join(__dirname, '/node_modules/bootstrap/fonts')));
-app.use('/public/pdf', express.static(path.join(__dirname, '/public/pdf')));
-app.use('/robots.txt', express.static(path.join(__dirname, '/public/robots.txt')));
-app.use('/sitemap.xml', express.static(path.join(__dirname, '/public/sitemap.xml')));
+app.use('/public/pdf', express.static(path.join(dist_directory, 'pdf')));
+app.use('/robots.txt', express.static(path.join(dist_directory, 'robots.txt')));
+app.use('/sitemap.xml', express.static(path.join(dist_directory, 'sitemap.xml')));
 
-app.set('views', __dirname + '/server/views');
+app.set('views', path.join(__dirname, 'frontend', 'view'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 

@@ -2,7 +2,7 @@ var assert = require('assert'),
     sinon = require('sinon'),
     proxyquire = require('proxyquire'),
     mocks = require('./mocks'),
-    rs = proxyquire('../server/routes/requeststrategy', {
+    rs = proxyquire('../backend/routes/requeststrategy', {
         'winston': new mocks.Logger()
     });
 

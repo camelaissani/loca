@@ -310,5 +310,5 @@ var testSet = [{
 }];
 
 describe('api', function() {
-    helpers.testRoutes('../server/routes/api', testSet);
+    helpers.testRoutes('../backend/routes/api', testSet);
 });

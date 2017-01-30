@@ -111,5 +111,5 @@ var testSet = [{
 }];
 
 describe('page routes', function() {
-    helpers.testRoutes('../server/routes/page', testSet);
+    helpers.testRoutes('../backend/routes/page', testSet);
 });
