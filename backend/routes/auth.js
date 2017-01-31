@@ -73,6 +73,11 @@ router.use((req, res, next) => {
         });
         return;
     }
+    if (req.realms && req.realms.length === 1) {
+        req.realm = req.realms[0];
+        next();
+        return;
+    }
     delete req.realm;
     next();
 });

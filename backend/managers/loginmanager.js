@@ -48,6 +48,75 @@ function checkRealmAccess(email, callback) {
     });
 }
 
+function createAccountIfNotExist(firstname, lastname, email, realmName, password, callback) {
+    function checkNotExistingAccount(email, done) {
+        accountModel.findOne(email, function(err, account) {
+            if (err) {
+                logger.error(ResponseTypes.DB_ERROR);
+                done({status: ResponseTypes.DB_ERROR});
+                return;
+            }
+            if (account) {
+                logger.info(ResponseTypes.EMAIL_TAKEN);
+                done({status: ResponseTypes.EMAIL_TAKEN});
+                return;
+            }
+            // no account found
+            done();
+        });
+    }
+
+    function createAccount(firstname, lastname, email, password, done) {
+        bcrypt.hash(password, 10, function(err, hash) {
+            var account;
+            if (err) {
+                logger.error(ResponseTypes.ENCRYPT_ERROR + ': ' + err);
+                done({status: ResponseTypes.ENCRYPT_ERROR});
+                return;
+            }
+
+            account = {
+                email: email.toLowerCase(),
+                password: hash,
+                firstname: firstname,
+                lastname: lastname
+            };
+            accountModel.add(account, done);
+        });
+    }
+
+    checkNotExistingAccount(email, (err) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+        createAccount(firstname, lastname, email, password, (err) => {
+            if (err) {
+                logger.error(ResponseTypes.DB_ERROR + ': ' + err);
+                callback({status: ResponseTypes.DB_ERROR});
+                return;
+            }
+            logger.info('Create realm on the fly for new user ' + email);
+            createRealm(realmName || '__default_', email, function(error, newRealm) {
+                if (error) {
+                    logger.info('Login failed ' + ResponseTypes.DB_ERROR);
+                    callback({status: ResponseTypes.DB_ERROR});
+                    return;
+                }
+                callback(null, {
+                    account: {
+                        firstname: firstname,
+                        lastname: lastname,
+                        email: email,
+                        realm: newRealm
+                    },
+                    status: ResponseTypes.SUCCESS
+                });
+            });
+        });
+    });
+}
+
 module.exports.authenticate = function(email, password, done) {
     if (!email || !password) {
         logger.info('Login failed ' + ResponseTypes.MISSING_FIELD);
@@ -111,132 +180,87 @@ module.exports.authenticate = function(email, password, done) {
     });
 };
 
-module.exports.signup = function(req, res) {
-    var email = req.param('email'),
-        password = req.param('password'),
-        firstname = req.param('firstname'),
-        lastname = req.param('lastname');
+logger.log('subscription ' + config.subscription);
+if (config.subscription) {
+    module.exports.signup = function(req, res) {
+        var email = req.param('email'),
+            password = req.param('password'),
+            firstname = req.param('firstname'),
+            lastname = req.param('lastname');
 
-    var checkNotExistingAccount = function(success) {
-            accountModel.findOne(email, function(err, account) {
-                if (err) {
-                    res.json({
-                        status: ResponseTypes.DB_ERROR
-                    });
-                    logger.error(ResponseTypes.DB_ERROR);
-                    return;
-                }
-                if (account) {
-                    res.json({
-                        status: ResponseTypes.EMAIL_TAKEN
-                    });
-                    logger.info(ResponseTypes.EMAIL_TAKEN);
-                    return;
-                }
-                success();
+        logger.info('Request new account: ' + email);
+
+        if (!email || !password || !firstname || !lastname) {
+            res.json({
+                status: ResponseTypes.MISSING_FIELD
             });
-        },
-        createAccount = function(callback) {
-            bcrypt.hash(password, 10, function(err, hash) {
-                var account;
-                if (err) {
-                    res.json({
-                        status: ResponseTypes.ENCRYPT_ERROR
-                    });
-                    logger.error(ResponseTypes.ENCRYPT_ERROR + ': ' + err);
-                    return;
-                }
+            logger.info(ResponseTypes.MISSING_FIELD);
+            return;
+        }
 
-                account = {
-                    email: email.toLowerCase(),
-                    password: hash,
-                    firstname: firstname,
-                    lastname: lastname
-                };
-                accountModel.add(account, callback);
-            });
-        };
-
-    logger.info('Request new account: ' + email);
-
-    if (!email || !password || !firstname || !lastname) {
-        res.json({
-            status: ResponseTypes.MISSING_FIELD
-        });
-        logger.info(ResponseTypes.MISSING_FIELD);
-        return;
-    }
-
-    email = email.toLowerCase();
-
-    checkNotExistingAccount(function() {
-        createAccount(function(err) {
+        createAccountIfNotExist(firstname, lastname, email.toLowerCase(), null, password, (err, account) => {
             if (err) {
-                res.json({
-                    status: ResponseTypes.DB_ERROR
-                });
-                logger.error(ResponseTypes.DB_ERROR + ': ' + err);
+                res.json(err);
                 return;
             }
-            logger.info('Create realm on the fly for new user ' + email);
-            createRealm('__default_', email, function(error, newRealm) {
-                if (error) {
-                    logger.info('Login failed ' + ResponseTypes.DB_ERROR);
-                    res.json({
-                        status: ResponseTypes.DB_ERROR
-                    });
-                    return;
-                }
-                res.json({
-                    account: {
-                        firstname: firstname,
-                        lastname: lastname,
-                        email: email,
-                        realm: newRealm
-                    },
-                    status: ResponseTypes.SUCCESS
-                });
-            });
+            res.json(account);
         });
-    });
-};
+    };
+}
 
 if (config.demomode) {
     module.exports.loginDemo = function(req, res) {
+        const firstname = 'Camel';
+        const lastname = 'Aissani';
         const email = 'demo@demo.com';
+        const realmName = 'demo';
+        const password = 'demo';
 
-        checkRealmAccess(email, function(err, realms) {
-            if (err) {
-                logger.info('Login failed', ResponseTypes.DB_ERROR, err);
+        function logIn(user) {
+            req.logIn(user, function(err) {
+                if (err) {
+                    logger.info('Login failed ' + err);
+                    res.redirect('/');
+                    return;
+                }
+                logger.info('Login successful ' + email);
+                res.redirect('/loggedin');
+            });
+        }
+
+        createAccountIfNotExist(firstname, lastname, email, realmName, password, (err, account) => {
+            if ((err && err.status !== ResponseTypes.EMAIL_TAKEN) && !account) {
+                logger.info('Login failed', err);
                 res.redirect('/');
                 return;
             }
 
-            req.user = {
-                firstname: 'Camel',
-                lastname: 'Aissani',
-                email,
-                realms
-            };
+            checkRealmAccess(email, function(err, realms) {
+                if (err) {
+                    logger.info('Login failed', ResponseTypes.DB_ERROR, err);
+                    res.redirect('/');
+                    return;
+                }
 
-            if (realms.length === 0) {
-                createRealm('demo', 'demo@demo.com', function(err, realm) {
-                    if (err) {
-                        logger.info('failed to create realm ' + ResponseTypes.DB_ERROR);
-                        res.redirect('/');
-                        return;
-                    }
-                    req.session.realms = [realm];
-                    req.realm = realms[0];
-                    logger.info('Login successful ' + email);
-                    res.redirect('/loggedin');
-                });
-                return;
-            }
+                const user = {
+                    firstname,
+                    lastname,
+                    email
+                };
 
-            req.realm = realms[0];
-            logger.info('Login successful ' + email);
-            res.redirect('/loggedin');
+                if (realms.length === 0) {
+                    createRealm('demo', 'demo@demo.com', function(err) {
+                        if (err) {
+                            logger.info('failed to create realm ' + ResponseTypes.DB_ERROR);
+                            res.redirect('/');
+                            return;
+                        }
+                        logIn(user);
+                    });
+                } else {
+                    logIn(user);
+                }
+            });
         });
     };
 } else {

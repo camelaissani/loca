@@ -56,10 +56,7 @@ var testSet = [{
         loginConfigPackage, {
             relativePath: '../managers/loginmanager',
             instance: new mocks.LoginManager()
-        }, {
-            relativePath: 'winston',
-            instance: new mocks.Logger()
-        }, {
+        }, loggerPackage, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['mustSessionLessArea']
@@ -73,10 +70,7 @@ var testSet = [{
             relativePath: '../managers/loginmanager',
             instance: new mocks.LoginManager(),
             ensureCallMethods: ['loginDemo']
-        }, {
-            relativePath: 'winston',
-            instance: new mocks.Logger()
-        }, {
+        }, loggerPackage, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['mustSessionLessArea']
@@ -86,7 +80,10 @@ var testSet = [{
     route: '/login'
 }, {
     mockedPackages: [
-        configPackage, loggerPackage, {
+        configPackage, loginConfigPackage, {
+            relativePath: '../managers/loginmanager',
+            instance: new mocks.LoginManager()
+        }, loggerPackage, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['mustSessionLessArea']
@@ -96,7 +93,10 @@ var testSet = [{
     route: '/signup'
 }, {
     mockedPackages: [
-        configPackage, loggerPackage, {
+        configPackage, loginConfigPackage, {
+            relativePath: '../managers/loginmanager',
+            instance: new mocks.LoginManager()
+        }, loggerPackage, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['restrictedAreaAndRedirect', 'mustRealmSetAndRedirect']
@@ -106,7 +106,10 @@ var testSet = [{
     route: '/loggedin'
 }, {
     mockedPackages: [
-        configPackage, loggerPackage, {
+        configPackage, loginConfigPackage, {
+            relativePath: '../managers/loginmanager',
+            instance: new mocks.LoginManager()
+        }, loggerPackage, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['restrictedAreaAndRedirect', 'mustRealmSetAndRedirect']
@@ -116,7 +119,10 @@ var testSet = [{
     route: '/loggedin'
 }, {
     mockedPackages: [
-        configPackage, loggerPackage, {
+        configPackage, loginConfigPackage, {
+            relativePath: '../managers/loginmanager',
+            instance: new mocks.LoginManager()
+        }, loggerPackage, {
             relativePath: './requeststrategy',
             instance: new mocks.RequestStrategy(),
             ensureCallMethods: ['restrictedAreaAndRedirect', 'mustRealmSetAndRedirect']

@@ -8,7 +8,7 @@ config.subscription = process.env.LOCA_PRODUCTIVE !== undefined && process.env.L
 
 config.demomode = !(process.env.LOCA_DEMOMODE !== undefined && process.env.LOCA_DEMOMODE.toLowerCase() === 'false');
 
-config.database = process.env.LOCA_DBNAME || 'demodb';
+config.database = config.demomode ? 'demodb' : process.env.LOCA_DBNAME || 'demodb';
 
 logger.debug('loaded configuration from', configdir + '/config');
 logger.silly('configuration content:', config);
