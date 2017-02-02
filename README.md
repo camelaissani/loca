@@ -30,18 +30,12 @@ npm install
 node server.js
 ```
 
-For developers, open a first terminal in the project directory a run these commands:
+For developers, run these commands:
 
 ```
 npm install
 npm run dev
 ```
-
-Open a second terminal in the same directory and run:
-```
-npm run watch
-```
-It will automatically build when the source code changes.
 
 Why I created this application?
 -------------------------------
