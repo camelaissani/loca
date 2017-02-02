@@ -1,8 +1,8 @@
-var configdir = process.env.LOCA_CONFIG_DIR || __dirname,
-    config = require(configdir + '/config'),
-    mongobackup = require('mongobackup');
+import path from 'path';
+import mongobackup from 'mongobackup';
+import config from '../config';
 
 mongobackup.dump({
     db: config.database,
-    out: './bkp/'
+    out: path.join(__dirname, '..', 'bkp')
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('../../config'),
+var config = require('../../config').default,
     mongojs = require('mongojs'),
     logger = require('winston'),
     collections = [],

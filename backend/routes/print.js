@@ -1,5 +1,5 @@
 const express = require('express');
-const config = require('../../config');
+const config = require('../../config').default;
 const rs = require('./requeststrategy');
 const printManager = require('../managers/printmanager');
 

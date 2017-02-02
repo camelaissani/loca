@@ -13,12 +13,13 @@ import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
 
 // directories
-const frontend_directory = path.join(__dirname, 'frontend');
+const root_directory = path.join(__dirname, '..');
+const frontend_directory = path.join(root_directory, 'frontend');
 const view_directory = path.join(frontend_directory, 'view');
 const less_directory = path.join(frontend_directory, 'less');
 const image_directory = path.join(frontend_directory, 'images');
 const locale_directory = path.join(frontend_directory, 'locales');
-const dist_directory = path.join(__dirname, 'dist');
+const dist_directory = path.join(root_directory, 'dist');
 const dist_css_directory = path.join(dist_directory, 'css');
 const dist_images_directory = path.join(dist_directory, 'images');
 const dist_js_directory = path.join(dist_directory, 'js');
@@ -215,7 +216,7 @@ const ppublic = {
 
 const restricted = {
     name: 'restricted',
-    extJs: [path.join(__dirname, 'node_modules', 'bootbox', 'bootbox.js')],
+    extJs: [path.join(root_directory, 'node_modules', 'bootbox', 'bootbox.js')],
     options: {
         entry: path.join(view_directory, 'index_restricted.js'),
         plugins: plugins('restricted')

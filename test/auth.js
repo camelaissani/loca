@@ -6,12 +6,15 @@ var helpers = require('./helpers'),
 var configPackage = {
     relativePath: '../../config',
     instance: {
-        subscription: true
+        default: {
+            subscription: true,
+            demomode: true
+        }
     }
 };
 
 var loginConfigPackage = JSON.parse(JSON.stringify(configPackage));
-loginConfigPackage.instance.demomode = false;
+loginConfigPackage.instance.default.demomode = false;
 
 var loggerPackage = {
     relativePath: 'winston',

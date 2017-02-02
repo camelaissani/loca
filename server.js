@@ -16,7 +16,7 @@ const logger = require('winston');
 const expressWinston = require('express-winston');
 const path = require('path');
 const moment = require('moment');
-const config = require('./config');
+const config = require('./config').default;
 const routes = require('./backend/routes');
 const db = require('./backend/models/db');
 
@@ -133,7 +133,9 @@ if (!debugMode) {
     app.use(errorHandler());
     logger.info('In development mode (no minify/no uglify)');
 }
-
+const configdir = process.env.LOCA_CONFIG_DIR || path.join(__dirname, 'config');
+logger.debug('loaded configuration from', configdir);
+logger.debug(JSON.stringify(config, null,'\t'));
 if (config.demomode) {
     logger.info('In demo mode (login disabled)');
 }

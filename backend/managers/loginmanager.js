@@ -3,7 +3,7 @@
 var bcrypt = require('bcryptjs'),
     logger = require('winston'),
     passport = require('passport'),
-    config = require('../../config'),
+    config = require('../../config').default,
     accountModel = require('../models/account'),
     realmModel = require('../models/realm'),
     ResponseTypes = {

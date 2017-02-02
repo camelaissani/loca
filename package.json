@@ -8,10 +8,10 @@
     "lint": "eslint .",
     "test-only": "babel-node node_modules/.bin/_mocha",
     "test": "npm run lint && babel-node node_modules/.bin/babel-istanbul cover node_modules/.bin/_mocha",
-    "builddev": "babel-node build.js",
-    "buildprod": "NODE_ENV=production babel-node build.js",
-    "mongodump": "node scripts/mongodump.js",
-    "mongorestore": "node scripts/mongorestore.js"
+    "builddev": "babel-node scripts/build.js",
+    "buildprod": "NODE_ENV=production babel-node scripts/build.js",
+    "mongodump": "babel-node scripts/mongodump.js",
+    "mongorestore": "babel-node scripts/mongorestore.js"
   },
   "dependencies": {
     "accounting": "^0.4.1",
