@@ -1,5 +1,5 @@
 import config from '../../config';
 
 export default {
-    rent: require(`./${config.businesslogic}/rent`).default
+    computeRent: require(`./${config.businesslogic}/computeRent`).default
 };

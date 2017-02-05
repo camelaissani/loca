@@ -1,7 +1,7 @@
 /* eslint-env node, mocha */
 import math from 'mathjs';
 import assert from 'assert';
-import bl from '../../backend/businesslogic';
+import BL from '../../backend/businesslogic';
 
 describe('business logic rent computation', () => {
     describe('one property rented', () => {
@@ -21,14 +21,14 @@ describe('business logic rent computation', () => {
         const grandTotal = math.round((property.price + property.expense - contract.discount) * (1+contract.vatRate), 2);
 
         it('compute one rent', () => {
-            const computedRent = bl.rent(contract, '01/01/2017', '31/01/2017');
+            const computedRent = BL.computeRent(contract, '01/01/2017', '31/01/2017');
             assert.equal(computedRent.total.grandTotal, grandTotal);
             assert(true);
         });
 
         it('compute two rents and check balance', () => {
-            const rentOne = bl.rent(contract, '01/01/2017', '31/01/2017');
-            const rentTwo = bl.rent(contract, '01/01/2017', '31/01/2017', null, rentOne);
+            const rentOne = BL.computeRent(contract, '01/01/2017', '31/01/2017');
+            const rentTwo = BL.computeRent(contract, '01/01/2017', '31/01/2017', null, rentOne);
             assert.equal(rentOne.total.grandTotal, grandTotal);
             assert.equal(rentTwo.balance, grandTotal);
             assert.equal(rentTwo.total.grandTotal, grandTotal * 2);
@@ -60,13 +60,13 @@ describe('business logic rent computation', () => {
         const grandTotal2 = math.round((property2.price + property2.expense) * (1+contract.vatRate), 2);
 
         it('compute one rent one property should be billed', () => {
-            const computedRent = bl.rent(contract, '01/01/2017', '31/01/2017');
+            const computedRent = BL.computeRent(contract, '01/01/2017', '31/01/2017');
             assert.equal(computedRent.total.grandTotal, grandTotal1);
             assert(true);
         });
 
         it('compute one rent two properties should be billed', () => {
-            const computedRent = bl.rent(contract, '01/02/2017', '28/02/2017');
+            const computedRent = BL.computeRent(contract, '01/02/2017', '28/02/2017');
             assert.equal(computedRent.total.grandTotal, grandTotal1 + grandTotal2);
             assert(true);
         });
