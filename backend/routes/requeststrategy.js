@@ -1,50 +1,54 @@
 'use strict';
 
-var logger = require('winston');
+import logger from 'winston';
 
-function RequestStrategy() {}
-
-RequestStrategy.prototype.mustSessionLessArea = function (req, res, next) {
+function mustSessionLessArea(req, res, next) {
     if (req.session && req.user) {
         logger.info('redirect to /index');
         res.redirect('/index');
     } else {
         next();
     }
-};
+}
 
-RequestStrategy.prototype.restrictedArea = function (req, res, next) {
+function restrictedArea(req, res, next) {
     if (!req.session || !req.user) {
-        res.send(401);
+        res.sendStatus(401);
     } else {
         next();
     }
-};
+}
 
-RequestStrategy.prototype.restrictedAreaAndRedirect = function (req, res, next) {
+function restrictedAreaAndRedirect(req, res, next) {
     if (!req.session || !req.user) {
         res.redirect('/login');
         logger.info('User not defined redirect to /login');
     } else {
         next();
     }
-};
+}
 
-RequestStrategy.prototype.mustRealmSetAndRedirect = function (req, res, next) {
+function mustRealmSetAndRedirect(req, res, next) {
     if (!req.session || !req.user || !req.realm) {
         res.redirect('/selectrealm');
         logger.info('Realm not defined redirect to /selectrealm');
     } else {
         next();
     }
-};
+}
 
-RequestStrategy.prototype.mustRealmSet = function (req, res, next) {
+function mustRealmSet(req, res, next) {
     if (!req.session || !req.user || !req.realm) {
-        res.send(401);
+        res.sendStatus(401);
     } else {
         next();
     }
-};
+}
 
-module.exports = new RequestStrategy();
+export default {
+    mustSessionLessArea,
+    restrictedArea,
+    restrictedAreaAndRedirect,
+    mustRealmSetAndRedirect,
+    mustRealmSet
+};

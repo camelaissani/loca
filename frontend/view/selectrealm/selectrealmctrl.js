@@ -14,22 +14,20 @@ class SelectRealmCtrl extends ViewController {
 
     onInitListeners() {
         $(document).on('click', '.realm-action', function() {
-            var $action = $(this),
-                realmId = $action.data('id'),
-                viewId;
+            const $action = $(this);
+            const realmId = $action.data('id');
             requester.ajax({
-                type: 'POST',
-                url: '/api/selectrealm',
-                dataType: 'json',
-                data: {id: realmId}
+                type: 'GET',
+                url: `/api/realms/${realmId}`
             },
             function(response) {
+                const location = window.location;
                 if (response.status === 'success') {
-                    if (window.location.pathname ===  '/selectrealm') {
-                        window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index';
+                    if (location.pathname ===  '/selectrealm') {
+                        window.location = `${location.origin}/page`;
                     } else {
-                        viewId = application.getViewFromQueryString(window.location);
-                        window.location = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/index?view='+viewId;
+                        const viewId = application.getViewFromLocation();
+                        window.location = `${location.origin}/page/${viewId}`;
                     }
                 }
             });

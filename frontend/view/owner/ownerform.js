@@ -15,11 +15,6 @@ class OwnerForm extends Form {
         return '#owner-form';
     }
 
-    // Only one owner
-    getAddUrl() {
-        return this.getUpdateUrl();
-    }
-
     getUpdateUrl() {
         return '/api/owner/update';
     }

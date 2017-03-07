@@ -57,10 +57,8 @@ class PropertyCtrl extends ViewController {
                     selectionIds.push(selection[index]._id);
                 }
                 requester.ajax({
-                    type: 'POST',
-                    url: '/api/properties/remove',
-                    data: {ids: selectionIds},
-                    dataType: 'json'
+                    type: 'GET',
+                    url: `/api/properties/remove/${selectionIds.join()}`,
                 },
                 (response) => {
                     if (!response.errors || response.errors.length===0) {

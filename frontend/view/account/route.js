@@ -5,7 +5,7 @@ import accountCtrl from './accountctrl';
 export default () => {
     LOCA.routes.account = {
         url() {
-            return '/page/account';
+            return '/view/account';
         },
         title: i18next.t('Account'),
         pageInitialized(callback) {

@@ -1,24 +1,24 @@
 'use strict';
 
-const i18next = require('i18next');
-const i18nMiddleware = require('i18next-express-middleware');
-const i18nFS = require('i18next-node-fs-backend');
-const i18nSprintf = require('i18next-sprintf-postprocessor');
-const express = require('express');
-const favicon = require('serve-favicon');
-const methodOverride = require('method-override');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
-const errorHandler = require('errorhandler');
-const passport = require('passport');
-const logger = require('winston');
-const expressWinston = require('express-winston');
-const path = require('path');
-const moment = require('moment');
-const config = require('./config').default;
-const routes = require('./backend/routes');
-const db = require('./backend/models/db');
+import i18next from 'i18next';
+import i18nMiddleware,{LanguageDetector} from 'i18next-express-middleware';
+import i18nFS from 'i18next-node-fs-backend';
+import i18nSprintf from 'i18next-sprintf-postprocessor';
+import express from 'express';
+import favicon from 'serve-favicon';
+import methodOverride from 'method-override';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import cookieSession from 'cookie-session';
+import errorHandler from 'errorhandler';
+import passport from 'passport';
+import logger from 'winston';
+import expressWinston from 'express-winston';
+import path from 'path';
+import moment from 'moment';
+import config from './config';
+import routes from './backend/routes';
+import db from './backend/models/db';
 
 const debugMode = process.env.NODE_ENV !== 'production';
 
@@ -32,7 +32,7 @@ logger.add(logger.transports.Console, {
 });
 
 // Init locale
-i18next.use(i18nMiddleware.LanguageDetector)
+i18next.use(LanguageDetector)
     .use(i18nFS)
     .use(i18nSprintf)
     .init({
@@ -117,11 +117,9 @@ app.use(expressWinston.errorLogger({
 }));
 
 // Init routes
-app.use(routes.website);
-app.use(routes.auth);
-app.use(routes.page);
-app.use(routes.api);
-app.use(routes.print);
+Object.keys(routes).forEach(route => {
+    app.use(routes[route]());
+});
 
 // Start web app
 if (!debugMode) {

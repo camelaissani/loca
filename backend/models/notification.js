@@ -1,17 +1,15 @@
 'use strict';
+import OF from './objectfilter';
+import Model from './model';
 
-var Model = require('./model'),
-    OF = require('./objectfilter');
-
-function NotificationModel() {
-    Model.call(this, 'notifications');
-    this.schema = new OF({
-        id: String,
-        status: String
-    });
+class NotificationModel extends Model {
+    constructor() {
+        super('notifications');
+        this.schema = new OF({
+            id: String,
+            status: String
+        });
+    }
 }
 
-NotificationModel.prototype = Object.create(Model.prototype);
-NotificationModel.constructor = NotificationModel;
-
-module.exports = new NotificationModel();
+export default new NotificationModel();

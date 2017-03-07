@@ -6,7 +6,7 @@ class LoginForm extends Form {
         return '#login-form';
     }
 
-    getAddUrl() {
+    getUpdateUrl() {
         return '/login';
     }
 

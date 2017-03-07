@@ -1,72 +1,101 @@
 'use strict';
 
-const express = require('express');
-const logger = require('winston');
-const render = require('../render');
-const rs = require('./requeststrategy');
+import express from 'express';
+import logger from 'winston';
+import config from '../../config';
+import rs from './requeststrategy';
 
 const defaultAdminView = 'dashboard';
-
 const adminViews = [
-    // 'account',
     'accounting',
     'dashboard',
     'occupant',
     'owner',
     'property',
     'rent',
+    'selectrealm',
     'website'
 ];
+const allViews = [
+    ...adminViews,
+    'login',
+    'signup'
+];
 
-const restrictedWithRealmSetRouter = express.Router();
-restrictedWithRealmSetRouter.use(rs.restrictedArea);
-restrictedWithRealmSetRouter.use(rs.mustRealmSet);
+function buildModel(view, req) {
+    return {
+        config,
+        view,
+        isValidView: allViews.indexOf(view) !== -1,
+        isLogged: req.user ? true : false,
+        isRealmSelected: req.realm ? true : false,
+        isDefaultRealmSelected: req.realm && req.realm.name === '__default_',
+        isMultipleRealmsAvailable: req.realms && req.realms.length > 1,
+        user: req.user,
+        realm: req.realm,
+        realms: req.realms,
+        errors: null
+    };
+}
 
-restrictedWithRealmSetRouter.route('/dashboard').get(function(req, res) {
-    res.render('dashboard/index', {
-        user: req.user
-    });
-});
+function renderPage(view, req, res) {
+    const model = buildModel(view, req);
+    res.render('index', model);
+}
 
-restrictedWithRealmSetRouter.route('/rent').get(function(req, res) {
-    res.render('rent/index');
-});
+function renderView(view, req, res) {
+    const model = buildModel(view, req);
+    res.render(`${view}/index`, model);
+}
 
-restrictedWithRealmSetRouter.route('/occupant').get(function(req, res) {
-    res.render('occupant/index');
-});
+export default function () {
 
-restrictedWithRealmSetRouter.route('/accounting').get(function(req, res) {
-    res.render('accounting/index');
-});
+    const router = express.Router();
 
-restrictedWithRealmSetRouter.route('/property').get(function(req, res) {
-    res.render('property/index');
-});
-
-restrictedWithRealmSetRouter.route('/owner').get(function(req, res) {
-    res.render('owner/index');
-});
-
-restrictedWithRealmSetRouter.route('/account').get(function(req, res) {
-    res.render('account/index');
-});
-
-const router = express.Router();
-
-router.route('/selectrealm').get(rs.restrictedAreaAndRedirect, function(req, res) {
-    render('selectrealm', req, res);
-});
-
-router.route('/index').get(rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, function(req, res) {
-    if (!req.query.view || adminViews.indexOf(req.query.view) === -1) {
-        res.redirect(`/index?view=${defaultAdminView}`);
-        logger.info(`View ${req.query.view} is not valid. Redirecting to /index?view=${defaultAdminView}`);
-        return;
+    if (config.subscription) {
+        router.get('/signup', rs.mustSessionLessArea, (req, res) => {
+            renderPage('signup', req, res);
+        });
+        router.post('/signedin', rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, (req, res) => {
+            res.redirect('/login');
+        });
     }
-    render(req.query.view, req, res);
-});
 
-router.use('/page', restrictedWithRealmSetRouter);
+    if (!config.demomode) {
+        router.get('/login', rs.mustSessionLessArea, (req, res) => {
+            renderPage('login', req, res);
+        });
+    }
 
-module.exports = router;
+    router.all('/loggedin', rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, (req, res) => {
+        res.redirect('/index');
+    });
+
+    router.get('/selectrealm', rs.restrictedAreaAndRedirect, (req, res) => {
+        renderPage('selectrealm', req, res);
+    });
+
+    router.get('/view/:view', rs.restrictedArea, rs.mustRealmSet, (req, res) => {
+        const view = req.params.view;
+        if (adminViews.indexOf(view) === -1) {
+            res.redirect(`/page/${defaultAdminView}`);
+            logger.info(`View ${view} is not valid. Redirecting to /page/${defaultAdminView}`);
+            return;
+        }
+        renderView(view, req, res);
+    });
+
+    router.get('/page/:view?', rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, (req, res) => {
+        const view = req.params.view;
+        if (adminViews.indexOf(view) === -1) {
+            res.redirect(`/page/${defaultAdminView}`);
+            logger.info(`View ${view} is not valid. Redirecting to /page/${defaultAdminView}`);
+            return;
+        }
+        renderPage(view, req, res);
+    });
+
+    router.get('/', (req, res) => renderPage('website', req, res));
+
+    return router;
+}

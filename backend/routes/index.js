@@ -1,13 +1,9 @@
-const api = require('./api');
-const auth = require('./auth');
-const page = require('./page');
-const print = require('./print');
-const website = require('./website');
+import api from './api';
+import auth from './auth';
+import page from './page';
 
-module.exports = {
-    api,
+export default {
     auth,
-    page,
-    print,
-    website
+    api,
+    page
 };

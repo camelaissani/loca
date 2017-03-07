@@ -5,7 +5,7 @@ import accountingCtrl from './accountingctrl';
 export default () => {
     LOCA.routes.accounting = {
         url() {
-            return '/page/accounting';
+            return '/view/accounting';
         },
         title: i18next.t('Accounting'),
         pageInitialized(callback) {

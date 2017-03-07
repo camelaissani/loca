@@ -5,7 +5,7 @@ import ownerCtrl from './ownerctrl';
 export default () => {
     LOCA.routes.owner = {
         url() {
-            return '/page/owner';
+            return '/view/owner';
         },
         title: i18next.t('Landloard'),
         pageInitialized(callback) {

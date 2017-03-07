@@ -38,13 +38,12 @@ class Application {
         });
     }
 
-    getViewFromQueryString(location) {
-        const queryString = Sugar.Object.fromQueryString(location),
-            view = (queryString && queryString.view) ? queryString.view : '',
-            hashIndex = view.indexOf('#'),
-            viewId = hashIndex >= 0 ? view.substr(0, hashIndex) : view;
-
-        return viewId;
+    getViewFromLocation() {
+        const m = /\/page\/([^\/#]*)/.exec(window.location.pathname);
+        if (m) {
+            return m[1];
+        }
+        return null;
     }
 
     _getViewAndUpdateData(data, noGetView, callback) {
@@ -87,7 +86,7 @@ class Application {
             if ($oldHeaderMenuItem) {
                 const oldViewId = $oldHeaderMenuItem.find('.nav-action').data('id');
                 const oldNavMapItem = LOCA.routes[oldViewId];
-                if (oldNavMapItem.pageExited) {
+                if (oldNavMapItem && oldNavMapItem.pageExited) {
                     oldNavMapItem.pageExited(() => {
                         $container.css('visibility', 'hidden');
                         $container.css('opacity', 0);
@@ -133,7 +132,7 @@ class Application {
 
         if (navMapItem) {
             const navData = {
-                menuId: navMapItem.menuId?navMapItem.menuId:viewId,
+                menuId: navMapItem.menuId || viewId,
                 viewId: viewId
             };
             this._getViewAndUpdateData(navData, true, callback);
@@ -148,11 +147,11 @@ class Application {
     updateView(viewId, qs, addToHistory) {
         const navMapItem = LOCA.routes[viewId],
             navData = {
-                menuId: navMapItem.menuId?navMapItem.menuId:viewId,
+                menuId: navMapItem.menuId || viewId,
                 viewId: viewId
             };
 
-        let facingUrl = '/index?view='+viewId;
+        let facingUrl = `/page/${viewId}`;
 
         if (qs) {
             let url = navMapItem.url();

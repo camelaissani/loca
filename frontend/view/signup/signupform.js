@@ -7,7 +7,7 @@ class SignupForm extends Form {
         return '#signup-form';
     }
 
-    getAddUrl() {
+    getUpdateUrl() {
         return '/signup';
     }
 

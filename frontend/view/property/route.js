@@ -5,7 +5,7 @@ import propertyCtrl from './propertyctrl';
 export default () => {
     LOCA.routes.property = {
         url: function () {
-            return '/page/property';
+            return '/view/property';
         },
         title: i18next.t('Properties'),
         pageInitialized: function(callback) {

@@ -22,7 +22,7 @@ document.addEventListener('applicationReady', function(/*event*/) {
     // init menu
     menu();
 
-    const viewId = application.getViewFromQueryString(window.location);
+    const viewId = application.getViewFromLocation();
     const $demoPopover = $('#demo-popover');
 
     application.updateData(viewId, function() {

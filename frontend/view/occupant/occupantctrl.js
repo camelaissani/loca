@@ -45,7 +45,7 @@ class OccupantCtrl extends ViewController {
     _loadPropertyList(callback) {
         requester.ajax({
             type: 'GET',
-            url: '/api/properties?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
+            url: '/api/properties'
         },
         (properties) => {
             if (callback) {
@@ -80,10 +80,8 @@ class OccupantCtrl extends ViewController {
                     selectionIds.push(selection[index]._id);
                 }
                 requester.ajax({
-                    type: 'POST',
-                    url: '/api/occupants/remove',
-                    data: {ids: selectionIds},
-                    dataType: 'json'
+                    type: 'GET',
+                    url: `/api/occupants/remove/${selectionIds.join()}`,
                 },
                 (response) => {
                     if (!response.errors || response.errors.length===0) {
@@ -110,7 +108,7 @@ class OccupantCtrl extends ViewController {
             this.openForm('invoices');
             requester.ajax({
                 type: 'GET',
-                url: '/api/rents/occupant?id='+selection[0]._id
+                url: `/api/rents/occupant/${selection[0]._id}`
             }, (rentsHistory) => {
                 const current = moment();
                 let count = 0;
@@ -147,9 +145,9 @@ class OccupantCtrl extends ViewController {
             const month = $action.data('month');
             const year = $action.data('year');
             const occupantId = $action.data('occupantId');
-            let url = `/print/invoice?occupants=${occupantId}&year=${year}`;
+            let url = `/api/documents/print/invoice/occupants/${occupantId}/${year}`;
             if (month) {
-                url += `&month=${month}`;
+                url += `/${month}`;
             }
             application.openPrintPreview(url);
         }
@@ -163,7 +161,7 @@ class OccupantCtrl extends ViewController {
                     if (data._id) {
                         requester.ajax({
                             type: 'GET',
-                            url: '/api/occupants/overview?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
+                            url: '/api/occupants/overview'
                         },
                         (occupantsOverview) => {
                             const countAll = occupantsOverview.countAll;
@@ -187,7 +185,7 @@ class OccupantCtrl extends ViewController {
             this.openForm('rents-history', true);
             requester.ajax({
                 type: 'GET',
-                url: '/api/rents/occupant?id='+selection[0]._id
+                url: `/api/rents/occupant/${selection[0]._id}`
             }, (rentsHistory) => {
                 $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
             });
@@ -200,49 +198,49 @@ class OccupantCtrl extends ViewController {
     onInitListeners() {
         $(document).on('click', '#view-occupant #printofficechecklist', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/checklist?occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/checklist/occupants/${selection}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/contract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/contract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printcustomcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/customcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/customcontract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printdomcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/domcontract?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/domcontract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantycertificate', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/guarantycertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/guarantycertificate/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantypayback', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/guarantypaybackcertificate?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/guarantypaybackcertificate/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantyrequest', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/guarantyrequest?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/guarantyrequest/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printinsurancerequest', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/insurance?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/insurance/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 

@@ -1,44 +1,42 @@
 'use strict';
 
-var Model = require('./model'),
-    OF = require('./objectfilter'),
-    logger = require('winston');
+import logger from 'winston';
+import Model from './model';
+import OF from './objectfilter';
 
-function AccountModel() {
-    // Call super constructor
-    Model.call(this, 'accounts');
-    this.schema = new OF({
-        email: String,
-        password: String,
-        firstname: String,
-        lastname: String,
-        creation: String
-    });
+class AccountModel extends Model {
+    constructor() {
+        super('accounts');
+        this.schema = new OF({
+            email: String,
+            password: String,
+            firstname: String,
+            lastname: String,
+            creation: String
+        });
+    }
+
+    findOne(email, callback) {
+        super.findFilter(null, {
+            email: email.toLowerCase()
+        }, (errors, accounts) => {
+            if (errors) {
+                callback(errors);
+            } else if (!accounts || accounts.length === 0) {
+                callback(null, null);
+            } else {
+                callback(null, accounts[0]);
+            }
+        });
+    }
+
+    add(item, callback) {
+        super.add(null, item, callback);
+    }
+
+    findAll() {
+        logger.error('method not implemented!');
+    }
 }
 
-AccountModel.prototype = Object.create(Model.prototype);
-AccountModel.prototype.constructor = AccountModel;
-
-AccountModel.prototype.findOne = function(email, callback) {
-    Model.prototype.findFilter.call(this, null, {
-        email: email.toLowerCase()
-    }, function(errors, accounts) {
-        if (errors) {
-            callback(errors);
-        } else if (!accounts || accounts.length === 0) {
-            callback(null, null);
-        } else {
-            callback(null, accounts[0]);
-        }
-    });
-};
-
-AccountModel.prototype.add = function(item, callback) {
-    Model.prototype.add.call(this, null, item, callback);
-};
-
-AccountModel.prototype.findAll = AccountModel.prototype.update = AccountModel.prototype.remove = function() {
-    logger.error('method not implemented!');
-};
-
-module.exports = new AccountModel();
+export default new AccountModel();

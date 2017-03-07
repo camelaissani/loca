@@ -5,7 +5,7 @@ import rentCtrl from './rentctrl';
 export default () => {
     LOCA.routes.rent = {
         url() {
-            return '/page/rent';
+            return '/view/rent';
         },
         title: i18next.t('Rents'),
         pageInitialized(callback) {

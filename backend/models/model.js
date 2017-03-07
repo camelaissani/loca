@@ -1,100 +1,87 @@
 'use strict';
+import logger from 'winston';
+import db  from './db';
 
-var logger = require('winston'),
-    db = require('./db');
+export default class Model {
 
-function Model(collection) {
-    this.collection = collection;
-    db.addCollection(collection);
-}
+    constructor(collection) {
+        this.collection = collection;
+        db.addCollection(collection);
+    }
 
-Model.prototype.findOne = function(realm, id, callback) {
-    var self = this,
-        item;
-    db.findItemById(realm, this.collection, id, function(errors, dbItems) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            item = (dbItems && dbItems.length > 0) ? dbItems[0] : null;
-            callback(null, self.schema ? self.schema.filter(item) : item);
-        }
-    });
-};
+    findOne(realm, id, callback) {
+        db.findItemById(realm, this.collection, id, (errors, dbItems) => {
+            if (errors && errors.length > 0) {
+                callback(errors);
+                return;
+            }
 
-Model.prototype.findAll = function(realm, callback) {
-    this.findFilter(realm, {}, callback);
-};
+            const item = (dbItems && dbItems.length > 0) ? dbItems[0] : null;
+            callback(null, this.schema ? this.schema.filter(item) : item);
+        });
+    }
 
-Model.prototype.findFilter = function(realm, filter, callback) {
-    var self = this,
-        items;
-    db.listWithFilter(realm, this.collection, filter, function(errors, dbItems) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            items = dbItems ? dbItems : [];
-            if (self.schema) {
-                items.forEach(function(item, index) {
+    findAll(realm, callback) {
+        this.findFilter(realm, {}, callback);
+    }
 
-                    items[index] = self.schema.filter(item);
+    findFilter(realm, filter, callback) {
+        db.listWithFilter(realm, this.collection, filter, (errors, dbItems) => {
+            if (errors && errors.length > 0) {
+                callback(errors);
+                return;
+            }
+            const items = dbItems || [];
+            if (this.schema) {
+                items.forEach((item, index) => {
+                    items[index] = this.schema.filter(item);
                 });
             }
             callback(null, items);
-        }
-    });
-};
-
-Model.prototype.upsert = function(realm, query, fieldsToSet, fieldsToSetOnInsert, callback) {
-    var updateSchema = this.updateSchema || this.schema;
-
-    if (!updateSchema.exists(fieldsToSet)) {
-        logger.error('cannot update', this.collection, fieldsToSet, 'not valid');
-        callback(['cannot update database fields not valid']);
-        return;
+        });
     }
 
-    db.upsert(realm, this.collection, query, fieldsToSet, this.schema.filter(fieldsToSetOnInsert), function(errors) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            callback(null);
-        }
-    });
-};
+    upsert(realm, query, fieldsToSet, fieldsToSetOnInsert, callback) {
+        const updateSchema = this.updateSchema || this.schema;
 
-Model.prototype.update = function(realm, item, callback) {
-    var updateSchema = this.updateSchema || this.schema,
-        itemToUpdate = updateSchema.filter(item);
-    db.update(realm, this.collection, itemToUpdate, function(errors) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-        } else {
-            callback(null);
-        }
-    });
-};
-
-Model.prototype.add = function(realm, item, callback) {
-    var self = this,
-        addSchema = this.addSchema || this.schema,
-        itemToAdd = addSchema.filter(item);
-    db.add(realm, this.collection, itemToAdd, function(errors, dbItem) {
-        if (errors && errors.length > 0) {
-            callback(errors);
+        if (!updateSchema.exists(fieldsToSet)) {
+            logger.error('cannot update', this.collection, fieldsToSet, 'not valid');
+            callback(['cannot update database fields not valid']);
             return;
         }
-        callback(null, self.schema.filter(dbItem));
-    });
-};
 
-Model.prototype.remove = function(realm, ids, callback) {
-    db.remove(realm, this.collection, ids, function(errors) {
-        if (errors && errors.length > 0) {
-            callback(errors);
-            return;
-        }
-        callback(null);
-    });
-};
+        db.upsert(realm, this.collection, query, fieldsToSet, this.schema.filter(fieldsToSetOnInsert), (errors) => {
+            if (errors && errors.length > 0) {
+                callback(errors);
+                return;
+            }
+            callback(null);
+        });
+    }
 
-module.exports = Model;
+    update(realm, item, callback) {
+        const updateSchema = this.updateSchema || this.schema;
+        const itemToUpdate = updateSchema.filter(item);
+        db.update(realm, this.collection, itemToUpdate, (errors) => {
+            callback(errors && errors.length > 0 ? errors : null);
+        });
+    }
+
+    add(realm, item, callback) {
+        const addSchema = this.addSchema || this.schema;
+        const itemToAdd = addSchema.filter(item);
+        db.add(realm, this.collection, itemToAdd, (errors, dbItem) => {
+            if (errors && errors.length > 0) {
+                callback(errors);
+                return;
+            }
+            callback(null, this.schema.filter(dbItem));
+        });
+    }
+
+    remove(realm, ids, callback) {
+        db.remove(realm, this.collection, ids, (errors) => {
+            callback(errors && errors.length > 0 ? errors : null);
+        });
+    }
+}

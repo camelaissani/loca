@@ -98,11 +98,11 @@ class Form {
     }
 
     getAddUrl() {
-        return '';
+        return null;
     }
 
     getUpdateUrl() {
-        return '';
+        return null;
     }
 
     getDefaultData() {
@@ -236,16 +236,23 @@ class Form {
     submit(callback) {
         var self = this;
         if (self.validate()) {
-            var data = self.getData();
-            var url = self.getUpdateUrl();
+            const data = self.getData();
+            let url = self.getUpdateUrl();
+            let method = 'POST';
 
-            if (!data._id || data._id === '') {
+            if (!data._id || !data._id.trim()) {
+                // if no _id add
+                // a new resource rather than
+                // updating it
+
+                // cleaning the empty _id property
                 delete data._id;
                 url = self.getAddUrl();
+                method = 'PUT';
             }
 
             requester.ajax({
-                type: 'POST',
+                type: method,
                 url: url,
                 dataType: 'json',
                 data: data

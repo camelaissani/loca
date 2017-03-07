@@ -1,21 +1,45 @@
 'use strict';
 
-var config = require('../../config').default,
-    mongojs = require('mongojs'),
-    logger = require('winston'),
-    collections = [],
-    db;
+import config from '../../config';
+import mongojs from 'mongojs';
+import logger from 'winston';
 
 require('sugar').extend();
 
-function buildFilter(realm, filter) {
-    var andArray = filter.$query ? filter.$query.$and : null,
-        realmFilter;
 
+// function objectId2StringId(obj) {
+//     if (obj) {
+//         Object.keys(obj).forEach(key => {
+//             if (key === '_id' && obj[key]) {
+//                 obj[key] = String(obj[key]);
+//             } else if (typeof obj[key] == 'object') {
+//                 obj[key] = objectId2StringId(obj[key]);
+//             }
+//         });
+//     }
+//     return obj;
+// }
+
+function stringId2ObjectId(obj) {
+    if (obj) {
+        Object.keys(obj).forEach(key => {
+            if (key === '_id' && (typeof obj[key] == 'string')) {
+                obj[key] = mongojs.ObjectId(obj[key]);
+            } else if (typeof obj[key] == 'object') {
+                obj[key] = stringId2ObjectId(obj[key]);
+            }
+        });
+    }
+    return obj;
+}
+
+function buildFilter(realm, inputfilter) {
+    const filter = stringId2ObjectId(inputfilter);
     if (realm) {
-        realmFilter = {
+        const realmFilter = {
             realmId: realm._id
         };
+        const andArray = filter.$query ? filter.$query.$and : null;
         if (andArray) {
             andArray.push(realmFilter);
         } else {
@@ -28,203 +52,184 @@ function buildFilter(realm, filter) {
     return filter;
 }
 
-module.exports.init = function() {
-    if (!db) {
-        logger.info('connecting database', config.database + '...');
-        db = mongojs(config.database, collections);
-        logger.info('database connected');
-    } else {
-        logger.info('database already connected');
-    }
-};
+function logDBError(err) {
+    logger.error(new Error().stack);
+    logger.error(err);
+}
 
-module.exports.addCollection = function(collection) {
-    var index = collections.indexOf(collection.toLowerCase());
+const collections = [];
+let db;
 
-    if (index < 0) {
+export default {
+    init() {
+        if (!db) {
+            logger.silly(`connecting database ${config.database}...`);
+            db = mongojs(config.database, collections);
+            logger.info(`connected to ${config.database}`);
+            return;
+        }
+        logger.silly('database already connected');
+    },
+
+    addCollection(collection) {
+        if (collections.indexOf(collection.toLowerCase()) >= 0) {
+            logger.silly(`db collection ${collection} already added`);
+            return;
+        }
         collections.push(collection.toLowerCase());
-        logger.silly('db collections have been updated', collections);
-    }
-};
+        logger.silly(`db collections have been updated ${collections}`);
+    },
 
-module.exports.findItemById = function(realm, collection, id, callback) {
-    var items = [],
-        _id = id,
-        query = buildFilter(realm, {
+    findItemById(realm, collection, id, callback) {
+        logger.info(`find item by id in collection ${collection} ${realm && realm.length > 0 ? 'in realm: ' + realm.name : ''}`);
+        const query = buildFilter(realm, {
             $query: {
-                _id: mongojs.ObjectId(_id)
+                _id: id
             }
         });
+        logger.debug(`\tfilter is ${JSON.stringify(query)}`);
 
-    logger.info('find by id in collection', collection, 'in realm:', realm ? realm.name : '');
-    logger.debug('\tid is', id);
-    db[collection].find(query, function(err, dbItems) {
-        var errors = [];
-        if (err || !dbItems) {
-            errors.push('Element non trouvé en base de données');
-        } else {
-            dbItems.forEach(function(dbItem) {
-                items.push(dbItem);
-                logger.silly('\treturned values', dbItem);
-                logger.info('\tsuccess');
-            });
-        }
-        callback(errors, items);
-    });
-};
-
-module.exports.listWithFilter = function(realm, collection, filter, callback) {
-    var items = [],
-        query = buildFilter(realm, filter);
-    if (filter === null || Object.keys(filter).length === 0) {
-        logger.info('find all in collection:', collection, 'in realm:', realm ? realm.name : 'not set??');
-    } else {
-        logger.info('find filtered values in collection:', collection, 'in realm:', realm ? realm.name : 'not set??');
-        logger.debug('\tfilter is', filter);
-    }
-    db[collection].find(query, function(err, dbItems) {
-        if (!err && dbItems) {
-            dbItems.forEach(function(dbItem) {
-                items.push(dbItem);
-            });
-            logger.silly('\treturned values', items);
-            logger.info('\tsuccess');
-        }
-        callback([], items);
-    });
-};
-
-module.exports.list = function(realm, collection, callback) {
-    module.exports.listWithFilter(realm, collection, {}, callback);
-};
-
-module.exports.add = function(realm, collection, item, callback) {
-    var _id = new mongojs.ObjectId();
-
-    item._id = _id;
-    if (realm) {
-        item.realmName = realm.name;
-        item.realmId = realm._id;
-    }
-    logger.info('insert item in collection', collection, 'in realm:', realm ? realm.name : '');
-    logger.debug('\titem is', item);
-    db[collection].save(item, function(err, saved) {
-        if (err || !saved) {
-            callback(['Element non ajouté en base de données']);
-        } else {
-            logger.silly('\treturned values is', item);
-            logger.info('\tsuccess');
-            callback([], item);
-        }
-    });
-};
-
-module.exports.updateWithFilter = function(realm, collection, filter, item, callback) {
-    var itemToUpdate = {
-        $set: Object.merge(item, {
-            realmName: realm.name,
-            realmId: realm._id
-        })
-    };
-
-    if (filter === null || Object.keys(filter).length === 0) {
-        logger.info('update all in collection:', collection, 'in realm:', realm ? realm.name : 'not set??');
-    } else {
-        logger.info('update filtered values in collection:', collection, 'in realm:', realm ? realm.name : 'not set??');
-        logger.debug('\tfilter is', filter);
-    }
-    db[collection].update(
-        filter,
-        itemToUpdate, {
-            multi: true
-        },
-        function(err, saved) {
-            if (err || !saved) {
-                callback(['Element non mis à jour en base de données']);
-            } else {
-                logger.silly('\treturned value is', item);
-                logger.info('\tsuccess');
-                callback([]);
+        db[collection].find(query, function(err, dbItems) {
+            if (err || !dbItems || dbItems.length<0) {
+                if (err) {
+                    logDBError(err);
+                }
+                callback(['item has not been found in database']);
+                return;
             }
+            logger.silly('\treturned values', dbItems.join('\n'));
+            callback([], dbItems);
+        });
+    },
+
+    listWithFilter(realm, collection, filter, callback) {
+        logger.info(`find items in collection: ${collection}${realm && realm.length > 0 ? ' in realm: '+realm.name : ''}`);
+        const query = buildFilter(realm, filter);
+        if (query) {
+            logger.debug(`\tfilter is ${JSON.stringify(query)}`);
         }
-    );
-};
+        db[collection].find(query, function(err, dbItems) {
+            if (err) {
+                logDBError(err);
+                callback(['item has not been found in database']);
+                return;
+            }
+            if (dbItems) {
+                logger.silly('\treturned values', dbItems.join('\n'));
+            } else {
+                logger.silly('\treturned an empty list');
+            }
+            callback([], dbItems || []);
+        });
+    },
 
-module.exports.update = function(realm, collection, item, callback) {
-    var _id = item._id.toString();
-    delete item._id;
-    module.exports.updateWithFilter(realm, collection, {
-        _id: mongojs.ObjectId(_id)
-    }, item, function(errors) {
-        item._id = _id;
-        callback(errors);
-    });
-};
+    add(realm, collection, item, callback) {
+        logger.info(`insert item in collection ${collection} ${realm && realm.length > 0 ? 'in realm: ' + realm.name : ''}`);
 
-module.exports.upsert = function(realm, collection, query, fieldsToSet, fieldsToSetOnInsert, callback) {
-    var fieldsToUpdate = {
+        item._id = mongojs.ObjectId();
+        if (realm) {
+            item.realmName = realm.name;
+            item.realmId = realm._id;
+        }
+        logger.debug('\titem is', item);
+        db[collection].save(item, function(err, saved) {
+            if (err || !saved) {
+                if (err) {
+                    logDBError(err);
+                }
+                callback(['item not added in database']);
+                return;
+            }
+            item._id = item._id.toString();
+            logger.silly('\treturned values is', item);
+            callback([], item);
+        });
+    },
+
+    update(realm, collection, item, callback) {
+        logger.info(`update items in collection: ${collection}${realm && realm.length > 0 ? ' in realm: '+realm.name : ''}`);
+        const _id = item._id.toString();
+        delete item._id;
+        const filter = buildFilter(null, {_id});
+        const itemToUpdate = {
+            $set: Object.merge(item, {
+                realmName: realm.name,
+                realmId: realm._id
+            })
+        };
+        logger.debug(`\tfilter is ${JSON.stringify(filter)}`);
+        logger.silly(`\titem to update is ${JSON.stringify(itemToUpdate)}`);
+
+        db[collection].update(
+            filter,
+            itemToUpdate, {
+                multi: true
+            },
+            (err, saved) => {
+                if (err || !saved) {
+                    if (err) {
+                        logDBError(err);
+                    }
+                    callback(['item has not been updated in database']);
+                    return;
+                }
+                item._id = _id;
+                logger.silly('\treturned value is', item);
+                callback([], item);
+            }
+        );
+    },
+
+    upsert(realm, collection, query, fieldsToSet, fieldsToSetOnInsert, callback) {
+        logger.info(`upsert in collection ${collection} ${realm && realm.length > 0 ? 'in realm: ' + realm.name : ''}`);
+
+        const fieldsToUpdate = {
             $set: Object.merge(fieldsToSet, {
                 realmName: realm.name,
                 realmId: realm._id
             }),
             $setOnInsert: fieldsToSetOnInsert
-        },
-        options = {
+        };
+        const options = {
             upsert: true
         };
 
-    logger.info('upsert in collection', collection, 'in realm:', realm ? realm.name : '');
-    logger.debug('\tfilter is', query);
-    logger.debug('\titem to update is', fieldsToSet);
-    logger.debug('\titem to insert is', fieldsToSetOnInsert);
-    db[collection].update(
-        query,
-        fieldsToUpdate,
-        options,
-        function(err, saved) {
-            if (err || !saved) {
-                callback(['Element non mis à jour en base de données']);
-            } else {
-                logger.info('\tsuccess');
+        logger.debug(`\tfilter is ${JSON.stringify(query)}`);
+        logger.silly(`\titem to update is ${JSON.stringify(fieldsToSet)}`);
+        logger.silly(`\titem to insert is ${JSON.stringify(fieldsToSetOnInsert)}`);
+        db[collection].update(
+            query,
+            fieldsToUpdate,
+            options,
+            (err, saved) => {
+                if (err || !saved) {
+                    if (err) {
+                        logDBError(err);
+                    }
+                    callback(['item has not been updated in database']);
+                    return;
+                }
                 callback([]);
             }
-        }
-    );
-};
+        );
+    },
 
-module.exports.removeWithFilter = function(realm, collection, filter, callback) {
-    if (filter !== null && Object.keys(filter).length > 0) {
-        logger.info('remove filtered values in collection:', collection, 'in realm:', realm ? realm.name : 'not set??');
-        logger.debug('\tfilter is', filter);
+    remove(realm, collection, items, callback) {
+        logger.info(`remove items in collection: ${collection}${realm && realm.length > 0 ? 'in realm: '+realm.name : ''}`);
+        const filter = buildFilter(null, {
+            $or: items.map(item => {return {_id: item};})
+        });
+
+        logger.debug(`\tfilter is ${JSON.stringify(filter)}`);
         db[collection].remove(filter, function(err, deleted) {
             if (err || !deleted) {
-                callback(['Aucun element n\'a été supprimé en base de données']);
-            } else {
-                logger.info('\tsuccess');
-                callback([]);
+                if (err) {
+                    logDBError(err);
+                }
+                callback(['item has not been deleted in database']);
+                return;
             }
+            callback([]);
         });
-    } else {
-        logger.error('fail to remove items in collection', collection, 'in realms:', realm ? realm.name : 'not set??');
-        logger.error('\tfilter is empty');
-        logger.info('\tfailure');
-        callback(['Aucun element n\'a été supprimé en base de données.Filtre de requête vide.']);
     }
-};
-
-module.exports.remove = function(realm, collection, items, callback) {
-    var filter = null,
-        subFilters = [],
-        index;
-    if (items && items.length > 0) {
-        for (index = 0; index < items.length; index++) {
-            subFilters.push({
-                _id: mongojs.ObjectId(items[index])
-            });
-        }
-        filter = {
-            $or: subFilters
-        };
-    }
-    module.exports.removeWithFilter(realm, collection, filter, callback);
 };

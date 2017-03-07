@@ -5,7 +5,7 @@ import occupantCtrl from './occupantctrl';
 export default () => {
     LOCA.routes.occupant = {
         url() {
-            return '/page/occupant';
+            return '/view/occupant';
         },
         title: i18next.t('Tenants'),
         pageInitialized(callback) {

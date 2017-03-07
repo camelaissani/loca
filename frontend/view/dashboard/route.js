@@ -5,7 +5,7 @@ import dashboardCtrl from './dashboardctrl';
 export default () => {
     LOCA.routes.dashboard = {
         url() {
-            return '/page/dashboard';
+            return '/view/dashboard';
         },
         title: i18next.t('Dashboard'),
         pageInitialized(callback) {

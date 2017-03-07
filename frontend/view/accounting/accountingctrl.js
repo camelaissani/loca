@@ -68,9 +68,9 @@ class AccountingCtrl extends ViewController {
             const month = $action.data('month');
             const year = $action.data('year');
             const occupantId = $action.data('occupantId');
-            let url = `/print/invoice?occupants=${occupantId}&year=${year}`;
+            let url = `/api/documents/print/invoice/occupants/${occupantId}/${year}`;
             if (month) {
-                url += `&month=${month}`;
+                url += `/${month}`;
             }
             application.openPrintPreview(url);
         }
@@ -79,7 +79,7 @@ class AccountingCtrl extends ViewController {
     load(callback) {
         requester.ajax({
             type: 'GET',
-            url: '/api/accounting?year='+ this.year
+            url: `/api/accounting/${this.year}`
         },
         (data) => {
             data.payments.months = moment.months();

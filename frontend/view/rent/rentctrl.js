@@ -29,7 +29,7 @@ class RentCtrl extends ViewController {
     loadList(callback) {
         requester.ajax({
             type: 'GET',
-            url: '/api/rents/overview?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
+            url: `/api/rents/overview/${LOCA.currentYear}/${LOCA.currentMonth}`
         },
         (rentsOverview) => {
             const countAll = rentsOverview.countAll;
@@ -56,7 +56,7 @@ class RentCtrl extends ViewController {
 
             requester.ajax({
                 type: 'GET',
-                url: '/api/rents?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
+                url: `/api/rents/${LOCA.currentYear}/${LOCA.currentMonth}`
             },
             (jsonRents) => {
                 this.list.init({rows: jsonRents});
@@ -83,37 +83,37 @@ class RentCtrl extends ViewController {
     onInitListeners() {
         $(document).on('click', '#view-rent #printinvoices', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/invoice?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/invoice/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #rentcall', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/rentcall?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/rentcall/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery1', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/recovery1?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/recovery1/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery2', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/recovery2?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/recovery2/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery3', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/recovery3?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/recovery3/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #paymentorder', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview('/print/paymentorder?month=' + LOCA.currentMonth + '&year=' + LOCA.currentYear + '&occupants=' + selection);
+            application.openPrintPreview(`/api/documents/print/paymentorder/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
@@ -144,7 +144,7 @@ class RentCtrl extends ViewController {
             $('#history-rents-table').html('');
             requester.ajax({
                 type: 'GET',
-                url: '/api/rents/occupant?id='+selection[0]._id
+                url: `/api/rents/occupant/${selection[0]._id}`
             },
             (rentsHistory) => {
                 $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
@@ -160,7 +160,7 @@ class RentCtrl extends ViewController {
                 this.closeForm(() => {
                     requester.ajax({
                         type: 'GET',
-                        url: '/api/rents/overview?month='+ LOCA.currentMonth +'&year='+ LOCA.currentYear
+                        url: `/api/rents/overview/${LOCA.currentYear}/${LOCA.currentMonth}`
                     },
                     (rentsOverview) => {
                         const countAll = rentsOverview.countAll;

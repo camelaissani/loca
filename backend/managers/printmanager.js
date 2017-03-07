@@ -1,13 +1,15 @@
 'use strict';
 
-require('sugar').extend();
+import sugar from 'sugar';
+sugar.extend();
 
-var moment = require('moment'),
-    realmModel = require('../models/realm'),
-    occupantManager = require('./occupantmanager'),
-    rentManager = require('./rentmanager');
+import moment from 'moment';
+import logger from 'winston';
+import config from '../../config';
+import realmModel from '../models/realm';
+import occupantManager from './occupantmanager';
 
-function rentBuildViewData(printableRent, occupant, month, year) {
+function _rentBuildViewData(printableRent, occupant, month, year) {
     const beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
     const endMoment = moment(occupant.endDate, 'DD/MM/YYYY');
     const fyear = String(Number(year) - 2000);
@@ -34,8 +36,6 @@ function rentBuildViewData(printableRent, occupant, month, year) {
         }
     });
 
-    const rentPrice = rentManager._computeRent(month, year, occupant.properties);
-
     month = printableRent.month || month;
     year = printableRent.year || year;
     printableRent.callDate = moment(`20/${month}/${year}`, 'DD/MM/YYYY').subtract(1, 'months').format('LL');
@@ -54,8 +54,9 @@ function rentBuildViewData(printableRent, occupant, month, year) {
     printableRent.paymentType = printableRent.paymentType || '';
     printableRent.paymentReference = printableRent.paymentReference || '';
     printableRent.paymentDate = printableRent.paymentDate || '';
-    printableRent.totalWithoutVatAmount = rentPrice.amount + rentPrice.expense - printableRent.discount;
     printableRent.vatAmount = printableRent.vatAmount ? Number(printableRent.vatAmount) : 0;
+    printableRent.discount = printableRent.discount ? Number(printableRent.discount) : 0;
+    printableRent.totalWithoutVatAmount = printableRent.totalAmount - printableRent.vatAmount - printableRent.discount;
     printableRent.promo = printableRent.promo ? Number(printableRent.promo) : 0;
     printableRent.notepromo = printableRent.notepromo || '';
     printableRent.totalAmount = printableRent.totalAmount ? Number(printableRent.totalAmount) : 0;
@@ -63,7 +64,6 @@ function rentBuildViewData(printableRent, occupant, month, year) {
     printableRent.officeAmount = printableRent.officeAmount ? Number(printableRent.officeAmount) : 0;
     printableRent.expenseAmount = printableRent.expenseAmount ? Number(printableRent.expenseAmount) : 0;
     printableRent.parkingAmount = printableRent.parkingAmount ? Number(printableRent.parkingAmount) : 0;
-    printableRent.discount = printableRent.discount ? Number(printableRent.discount) : 0;
     printableRent.totalWithoutBalanceAmount = printableRent.officeAmount + printableRent.expenseAmount + printableRent.parkingAmount - printableRent.discount + printableRent.vatAmount;
     printableRent.totalToPay = printableRent.totalAmount > 0 ? printableRent.totalAmount : 0;
     printableRent.description = printableRent.description || '';
@@ -72,10 +72,15 @@ function rentBuildViewData(printableRent, occupant, month, year) {
     return printableRent;
 }
 
-function buildViewData(realm, months, year, occupants) {
-    var dataModel = {};
-    dataModel.today = moment().format('LL');
-    dataModel.months = moment.months();
+function _buildViewData(realm, doc, fromMonth, month, year, occupants) {
+    const dataModel = {
+        today: moment().format('LL'),
+        year: moment().format('YYYY'),
+        months: moment.months(),
+        occupants,
+        config,
+        view: `printable/${doc}`
+    };
     dataModel.realm = realm.manager ? realm : {
         manager: '?',
         company: '?',
@@ -94,13 +99,22 @@ function buildViewData(realm, months, year, occupants) {
         bank: '?',
         rib: '?'
     };
+    if (month) {
+        dataModel.months = [Number(month)];
+    }
+    if (fromMonth) {
+        dataModel.months = [];
+        for (let m=Number(fromMonth); m<=12; m++) {
+            dataModel.months.push(m);
+        }
+    }
     dataModel.rents = [];
 
     occupants.forEach((occupant) => {
-        months.forEach((month) => {
+        dataModel.months.forEach((month) => {
             if (occupant.rents[year] && occupant.rents[year][month]) {
                 const printableRent = occupant.rents[year][month];
-                dataModel.rents.push(rentBuildViewData(printableRent, occupant, month, year));
+                dataModel.rents.push(_rentBuildViewData(printableRent, occupant, month, year));
             }
         });
     });
@@ -108,15 +122,21 @@ function buildViewData(realm, months, year, occupants) {
     return dataModel;
 }
 
-module.exports.renderModel = function(req, res, callback) {
-    var realm = req.realm,
-        occupantIds = req.query.occupants ? req.query.occupants.split(',') : [],
-        occupants = [],
-        occupantIdsLoop;
+////////////////////////////////////////////////////////////////////////////////
+// Exported functions
+////////////////////////////////////////////////////////////////////////////////
+function print(req, res) {
+    const realm = req.realm;
+    const doc = req.params.id;
+    const month = req.params.month;
+    const fromMonth = req.params.fromMonth;
+    const year = req.params.year;
+    const occupantIds = req.params.ids ? req.params.ids.split(',') : [];
+    const occupants = [];
 
-    occupantIdsLoop = function(index, endLoopCallback) {
+    function occupantIdsLoop(index, endLoopCallback) {
         if (index < occupantIds.length) {
-            occupantManager.findOccupant(realm, occupantIds[index], function(errors, occupant) {
+            occupantManager.findOccupant(realm, occupantIds[index], (errors, occupant) => {
                 occupant.office = {
                     surface: 0,
                     m2Price: 0,
@@ -128,7 +148,7 @@ module.exports.renderModel = function(req, res, callback) {
                     price: 0,
                     expense: 0
                 };
-                occupant.properties.forEach(function(item) {
+                occupant.properties.forEach((item) => {
                     var property = item.property;
                     if (property.type === 'parking') {
                         occupant.parking.price += property.price;
@@ -154,110 +174,20 @@ module.exports.renderModel = function(req, res, callback) {
         } else {
             endLoopCallback();
         }
-    };
+    }
 
-    occupantIdsLoop(0, function() {
-        realmModel.findOne(realm._id, function(err, realmFound) {
+    occupantIdsLoop(0, () => {
+        realmModel.findOne(realm._id, (err, realmFound) => {
             if (err) {
-                callback([err]);
-            } else {
-                var dataModel = {};
-                dataModel.today = moment().format('LL');
-                dataModel.year = moment().format('YYYY');
-                dataModel.months = moment.months();
-                dataModel.realm = realmFound.manager ? realm : {
-                    manager: '?',
-                    company: '?',
-                    legalForm: '?',
-                    capital: 0,
-                    rcs: '?',
-                    vatNumber: '?',
-                    street1: '?',
-                    street2: '?',
-                    zipCode: '?',
-                    city: '?',
-                    contact: '?',
-                    phone1: '?',
-                    phone2: '?',
-                    email: '?',
-                    bank: '?',
-                    rib: '?'
-                };
-                dataModel.occupants = occupants;
-                callback([], dataModel);
+                logger.error(err);
+                return;
             }
+            const dataModel = _buildViewData(realmFound, doc, fromMonth, month, year, occupants);
+            res.render(dataModel.view, dataModel);
         });
     });
-};
+}
 
-module.exports.rentModel = function(req, res, callback) {
-    var realm = req.realm,
-        month = req.query.month,
-        fromMonth = req.query.fromMonth,
-        year = req.query.year,
-        occupantIds = req.query.occupants ? req.query.occupants.split(',') : [],
-        occupants = [],
-        occupantIdsLoop;
-
-    occupantIdsLoop = function(index, endLoopCallback) {
-        if (index < occupantIds.length) {
-            occupantManager.findOccupant(realm, occupantIds[index], function(errors, occupant) {
-                occupant.office = {
-                    surface: 0,
-                    m2Price: 0,
-                    m2Expense: 0,
-                    price: 0,
-                    expense: 0
-                };
-                occupant.parking = {
-                    price: 0,
-                    expense: 0
-                };
-                occupant.properties.forEach(function(item) {
-                    var property = item.property;
-                    if (property.type === 'parking') {
-                        occupant.parking.price += property.price;
-                        if (property.expense) {
-                            occupant.parking.expense += property.expense;
-                        }
-                    } else {
-                        occupant.office.surface += property.surface;
-                        occupant.office.price += property.price;
-                        if (property.expense) {
-                            occupant.office.expense += property.expense;
-                        }
-                    }
-                });
-                if (occupant.office) {
-                    occupant.office.m2Price = occupant.office.price / occupant.office.surface;
-                    occupant.office.m2Expense = occupant.office.expense / occupant.office.surface;
-                }
-                occupants.push(occupant);
-                index++;
-                occupantIdsLoop(index, endLoopCallback);
-            });
-        } else {
-            endLoopCallback();
-        }
-    };
-
-    occupantIdsLoop(0, function() {
-        realmModel.findOne(realm._id, function(err, realmFound) {
-            if (err) {
-                callback([err]);
-            } else {
-                let months = [1,2,3,4,5,6,7,8,9,10,11,12];
-                if (month) {
-                    months = [Number(month)];
-                }
-                if (fromMonth) {
-                    months = [];
-                    for (let m=Number(fromMonth); m<=12; m++) {
-                        months.push(m);
-                    }
-                }
-                callback([], buildViewData(realmFound, months, year, occupants));
-            }
-        });
-    });
+export default {
+    print
 };

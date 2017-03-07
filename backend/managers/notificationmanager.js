@@ -1,42 +1,97 @@
 'use strict';
 
-var moment = require('moment'),
-    crypto = require('crypto'),
-    occupantModel = require('../models/occupant'),
-    notificationModel = require('../models/notification');
+import moment from 'moment';
+import crypto from 'crypto';
+import sugar from 'sugar';
+import occupantModel from '../models/occupant';
+import notificationModel from '../models/notification';
 
-require('sugar').extend();
+// TODO remove this lib
+sugar.extend();
 
-module.exports.generateId = function(name) {
-    return crypto.createHash('md5').update(name).digest('hex');
-};
-
-module.exports._buildViewData = function(currentDate, notifications) {
-    var currentMoment = moment(currentDate).endOf('day');
-    notifications.forEach(function(notification) {
-        var expirationMoment;
+function _buildViewData(currentDate, notifications) {
+    notifications.forEach((notification) => {
         if (!notification.expirationDate) {
             notification.expired = true;
         } else {
-            expirationMoment = moment(notification.expirationDate).endOf('day');
+            const currentMoment = moment(currentDate).endOf('day');
+            const expirationMoment = moment(notification.expirationDate).endOf('day');
             notification.expired = currentMoment.isAfter(expirationMoment);
         }
     });
 
     return notifications;
-};
+}
 
-module.exports.findAll = function(req, res) {
-    var realm = req.realm,
-        notifications = [],
-        feederLoop;
+////////////////////////////////////////////////////////////////////////////////
+// Exported functions
+////////////////////////////////////////////////////////////////////////////////
+function generateId(name) {
+    return crypto.createHash('md5').update(name).digest('hex');
+}
 
-    feederLoop = function(index, endLoopCallback) {
-        var feederFct;
-        if (index < module.exports.feeders.length) {
-            feederFct = module.exports.feeders[index];
-            feederFct(req.t, realm, function(foundNotifications) {
-                foundNotifications.forEach(function(notification) {
+const feeders = [
+
+    //function expiredDocuments(t, realm, callback) {
+    (t, realm, callback) => {
+        const notifications = [];
+        occupantModel.findFilter(realm, {
+            $orderby: {
+                name: 1
+            }
+        }, (errors, occupants) => {
+            if (errors || (occupants && occupants.length === 0)) {
+                callback(notifications);
+                return;
+            }
+
+            occupants.forEach((occupant) => {
+                if (occupant.documents && occupant.documents.length > 0) {
+                    occupant.documents.forEach((document) => {
+                        notifications.push({
+                            type: 'expiredDocument',
+                            notificationId: generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD-MM-YYYY') + document.name),
+                            expirationDate: document.expirationDate,
+                            title: occupant.name,
+                            description: t('has expired', {document: document.name, date: moment(document.expirationDate).format(t('__fmt_date__')), interpolation: {escape: false}}),
+                            actionUrl: ''
+                        });
+                    });
+                } else if (!occupant.terminationDate && occupant.properties) {
+                    occupant.properties.some((p) => {
+                        if (p.property.type !== 'letterbox' && p.property.type !== 'parking') {
+                            notifications.push({
+                                type: 'warning',
+                                notificationId: generateId(occupant._id.toString() + '_no_document'),
+                                title: occupant.name,
+                                description:  t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
+                                actionUrl: ''
+                            });
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            });
+            callback(notifications);
+
+        });
+    },
+    //function chequesToCollect(t, realm, callback) {
+    (t, realm, callback) => {
+        callback([]);
+    }
+];
+
+function all(req, res) {
+    const realm = req.realm;
+    const notifications = [];
+
+    function feederLoop(index, endLoopCallback) {
+        if (index < feeders.length) {
+            const feederFct = feeders[index];
+            feederFct(req.t, realm, (foundNotifications) => {
+                foundNotifications.forEach((notification) => {
                     notifications.push(notification);
                 });
                 index++;
@@ -45,10 +100,10 @@ module.exports.findAll = function(req, res) {
         } else {
             endLoopCallback();
         }
-    };
+    }
 
-    feederLoop(0, function() {
-        notificationModel.findAll(realm, function(errors, dbNotifications) {
+    feederLoop(0, () => {
+        notificationModel.findAll(realm, (errors, dbNotifications) => {
             if (errors) {
                 res.json({
                     errors: errors
@@ -56,26 +111,26 @@ module.exports.findAll = function(req, res) {
                 return;
             }
             if (dbNotifications && dbNotifications.length > 0 && notifications && notifications.length > 0) {
-                dbNotifications.forEach(function(dbNotification) {
-                    notifications.forEach(function(notification) {
+                dbNotifications.forEach((dbNotification) => {
+                    notifications.forEach((notification) => {
                         if (dbNotification._id === notification._id) {
                             notification.changes = dbNotification.changes;
                         }
                     });
                 });
             }
-            res.json(module.exports._buildViewData(new Date(), notifications));
+            res.json(_buildViewData(new Date(), notifications));
         });
     });
-};
+}
 
-module.exports.update = function(req, res) {
-    var date = new Date(),
-        user = req.user,
-        realm = user.realm,
-        notification = notificationModel.schema.filter(req.body);
+function update(req, res) {
+    const date = new Date();
+    const user = req.user;
+    const realm = user.realm;
+    const notification = notificationModel.schema.filter(req.body);
 
-    notification.findOne(realm, notification._id, function(errors, dbNotification) {
+    notification.findOne(realm, notification._id, (errors, dbNotification) => {
         if (errors) {
             res.json({
                 errors: errors
@@ -100,7 +155,7 @@ module.exports.update = function(req, res) {
 
         notificationModel.upsert(realm, {
             _id: notification._id
-        }, dbNotification, null, function(errors) {
+        }, dbNotification, null, (errors) => {
             if (errors) {
                 res.json({
                     errors: errors
@@ -108,60 +163,16 @@ module.exports.update = function(req, res) {
                 return;
             }
 
-            res.json(module.exports._buildViewData(date, Object.merge(dbNotification, {
+            res.json(_buildViewData(date, Object.merge(dbNotification, {
                 _id: notification._id
             })));
         });
     });
+}
+
+export default {
+    update,
+    all,
+    generateId,
+    feeders,
 };
-
-module.exports.feeders = [
-
-    function expiredDocuments(t, realm, callback) {
-        var notifications = [];
-        occupantModel.findFilter(realm, {
-            $orderby: {
-                name: 1
-            }
-        }, function(errors, occupants) {
-            if (errors || (occupants && occupants.length === 0)) {
-                callback(notifications);
-                return;
-            }
-
-            occupants.forEach(function(occupant) {
-                if (occupant.documents && occupant.documents.length > 0) {
-                    occupant.documents.forEach(function(document) {
-                        notifications.push({
-                            type: 'expiredDocument',
-                            notificationId: module.exports.generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD-MM-YYYY') + document.name),
-                            expirationDate: document.expirationDate,
-                            title: occupant.name,
-                            description: t('has expired', {document: document.name, date: moment(document.expirationDate).format(t('__fmt_date__')), interpolation: {escape: false}}),
-                            actionUrl: ''
-                        });
-                    });
-                } else if (!occupant.terminationDate && occupant.properties) {
-                    occupant.properties.some(function(p) {
-                        if (p.property.type !== 'letterbox' && p.property.type !== 'parking') {
-                            notifications.push({
-                                type: 'warning',
-                                notificationId: module.exports.generateId(occupant._id.toString() + '_no_document'),
-                                title: occupant.name,
-                                description:  t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
-                                actionUrl: ''
-                            });
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-            });
-            callback(notifications);
-
-        });
-    },
-    function chequesToCollect(t, realm, callback) {
-        callback([]);
-    }
-];

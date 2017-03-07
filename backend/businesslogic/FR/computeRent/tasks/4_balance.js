@@ -1,7 +1,7 @@
-export default function(contract, beginDate, includedEndDate, payments, previousRent, rent) {
+export default function(contract, rentDate, previousRent, settlements, rent) {
     rent.balance = 0;
     if (previousRent) {
-        rent.balance = previousRent.total.grandTotal - previousRent.total.paymentAmount;
+        rent.balance = previousRent.total.grandTotal - previousRent.total.payment;
     }
     return rent;
 }
