@@ -220,6 +220,7 @@ function add(req, res) {
 
 function update(req, res) {
     const realm = req.realm;
+    const occupantId = req.params.id;
     const occupant = occupantModel.schema.filter(req.body);
     const momentEnd = occupant.terminationDate ? moment(occupant.terminationDate, 'DD/MM/YYYY') : moment(occupant.endDate, 'DD/MM/YYYY');
 
@@ -241,7 +242,7 @@ function update(req, res) {
         occupant.name = occupant.company;
     }
 
-    findOccupant(realm, occupant._id, (errors, dbOccupant) => {
+    findOccupant(realm, occupantId, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors

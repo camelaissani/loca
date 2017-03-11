@@ -19,11 +19,11 @@ class OccupantForm extends Form {
     }
 
     getAddUrl() {
-        return '/api/occupants/add';
+        return '/api/occupants';
     }
 
     getUpdateUrl() {
-        return '/api/occupants/update';
+        return '/api/occupants';
     }
 
     getDefaultData() {

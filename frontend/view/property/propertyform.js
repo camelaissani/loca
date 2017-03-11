@@ -17,11 +17,11 @@ class PropertyForm extends Form {
     }
 
     getAddUrl() {
-        return '/api/properties/add';
+        return '/api/properties';
     }
 
     getUpdateUrl() {
-        return '/api/properties/update';
+        return '/api/properties';
     }
 
     getDefaultData() {

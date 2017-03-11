@@ -16,7 +16,7 @@ class OwnerForm extends Form {
     }
 
     getUpdateUrl() {
-        return '/api/owner/update';
+        return '/api/owner';
     }
 
     getDefaultData() {

@@ -238,17 +238,16 @@ class Form {
         if (self.validate()) {
             const data = self.getData();
             let url = self.getUpdateUrl();
-            let method = 'POST';
+            let method = 'PATCH';
 
             if (!data._id || !data._id.trim()) {
-                // if no _id add
-                // a new resource rather than
-                // updating it
-
-                // cleaning the empty _id property
-                delete data._id;
+                // if no _id add a new resource rather than updating it
                 url = self.getAddUrl();
-                method = 'PUT';
+                method = 'POST';
+                delete data._id;
+            } else {
+                // complete the patch url with the id of the resource
+                url = `${url}/${data._id}`;
             }
 
             requester.ajax({

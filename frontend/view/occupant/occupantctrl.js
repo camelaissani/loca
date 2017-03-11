@@ -80,8 +80,8 @@ class OccupantCtrl extends ViewController {
                     selectionIds.push(selection[index]._id);
                 }
                 requester.ajax({
-                    type: 'GET',
-                    url: `/api/occupants/remove/${selectionIds.join()}`,
+                    type: 'DELETE',
+                    url: `/api/occupants/${selectionIds.join()}`,
                 },
                 (response) => {
                     if (!response.errors || response.errors.length===0) {

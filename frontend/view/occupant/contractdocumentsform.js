@@ -21,7 +21,7 @@ class ContractDocumentsForm extends Form {
     // };
 
     getUpdateUrl() {
-        return '/api/documents/update';
+        return '/api/documents';
     }
 
     getDefaultData() {
