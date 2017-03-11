@@ -117,8 +117,8 @@ app.use(expressWinston.errorLogger({
 }));
 
 // Init routes
-Object.keys(routes).forEach(route => {
-    app.use(routes[route]());
+routes.forEach(route => {
+    app.use(route());
 });
 
 // Start web app

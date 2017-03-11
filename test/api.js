@@ -5,7 +5,6 @@ import assert from 'assert';
 import sinon from 'sinon';
 import apiRouter from '../backend/routes/api';
 import requester from './requester';
-import * as rs from '../backend/routes/requeststrategy';
 import * as loginManager from '../backend/managers/loginmanager';
 import * as rentManager from '../backend/managers/rentmanager';
 import * as occupantManager from '../backend/managers/occupantmanager';
@@ -17,19 +16,6 @@ import * as notificationManager from '../backend/managers/notificationmanager';
 import * as accountingManager from '../backend/managers/accountingmanager';
 
 describe.only('api', () => {
-    let mocked_restrictedArea;
-    before(()=>{
-        mocked_restrictedArea = sinon.stub(rs.default, 'restrictedArea', (req, res, next) => {
-            next();
-        });
-    });
-    after(()=>{
-        rs.default.restrictedArea.restore();
-    });
-    afterEach(()=>{
-        rs.default.restrictedArea.reset();
-    });
-
     // TODO: move these tests in auth.js
     // describe.only('session', () => {
     //     it('POST   /api/signup', (done) => {
@@ -42,7 +28,6 @@ describe.only('api', () => {
     //             if (err) {
     //                 throw err;
     //             }
-    //             assert(mocked_restrictedArea.notCalled);
     //             assert(mocked_signup.calledOnce);
     //             config.default.subscription = false;
     //             loginManager.default.signup.restore();
@@ -58,7 +43,6 @@ describe.only('api', () => {
     //             if (err) {
     //                 throw err;
     //             }
-    //             assert(mocked_restrictedArea.notCalled);
     //             assert(mocked_login.calledOnce);
     //             loginManager.default.login.restore();
     //             done();
@@ -74,7 +58,6 @@ describe.only('api', () => {
     //             if (err) {
     //                 throw err;
     //             }
-    //             assert(mocked_restrictedArea.notCalled);
     //             assert(mocked_loginDemo.calledOnce);
     //             config.default.demomode = false;
     //             loginManager.default.loginDemo.restore();
@@ -90,7 +73,6 @@ describe.only('api', () => {
     //             if (err) {
     //                 throw err;
     //             }
-    //             assert(mocked_restrictedArea.calledOnce);
     //             assert(mocked_logout.calledOnce);
     //             loginManager.default.logout.restore();
     //             done();
@@ -107,7 +89,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_update.calledOnce);
                 documentManager.default.update.restore();
                 done();
@@ -121,7 +102,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_print.calledOnce);
                 printManager.default.print.restore();
                 done();
@@ -135,7 +115,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_print.calledOnce);
                 printManager.default.print.restore();
                 done();
@@ -149,7 +128,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_print.calledOnce);
                 printManager.default.print.restore();
                 done();
@@ -166,7 +144,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_all.calledOnce);
                 notificationManager.default.all.restore();
                 done();
@@ -183,7 +160,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_selectRealm.calledOnce);
                 loginManager.default.selectRealm.restore();
                 done();
@@ -200,7 +176,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_add.calledOnce);
                 occupantManager.default.add.restore();
                 done();
@@ -214,7 +189,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_update.calledOnce);
                 occupantManager.default.update.restore();
                 done();
@@ -228,7 +202,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_remove.calledOnce);
                 occupantManager.default.remove.restore();
                 done();
@@ -242,7 +215,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_all.calledOnce);
                 occupantManager.default.all.restore();
                 done();
@@ -256,7 +228,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_overview.calledOnce);
                 occupantManager.default.overview.restore();
                 done();
@@ -273,7 +244,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_update.calledOnce);
                 mocked_update.restore();
                 done();
@@ -287,7 +257,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_rentsOfOccupant.calledOnce);
                 mocked_rentsOfOccupant.restore();
                 done();
@@ -301,7 +270,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_all.calledOnce);
                 mocked_all.restore();
                 done();
@@ -315,7 +283,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_overview.calledOnce);
                 mocked_overview.restore();
                 done();
@@ -329,7 +296,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_overview.calledOnce);
                 mocked_overview.restore();
                 done();
@@ -346,7 +312,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_add.calledOnce);
                 mocked_add.restore();
                 done();
@@ -360,7 +325,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_update.calledOnce);
                 mocked_update.restore();
                 done();
@@ -374,7 +338,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_remove.calledOnce);
                 mocked_remove.restore();
                 done();
@@ -388,7 +351,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_all.calledOnce);
                 mocked_all.restore();
                 done();
@@ -402,7 +364,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_overview.calledOnce);
                 mocked_overview.restore();
                 done();
@@ -419,7 +380,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_update.calledOnce);
                 mocked_update.restore();
                 done();
@@ -433,7 +393,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_all.calledOnce);
                 mocked_all.restore();
                 done();
@@ -450,7 +409,6 @@ describe.only('api', () => {
                 if (err) {
                     throw err;
                 }
-                assert(mocked_restrictedArea.calledOnce);
                 assert(mocked_all.calledOnce);
                 mocked_all.restore();
                 done();
