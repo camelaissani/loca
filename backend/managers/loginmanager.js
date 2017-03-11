@@ -203,6 +203,49 @@ const loginManager = {
                 status: ResponseTypes.SUCCESS
             });
         });
+    },
+
+    getUserByEmail(email, callback) {
+        accountModel.findOne(email, (err, user) => {
+            if (err) {
+                callback(err);
+                return;
+            }
+            callback(err, user);
+        });
+    },
+
+    updateRequestWithRealmsOfUser(req, res, next) {
+        if (!req.user) {
+            delete req.realm;
+            delete req.realms;
+            next();
+            return;
+        }
+
+        realmModel.findByEmail(req.user.email, (err, realms) => {
+            if (err) {
+                next(err);
+                return;
+            }
+            if (realms) {
+                req.realms = realms;
+                if (req.session && req.session.realmId) {
+                    const filteredDbRealms = req.realms.filter(realm =>
+                        realm._id.toString() === req.session.realmId
+                    );
+                    if (filteredDbRealms.length > 0) {
+                        req.realm = filteredDbRealms[0];
+                    }
+                }
+                if (!req.realm) {
+                    req.realm = realms[0];
+                }
+            } else {
+                delete req.realms;
+            }
+            next();
+        });
     }
 };
 

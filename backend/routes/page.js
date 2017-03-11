@@ -68,7 +68,7 @@ export default function () {
     }
 
     router.all('/loggedin', rs.restrictedAreaAndRedirect, rs.mustRealmSetAndRedirect, (req, res) => {
-        res.redirect('/index');
+        res.redirect(`/page/${defaultAdminView}`);
     });
 
     router.get('/selectrealm', rs.restrictedAreaAndRedirect, (req, res) => {
