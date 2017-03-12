@@ -114,6 +114,8 @@ class Application {
 
         if (navMapItem.dataChanged) {
             navMapItem.dataChanged(() => {
+                $('body').removeClass('covered-body');
+                $('body > .footer').remove();
                 $container.css('visibility', 'visible');
                 $container.css('opacity', 1);
                 if (callback) {

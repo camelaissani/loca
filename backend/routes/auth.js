@@ -2,7 +2,7 @@ import express from 'express';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import logger from 'winston';
-import rs from './requeststrategy';
+import {defaultLoggedView} from './page';
 import config from '../../config';
 import loginManager from '../managers/loginmanager';
 
@@ -33,10 +33,17 @@ export default function() {
     router.use(loginManager.updateRequestWithRealmsOfUser);
 
     if (config.subscription) {
-        router.post('/signup', rs.mustSessionLessArea, loginManager.signup);
+        router.post('/signup', loginManager.signup);
+        router.post('/signedin', (req, res) => {
+            res.redirect('/login');
+        });
     }
 
-    router.post('/login', rs.mustSessionLessArea, config.demomode ? loginManager.loginDemo : loginManager.login);
+    router.post('/login', config.demomode ? loginManager.loginDemo : loginManager.login);
+
+    router.all('/loggedin', (req, res) => {
+        res.redirect(`/page/${defaultLoggedView}`);
+    });
 
     router.get('/logout', (req, res) => {
         logger.info('Logout and redirect to /');
