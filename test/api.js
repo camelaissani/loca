@@ -3,8 +3,8 @@
 'use strict';
 import assert from 'assert';
 import sinon from 'sinon';
-import apiRouter from '../backend/routes/api';
 import requester from './requester';
+import apiRouter from '../backend/routes/api';
 import * as loginManager from '../backend/managers/loginmanager';
 import * as rentManager from '../backend/managers/rentmanager';
 import * as occupantManager from '../backend/managers/occupantmanager';

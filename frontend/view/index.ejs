@@ -34,11 +34,7 @@ if (config.productive) {
         <%- include website/header.ejs %>
 
         <div class="view-container" style="visibility:hidden;opacity:0;">
-        <% if (isValidView) { %>
             <%- include(view+'/index') %>
-        <% } else { %>
-            <p>Page inconnue</p>
-        <% } %>
         </div>
 
         <%if (user && config.demomode) {%>

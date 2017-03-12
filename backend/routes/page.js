@@ -14,18 +14,11 @@ const adminViews = [
     'rent',
     'selectrealm',
 ];
-const allViews = [
-    ...adminViews,
-    'website',
-    'login',
-    'signup'
-];
 
 function buildModel(view, req) {
     return {
         config,
         view,
-        isValidView: allViews.indexOf(view) !== -1,
         isLogged: req.user ? true : false,
         isRealmSelected: req.realm ? true : false,
         isDefaultRealmSelected: req.realm && req.realm.name === '__default_',
