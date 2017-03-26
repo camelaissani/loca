@@ -1,84 +1,82 @@
-<div class="well">
-    <form id='property-form' role="form">
-        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-        <input type="hidden" id="_id"/>
-            <h2 id="propertyNameLabel" class="page-header"><%= t('Property to rent') %></h2>
-            <div class="row">
-                <div class="col-xs-12 col-lg-4">
-                    <label><%= t('Describe the property to rent') %></label>
+<form id='property-form' role="form">
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <input type="hidden" id="_id"/>
+        <h2 id="propertyNameLabel" class="page-header"><%= t('Property to rent') %></h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label><%= t('Describe the property to rent') %></label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="form-group">
+                    <label><%= t('Type') %></label>
+                    <select id="type" class="form-control">
+                        <option value="office"><%= t('Room') %></option>
+                        <option value="parking"><%= t('Car park') %></option>
+                        <option value="letterbox"><%= t('Letterbox') %></option>
+                    </select>
                 </div>
-                <div class="col-xs-12 col-lg-8">
-                    <div class="form-group">
-                        <label><%= t('Type') %></label>
-                        <select id="type" class="form-control">
-                            <option value="office"><%= t('Room') %></option>
-                            <option value="parking"><%= t('Car park') %></option>
-                            <option value="letterbox"><%= t('Letterbox') %></option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><%= t('Label') %></label>
-                        <input type="text" id="name" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <label><%= t('Description') %></label>
-                        <textarea id="description" class="form-control" rows="3"></textarea>
-                    </div>
-                    <div class="property-no-expense row">
-                        <div class="col-xs-12 col-lg-6">
-                            <div class="form-group">
-                                <label><%= t('Area') %> m<sup>2</sup></label>
-                                <input type="text" id="surface" class="form-control"/>
-                            </div>
+                <div class="form-group">
+                    <label><%= t('Label') %></label>
+                    <input type="text" id="name" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label><%= t('Description') %></label>
+                    <textarea id="description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="property-no-expense row">
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="form-group">
+                            <label><%= t('Area') %> m<sup>2</sup></label>
+                            <input type="text" id="surface" class="form-control"/>
                         </div>
-                        <div class="col-xs-12 col-lg-6">
-                            <div class="form-group">
-                                <label><%= t('Phone number') %></label>
-                                <input type="text" id="phone" class="form-control"/>
-                            </div>
+                    </div>
+                    <div class="col-xs-12 col-lg-6">
+                        <div class="form-group">
+                            <label><%= t('Phone number') %></label>
+                            <input type="text" id="phone" class="form-control"/>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <h2 class="page-header"><%= t('Location') %></h2>
-            <div class="row">
-                <div class="col-xs-12 col-lg-4">
-                    <label><%= t('Where the property is located') %></label>
+        <h2 class="page-header"><%= t('Location') %></h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label><%= t('Where the property is located') %></label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="property-no-expense form-group">
+                    <label><%= t('Building') %></label>
+                    <input type="text" id="building" class="form-control"/>
                 </div>
-                <div class="col-xs-12 col-lg-8">
-                    <div class="property-no-expense form-group">
-                        <label><%= t('Building') %></label>
-                        <input type="text" id="building" class="form-control"/>
-                    </div>
-                    <div class="property-no-expense form-group">
-                        <label><%= t('Level') %></label>
-                        <input type="text" id="level" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                        <label><%= t('Location') %> / <%= t('Address') %></label>
-                        <textarea id="location" class="form-control" rows="3"></textarea>
-                    </div>
+                <div class="property-no-expense form-group">
+                    <label><%= t('Level') %></label>
+                    <input type="text" id="level" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label><%= t('Location') %> / <%= t('Address') %></label>
+                    <textarea id="location" class="form-control" rows="3"></textarea>
                 </div>
             </div>
+        </div>
 
-            <h2 class="page-header"><%= t('Rent') %></h2>
-            <div class="row">
-                <div class="col-xs-12 col-lg-4">
-                    <label><%= t('Information about the monthly rent') %></label>
+        <h2 class="page-header"><%= t('Rent') %></h2>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <label><%= t('Information about the monthly rent') %></label>
+            </div>
+            <div class="col-xs-12 col-lg-8">
+                <div class="form-group">
+                    <label><%= t('Monthly rent amount without CAM without VAT') %></label>
+                    <input type="text" id="price" class="form-control"/>
                 </div>
-                <div class="col-xs-12 col-lg-8">
-                    <div class="form-group">
-                        <label><%= t('Monthly rent amount without CAM without VAT') %></label>
-                        <input type="text" id="price" class="form-control"/>
-                    </div>
-                    <div class="property-no-expense form-group">
-                        <label><%= t('Monthly CAM amount without VAT') %></label>
-                        <input type="text" id="expense" class="form-control"/>
-                    </div>
+                <div class="property-no-expense form-group">
+                    <label><%= t('Monthly CAM amount without VAT') %></label>
+                    <input type="text" id="expense" class="form-control"/>
                 </div>
             </div>
+        </div>
 
-        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-    </form>
-</div>
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+</form>

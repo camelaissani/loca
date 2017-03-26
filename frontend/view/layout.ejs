@@ -1,31 +1,29 @@
-<div id='<%= viewId %>' class='container-fluid view'>
-    <% if (typeof topMenu != 'undefined') { %>
+<div id='<%= viewId %>' class='view'>
+    <div class='container-fluid'>
         <div class="row">
-            <div class="col-xs-12">
-                <%- include(topMenu) %>
-            </div>
-        </div>
-    <% } %>
-
-    <% if (typeof rightMenu != 'undefined') { %>
-        <div class="row">
-            <div class="col-xs-12 col-sm-8 main-col">
-                <div class="view-content-with-menu">
-                <%- include(content) %>
+            <% if (typeof topMenu != 'undefined') { %>
+                <div class="col-xs-12">
+                    <%- include(topMenu) %>
                 </div>
-            </div>
+            <% } %>
 
-            <div id='right-menu-pane' class="col-xs-12 col-sm-4 main-col">
-                <%- include(rightMenu) %>
-            </div>
+            <% if (typeof rightMenu != 'undefined') { %>
+                <div class="col-xs-8">
+                    <div class="view-content-with-menu">
+                    <%- include(content) %>
+                    </div>
+                </div>
+
+                <div id='right-menu-pane' class="col-xs-4">
+                    <%- include(rightMenu) %>
+                </div>
+            <% } else { %>
+                <div class="col-xs-12">
+                    <%- include(content) %>
+                </div>
+            <% } %>
         </div>
-    <% } else { %>
-        <div class="row">
-            <div class="col-xs-12 main-col">
-                <%- include(content) %>
-            </div>
-        </div>
-    <% } %>
+    </div>
 </div>
 
 <!-- HANDLEBAR TEMPLATES -->

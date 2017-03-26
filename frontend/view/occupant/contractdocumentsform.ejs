@@ -1,37 +1,35 @@
-<div class="well">
-    <form id="contract-documents-form" role="form">
-        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-        <input type="hidden" id="_id" class="">
-        <h2 id="occupantNameLabel" class="page-header"></h2>
-        <div class="row">
-            <div class="col-xs-12 col-lg-4">
-                <label><%= t('Documents') %></label>
-            </div>
-            <div class="col-xs-12 col-lg-8">
-                <div id="documents" class="form-rows">
-                    <div class="row form-row master-form-row">
-                        <div class="col-xs-12 col-sm-6">
-                           <div class="form-group">
-                                <label class="control-label"><%= t('Label') %></label>
-                                <input type="text" id="name_0" class="form-control">
-                           </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6">
-                           <div class="form-group">
-                                <label class="control-label"><%= t('Expiration date') %></label>
-                                <input type="text" id="expirationDate_0" class="form-control">
-                           </div>
-                        </div>
-                        <div class="col-xs-12 clearfix">
-                            <div class="pull-right form-btn-remove-row form-btn">
-                                <i class="fa fa-trash-o"></i> <%= t('Remove') %>
-                            </div>
+<form id="contract-documents-form" role="form">
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <input type="hidden" id="_id" class="">
+    <h2 id="occupantNameLabel" class="page-header"></h2>
+    <div class="row">
+        <div class="col-xs-12 col-lg-4">
+            <label><%= t('Documents') %></label>
+        </div>
+        <div class="col-xs-12 col-lg-8">
+            <div id="documents" class="form-rows">
+                <div class="row form-row master-form-row">
+                    <div class="col-xs-12 col-sm-6">
+                       <div class="form-group">
+                            <label class="control-label"><%= t('Label') %></label>
+                            <input type="text" id="name_0" class="form-control">
+                       </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                       <div class="form-group">
+                            <label class="control-label"><%= t('Expiration date') %></label>
+                            <input type="text" id="expirationDate_0" class="form-control">
+                       </div>
+                    </div>
+                    <div class="col-xs-12 clearfix">
+                        <div class="pull-right form-btn-remove-row form-btn">
+                            <i class="fa fa-trash-o"></i> <%= t('Remove') %>
                         </div>
                     </div>
                 </div>
-                <span id="btn-add-document" class="form-btn"><i class="fa fa-plus"></i> <%= t('Add') %></span>
             </div>
+            <span id="btn-add-document" class="form-btn"><i class="fa fa-plus"></i> <%= t('Add') %></span>
         </div>
-        <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-    </form>
-</div>
+    </div>
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+</form>

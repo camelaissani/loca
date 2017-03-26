@@ -51,7 +51,6 @@ class Application {
             ajaxUrl = navMapItem.url(),
             $oldHeaderMenuItem = $('.nav li.active'),
             $newHeaderMenuItem = $('.nav li .nav-action[data-id="' + data.menuId + '"]').closest('li'),
-            $mainPhoneBar = $('.main-mini-menu-bar'),
             $container = $('.view-container');
 
         const updateView = (contentHtml) => {
@@ -63,8 +62,6 @@ class Application {
                 $oldHeaderMenuItem.removeClass('active');
                 $newHeaderMenuItem.addClass('active');
             }
-            $mainPhoneBar.find('.main-mini-menu-bar-title.active').removeClass('active');
-            $mainPhoneBar.find('.main-mini-menu-bar-title[data-id="' + data.menuId + '"]').addClass('active');
 
             navMapItem.pageInitialized(() => {
                 if (navMapItem.pageEntered) {

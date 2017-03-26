@@ -35,7 +35,7 @@ form {
 }
 
 .form-card {
-    background-color: rgba(245,245,245,0.85);
+    background-color: @well-bg;
     max-width: 500px;
     margin: auto;
     margin-top: 40px;
@@ -61,41 +61,6 @@ body.covered-body {
         color: @text-color;
         a {
             color: @text-color;
-        }
-    }
-}
-
-/* phones */
-@media (max-width: 767px) {
-    .form-card {
-        max-width: none;
-        margin-top: 10px;
-        padding-left: 10px;
-        padding-right: 10px;
-        background-color: transparent;
-        border: none;
-    }
-
-    .form-content {
-        label {
-            color: @text-color;
-        }
-        .well {
-            padding: 0px 19px;
-            margin-bottom: 0;
-            background-color: transparent;
-            border: none;
-            border-radius: 0;
-            box-shadow: none;
-        }
-    }
-
-    body.covered-body {
-        .form-card {
-            color: #fff;
-            a {
-                color: #fff;
-            }
         }
     }
 }

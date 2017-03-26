@@ -1,96 +1,9 @@
-.main-mini-menu-bar {
-    display: none;
-    position: fixed;
-    top: 0;
-    height: @main-mini-menu-bar-height;
-    left: 0;
-    width: 100%;
-    color: @navbar-default-link-color;
-    background-color: @navbar-default-bg;
-    padding: 10px;
-    z-index: 2;
-
-    font-size: @main-mini-menu-button-font-size;
-
-
-    a:hover, a:active, a:focus {
-        outline: 0;
-    }
-
-    .main-mini-menu-bar-title {
-        display: none;
-        &.active {
-            display: block;
-        }
-    }
-
-    .main-mini-menu-bar-brand {
-        padding: 2px 3px;
-        font-size: 18px;
-        a {
-            text-decoration: none;
-        }
-    }
-
-    .btn {
-        padding: 5px 6px;
-    }
-}
-
-a.main-menu-button {
-    display: none;
-    position: fixed;
-    top: 13px;
-    left: 10px;
-    height: @main-mini-menu-button-font-size;
-    z-index: 3;
-    outline: 0;
-    color: @navbar-default-link-color;
-
-    &:focus, &:hover {
-        color: @navbar-default-link-color;
-        text-decoration: none;
-    }
-
-    .fa {
-        position: static;
-        margin: 0;
-        padding: 0;
-        font-size: @main-mini-menu-button-font-size;
-    }
-}
-
-.main-menu-card {
-    display: none;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: -@main-menu-card-width;
-    width: @main-menu-card-width;
-    margin-top: @main-mini-menu-bar-height;
-    color: @navbar-default-color;
-    background: @navbar-default-bg;
-    z-index: 4;
-
-    h2.page-header {
-        color: @navbar-default-link-color;
-    }
-
-    li {
-        a {
-            color: @navbar-default-link-color;
-            background-color: transparent;
-            outline: 0;
-        }
-
-        &:hover, &.active {
-            a {
-                color: @navbar-default-link-hover-color;
-                background-color: transparent;
-                outline: 0;
-            }
-            background-color: @navbar-default-link-hover-bg;
-        }
+.main-menu-bar {
+    .container-fluid {
+        width: @viewport-width;
+        margin: auto;
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 
@@ -106,11 +19,6 @@ a.main-menu-button {
 
 .menu-card {
     display: none;
-    padding: 19px;
-    background-color: @well-bg;
-    border: 1px solid @well-border;
-    border-radius: @border-radius-base;
-    .box-shadow(inset 0 1px 1px rgba(0,0,0,.05));
 
     .row {
         margin: 0;
@@ -125,6 +33,7 @@ a.main-menu-button {
     .list-group {
         max-height: 350px;
         overflow-y: auto;
+        margin-bottom: 0;
     }
 
     .list-group.list-group-selection {
@@ -140,89 +49,6 @@ a.main-menu-button {
         &.fixed .list-group-item {
             .fa-times {
                 display: none;
-            }
-        }
-    }
-}
-
-
-// Phone devices
-@media (max-width: 767px) {
-    a.main-menu-button,
-    .main-mini-menu-bar,
-    .main-menu-card {
-        display: block;
-    }
-
-    .main-menu-bar {
-        display: none;
-    }
-
-    .view-container {
-        .view {
-            .menu {
-                position: fixed;
-                bottom: 0px;
-                left: 0px;
-                width: 100%;
-                padding-left: 0;
-                padding-right: 0;
-            }
-        }
-    }
-
-    .menu-card {
-        position: fixed;
-        top: @navbar-height;
-        height: @navbar-height;
-        left:0;
-        width: 100%;
-        bottom: auto;
-        margin: 0;
-        padding: 0;
-        border-radius: 0;
-        border-left: 0;
-        border-right: 0;
-        box-shadow: 0 4px 4px -2px darken(@well-bg, 40%);
-
-        .fa {
-            font-size: @main-mini-menu-button-font-size;
-        }
-        .btn-group {
-            height: @navbar-height - 2px;
-            .btn {
-                text-align: center;
-                border-radius: 0;
-                padding: 0 2px;
-                min-width: 75px;
-                box-shadow: none;
-                border-top: none;
-                border-bottom: none;
-                text-shadow: none;
-                height: 100%;
-                font-size: ceil((@font-size-base * 0.85));
-            }
-        }
-        .list-group {
-            height: @navbar-height - 2px;
-            width: 100%;
-            margin: 0;
-
-            .list-group-item {
-                display: inline-block;
-                vertical-align: middle;
-                text-align: center;
-                min-width: 60px;
-                max-width: 60px;
-                padding: 3px 5px;
-                font-size: ceil((@font-size-base * 0.85));
-                margin-left: 2px;
-                border-radius: 4px;
-                height: 100%;
-            }
-
-            .list-group-item:last-child {
-                margin-left: 0;
             }
         }
     }

@@ -52,11 +52,25 @@ body {
             outline: 0;
         }
     }
+
+    .footer-container {
+        width: @viewport-width;
+        margin: auto;
+    }
 }
 
 .view-container {
+    width: @viewport-width;
+    margin: auto;
     padding-top: @navbar-height + 20px;
     padding-bottom: 5px;
+
+    .view {
+        & > .container-fluid {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
 }
 
 .sheet {
@@ -84,55 +98,4 @@ body {
         padding-left: 10px;
         font-size: 18px;
     }
-}
-
-// RESPONSIVE
-// Phone devices
-@media (max-width: 767px) {
-    body {
-        background-color: lighten(@well-bg, 1%);
-    }
-
-    label {
-        color: @component-active-color;
-        font-weight: normal;
-    }
-
-    .row {
-        margin-left: 0;
-        margin-right: 0
-    }
-
-    .view-container {
-        padding: @navbar-height 10px 0 10px;
-        .container-fluid {
-            padding-left: 0;
-            padding-right: 0;
-        }
-        .view-content-with-menu {
-            padding-top: @navbar-height + 10px;
-        }
-    }
-
-    .main-col[class*="col-"] {
-        padding-left: 0;
-        padding-right: 0;
-    }
-}
-
-/* Medium devices (desktops, 991px and up) */
-@media (max-width: 991px) {
-    body {
-        &.covered-body {
-            margin-bottom: @xs-footer-height;
-        }
-    }
-    .footer {
-        z-index: 0;
-        height: @xs-footer-height;
-    }
-}
-
-/* Medium devices (desktops, 992px and up) */
-@media (min-width: 992px) {
 }

@@ -1,89 +1,87 @@
-<div class="well">
-	<form id="rent-payment-form" class="grid-form" role="form">
-		<div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-	 	<input type="hidden" id="_id" />
-	 	<input type="hidden" id="month" value=""/>
-	 	<input type="hidden" id="year" value=""/>
-	 	 	<h2 id="occupantNameLabel"></h2>
-		 	<h2 class="page-header"><%= t('Payment') %> - <span id="paymentPeriod"></span></h2>
-		 	<div class="row">
-		 		<div class="col-xs-12 col-lg-4">
-		 			<label><%= t('Indicate the amount, the type, and the date of payment') %></label>
-		 		</div>
-		 		<div class="col-xs-12 col-lg-8">
-		 			<div class="row">
-			 			<div class="col-xs-12 col-lg-6">
-						    <div class="form-group">
-						        <label class="control-label" for="payment"><%= t('Amount') %></label>
-						        <div class="input-group">
-							      	<input type="text" id="payment" class="form-control text-right" />
-							      	<span class="input-group-addon">€</span>
-							    </div>
-						    </div>
-						</div>
-						<div class="col-xs-12 col-lg-6">
-						    <div class="form-group">
-						        <label class="control-label" for="paymentType"><%= t('Type') %></label>
-						        <select id="paymentType" class="form-control">
-						            <option value="cheque"><%= t('cheque') %></option>
-						            <option value="cash"><%= t('cash') %></option>
-						            <option value="levy"><%= t('levy') %></option>
-						            <option value="transfer"><%= t('transfer') %></option>
-						        </select>
+<form id="rent-payment-form" class="grid-form" role="form">
+	<div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+ 	<input type="hidden" id="_id" />
+ 	<input type="hidden" id="month" value=""/>
+ 	<input type="hidden" id="year" value=""/>
+ 	 	<h2 id="occupantNameLabel"></h2>
+	 	<h2 class="page-header"><%= t('Payment') %> - <span id="paymentPeriod"></span></h2>
+	 	<div class="row">
+	 		<div class="col-xs-12 col-lg-4">
+	 			<label><%= t('Indicate the amount, the type, and the date of payment') %></label>
+	 		</div>
+	 		<div class="col-xs-12 col-lg-8">
+	 			<div class="row">
+		 			<div class="col-xs-12 col-lg-6">
+					    <div class="form-group">
+					        <label class="control-label" for="payment"><%= t('Amount') %></label>
+					        <div class="input-group">
+						      	<input type="text" id="payment" class="form-control text-right" />
+						      	<span class="input-group-addon">€</span>
 						    </div>
 					    </div>
 					</div>
-					<div class="row">
-						<div class="col-xs-12 col-lg-6">
-						    <div class="form-group">
-						        <label class="control-label" for="paymentReference"><%= t('Reference') %></label>
-						        <input type="text" id="paymentReference" class="form-control" />
-						    </div>
-						</div>
-						<div class="col-xs-12 col-lg-6">
-							<div class="form-group">
-						        <label class="control-label" for="paymentDate"><%= t('Date') %></label>
-						        <input type="text" class="datepicker form-control" id="paymentDate" />
-						    </div>
-						</div>
+					<div class="col-xs-12 col-lg-6">
+					    <div class="form-group">
+					        <label class="control-label" for="paymentType"><%= t('Type') %></label>
+					        <select id="paymentType" class="form-control">
+					            <option value="cheque"><%= t('cheque') %></option>
+					            <option value="cash"><%= t('cash') %></option>
+					            <option value="levy"><%= t('levy') %></option>
+					            <option value="transfer"><%= t('transfer') %></option>
+					        </select>
+					    </div>
 				    </div>
 				</div>
+				<div class="row">
+					<div class="col-xs-12 col-lg-6">
+					    <div class="form-group">
+					        <label class="control-label" for="paymentReference"><%= t('Reference') %></label>
+					        <input type="text" id="paymentReference" class="form-control" />
+					    </div>
+					</div>
+					<div class="col-xs-12 col-lg-6">
+						<div class="form-group">
+					        <label class="control-label" for="paymentDate"><%= t('Date') %></label>
+					        <input type="text" class="datepicker form-control" id="paymentDate" />
+					    </div>
+					</div>
+			    </div>
 			</div>
-		 	<h2 class="page-header"><%= t('Discount') %></h2>
-		 	<div class="row">
-		 		<div class="col-xs-12 col-lg-4">
-		 			<label><%= t('Discount on current rent') %></label>
-		 		</div>
-		 		<div class="col-xs-12 col-lg-8">
-				    <div class="form-group">
-				        <label class="control-label" for="promo"><%= t('Amount') %></label>
-				        <input type="text" id="promo" class="form-control" />
-				    </div>
-				    <div class="form-group">
-				        <label class="control-label" for="notepromo"><%= t('Reason for reduction') %></label>
-				        <input type="text" id="notepromo" class="form-control" />
-				    </div>
-		 		</div>
-		 	</div>
-		 	<h2 class="page-header"><%= t('Internal note') %></h2>
-		 	<div class="row">
-		 		<div class="col-xs-12 col-lg-4">
-		 			<label><%= t('Comments that will not appear on the rent invoice') %></label>
-		 		</div>
-		 		<div class="col-xs-12 col-lg-8">
-					<div class="form-group">
-				        <label class="control-label" for="description"><%= t('Comments') %></label>
-				        <textarea type="text" class="form-control" id="description" rows="4" /></textarea>
-				    </div>
-				</div>
+		</div>
+	 	<h2 class="page-header"><%= t('Discount') %></h2>
+	 	<div class="row">
+	 		<div class="col-xs-12 col-lg-4">
+	 			<label><%= t('Discount on current rent') %></label>
+	 		</div>
+	 		<div class="col-xs-12 col-lg-8">
+			    <div class="form-group">
+			        <label class="control-label" for="promo"><%= t('Amount') %></label>
+			        <input type="text" id="promo" class="form-control" />
+			    </div>
+			    <div class="form-group">
+			        <label class="control-label" for="notepromo"><%= t('Reason for reduction') %></label>
+			        <input type="text" id="notepromo" class="form-control" />
+			    </div>
+	 		</div>
+	 	</div>
+	 	<h2 class="page-header"><%= t('Internal note') %></h2>
+	 	<div class="row">
+	 		<div class="col-xs-12 col-lg-4">
+	 			<label><%= t('Comments that will not appear on the rent invoice') %></label>
+	 		</div>
+	 		<div class="col-xs-12 col-lg-8">
+				<div class="form-group">
+			        <label class="control-label" for="description"><%= t('Comments') %></label>
+			        <textarea type="text" class="form-control" id="description" rows="4" /></textarea>
+			    </div>
 			</div>
+		</div>
 
-	    <!--
-	    <div class="form-group">
-	        <label class="control-label" for="description">Note interne</label>
-	        <textarea id="description" class="" rows="3"></textarea>
-	    </div>
-	    -->
-		<div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-	</form>
-</div>
+    <!--
+    <div class="form-group">
+        <label class="control-label" for="description">Note interne</label>
+        <textarea id="description" class="" rows="3"></textarea>
+    </div>
+    -->
+	<div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+</form>
