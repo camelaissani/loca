@@ -333,9 +333,13 @@ if (config.demomode) {
     };
 } else {
     loginManager.login = function(req, res, next) {
-        passport.authenticate('local', (err, user/*, info*/) => {
+        passport.authenticate('local', (err, user, info) => {
             if (err) {
                 return next(err);
+            }
+            if (!user) {
+                res.json({status: info.message});
+                return;
             }
             req.logIn(user, (err) => {
                 if (err) {

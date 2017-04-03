@@ -269,7 +269,7 @@ function _findAllOccupantRents(realm, month, year, callback) {
 ////////////////////////////////////////////////////////////////////////////////
 function update(req, res) {
     const realm = req.realm;
-    const paymentData = rentModel.paymentSchema.filter(req.body);
+    let paymentData = rentModel.paymentSchema.filter(req.body);
     let currentDate = moment();
 
     if (req.body.year && req.body.month) {
@@ -302,18 +302,23 @@ function update(req, res) {
             vatRate: dbOccupant.vatRatio,
             properties: dbOccupant.properties
         };
-        let currentPaymentMonth = true;
-        let previousRent;
-
         while(currentMonth.isSameOrBefore(end, 'month')) {
             const month = currentMonth.month() + 1; // 0 based
             const year = currentMonth.year();
             if (!dbOccupant.rents[year] || !dbOccupant.rents[year][month]) {
                 break;
             }
-            dbOccupant.rents[year][month] = _updateRentAmount(contract, dbOccupant.rents[year][month], currentMonth, previousRent, currentPaymentMonth ? paymentData : null);
-            previousRent = dbOccupant.rents[year][month];
-            currentPaymentMonth = false;
+
+            const previousMonth = moment(currentMonth).subtract(1, 'months');
+            const previousY = previousMonth.year();
+            const previousM = previousMonth.month() + 1;
+            let previousRent;
+            if (dbOccupant.rents[previousY] && dbOccupant.rents[previousY][previousM]) {
+                previousRent = dbOccupant.rents[previousY][previousM];
+            }
+
+            dbOccupant.rents[year][month] = _updateRentAmount(contract, dbOccupant.rents[year][month], currentMonth, previousRent, paymentData);
+            paymentData = null;
             currentMonth.add(1, 'months');
         }
 

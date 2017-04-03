@@ -76,7 +76,7 @@ function _buildViewData(realm, doc, fromMonth, month, year, occupants) {
     const dataModel = {
         today: moment().format('LL'),
         year: moment().format('YYYY'),
-        months: moment.months(),
+        months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         occupants,
         config,
         view: `printable/${doc}`
