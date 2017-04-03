@@ -39,7 +39,11 @@ export default function() {
         });
     }
 
-    router.post('/login', config.demomode ? loginManager.loginDemo : loginManager.login);
+    if (config.demomode) {
+        router.get('/login', loginManager.loginDemo);
+    } else {
+        router.post('/login', loginManager.login);
+    }
 
     router.all('/loggedin', (req, res) => {
         res.redirect(`/page/${defaultLoggedView}`);
