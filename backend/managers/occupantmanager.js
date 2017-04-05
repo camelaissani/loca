@@ -96,7 +96,7 @@ function _createUpdateContractRents(contract, inputRents) {
                 year,
                 months: Object.keys(rents[year]).reduce((acc, month) => {
                     const rentMoment = moment(`01/${month}/${year}`, 'DD/MM/YYYY');
-                    if (rentMoment.isBetween(begin, end, 'month', '[]')
+                    if (!rentMoment.isBetween(begin, end, 'month', '[]')
                         && !rents[year][month].payment) {
                         acc.push(month);
                     }
@@ -291,7 +291,7 @@ function update(req, res) {
 
                 const contract = {
                     begin: occupant.beginDate,
-                    end: occupant.endDate,
+                    end: momentEnd.format('DD/MM/YYYY'),
                     discount: occupant.discount || 0,
                     vatRate: occupant.vatRatio,
                     properties: occupant.properties
