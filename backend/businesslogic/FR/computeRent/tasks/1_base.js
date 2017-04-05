@@ -1,7 +1,8 @@
 import moment from 'moment';
 
 export default function(contract, rentDate, previousRent, settlements, rent) {
-    const currentMoment = moment(rentDate, 'DD/MM/YYYY');
+    const currentMoment = moment(rentDate, 'DD/MM/YYYY HH:mm');
+    rent.term = Number(currentMoment.format('YYYYMMDDHH'));
     rent.month = currentMoment.month() + 1; // 0 based
     rent.year = currentMoment.year();
 

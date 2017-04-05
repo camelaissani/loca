@@ -1,6 +1,7 @@
 /* eslint-env node, mocha */
 import math from 'mathjs';
 import assert from 'assert';
+import moment from 'moment';
 import BL from '../../backend/businesslogic';
 
 describe('business logic rent computation', () => {
@@ -24,10 +25,17 @@ describe('business logic rent computation', () => {
 
         const grandTotal = math.round((property.property.price + property.property.expense - contract.discount) * (1+contract.vatRate), 2);
 
+        it('check rent object structure', () => {
+            const computedRent = BL.computeRent(contract, '01/01/2017');
+            const rentMoment = moment('01/01/2017', 'DD/MM/YYYY HH:mm');
+            assert(computedRent.term === Number(rentMoment.format('YYYYMMDDHH')));
+            assert(computedRent.month === rentMoment.month()+1);
+            assert(computedRent.year === rentMoment.year());
+        });
+
         it('compute one rent', () => {
             const computedRent = BL.computeRent(contract, '01/01/2017');
             assert.equal(computedRent.total.grandTotal, grandTotal);
-            assert(true);
         });
 
         it('compute two rents and check balance', () => {
@@ -36,7 +44,6 @@ describe('business logic rent computation', () => {
             assert.equal(rentOne.total.grandTotal, grandTotal);
             assert.equal(rentTwo.balance, grandTotal);
             assert.equal(rentTwo.total.grandTotal, grandTotal * 2);
-            assert(true);
         });
     });
 
@@ -78,7 +85,6 @@ describe('business logic rent computation', () => {
         it('compute one rent two properties should be billed', () => {
             const computedRent = BL.computeRent(contract, '01/02/2017');
             assert.equal(computedRent.total.grandTotal, grandTotal1 + grandTotal2);
-            assert(true);
         });
 
     });

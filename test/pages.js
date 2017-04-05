@@ -10,7 +10,7 @@ import pageRouter, {defaultLoggedView} from '../backend/routes/page';
 
 logger.info = sinon.stub(logger.default, 'info', ()=>{});
 
-describe.only('page/view rendering', () => {
+describe('page/view rendering', () => {
     it('GET  /', (done) => {
         const viewEngine = sinon.stub();
         config.default.subscription = true;

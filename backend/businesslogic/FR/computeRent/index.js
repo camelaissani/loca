@@ -4,6 +4,7 @@ import path from 'path';
 
 export default function(contract, rentDate, previousRent, settlements) {
     const rent = {
+        term: 0,
         month: 0,
         year: 0,
         preTaxAmounts: [

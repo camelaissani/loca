@@ -1,7 +1,7 @@
 'use strict';
 
-import BL from '../businesslogic';
 import moment from 'moment';
+import BL from '../businesslogic';
 import rentModel from '../models/rent';
 import occupantModel from '../models/occupant';
 import occupantManager from './occupantmanager.js';

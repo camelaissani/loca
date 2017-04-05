@@ -15,9 +15,9 @@ import * as ownerManager from '../backend/managers/ownermanager';
 import * as notificationManager from '../backend/managers/notificationmanager';
 import * as accountingManager from '../backend/managers/accountingmanager';
 
-describe.only('api', () => {
+describe('api', () => {
     // TODO: move these tests in auth.js
-    // describe.only('session', () => {
+    // describe('session', () => {
     //     it('POST   /api/signup', (done) => {
     //         config.default.subscription = true;
     //         loginManager.default.signup = () => {};
@@ -80,7 +80,7 @@ describe.only('api', () => {
     //     });
     // });
 
-    describe.only('documents', () => {
+    describe('documents', () => {
         it('PATCH  /api/documents/:id', (done) => {
             const mocked_update = sinon.stub(documentManager.default, 'update', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'patch', uri: '/api/documents/1234'})
@@ -135,7 +135,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('notifications', () => {
+    describe('notifications', () => {
         it('GET    /api/notifications', (done) => {
             const mocked_all = sinon.stub(notificationManager.default, 'all', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'get', uri: '/api/notifications'})
@@ -151,7 +151,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('realms', () => {
+    describe('realms', () => {
         it('GET    /api/realms/:id', (done) => {
             const mocked_selectRealm = sinon.stub(loginManager.default, 'selectRealm', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'get', uri: '/api/realms/1234'})
@@ -167,7 +167,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('occupants', () => {
+    describe('occupants', () => {
         it('POST   /api/occupants', (done) => {
             const mocked_add = sinon.stub(occupantManager.default, 'add', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'post', uri: '/api/occupants'})
@@ -235,7 +235,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('rents', () => {
+    describe('rents', () => {
         it('PATCH  /api/rents/:id', (done) => {
             const mocked_update = sinon.stub(rentManager.default, 'update', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'patch', uri: '/api/rents/1234'})
@@ -303,7 +303,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('properties', () => {
+    describe('properties', () => {
         it('POST   /api/properties', (done) => {
             const mocked_add = sinon.stub(propertyManager.default, 'add', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'post', uri: '/api/properties'})
@@ -371,7 +371,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('owner', () => {
+    describe('owner', () => {
         it('PATCH  /api/owner/:id', (done) => {
             const mocked_update = sinon.stub(ownerManager.default, 'update', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'patch', uri: '/api/owner/1234'})
@@ -400,7 +400,7 @@ describe.only('api', () => {
         });
     });
 
-    describe.only('accounting', () => {
+    describe('accounting', () => {
         it('GET    /api/accounting/:year', (done) => {
             const mocked_all = sinon.stub(accountingManager.default, 'all', (req, res) => {res.json({});});
             requester(apiRouter(), {httpMethod: 'get', uri: '/api/accounting/2017'})

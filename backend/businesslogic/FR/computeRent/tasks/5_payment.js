@@ -1,5 +1,5 @@
 export default function(contract, rentDate, previousRent, settlements, rent) {
-    if (settlements && settlements.discounts) {
+    if (settlements && settlements.payments) {
         settlements.payments.forEach(payment => {
             rent.payments.push(payment);
         });
