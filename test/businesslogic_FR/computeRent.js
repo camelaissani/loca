@@ -28,22 +28,22 @@ describe('business logic rent computation', () => {
         it('check rent object structure', () => {
             const computedRent = BL.computeRent(contract, '01/01/2017');
             const rentMoment = moment('01/01/2017', 'DD/MM/YYYY HH:mm');
-            assert(computedRent.term === Number(rentMoment.format('YYYYMMDDHH')));
-            assert(computedRent.month === rentMoment.month()+1);
-            assert(computedRent.year === rentMoment.year());
+            assert.strictEqual(computedRent.term, Number(rentMoment.format('YYYYMMDDHH')));
+            assert.strictEqual(computedRent.month, rentMoment.month()+1);
+            assert.strictEqual(computedRent.year, rentMoment.year());
         });
 
         it('compute one rent', () => {
             const computedRent = BL.computeRent(contract, '01/01/2017');
-            assert.equal(computedRent.total.grandTotal, grandTotal);
+            assert.strictEqual(computedRent.total.grandTotal, grandTotal);
         });
 
         it('compute two rents and check balance', () => {
             const rentOne = BL.computeRent(contract, '01/01/2017');
             const rentTwo = BL.computeRent(contract, '01/01/2017', rentOne);
-            assert.equal(rentOne.total.grandTotal, grandTotal);
-            assert.equal(rentTwo.balance, grandTotal);
-            assert.equal(rentTwo.total.grandTotal, grandTotal * 2);
+            assert.strictEqual(rentOne.total.grandTotal, grandTotal);
+            assert.strictEqual(rentTwo.balance, grandTotal);
+            assert.strictEqual(rentTwo.total.grandTotal, grandTotal * 2);
         });
     });
 
@@ -78,13 +78,12 @@ describe('business logic rent computation', () => {
 
         it('compute one rent one property should be billed', () => {
             const computedRent = BL.computeRent(contract, '01/01/2017');
-            assert.equal(computedRent.total.grandTotal, grandTotal1);
-            assert(true);
+            assert.strictEqual(computedRent.total.grandTotal, grandTotal1);
         });
 
         it('compute one rent two properties should be billed', () => {
             const computedRent = BL.computeRent(contract, '01/02/2017');
-            assert.equal(computedRent.total.grandTotal, grandTotal1 + grandTotal2);
+            assert.strictEqual(computedRent.total.grandTotal, grandTotal1 + grandTotal2);
         });
 
     });

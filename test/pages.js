@@ -25,7 +25,7 @@ describe('page/view rendering', () => {
             const filepath = viewEngineArgs[0];
             assert(filepath.endsWith('index.ejs'));
             const model = viewEngineArgs[1];
-            assert(model.view === 'website');
+            assert.strictEqual(model.view, 'website');
             done();
         });
     });
@@ -44,7 +44,7 @@ describe('page/view rendering', () => {
             const filepath = viewEngineArgs[0];
             assert(filepath.endsWith('index.ejs'));
             const model = viewEngineArgs[1];
-            assert(model.view === 'signup');
+            assert.strictEqual(model.view, 'signup');
             done();
         });
     });
@@ -63,7 +63,7 @@ describe('page/view rendering', () => {
             const filepath = viewEngineArgs[0];
             assert(filepath.endsWith('index.ejs'));
             const model = viewEngineArgs[1];
-            assert(model.view === 'login');
+            assert.strictEqual(model.view, 'login');
             done();
         });
     });
@@ -81,7 +81,7 @@ describe('page/view rendering', () => {
             const filepath = viewEngineArgs[0];
             assert(filepath.endsWith('index.ejs'));
             const model = viewEngineArgs[1];
-            assert(model.view === 'selectrealm');
+            assert.strictEqual(model.view, 'selectrealm');
             done();
         });
     });
@@ -99,7 +99,7 @@ describe('page/view rendering', () => {
             const filepath = viewEngineArgs[0];
             assert(filepath.endsWith('index.ejs'));
             const model = viewEngineArgs[1];
-            assert(model.view === 'property');
+            assert.strictEqual(model.view, 'property');
             done();
         });
     });
@@ -131,7 +131,7 @@ describe('page/view rendering', () => {
 
             assert(filepath.endsWith('property/index.ejs'));
             const model = viewEngineArgs[1];
-            assert(model.view === 'property');
+            assert.strictEqual(model.view, 'property');
             done();
         });
     });
