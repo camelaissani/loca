@@ -56,18 +56,13 @@ function _rentBuildViewData(printableRent, occupant, month, year) {
     printableRent.paymentDate = printableRent.paymentDate || '';
     printableRent.vatAmount = printableRent.vatAmount ? Number(printableRent.vatAmount) : 0;
     printableRent.discount = printableRent.discount ? Number(printableRent.discount) : 0;
-    printableRent.totalWithoutVatAmount = printableRent.totalAmount - printableRent.vatAmount - printableRent.discount;
+    printableRent.totalAmount = printableRent.totalAmount ? Number(printableRent.totalAmount) : 0;
+    printableRent.totalWithoutVatAmount = printableRent.totalAmount - printableRent.balance - printableRent.vatAmount;
     printableRent.promo = printableRent.promo ? Number(printableRent.promo) : 0;
     printableRent.notepromo = printableRent.notepromo || '';
-    printableRent.totalAmount = printableRent.totalAmount ? Number(printableRent.totalAmount) : 0;
     printableRent.newBalance = Number((printableRent.payment - printableRent.totalAmount).toFixed(2));
-    printableRent.officeAmount = printableRent.officeAmount ? Number(printableRent.officeAmount) : 0;
-    printableRent.expenseAmount = printableRent.expenseAmount ? Number(printableRent.expenseAmount) : 0;
-    printableRent.parkingAmount = printableRent.parkingAmount ? Number(printableRent.parkingAmount) : 0;
-    printableRent.totalWithoutBalanceAmount = printableRent.officeAmount + printableRent.expenseAmount + printableRent.parkingAmount - printableRent.discount + printableRent.vatAmount;
     printableRent.totalToPay = printableRent.totalAmount > 0 ? printableRent.totalAmount : 0;
     printableRent.description = printableRent.description || '';
-    printableRent.rowSelected = '';
     printableRent.status = '';
     return printableRent;
 }
