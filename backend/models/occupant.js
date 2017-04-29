@@ -30,7 +30,7 @@ class OccupantModel extends Model {
             isVat: Boolean,
             vatRatio: Number,
             discount: Number,
-            rents: Object
+            rents: Array
         });
     }
 }

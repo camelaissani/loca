@@ -111,6 +111,7 @@ function payTerm(contract, term, settlements) {
         if (index > previousRentIndex) {
             contract.rents[index] = BL.computeRent(contract, current.format('DD/MM/YYYY HH:mm'), previousRent, settlements);
             previousRent = contract.rents[index];
+            current.add(1, contract.frequency);
             settlements = null;
         }
     });

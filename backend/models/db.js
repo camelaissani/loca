@@ -23,8 +23,12 @@ require('sugar').extend();
 function stringId2ObjectId(obj) {
     if (obj) {
         Object.keys(obj).forEach(key => {
-            if (key === '_id' && (typeof obj[key] == 'string')) {
-                obj[key] = mongojs.ObjectId(obj[key]);
+            if (key === '_id') {
+                if (typeof obj[key] == 'string') {
+                    obj[key] = mongojs.ObjectId(obj[key]);
+                } else if (typeof obj[key] == 'object' && obj[key].$in) {
+                    obj[key].$in = obj[key].$in.map(_id => mongojs.ObjectId(_id));
+                }
             } else if (typeof obj[key] == 'object') {
                 obj[key] = stringId2ObjectId(obj[key]);
             }

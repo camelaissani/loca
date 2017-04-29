@@ -4,6 +4,7 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
 
         rent.preTaxAmounts.forEach((preTaxAmount) => {
             rent.vats.push({
+                origin: 'contract',
                 description: `${preTaxAmount.description} T.V.A. (${rate*100}%)`,
                 amount: preTaxAmount.amount*rate,
                 rate
@@ -12,6 +13,7 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
 
         rent.charges.forEach((charges) => {
             rent.vats.push({
+                origin: 'contract',
                 description: `${charges.description} T.V.A. (${rate*100}%)`,
                 amount: charges.amount*rate,
                 rate
@@ -20,6 +22,7 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
 
         rent.discounts.forEach((discount) => {
             rent.vats.push({
+                origin: discount.origin,
                 description: `${discount.description} T.V.A. (${rate*100}%)`,
                 amount: discount.amount*rate*(-1),
                 rate

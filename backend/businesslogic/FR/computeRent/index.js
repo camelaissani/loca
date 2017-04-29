@@ -21,28 +21,36 @@ export default function(contract, rentDate, previousRent, settlements) {
         ],
         discounts: [
         // {
+        //     origin: '',  // 'contract', 'settlement'
+        //     description: '',
+        //     amount: ''
+        // }
+        ],
+        debts: [
+        // {
         //     description: '',
         //     amount: ''
         // }
         ],
         vats: [
         // {
+        //     origin: '',  // 'contract', 'settlement'
         //     description: '',
         //     rate: 0,
         //     amount: 0
         // }
         ],
-        balance: 0,
         payments: [
         // {
         //     date: '',
         //     amount: 0,
         //     type: '',
-        //     reference: '',
-        //     description: ''
+        //     reference: ''
         // }
         ],
+        description: '',
         total: {
+            balance: 0,
             preTaxAmount: 0,
             charges: 0,
             discount: 0,

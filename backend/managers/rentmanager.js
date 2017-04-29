@@ -1,239 +1,27 @@
 'use strict';
 
 import moment from 'moment';
-import BL from '../businesslogic';
+import Contract from './contract';
+import FD from './frontdata';
 import rentModel from '../models/rent';
 import occupantModel from '../models/occupant';
-import occupantManager from './occupantmanager.js';
-
-// return this object
-// {
-//     _id,                               // occupant ID
-//     month: String,
-//     year: String,
-//     discount: Number,
-//     promo: Number,
-//     notepromo: String,
-//     balance: Number,
-//     newBalance: Number,
-//     isVat: Boolean,
-//     vatRatio: Number,
-//     vatAmount: Number,
-//     totalAmount: Number,
-//     payment: Number,
-//     paymentType: String,
-//     paymentReference: String,
-//     paymentDate: String,               // DD/MM/YYYY
-//     totalWithoutVatAmount: Number,
-//     totalWithoutBalanceAmount: Number,
-//     totalToPay: Number,
-//     description: String,
-//     status: String,                    // 'paid', 'partialypaid', 'notpaid'
-//     paymentStatus: [{
-//          month: String,
-//          status: String
-//     }],
-//     occupant: {
-//         _id: String,
-//         isCompany: Boolean,
-//         company: String,
-//         legalForm: String,
-//         siret: String,
-//         capital: Number,
-//         manager: String,
-//         name: String,
-//         street1: String,
-//         street2: String,
-//         zipCode: String,
-//         city: String,
-//         contacts: Array,
-//         contract: String,
-//         beginDate: String,
-//         endDate: String,
-//         terminationDate: String,
-//         guarantyPayback: Number,
-//         properties: Array,
-//         guaranty: Number,
-//         reference: String,
-//         isVat: Boolean,
-//         vatRatio: Number,
-//         discount: Number,
-//     }
-// }
-function _getViewData(inputOccupant, inputRent) {
-    // clone and set default values for rent
-    const rent = inputRent ? JSON.parse(JSON.stringify(inputRent)) : {};
-
-    // TODO month should be a number not a string
-    rent.month = Number(rent.month) > 9 ? `${rent.month}` : `0${Number(rent.month)}`;
-
-    const rentMoment = moment(`01/${rent.month}/${rent.year}`, 'DD/MM/YYYY');
-
-    rent.vatRatio = rent.vatRatio ? Number(rent.vatRatio) : 0;
-    rent.balance = rent.balance ? Number(rent.balance) : 0;
-    rent.payment = rent.payment ? Number(rent.payment) : 0;
-    rent.paymentType = rent.paymentType || '';
-    rent.paymentReference = rent.paymentReference || '';
-    rent.paymentDate = rent.paymentDate || '';
-    rent.totalWithoutVatAmount = rent.totalAmount - rent.vatRatio - rent.balance;
-    rent.vatAmount = rent.vatAmount ? Number(rent.vatAmount) : 0;
-    rent.promo = rent.promo ? Number(rent.promo) : 0;
-    rent.notepromo = rent.notepromo || '';
-    rent.totalAmount = rent.totalAmount ? Number(rent.totalAmount) : 0;
-    rent.newBalance =  Number((rent.payment - rent.totalAmount));
-    rent.discount = rent.discount ? Number(rent.discount) : 0;
-    rent.totalWithoutBalanceAmount = rent.totalAmount - rent.balance;
-    rent.totalToPay = rent.totalAmount > 0 ? rent.totalAmount : 0;
-    rent.description = rent.description || '';
-    rent.status = '';
-    if (rentMoment.isSameOrBefore(moment(), 'month')) {
-        if (rent.totalAmount <= 0 || rent.newBalance >= 0) {
-            rent.status = 'paid';
-        } else if (rent.payment > 0) {
-            rent.status = 'partialypaid';
-        } else {
-            rent.status = 'notpaid';
-        }
-    }
-
-    // clone and set default values for occupant
-    if (inputOccupant) {
-        const occupant = JSON.parse(JSON.stringify(inputOccupant));
-        occupant.street1 = occupant.street1 || '';
-        occupant.street2 = occupant.street2 || '';
-        occupant.zipCode = occupant.zipCode || '';
-        occupant.city = occupant.city || '';
-
-        occupant.legalForm = occupant.legalForm || '';
-        occupant.siret = occupant.siret || '';
-        occupant.contract = occupant.contract || '';
-        occupant.reference = occupant.reference || '';
-
-        occupant.guaranty = occupant.guaranty ? Number(occupant.guaranty) : 0;
-        if (occupant.isVat) {
-            occupant.vatRatio = occupant.vatRatio ? Number(occupant.vatRatio) : 0;
-        } else {
-            occupant.vatRatio = 0;
-        }
-        occupant.discount = occupant.discount ? Number(occupant.discount) : 0;
-
-        // Compute if contract is completed
-        if (!occupant.terminationDate) {
-            const currentDate = moment();
-            const momentTermination = moment(occupant.terminationDate, 'DD/MM/YYYY');
-            if (momentTermination.isBefore(currentDate, 'month')) {
-                occupant.terminated = true;
-            }
-        } else {
-            occupant.terminated = false;
-        }
-
-        rent.occupant = occupant;
-        rent._id = occupant._id;
-
-        // count number of month of not paid rent
-        if (rentMoment.isSameOrBefore(moment(), 'month')) {
-            rent.paymentStatus = [];
-            let currentMoment = moment(rentMoment);
-            let currentRent;
-            let countMonthNotPaid = 0;
-            do {
-                currentRent = null;
-                let currentMonth = String(currentMoment.month() + 1);
-                let currentYear = String(currentMoment.year());
-                if (occupant.rents[currentYear] && occupant.rents[currentYear][currentMonth]) {
-                    currentRent = occupant.rents[currentYear][currentMonth];
-                    const totalAmount = currentRent.totalAmount ? Number(currentRent.totalAmount) : 0;
-                    const payment = currentRent.payment ? Number(currentRent.payment) : 0;
-                    const newBalance =  Number(currentRent.payment) - totalAmount;
-
-                    if (totalAmount <= 0 || newBalance >= 0) {
-                        break;
-                    } else {
-                        rent.paymentStatus.push({month: currentMonth, status: payment > 0 ? 'partialypaid' : 'notpaid'});
-                        countMonthNotPaid++;
-                    }
-                }
-                currentMoment.subtract(1, 'month');
-            } while (currentRent);
-
-            if (countMonthNotPaid >= 1) {
-                rent.countMonthNotPaid = countMonthNotPaid;
-            } else {
-                delete rent.paymentStatus;
-            }
-        }
-        delete rent.occupant.rents;
-    }
-    return rent;
-}
-
-function _updateRentAmount(contract, inputRent, currentMonth, previousRent, paymentData) {
-    const rent = rentModel.rentSchema.filter(inputRent);
-    const prevRent = previousRent ? {
-        total: {
-            grandTotal: previousRent.totalAmount,
-            payment: previousRent.payment || 0
-        }
-    } : null;
-    const settlements = {
-        payments: [],
-        discounts: []
-    };
-    if (paymentData) {
-        settlements.payments.push({
-            date: paymentData.paymentDate || '',
-            amount: paymentData.payment || 0,
-            type: paymentData.paymentType || '',
-            reference: paymentData.paymentReference || '',
-            description: paymentData.description || ''
-        });
-        if (paymentData.promo) {
-            settlements.discounts.push({
-                description: paymentData.notepromo || '',
-                amount: paymentData.promo * (1 / (1 + contract.vatRate))
-            });
-        }
-    }
-    const computedRent = BL.computeRent(contract, currentMonth, prevRent, settlements);
-    rent.discount = computedRent.total.discount;
-    rent.vatAmount = computedRent.total.vat;
-    rent.balance = computedRent.balance;
-    rent.totalAmount = computedRent.total.grandTotal;
-    if (paymentData) {
-        rent.payment = computedRent.total.payment;
-        rent.paymentType = computedRent.payments[0].type;
-        rent.paymentReference = computedRent.payments[0].reference;
-        rent.paymentDate = computedRent.payments[0].date;
-        rent.description = computedRent.payments[0].description;
-        rent.promo = paymentData.promo || 0;
-        rent.notepromo = paymentData.notepromo || '';
-    }
-    return rent;
-}
 
 function _findOccupantRents(realm, id, month, year, callback) {
-    occupantManager.findOccupant(realm, id, (errors, occupant) => {
+    occupantModel.findOne(realm, id, (errors, occupant) => {
         if (errors && errors.length > 0) {
             callback(errors);
             return;
         }
         const rents = [];
+        const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
         let rent = null;
 
         if (occupant && occupant.rents) {
-            Object.keys(occupant.rents).forEach((currentYear) => {
-                Object.keys(occupant.rents[currentYear]).forEach((currentMonth) => {
-                    const currentRent = occupant.rents[currentYear][currentMonth];
-                    if (currentRent) {
-                        currentRent.month = currentMonth;
-                        currentRent.year = currentYear;
-                        rents.push(_getViewData(occupant, currentRent));
-                    }
-                    if (Number(currentMonth) === Number(month) && Number(currentYear) === Number(year)) {
-                        rent = currentRent;
-                    }
-                });
+            occupant.rents.forEach(currentRent => {
+                rents.push(FD.toRentData(occupant, currentRent));
+                if (currentRent.term === term) {
+                    rent = currentRent;
+                }
             });
         }
 
@@ -246,22 +34,25 @@ function _findOccupantRents(realm, id, month, year, callback) {
 }
 
 function _findAllOccupantRents(realm, month, year, callback) {
-    const filter = {};
-    filter[`rents.${year}.${month}`] = {
-        $exists: true
-    };
-    occupantManager.findAllOccupants(realm, (errors, occupants) => {
+    occupantModel.findFilter(realm, {
+        $orderby: {
+            name: 1
+        }
+    }, (errors, occupants) => {
         if (errors && errors.length > 0) {
             callback(errors);
             return;
         }
-        callback([], occupants.map(occupant => {
-            const rent = occupant.rents[year][month];
-            rent.month = month;
-            rent.year = year;
-            return _getViewData(occupant, rent);
-        }));
-    }, filter);
+        const occupantRents = [];
+        const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
+        occupants.forEach(occupant => {
+            const rents = occupant.rents.filter(rent => rent.term === term);
+            if (rents.length>0) {
+                occupantRents.push(FD.toRentData(occupant, rents[0]));
+            }
+        });
+        callback([], occupantRents);
+    });
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -293,44 +84,48 @@ function update(req, res) {
             res.json({errors: errors});
             return;
         }
-        const currentMonth = moment('01/' + paymentData.month + '/' + paymentData.year, 'DD/MM/YYYY');
-        const end = moment(dbOccupant.endDate, 'DD/MM/YYYY');
+
         const contract = {
+            frequency: 'months',
             begin: dbOccupant.beginDate,
             end: dbOccupant.endDate,
             discount: dbOccupant.discount || 0,
             vatRate: dbOccupant.vatRatio,
-            properties: dbOccupant.properties
+            properties: dbOccupant.properties,
+            rents: dbOccupant.rents
         };
-        while(currentMonth.isSameOrBefore(end, 'month')) {
-            const month = currentMonth.month() + 1; // 0 based
-            const year = currentMonth.year();
-            if (!dbOccupant.rents[year] || !dbOccupant.rents[year][month]) {
-                break;
-            }
 
-            const previousMonth = moment(currentMonth).subtract(1, 'months');
-            const previousY = previousMonth.year();
-            const previousM = previousMonth.month() + 1;
-            let previousRent;
-            if (dbOccupant.rents[previousY] && dbOccupant.rents[previousY][previousM]) {
-                previousRent = dbOccupant.rents[previousY][previousM];
+        const settlements = {
+            payments: [],
+            discounts: []
+        };
+        if (paymentData) {
+            settlements.payments.push({
+                date: paymentData.paymentDate || '',
+                amount: paymentData.payment || 0,
+                type: paymentData.paymentType || '',
+                reference: paymentData.paymentReference || '',
+                description: paymentData.description || ''
+            });
+            if (paymentData.promo) {
+                settlements.discounts.push({
+                    origin: 'settlement',
+                    description: paymentData.notepromo || '',
+                    amount: paymentData.promo * (1 / (1 + contract.vatRate))
+                });
             }
-
-            dbOccupant.rents[year][month] = _updateRentAmount(contract, dbOccupant.rents[year][month], currentMonth, previousRent, paymentData);
-            paymentData = null;
-            currentMonth.add(1, 'months');
         }
+
+        dbOccupant.rents = Contract.payTerm(contract, `01/${paymentData.month}/${paymentData.year} 00:00`, settlements).rents;
 
         occupantModel.update(realm, dbOccupant, (errors) => {
             if (errors) {
                 res.json({errors: errors});
                 return;
             }
-            const rent = dbOccupant.rents[currentDate.year()][currentDate.month() + 1];
-            rent.month = currentDate.month() + 1;
-            rent.year = currentDate.year();
-            res.json(_getViewData(dbOccupant, rent));
+            const rent = dbOccupant.rents.filter(rent => rent.term === Number(currentDate.format('YYYYMMDDHH')))[0];
+
+            res.json(FD.toRentData(dbOccupant, rent));
         });
     });
 }
@@ -347,20 +142,20 @@ function rentsOfOccupant(req, res) {
             });
             return;
         }
+        let rentsToReturn = [];
         if (rents) {
-            rents.forEach( currentRent => {
-                currentRent.uid = currentRent.occupant._id + '|' + currentRent.month + '|' + currentRent.year;
-                // if (Number(currentRent.year) === date.year && Number(currentRent.month) === date.month) {
+            rentsToReturn = rents.map( currentRent => {
                 if (currentRent === rent) {
                     currentRent.active = 'active';
                 }
                 delete currentRent.occupant;
+                return currentRent;
             });
         }
         delete occupant.rents;
         res.json({
-            occupant: occupant,
-            rents: rents
+            occupant,
+            rents: rentsToReturn
         });
     });
 }
@@ -399,41 +194,39 @@ function overview(req, res) {
             });
             return;
         }
-        let countPaid = 0;
-        let countPartiallyPaid = 0;
-        let countNotPaid = 0;
-        let totalToPay = 0;
-        let totalPaid = 0;
-        let totalNotPaid = 0;
+
+        let overview = {
+            countAll: 0,
+            countPaid: 0,
+            countPartiallyPaid: 0,
+            countNotPaid: 0,
+            totalToPay: 0,
+            totalPaid: 0,
+            totalNotPaid: 0
+        };
+
         if (rents) {
-            rents.forEach( currentRent => {
+            overview = rents.reduce((acc, currentRent) => {
                 if (currentRent.totalAmount <= 0 || currentRent.newBalance >= 0) {
-                    countPaid++;
+                    acc.countPaid++;
                 } else if (currentRent.payment > 0) {
-                    countPartiallyPaid++;
+                    acc.countPartiallyPaid++;
                 } else {
-                    countNotPaid++;
+                    acc.countNotPaid++;
                 }
-                totalToPay += currentRent.totalToPay;
-                totalNotPaid += currentRent.newBalance;
-                totalPaid += currentRent.payment;
-            });
-            totalNotPaid = (-1 * totalNotPaid);
+                acc.countAll ++;
+                acc.totalToPay += currentRent.totalToPay;
+                acc.totalPaid += currentRent.payment;
+                acc.totalNotPaid -= currentRent.newBalance;
+
+                return acc;
+            }, overview);
         }
-        res.json({
-            countAll: countPaid + countPartiallyPaid + countNotPaid,
-            countPaid: countPaid,
-            countPartiallyPaid: countPartiallyPaid,
-            countNotPaid: countNotPaid,
-            totalToPay: totalToPay,
-            totalPaid: totalPaid,
-            totalNotPaid: totalNotPaid
-        });
+        res.json(overview);
     });
 }
 
 export default {
-    // one,
     update,
     rentsOfOccupant,
     all,

@@ -11,7 +11,7 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
     rent.total.charges = charges;
     rent.total.discount = discount;
     rent.total.vat = vat;
-    rent.total.grandTotal = math.round(preTaxAmount + charges - discount + vat + rent.balance, 2);
+    rent.total.grandTotal = math.round(preTaxAmount + charges - discount + vat + rent.total.balance, 2);
     rent.total.payment = payment;
 
     return rent;

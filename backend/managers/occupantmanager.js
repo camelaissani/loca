@@ -139,30 +139,6 @@ function _createUpdateContractRents(contract, inputRents) {
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
 ////////////////////////////////////////////////////////////////////////////////
-function findOccupant(realm, id, callback) {
-    occupantModel.findOne(realm, id, (errors, occupant) => {
-        if (errors) {
-            callback(errors);
-        } else {
-            callback(errors, occupant);
-        }
-    });
-}
-
-function findAllOccupants(realm, callback, filter) {
-    if (!filter) {
-        filter = {};
-    }
-    occupantModel.findFilter(realm, {
-        $query: filter,
-        $orderby: {
-            name: 1
-        }
-    }, (errors, occupants) => {
-        callback(errors, occupants);
-    });
-}
-
 function add(req, res) {
     const realm = req.realm;
     const occupant = occupantModel.schema.filter(req.body);
@@ -242,7 +218,7 @@ function update(req, res) {
         occupant.name = occupant.company;
     }
 
-    findOccupant(realm, occupantId, (errors, dbOccupant) => {
+    occupantModel.findOne(realm, occupantId, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
@@ -370,7 +346,11 @@ function remove(req, res) {
 
 function all(req, res) {
     const realm = req.realm;
-    findAllOccupants(realm, function(errors, occupants) {
+    occupantModel.findFilter(realm, {
+        $orderby: {
+            name: 1
+        }
+    }, (errors, occupants) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
@@ -392,7 +372,11 @@ function overview(req, res) {
         countInactive: 0
     };
 
-    findAllOccupants(realm, function(errors, occupants) {
+    occupantModel.findFilter(realm, {
+        $orderby: {
+            name: 1
+        }
+    }, (errors, occupants) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
@@ -416,9 +400,6 @@ function overview(req, res) {
 }
 
 export default {
-    findOccupant,
-    findAllOccupants,
-    // one,
     add,
     update,
     remove,

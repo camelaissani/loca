@@ -42,7 +42,7 @@ describe('business logic rent computation', () => {
             const rentOne = BL.computeRent(contract, '01/01/2017');
             const rentTwo = BL.computeRent(contract, '01/01/2017', rentOne);
             assert.strictEqual(rentOne.total.grandTotal, grandTotal);
-            assert.strictEqual(rentTwo.balance, grandTotal);
+            assert.strictEqual(rentTwo.total.balance, grandTotal);
             assert.strictEqual(rentTwo.total.grandTotal, grandTotal * 2);
         });
     });
