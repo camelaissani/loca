@@ -1,13 +1,10 @@
 'use strict';
-import BL from '../businesslogic';
 
 import moment from 'moment';
+import FD from './frontdata';
+import Contract from './contract';
 import occupantModel from '../models/occupant';
 import propertyModel from '../models/property';
-import sugar from 'sugar';
-
-// TODO remove this lib
-sugar.extend();
 
 function _buildPropertyMap(realm, callback) {
     propertyModel.findFilter(realm, {
@@ -16,124 +13,16 @@ function _buildPropertyMap(realm, callback) {
             type: 1,
             name: 1
         }
-    }, function(errors, properties) {
-        let propertyMap = {};
+    }, (errors, properties) => {
+        const propertyMap = {};
         if (properties) {
-            propertyMap = properties.reduce( (acc, property) => {
+            properties.reduce( (acc, property) => {
                 acc[property._id.toString()] = property;
                 return acc;
-            }, {});
+            }, propertyMap);
         }
         callback(errors, propertyMap);
     });
-}
-
-function _getPaidRents(occupant, startMoment=moment(occupant.beginDate, 'DD/MM/YYYY'), excludeCurrentMonth=false) {
-    const currentMoment = moment(startMoment);
-    const paidRents = [];
-
-    if (excludeCurrentMonth) {
-        currentMoment.add(1, 'months');
-    }
-    let month = currentMoment.month() + 1; // 0 based
-    let year = currentMoment.year();
-    while (occupant.rents && occupant.rents[year] && occupant.rents[year][month]) {
-        const rent = occupant.rents[year][month];
-        if (rent.payment && rent.payment !== 0) {
-            paidRents.push(month + '/' + year);
-        }
-
-        currentMoment.add(1, 'months');
-        month = currentMoment.month() + 1; // 0 based
-        year = currentMoment.year();
-    }
-    return paidRents;
-}
-
-function _getPaidRentsAfterDate(occupant, startMoment) {
-    return _getPaidRents(occupant, startMoment, true);
-}
-
-function _createRent(contract, currentMonth, previousRent) {
-    const prevRent = previousRent ? {
-        total: {
-            grandTotal: previousRent.totalAmount || 0,
-            payment: previousRent.payment || 0
-        }
-    } : null;
-    const settlements = {
-        payments: [],
-        discounts: []
-    };
-    const computedRent = BL.computeRent(contract, currentMonth, prevRent, settlements);
-    const month = computedRent.month;
-    const year = computedRent.year;
-
-    return {
-        month,
-        year,
-        'discount': computedRent.total.discount,
-        'promo': 0,
-        'balance': computedRent.balance,
-        'isVat': computedRent.vats.length > 0,
-        'vatRatio': computedRent.vats.length > 0 ? computedRent.vats[0].rate : 0,
-        'vatAmount': computedRent.total.vat,
-        'totalAmount': computedRent.total.grandTotal
-    };
-}
-
-function _createUpdateContractRents(contract, inputRents) {
-    const rents = inputRents ? JSON.parse(JSON.stringify(inputRents)) : {};
-    const begin = moment(contract.begin, 'DD/MM/YYYY');
-    const end = moment(contract.end, 'DD/MM/YYYY');
-
-    // clean rent which are not in contract time-frame
-    // except if there is a payment
-    if (rents) {
-        // find all rents to delete
-        Object.keys(rents).map(year => {
-            return {
-                year,
-                months: Object.keys(rents[year]).reduce((acc, month) => {
-                    const rentMoment = moment(`01/${month}/${year}`, 'DD/MM/YYYY');
-                    if (!rentMoment.isBetween(begin, end, 'month', '[]')
-                        && !rents[year][month].payment) {
-                        acc.push(month);
-                    }
-                    return acc;
-                }, [])
-            };
-        }).forEach(rentsToDelete => {
-            if (rentsToDelete.months.length>0) {
-                // delete rents of year
-                if (rentsToDelete.months.length===12) {
-                    delete rents[rentsToDelete.year];
-                } else {
-                    rentsToDelete.months.forEach(month => {
-                        delete rents[rentsToDelete.year][month];
-                    });
-                }
-            }
-        });
-    }
-
-    // update rents according to the contract
-    let currentMonth = begin;
-    let previousRent;
-    while (currentMonth.isSameOrBefore(end, 'month')) {
-        const month = currentMonth.month() + 1; // 0 based
-        const year = currentMonth.year();
-        if (!rents[year]) {
-            rents[year] = {};
-        }
-        if (!rents[year][month]) {
-            rents[year][month] = _createRent(contract, currentMonth.format('DD/MM/YYYY'), previousRent);
-        }
-        previousRent = rents[year][month];
-        currentMonth.add(1, 'months');
-    }
-
-    return rents;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -173,14 +62,15 @@ function add(req, res) {
             item.property = propertyMap[item.propertyId];
         });
 
-        const contract = {
+        const contract = Contract.create({
             begin: occupant.beginDate,
             end: occupant.endDate,
-            discount: occupant.discount || 0,
-            vatRate: occupant.vatRatio,
+            frequency: 'months',
             properties: occupant.properties
-        };
-        occupant.rents = _createUpdateContractRents(contract, occupant.rents);
+        });
+
+        occupant.rents = contract.rents;
+
         occupantModel.add(realm, occupant, (errors, occupant) => {
             if (errors) {
                 res.json({
@@ -188,8 +78,7 @@ function add(req, res) {
                 });
                 return;
             }
-            delete occupant.rents;
-            res.json(occupant);
+            res.json(FD.toOccupantData(occupant));
         });
     });
 }
@@ -198,7 +87,6 @@ function update(req, res) {
     const realm = req.realm;
     const occupantId = req.params.id;
     const occupant = occupantModel.schema.filter(req.body);
-    const momentEnd = occupant.terminationDate ? moment(occupant.terminationDate, 'DD/MM/YYYY') : moment(occupant.endDate, 'DD/MM/YYYY');
 
     if (!occupant.properties || occupant.properties.length === 0) {
         res.json({
@@ -225,54 +113,65 @@ function update(req, res) {
             });
             return;
         }
-        delete dbOccupant._id;
-        occupant.rents = dbOccupant.rents;
+
         if (dbOccupant.documents) {
             occupant.documents = dbOccupant.documents;
         }
 
-        const afterPaidRents = _getPaidRentsAfterDate(occupant, momentEnd);
-        if (!afterPaidRents || afterPaidRents.length === 0) {
-            _buildPropertyMap(realm, (errors, propertyMap) => {
-                if (errors && errors.length > 0) {
-                    res.json({
-                        errors: errors
-                    });
-                    return;
-                }
-
-                // Resolve proprerties
-                const properties = [];
-                occupant.properties.forEach((item) => {
-                    let itemToKeep;
-                    dbOccupant.properties.forEach((dbItem) => {
-                        if (dbItem.propertyId === item.propertyId) {
-                            itemToKeep = dbItem;
-                        }
-                    });
-                    if (!itemToKeep) {
-                        itemToKeep = {
-                            propertyId: item.propertyId,
-                            property: propertyMap[item.propertyId],
-                            entryDate: item.entryDate,
-                            exitDate: item.exitDate
-                        };
-                    } else {
-                        itemToKeep.entryDate = item.entryDate;
-                        itemToKeep.exitDate = item.exitDate;
-                    }
-                    properties.push(itemToKeep);
+        _buildPropertyMap(realm, (errors, propertyMap) => {
+            if (errors && errors.length > 0) {
+                res.json({
+                    errors: errors
                 });
-                occupant.properties = properties;
+                return;
+            }
 
-                const contract = {
-                    begin: occupant.beginDate,
-                    end: momentEnd.format('DD/MM/YYYY'),
-                    discount: occupant.discount || 0,
-                    vatRate: occupant.vatRatio,
-                    properties: occupant.properties
-                };
-                occupant.rents = _createUpdateContractRents(contract, occupant.rents);
+            // Resolve proprerties
+            occupant.properties = occupant.properties.map((item) => {
+                let itemToKeep;
+                dbOccupant.properties.forEach((dbItem) => {
+                    if (dbItem.propertyId === item.propertyId) {
+                        itemToKeep = dbItem;
+                    }
+                });
+                if (!itemToKeep) {
+                    itemToKeep = {
+                        propertyId: item.propertyId,
+                        property: propertyMap[item.propertyId],
+                        entryDate: item.entryDate,
+                        exitDate: item.exitDate
+                    };
+                } else {
+                    itemToKeep.entryDate = item.entryDate;
+                    itemToKeep.exitDate = item.exitDate;
+                }
+                return itemToKeep;
+            });
+
+            const contract = {
+                begin: dbOccupant.beginDate,
+                end: dbOccupant.endDate,
+                frequency: 'months',
+                terms: Math.round(
+                    moment(dbOccupant.endDate, 'DD/MM/YYYY')
+                    .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),
+                properties: dbOccupant.proprerties,
+                vatRate: dbOccupant.vatRatio,
+                discount: dbOccupant.discount,
+                rents: dbOccupant.rents
+            };
+
+            const modification = {
+                begin: occupant.beginDate,
+                end: occupant.endDate,
+                termination: occupant.terminationDate,
+                properties: occupant.properties
+            };
+
+            try {
+                const newContract = Contract.update(contract, modification);
+
+                occupant.rents = newContract.rents;
 
                 occupantModel.update(realm, occupant, (errors) => {
                     if (errors) {
@@ -281,16 +180,13 @@ function update(req, res) {
                         });
                         return;
                     }
-                    delete occupant.rents;
-                    res.json(occupant);
+                    res.json(FD.toOccupantData(occupant));
                 });
-            });
-            return;
-        }
-
-        res.json({
-            // TODO: to localize
-            errors: ['Impossible de mettre à jour le dossier du locataire.', 'Des paiments de loyer ont été effectués après la nouvelle date de fin du bail']
+            } catch (e) {
+                res.json({
+                    errors: [String(e)]
+                });
+            }
         });
     });
 }
@@ -317,7 +213,11 @@ function remove(req, res) {
                 return;
             }
             if (occupants) {
-                const occupantsWithPaidRents = occupants.filter(occupant => _getPaidRents(occupant).length > 0);
+                const occupantsWithPaidRents = occupants.filter(occupant => {
+                    return occupant.rents
+                    .some(rent => rent.payments.length > 0 ||
+                                rent.discounts.some(discount => discount.origin === 'settlement'));
+                });
                 if (occupantsWithPaidRents.length > 0) {
                     // TODO: to localize
                     callback(['Impossible de supprimer le locataire : ' + occupantsWithPaidRents[0].name + '. Des loyers ont été encaissés.']);
@@ -356,10 +256,7 @@ function all(req, res) {
                 errors: errors
             });
         } else {
-            res.json(occupants.map(occupant => {
-                delete occupant.rents;
-                return occupant;
-            }));
+            res.json(occupants.map(occupant => FD.toOccupantData(occupant)));
         }
     });
 }

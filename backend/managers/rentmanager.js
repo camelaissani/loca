@@ -6,33 +6,6 @@ import FD from './frontdata';
 import rentModel from '../models/rent';
 import occupantModel from '../models/occupant';
 
-function _findOccupantRents(realm, id, month, year, callback) {
-    occupantModel.findOne(realm, id, (errors, occupant) => {
-        if (errors && errors.length > 0) {
-            callback(errors);
-            return;
-        }
-        const rents = [];
-        const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
-        let rent = null;
-
-        if (occupant && occupant.rents) {
-            occupant.rents.forEach(currentRent => {
-                rents.push(FD.toRentData(occupant, currentRent));
-                if (currentRent.term === term) {
-                    rent = currentRent;
-                }
-            });
-        }
-
-        if (!rent && rents.length>0) {
-            rent = rents[0];
-        }
-
-        callback([], occupant, rent, rents);
-    });
-}
-
 function _findAllOccupantRents(realm, month, year, callback) {
     occupantModel.findFilter(realm, {
         $orderby: {
@@ -48,7 +21,7 @@ function _findAllOccupantRents(realm, month, year, callback) {
         occupants.forEach(occupant => {
             const rents = occupant.rents.filter(rent => rent.term === term);
             if (rents.length>0) {
-                occupantRents.push(FD.toRentData(occupant, rents[0]));
+                occupantRents.push(FD.toRentData(rents[0], occupant));
             }
         });
         callback([], occupantRents);
@@ -79,7 +52,7 @@ function update(req, res) {
         paymentData.notepromo = null;
     }
 
-    _findOccupantRents(realm, paymentData._id, paymentData.month, paymentData.year, (errors, dbOccupant/*, dbRent, rents*/) => {
+    occupantModel.findOne(realm, paymentData._id, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
             res.json({errors: errors});
             return;
@@ -125,7 +98,7 @@ function update(req, res) {
             }
             const rent = dbOccupant.rents.filter(rent => rent.term === Number(currentDate.format('YYYYMMDDHH')))[0];
 
-            res.json(FD.toRentData(dbOccupant, rent));
+            res.json(FD.toRentData(rent, dbOccupant));
         });
     });
 }
@@ -133,26 +106,27 @@ function update(req, res) {
 function rentsOfOccupant(req, res) {
     const realm = req.realm;
     const id = req.params.id;
-    const currentDate = moment();
+    const term = Number(moment().startOf('month').format('YYYYMMDDHH'));
 
-    _findOccupantRents(realm, id, currentDate.month() + 1, currentDate.year(), (errors, occupant, rent, rents) => {
+    occupantModel.findOne(realm, id, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
             });
             return;
         }
-        let rentsToReturn = [];
-        if (rents) {
-            rentsToReturn = rents.map( currentRent => {
-                if (currentRent === rent) {
-                    currentRent.active = 'active';
-                }
-                delete currentRent.occupant;
-                return currentRent;
-            });
-        }
-        delete occupant.rents;
+
+        const rentsToReturn = dbOccupant.rents.map( currentRent => {
+            const rent = FD.toRentData(currentRent);
+            if (currentRent.term === term) {
+                rent.active = 'active';
+            }
+            rent.vatRatio = dbOccupant.vatRatio;
+            return rent;
+        });
+
+        const occupant = FD.toOccupantData(dbOccupant);
+
         res.json({
             occupant,
             rents: rentsToReturn
@@ -195,7 +169,7 @@ function overview(req, res) {
             return;
         }
 
-        let overview = {
+        const overview = {
             countAll: 0,
             countPaid: 0,
             countPartiallyPaid: 0,
@@ -206,7 +180,7 @@ function overview(req, res) {
         };
 
         if (rents) {
-            overview = rents.reduce((acc, currentRent) => {
+            rents.reduce((acc, currentRent) => {
                 if (currentRent.totalAmount <= 0 || currentRent.newBalance >= 0) {
                     acc.countPaid++;
                 } else if (currentRent.payment > 0) {

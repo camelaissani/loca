@@ -1,21 +1,16 @@
 import moment from 'moment';
 import config from '../../config';
 
-function toRentData(inputOccupant, inputRent) {
+function toRentData(inputRent, inputOccupant) {
     const rentToReturn = {};
     const rent = JSON.parse(JSON.stringify(inputRent));
-    const occupant = JSON.parse(JSON.stringify(inputOccupant));
 
-    const rentMoment = moment(rent.term, 'YYYYMMDDHH');
+    const rentMoment = moment(String(rent.term), 'YYYYMMDDHH');
     Object.assign(
         rentToReturn,
         {
-            _id: occupant._id,
-            uid: `${occupant._id}|${rent.month}|${rent.year}`,
-            occupant: occupant,
             month: rent.month,
             year: rent.year,
-            vatRatio: occupant.vatRatio,
             balance: rent.total.balance,
             newBalance:  rent.total.payment - rent.total.grandTotal,
             payment: rent.total.payment,
@@ -102,67 +97,51 @@ function toRentData(inputOccupant, inputRent) {
         }
     }
 
-    // set default values for occupant
-    Object.assign(
-        occupant,
-        {
-            street1: occupant.street1 || '',
-            street2: occupant.street2 || '',
-            zipCode: occupant.zipCode || '',
-            city: occupant.city || '',
-            legalForm: occupant.legalForm || '',
-            siret: occupant.siret || '',
-            contract: occupant.contract || '',
-            reference: occupant.reference || '',
-            guaranty: occupant.guaranty ? Number(occupant.guaranty) : 0,
-            vatRatio: occupant.vatRatio ? Number(occupant.vatRatio) : 0,
-            discount: occupant.discount ? Number(occupant.discount) : 0,
-        }
-    );
+    if (inputOccupant) {
+        const occupant = toOccupantData(inputOccupant);
 
-    // Compute if contract is completed
-    if (!occupant.terminationDate) {
-        const currentDate = moment();
-        const momentTermination = moment(occupant.terminationDate, 'DD/MM/YYYY');
-        if (momentTermination.isBefore(currentDate, 'month')) {
-            occupant.terminated = true;
-        }
-    } else {
-        occupant.terminated = false;
-    }
-
-    // count number of month rent not paid
-    let endCounting = false;
-    occupant.rents
-    .reverse()
-    .filter(currentRent => {
-        if (moment(String(currentRent.term), 'YYYYMMDDHH').isSameOrBefore(moment(), 'month')) {
-            if (endCounting) {
-                return false;
+        Object.assign(
+            rentToReturn,
+            {
+                _id: occupant._id,
+                occupant: occupant,
+                vatRatio: occupant.vatRatio,
+                uid: `${occupant._id}|${rent.month}|${rent.year}`
             }
+        );
 
+        // count number of month rent not paid
+        let endCounting = false;
+        inputOccupant.rents
+        .reverse()
+        .filter(currentRent => {
+            if (moment(String(currentRent.term), 'YYYYMMDDHH').isSameOrBefore(moment(), 'month')) {
+                if (endCounting) {
+                    return false;
+                }
+
+                const payment = currentRent.total.payment;
+                const totalAmount = currentRent.total.grandTotal;
+                const newBalance =  currentRent.total.payment - currentRent.total.grandTotal;
+
+                if (payment || totalAmount <= 0 || newBalance >= 0) {
+                    endCounting = true;
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        })
+        .forEach(currentRent => {
             const payment = currentRent.total.payment;
-            const totalAmount = currentRent.total.grandTotal;
-            const newBalance =  currentRent.total.payment - currentRent.total.grandTotal;
-
-            if (payment || totalAmount <= 0 || newBalance >= 0) {
-                endCounting = true;
-                return false;
-            }
-            return true;
-        }
-        return false;
-    })
-    .forEach(currentRent => {
-        const payment = currentRent.total.payment;
-        const term = moment(currentRent.term, 'YYYYMMDDHH');
-        rentToReturn.paymentStatus.push({
-            month: term.month() + 1,
-            status: payment > 0 ? 'partialypaid' : 'notpaid'
+            const term = moment(String(currentRent.term), 'YYYYMMDDHH');
+            rentToReturn.paymentStatus.push({
+                month: term.month() + 1,
+                status: payment > 0 ? 'partialypaid' : 'notpaid'
+            });
+            rentToReturn.countMonthNotPaid++;
         });
-        rentToReturn.countMonthNotPaid++;
-    });
-    delete occupant.rents;
+    }
 
     return rentToReturn;
 }
@@ -245,7 +224,7 @@ function toPrintData(realm, doc, fromMonth, month, year, occupants) {
 
             occupant.durationInMonth = Math.round(moment.duration(endMoment.diff(beginMoment)).asMonths());
             acc.push(Object.assign(
-                toRentData(occupant, rent),
+                toRentData(rent, occupant),
                 {
                     callDate: moment(`20/${rent.month}/${year}`, 'DD/MM/YYYY').subtract(1, 'months').format('LL'),
                     invoiceDate: moment(`20/${rent.month}/${year}`, 'DD/MM/YYYY').format('LL'),
@@ -263,6 +242,36 @@ function toPrintData(realm, doc, fromMonth, month, year, occupants) {
 
 function toOccupantData(inputOccupant) {
     const occupant = JSON.parse(JSON.stringify(inputOccupant));
+
+    // set default values for occupant
+    Object.assign(
+        occupant,
+        {
+            street1: occupant.street1 || '',
+            street2: occupant.street2 || '',
+            zipCode: occupant.zipCode || '',
+            city: occupant.city || '',
+            legalForm: occupant.legalForm || '',
+            siret: occupant.siret || '',
+            contract: occupant.contract || '',
+            reference: occupant.reference || '',
+            guaranty: occupant.guaranty ? Number(occupant.guaranty) : 0,
+            vatRatio: occupant.vatRatio ? Number(occupant.vatRatio) : 0,
+            discount: occupant.discount ? Number(occupant.discount) : 0,
+        }
+    );
+
+    // Compute if contract is completed
+    if (!occupant.terminationDate) {
+        const currentDate = moment();
+        const momentTermination = moment(occupant.terminationDate, 'DD/MM/YYYY');
+        if (momentTermination.isBefore(currentDate, 'month')) {
+            occupant.terminated = true;
+        }
+    } else {
+        occupant.terminated = false;
+    }
+
     occupant.office = {
         surface: 0,
         m2Price: 0,
@@ -331,9 +340,8 @@ function toAccountingData(year, inputOccupants) {
                     rents: termsOfYear.map(term => {
                         let currentRent = occupant.rents.find(rent => rent.term === term);
                         if (currentRent) {
-                            currentRent = toRentData(occupant, currentRent);
+                            currentRent = toRentData(currentRent);
                             currentRent.occupantId = occupant._id;
-                            delete currentRent.occupant;
                         }
                         return currentRent || {inactive: true};
                     })
@@ -366,8 +374,8 @@ function toAccountingData(year, inputOccupants) {
                 .map((occupant) => {
                     const totalAmount = occupant.rents
                     .filter(rent => {
-                        return rent.term >= beginOfYear.format('YYYYMMDDHH') &&
-                               rent.term <= endOfYear.format('YYYYMMDDHH');
+                        return rent.term >= Number(beginOfYear.format('YYYYMMDDHH')) &&
+                               rent.term <= Number(endOfYear.format('YYYYMMDDHH'));
                     })
                     .reduce((acc, rent) => {
                         let balance = rent.total.grandTotal - rent.total.payment;
