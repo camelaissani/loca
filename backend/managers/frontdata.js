@@ -1,4 +1,5 @@
 import moment from 'moment';
+import math from 'mathjs';
 import config from '../../config';
 
 function toRentData(inputRent, inputOccupant) {
@@ -399,9 +400,47 @@ function toAccountingData(year, inputOccupants) {
     };
 }
 
+function toProperty(inputProperty, inputOccupant) {
+    const property = {
+        _id: inputProperty._id,
+        name: inputProperty.name,
+        type: inputProperty.type,
+        location: inputProperty.location,
+        phone: inputProperty.phone,
+        price: inputProperty.price,
+        surface: inputProperty.surface,
+        expense: inputProperty.expense || 0,
+        priceWithExpenses: math.round(inputProperty.price + inputProperty.expense, 2),
+        m2Expense: inputProperty.surface ? math.round((inputProperty.expense / inputProperty.surface), 2) : null,
+        m2Price: inputProperty.surface ? math.round((inputProperty.price / inputProperty.surface), 2) : null,
+        beginDate: '',
+        endDate: '',
+        lastBusyDay: '',
+        occupantLabel: '',
+        available: true
+    };
+    if (inputOccupant) {
+        Object.assign(
+            property,
+            {
+                beginDate: inputOccupant.entryDate,
+                endDate:  inputOccupant.exitDate,
+                lastBusyDay: inputOccupant.terminationDate || inputOccupant.endDate,
+                occupantLabel: inputOccupant.name
+            }
+        );
+        if (property.lastBusyDay) {
+            property.available = moment(property.lastBusyDay, 'DD/MM/YYYY').isBefore(moment(), 'month');
+        }
+    }
+
+    return property;
+}
+
 export default {
-    toRentData,
     toOccupantData,
+    toProperty,
+    toRentData,
     toPrintData,
     toAccountingData
 };
