@@ -2,37 +2,37 @@
 
 import ownerModel from '../models/owner';
 
-function _findOwner(realm, callback) {
-    ownerModel.findOne(null, realm._id, (errors, dbRealm) => {
-        if (errors) {
-            callback(errors);
-            return;
-        }
-        if (!dbRealm.manager) {
-            dbRealm.manager = dbRealm.renter;
-            delete dbRealm.renter;
-        }
-        if (dbRealm && !dbRealm.siret) {
-            dbRealm.siret = dbRealm.rcs;
-            delete dbRealm.rcs;
-        }
-        callback(null, dbRealm);
-    });
-}
+// function _findOwner(realm, callback) {
+//     ownerModel.findOne(null, realm._id, (errors, dbRealm) => {
+//         if (errors) {
+//             callback(errors);
+//             return;
+//         }
+//         if (!dbRealm.manager) {
+//             dbRealm.manager = dbRealm.renter;
+//             delete dbRealm.renter;
+//         }
+//         if (dbRealm && !dbRealm.siret) {
+//             dbRealm.siret = dbRealm.rcs;
+//             delete dbRealm.rcs;
+//         }
+//         callback(null, dbRealm);
+//     });
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
 ////////////////////////////////////////////////////////////////////////////////
 function all(req, res) {
     const realm = req.realm;
-    _findOwner(realm, (errors, realm) => {
+    ownerModel.findOne(null, realm._id, (errors, dbRealm) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
             });
             return;
         }
-        res.json(realm);
+        res.json(dbRealm);
     });
 }
 

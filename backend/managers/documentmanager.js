@@ -1,6 +1,7 @@
 'use strict';
 
 import moment from 'moment';
+import FD from './frontdata';
 import occupantModel from '../models/occupant';
 import documentModel from '../models/document';
 
@@ -40,7 +41,7 @@ function update(req, res) {
                 });
                 return;
             }
-            res.json(dbOccupant);
+            res.json(FD.toOccupantData(dbOccupant));
         });
     });
 }
