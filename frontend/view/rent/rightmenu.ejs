@@ -1,134 +1,63 @@
 <div class="filterbar menu-card card" data-id="rents-menu">
-    <!--
-    <div class="visible-xs">
-        <div class="btn-toolbar clearfix" role="toolbar">
-            <div class="btn-group pull-left" role="group">
-                <button type="button" class="btn btn-default user-action rent-period mobile-view" role="button"></button>
+    <h4><%= t('Period') %></h4>
+    <button type="button" class="btn btn-default btn-block user-action rent-period" role="button"></button>
+    <div class="month-picker" class="hidden"></div>
+
+    <h4><%= t('Status') %></h4>
+    <button type="button" class="btn btn-default btn-block default-filter user-action" data-id="list-filter" data-toggle="button" role="button">
+        <div class="clearfix">
+            <div class="pull-left">
+                <%= t('All') %> <span class="all-filter-label text-muted"></span>
             </div>
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default default-filter user-action" data-id="list-filter" data-toggle="button" role="button"><%= t('All') %><div class="all-filter-label text-muted"></div></button>
-                <button type="button" class="btn btn-default user-action" data-id="list-filter" data-value="<%= t('Paid') %>,<%= t('Partially paid') %>" data-toggle="button" role="button"><%= t('Paid') %><div class="paid-filter-label text-muted"></div></button>
-                <button type="button" class="btn btn-default user-action" data-id="list-filter" data-value="<%= t('Not paid') %>" data-toggle="button" role="button"><%= t('Not paid') %><div class="not-paid-filter-label text-muted"></div></button>
+            <div class="pull-right">
+                <span class="text-right total-topay"></span>
             </div>
         </div>
-        <div class="month-picker" class="hidden"></div>
-    </div>
-    -->
-
-    <!-- <div class="hidden-xs"> -->
-        <h4><%= t('Period') %></h4>
-        <button type="button" class="btn btn-default btn-block user-action rent-period" role="button"></button>
-        <div class="month-picker" class="hidden"></div>
-
-        <h4><%= t('Status') %></h4>
-        <button type="button" class="btn btn-default btn-block default-filter user-action" data-id="list-filter" data-toggle="button" role="button">
-            <div class="clearfix">
-                <div class="pull-left">
-                    <%= t('All') %> <span class="all-filter-label text-muted"></span>
-                </div>
-                <div class="pull-right">
-                    <span class="text-right total-topay"></span>
-                </div>
+    </button>
+    <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Paid') %>,<%= t('Partially paid') %>" data-toggle="button" role="button">
+        <div class="clearfix">
+            <div class="pull-left">
+                <%= t('Paid') %> <span class="paid-filter-label text-muted"></span>
             </div>
-        </button>
-        <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Paid') %>,<%= t('Partially paid') %>" data-toggle="button" role="button">
-            <div class="clearfix">
-                <div class="pull-left">
-                    <%= t('Paid') %> <span class="paid-filter-label text-muted"></span>
-                </div>
-                <div class="pull-right">
-                    <span class="total-paid text-success strong"></span>
-                </div>
-        </button>
-        <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Not paid') %>" data-toggle="button" role="button">
-            <div class="clearfix">
-                <div class="pull-left">
-                    <%= t('Not paid') %> <span class="not-paid-filter-label text-muted"></span>
-                </div>
-                <div class="pull-right">
-                    <span class="total-notpaid text-danger strong"></span>
-                </div>
-        </button>
-    <!-- </div> -->
+            <div class="pull-right">
+                <span class="total-paid text-success strong"></span>
+            </div>
+    </button>
+    <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Not paid') %>" data-toggle="button" role="button">
+        <div class="clearfix">
+            <div class="pull-left">
+                <%= t('Not paid') %> <span class="not-paid-filter-label text-muted"></span>
+            </div>
+            <div class="pull-right">
+                <span class="total-notpaid text-danger strong"></span>
+            </div>
+    </button>
 </div>
 
 <div class="menu-card card" data-id="rents-selection-menu">
-    <!--
-    <div class="visible-xs">
-        <div class="btn-toolbar clearfix" role="toolbar">
-            <div class="btn-group pull-left" role="group">
-                <button type="button" data-id="list-action-pay-rent" class="btn btn-default user-action only-mono-selection" role="button"><i class="fa fa-credit-card"></i></button>
-                <button type="button" data-id="list-action-rents-history" class="btn btn-default user-action only-mono-selection" role="button"><i class="fa fa-history"></i></button>
-            </div>
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default user-action cancel-selection" role="button"><i class="fa fa-reply"></i></button>
-            </div>
-        </div>
-    </div>
-    -->
-
-    <!-- <div class="hidden-xs"> -->
-        <h4 class="rent-period"></h4>
-        <button type="button" class="btn btn-default btn-block user-action cancel-selection" role="button"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
-        <button type="button" data-id="list-action-pay-rent" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-credit-card"></i> <%= t('Payment') %></button>
-        <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
-        <button type="button" data-id="list-action-print" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-print"></i> <%= t('Print') %></button>
-        <h4 class="list-selection-menu-label"></h4>
-        <div class="list-selected-elements list-group list-group-selection"></div>
-    <!-- </div> -->
-
+    <h4 class="rent-period"></h4>
+    <button type="button" class="btn btn-default btn-block user-action cancel-selection" role="button"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
+    <button type="button" data-id="list-action-pay-rent" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-credit-card"></i> <%= t('Payment') %></button>
+    <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
+    <button type="button" data-id="list-action-print" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-print"></i> <%= t('Print') %></button>
+    <h4 class="list-selection-menu-label"></h4>
+    <div class="list-selected-elements list-group list-group-selection"></div>
 </div>
 
 <div class="menu-card card" data-id="pay-rent-form-menu" data-target="#pay-rent-form">
-    <!--
-    <div class="visible-xs">
-        <div class="btn-toolbar clearfix" role="toolbar">
-            <div class="btn-group pull-left" role="group">
-                <button data-id="list-action-save-form" type="button" class="btn btn-default user-action" role="button"><i class="fa fa-save"></i></button>
-            </div>
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default user-action cancel-form" role="button"><i class="fa fa-reply"></i></button>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- <div class="hidden-xs"> -->
-        <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
-        <button data-id="list-action-save-form" type="button" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
-        <h4 class="list-selection-menu-label"></h4>
-        <div class="list-selected-elements fixed list-group"></div>
-    <!-- </div> -->
+    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <button data-id="list-action-save-form" type="button" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
+    <h4 class="list-selection-menu-label"></h4>
+    <div class="list-selected-elements fixed list-group"></div>
 </div>
 
 <div class="menu-card card"  data-id="rents-history-menu" data-target="#rents-history">
-    <!--
-    <div class="visible-xs">
-        <div class="btn-toolbar clearfix" role="toolbar">
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default user-action cancel-form" role="button"><i class="fa fa-reply"></i></button>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- <div class="hidden-xs"> -->
-        <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
-    <!-- </div> -->
+    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
 </div>
 
 <div class="menu-card card"  data-id="print-doc-selector-menu" data-target="#print-doc-selector">
-    <!--
-    <div class="visible-xs">
-        <div class="btn-toolbar clearfix" role="toolbar">
-            <div class="btn-group pull-right" role="group">
-                <button type="button" class="btn btn-default user-action cancel-form" role="button"><i class="fa fa-reply"></i></button>
-            </div>
-        </div>
-    </div>
-    -->
-    <!-- <div class="hidden-xs"> -->
-        <h4 class="rent-period"></h4>
-        <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
-        <h4 class="title-card list-selection-menu-label"></h4>
-        <div class="list-selected-elements fixed list-group"></div>
-    <!-- </div> -->
+    <h4 class="rent-period"></h4>
+    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <h4 class="title-card list-selection-menu-label"></h4>
+    <div class="list-selected-elements fixed list-group"></div>
 </div>
