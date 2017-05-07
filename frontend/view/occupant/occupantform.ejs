@@ -12,6 +12,12 @@
     <!-- /HANDLEBAR TEMPLATES -->
     <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
     <input type="hidden" id="_id">
+    <div class="js-lease-state alert alert-danger hidden" role="alert">
+        <div class="row">
+            <div class="col-xs-6"><%= t('Lease terminated') %></div>
+            <div class="js-occupant-form-termination-date col-xs-6 text-right"></div>
+        </div>
+    </div>
     <h2 id="occupantNameLabel" class="page-header"><%= t('Tenant') %></h2>
     <div class="row">
         <div class="col-xs-12">

@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+    <div class="panel-heading"><%= t('Rent information') %></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-6"><%= t('Deposit') %></div>
+            <div class="js-occupant-form-summary-guaranty col-xs-6 text-right">-</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-6"><%= t('Property') %><small><a href="#" title="<%= t('Including Common Area Maintenance fees Excluding VAT') %>"> (<%= t('ICAMEVAT') %>)</a></small></div>
+            <div class="js-occupant-form-summary-rentwithexpenses col-xs-6 text-right">-</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6"><%= t('Discount') %><small><a href="#" title="<%= t('Excluding VAT') %>"> (<%= t('EVAT') %>)</a></small></div>
+            <div class="js-occupant-form-summary-discount col-xs-6 text-right">-</div>
+        </div>
+        <br class="occupant-form-vat-row">
+        <div class="occupant-form-vat-row row">
+            <div class="col-xs-6"><%= t('Rent') %><small><a href="#" title="<%= t('Including Common Area Maintenance fees Excluding VAT') %>"> (<%= t('ICAMEVAT') %>)</a></small></div>
+            <div class="js-occupant-form-summary-total-rentwithexpenses col-xs-6 text-right">-</div>
+        </div>
+        <div class="occupant-form-vat-row row">
+            <div class="col-xs-6"><%= t('VAT') %></div>
+            <div class="js-occupant-form-summary-vat col-xs-6 text-right">-</div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-6"><%= t('Rent') %><small><a href="#" title="<%= t('Including Common Area Maintenance fees Including VAT') %>"> (<%= t('ICAMIVAT') %>)</a></small></div>
+            <div class="js-occupant-form-summary-total-rentwithexpensesandvat col-xs-6 text-right">-</div>
+        </div>
+    </div>
+</div>

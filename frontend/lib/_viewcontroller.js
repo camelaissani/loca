@@ -236,13 +236,19 @@ class ViewController {
         return selection;
     }
 
-    openForm(formId) {
+    openForm(formId, menuId, callback) {
         anilayout.hideMenu(() => {
-            anilayout.showMenu(formId+'-menu');
+            const menuCallback = () => {
+                anilayout.showMenu(menuId ? menuId : formId+'-menu', callback);
+            };
             if (this.list) {
                 this.list.hideAllRows(() => {
                     anilayout.showSheet(formId);
+                    menuCallback();
                 });
+            } else {
+                anilayout.showSheet(formId, menuCallback);
+                menuCallback();
             }
         });
     }
@@ -266,6 +272,14 @@ class ViewController {
                 }
             });
         }
+    }
+
+    showMenu(dataId, callback) {
+        anilayout.showMenu(dataId, callback);
+    }
+
+    hideMenu(callback) {
+        anilayout.hideMenu(callback);
     }
 
     scrollToVisible(selector) {

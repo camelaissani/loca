@@ -57,11 +57,20 @@ class OccupantCtrl extends ViewController {
     onUserAction($action, actionId) {
         const selection = this.list.getSelectedData();
 
-        if (actionId==='list-action-edit-occupant') {
+        if (actionId==='list-action-view-occupant') {
             this._loadPropertyList((properties) => {
                 this.form.setData(selection[0], properties);
-                this.openForm('occupant-form');
+                $('#occupant-form select').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+                $('#occupant-form input').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+                $('#occupant-form .btn').addClass('hidden');
+                this.openForm('occupant-form', 'occupant-view-menu');
             });
+        }
+        else if (actionId==='list-action-edit-occupant') {
+            $('#occupant-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#occupant-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#occupant-form .btn').removeClass('hidden');
+            this.showMenu('occupant-edit-menu');
         }
         else if (actionId==='list-action-add-occupant') {
             this.list.unselectAll();

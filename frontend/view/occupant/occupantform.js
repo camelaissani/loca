@@ -221,18 +221,18 @@ class OccupantForm extends Form {
 
         if (occupant && occupant._id) {
             $(this.getDomSelector() + ' #occupantNameLabel').html(occupant.name);
-            //$(this.getDomSelector() + ' .js-form-field-not-editable').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
             $(this.getDomSelector() + ' #termination-row').show();
-            if (occupant.terminationDate && occupant.terminationDate!=='') {
-                $('.js-user-action[data-id="list-action-remove-occupant"]').hide();
+            if (occupant.terminationDate) {
+                $('.js-lease-state').removeClass('hidden');
+                $('.js-user-action[data-id="list-action-remove-occupant"]').addClass('disabled');
             }
             else {
-                $('.js-user-action[data-id="list-action-remove-occupant"]').show();
+                $('.js-lease-state').addClass('hidden');
+                $('.js-user-action[data-id="list-action-remove-occupant"]').removeClass('disable');
             }
         }
         else {
             $(this.getDomSelector() + ' #occupantNameLabel').html(i18next.t('Tenant'));
-            //$(this.getDomSelector() + ' .js-form-field-not-editable').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
             $(this.getDomSelector() + ' #termination-row').hide();
             $('.js-user-action[data-id="list-action-remove-occupant"]').hide();
         }
@@ -530,12 +530,13 @@ class OccupantForm extends Form {
 
         rentWithVat = rentWithDiscount + vat;
 
-        $('#occupant-form-summary-guaranty').html(Helper.formatMoney(data.guaranty, false, false));
-        $('#occupant-form-summary-rentwithexpenses').html(Helper.formatMoney(rentWithExpenses, false, false));
-        $('#occupant-form-summary-discount').html(Helper.formatMoney(data.discount, false, false));
-        $('#occupant-form-summary-vat').html(Helper.formatMoney(vat, false, false));
-        $('#occupant-form-summary-total-rentwithexpenses').html(Helper.formatMoney(rentWithDiscount, false, false));
-        $('#occupant-form-summary-totla-rentwithexpensesandvat').html(Helper.formatMoney(rentWithVat, false, false));
+        $('.js-occupant-form-termination-date').html(Helper.formatDate(data.terminationDate));
+        $('.js-occupant-form-summary-guaranty').html(Helper.formatMoney(data.guaranty, false, false));
+        $('.js-occupant-form-summary-rentwithexpenses').html(Helper.formatMoney(rentWithExpenses, false, false));
+        $('.js-occupant-form-summary-discount').html(Helper.formatMoney(data.discount, false, false));
+        $('.js-occupant-form-summary-vat').html(Helper.formatMoney(vat, false, false));
+        $('.js-occupant-form-summary-total-rentwithexpenses').html(Helper.formatMoney(rentWithDiscount, false, false));
+        $('.js-occupant-form-summary-total-rentwithexpensesandvat').html(Helper.formatMoney(rentWithVat, false, false));
     }
 }
 

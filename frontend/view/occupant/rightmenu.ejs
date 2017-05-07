@@ -8,7 +8,7 @@
 
 <div class="js-side-menu side-menu card" data-id="occupants-selection-menu">
     <button type="button" class="btn btn-default btn-block js-user-action js-cancel-selection" role="button"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
-    <button type="button" data-id="list-action-edit-occupant" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-pencil-square-o"></i> <%= t('Lease contract') %></button>
+    <button type="button" data-id="list-action-view-occupant" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-eye"></i> <%= t('Lease contract') %></button>
     <button type="button" data-id="list-action-invoices" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-file-text-o"></i> <%= t('Rental invoices') %></button>
     <button type="button" data-id="list-action-manage-documents" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-folder-o"></i> <%= t('Manage documents') %></button>
     <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
@@ -17,38 +17,19 @@
     <div class="js-list-selected-elements list-group list-group-selection"></div>
 </div>
 
-<div class="js-side-menu side-menu card" data-id="occupant-form-menu" data-target="#occupant-form">
+<div class="js-side-menu side-menu card" data-id="occupant-view-menu">
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <button type="button" data-id="list-action-edit-occupant" class="btn btn-default btn-block js-user-action js-only-mono-selection"><i class="fa fa-pencil-square-o"></i> <%= t('Edit') %></button>
+    <br>
+    <% include rentoverview %>
+</div>
+
+<div class="js-side-menu side-menu card" data-id="occupant-edit-menu">
     <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
     <button type="button" data-id="list-action-save-form" type="button" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
     <button type="button" data-id="list-action-remove-occupant" class="btn btn-warning btn-block js-user-action" role="button"><i class="fa fa-trash"></i> <%= t('Remove') %></button>
-    <h4 class=""><%= t('Rent information') %></h4>
-    <div class="row">
-        <div class="col-xs-6"><%= t('Deposit') %></div>
-        <div id="occupant-form-summary-guaranty" class="col-xs-6 text-right">-</div>
-    </div>
     <br>
-    <div class="row">
-        <div class="col-xs-6"><%= t('Property') %><small><a href="#" title="<%= t('Including Common Area Maintenance fees Excluding VAT') %>"> (<%= t('ICAMEVAT') %>)</a></small></div>
-        <div id="occupant-form-summary-rentwithexpenses" class="col-xs-6 text-right">-</div>
-    </div>
-    <div class="row">
-        <div class="col-xs-6"><%= t('Discount') %><small><a href="#" title="<%= t('Excluding VAT') %>"> (<%= t('EVAT') %>)</a></small></div>
-        <div id="occupant-form-summary-discount" class="col-xs-6 text-right">-</div>
-    </div>
-    <br class="occupant-form-vat-row">
-    <div class="occupant-form-vat-row row">
-        <div class="col-xs-6"><%= t('Rent') %><small><a href="#" title="<%= t('Including Common Area Maintenance fees Excluding VAT') %>"> (<%= t('ICAMEVAT') %>)</a></small></div>
-        <div id="occupant-form-summary-total-rentwithexpenses"class="col-xs-6 text-right">-</div>
-    </div>
-    <div class="occupant-form-vat-row row">
-        <div class="col-xs-6"><%= t('VAT') %></div>
-        <div id="occupant-form-summary-vat" class="col-xs-6 text-right">-</div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-xs-6"><%= t('Rent') %><small><a href="#" title="<%= t('Including Common Area Maintenance fees Including VAT') %>"> (<%= t('ICAMIVAT') %>)</a></small></div>
-        <div id="occupant-form-summary-totla-rentwithexpensesandvat"class="col-xs-6 text-right">-</div>
-    </div>
+    <% include rentoverview %>
 </div>
 
 <div class="js-side-menu side-menu card" data-id="invoices-menu" data-target="#invoices">
