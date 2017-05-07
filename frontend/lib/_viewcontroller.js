@@ -276,7 +276,7 @@ class ViewController {
 
     scrollToVisible(selector) {
         if (this.list) {
-            const offset = parseInt($('.view-container').css('padding-top'), 10);
+            const offset = parseInt($('.js-view-container').css('padding-top'), 10);
             if (!selector) {
                 selector = '.list-row.active:first';
             }

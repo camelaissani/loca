@@ -6,9 +6,11 @@ html {
 body {
     overflow-x: hidden;
     background-color: @body-bg;
+    padding-top: 70px;
+    padding-bottom: 15px;
+    margin-bottom: @footer-height;
 
     &.covered-body {
-        margin-bottom: @footer-height;
         background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
         webkit-background-size: cover;
         moz-background-size: cover;
@@ -50,25 +52,6 @@ body {
         padding-right: 5px;
         &:focus {
             outline: 0;
-        }
-    }
-
-    .footer-container {
-        width: @viewport-width;
-        margin: auto;
-    }
-}
-
-.view-container {
-    width: @viewport-width;
-    margin: auto;
-    padding-top: @navbar-height + 20px;
-    padding-bottom: 5px;
-
-    .view {
-        & > .container-fluid {
-            padding-left: 0;
-            padding-right: 0;
         }
     }
 }

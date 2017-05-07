@@ -51,7 +51,7 @@ class Application {
             ajaxUrl = navMapItem.url(),
             $oldHeaderMenuItem = $('.nav li.active'),
             $newHeaderMenuItem = $('.nav li .nav-action[data-id="' + data.menuId + '"]').closest('li'),
-            $container = $('.view-container');
+            $container = $('.js-view-container');
 
         const updateView = (contentHtml) => {
             if (contentHtml) {
@@ -104,7 +104,7 @@ class Application {
 
     _updateDataInCurrentView(data, callback) {
         const navMapItem = LOCA.routes[data.viewId],
-            $container = $('.view-container');
+            $container = $('.js-view-container');
 
         $container.css('visibility', 'hidden');
         $container.css('opacity', 0);
@@ -137,7 +137,7 @@ class Application {
             this._getViewAndUpdateData(navData, true, callback);
         } else {
             this.hideWaitMessage();
-            const $container = $('.view-container');
+            const $container = $('.js-view-container');
             $container.css('visibility', 'visible');
             $container.css('opacity', 1);
         }

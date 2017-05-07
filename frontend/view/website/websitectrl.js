@@ -6,7 +6,7 @@ import SignupForm from '../signup/signupform';
 
 export default {
     applicationReady(/*event*/) {
-        const $container = $('.view-container');
+        const $container = $('.js-view-container');
         const location = window.location;
 
         if (location.pathname ===  '/login')  {
