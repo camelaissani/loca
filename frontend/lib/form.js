@@ -174,7 +174,7 @@ class Form {
         self.validator.resetForm();
         self.$alert.hide();
         self.$form.find('.has-error').removeClass('has-error');
-        self.$form.find('.form-row:not(.master-form-row)').remove();
+        self.$form.find('.js-form-row:not(.js-master-form-row)').remove();
 
         this.beforeSetData(arguments);
 
@@ -192,10 +192,10 @@ class Form {
         var values;
         var key, value;
 
-        this.$form.find('.form-rows').each(function () {
+        this.$form.find('.js-js-form-rows').each(function () {
             var $formRows = $(this);
             var id = $formRows.attr('id');
-            var $rows = $formRows.find('.form-row');
+            var $rows = $formRows.find('.js-form-row');
 
             data[id] = [];
             $rows.each(function () {
@@ -285,7 +285,7 @@ class Form {
         }
 
         self.$alert = $(self.getDomSelector() + ' .form-error').hide();
-        self.$alertMsg = self.$alert.find('.form-error-message');
+        self.$alertMsg = self.$alert.find('.js-form-error-message');
 
         $(self.getDomSelector() + ' input, ' + self.getDomSelector() + ' select, ' + self.getDomSelector() + ' textarea').each(function(/*index*/) {
             $input = $(this);

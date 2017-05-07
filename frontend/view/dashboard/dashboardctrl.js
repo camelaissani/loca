@@ -115,7 +115,7 @@ class DashboardCtrl extends ViewController {
             $('#view-dashboard #count-paid-rents').html(countPaidAndPartiallyPaid + ' ' + i18next.t('Rent', {count: countPaidAndPartiallyPaid}));
             $('#view-dashboard #count-not-paid-rents').html(countNotPaid + ' ' +  i18next.t('Rent', {count: countNotPaid}));
             //$('#view-dashboard #count-partially-paid-rents').html(countPartiallyPaid);
-            $('#view-dashboard #count-total-topay-rents').html(Helper.formatMoney(totalToPay));
+            $('#view-dashboard #count-js-total-topay-rents').html(Helper.formatMoney(totalToPay));
             $('#view-dashboard #count-total-notpaid-rents').html(Helper.formatMoney(totalNotPaid * (-1)));
             $('#view-dashboard #count-total-paid-rents').html(Helper.formatMoney(totalPaid));
             if (callback) {

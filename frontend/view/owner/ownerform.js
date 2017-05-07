@@ -141,11 +141,11 @@ class OwnerForm extends Form {
         const selection = $select.find(':selected').val();
         if (selection === 'true') {
             $(domSelector + ' .private-fields').hide();
-            $(domSelector + ' .company-fields').show();
+            $(domSelector + ' .js-company-fields').show();
             $(domSelector + ' #manager-label').html(i18next.t('Effective manager (first and last name)'));
         }
         else {
-            $(domSelector + ' .company-fields').hide();
+            $(domSelector + ' .js-company-fields').hide();
             $(domSelector + ' .private-fields').show();
             $(domSelector + ' #manager-label').html(i18next.t('First and last name'));
         }

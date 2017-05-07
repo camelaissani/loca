@@ -1,63 +1,63 @@
-<div class="filterbar menu-card card" data-id="rents-menu">
+<div class="js-filterbar js-side-menu side-menu card" data-id="rents-menu">
     <h4><%= t('Period') %></h4>
-    <button type="button" class="btn btn-default btn-block user-action rent-period" role="button"></button>
-    <div class="month-picker" class="hidden"></div>
+    <button type="button" class="btn btn-default btn-block js-user-action js-rent-period" role="button"></button>
+    <div class="js-month-picker month-picker" class="hidden"></div>
 
     <h4><%= t('Status') %></h4>
-    <button type="button" class="btn btn-default btn-block default-filter user-action" data-id="list-filter" data-toggle="button" role="button">
+    <button type="button" class="btn btn-default btn-block js-default-filter js-user-action" data-id="list-filter" data-toggle="button" role="button">
         <div class="clearfix">
             <div class="pull-left">
-                <%= t('All') %> <span class="all-filter-label text-muted"></span>
+                <%= t('All') %> <span class="js-all-filter-label text-muted"></span>
             </div>
             <div class="pull-right">
-                <span class="text-right total-topay"></span>
+                <span class="text-right js-total-topay"></span>
             </div>
         </div>
     </button>
-    <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Paid') %>,<%= t('Partially paid') %>" data-toggle="button" role="button">
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="<%= t('Paid') %>,<%= t('Partially paid') %>" data-toggle="button" role="button">
         <div class="clearfix">
             <div class="pull-left">
-                <%= t('Paid') %> <span class="paid-filter-label text-muted"></span>
+                <%= t('Paid') %> <span class="js-paid-filter-label text-muted"></span>
             </div>
             <div class="pull-right">
-                <span class="total-paid text-success strong"></span>
+                <span class="js-total-paid text-success strong"></span>
             </div>
     </button>
-    <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Not paid') %>" data-toggle="button" role="button">
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="<%= t('Not paid') %>" data-toggle="button" role="button">
         <div class="clearfix">
             <div class="pull-left">
-                <%= t('Not paid') %> <span class="not-paid-filter-label text-muted"></span>
+                <%= t('Not paid') %> <span class="js-not-paid-filter-label text-muted"></span>
             </div>
             <div class="pull-right">
-                <span class="total-notpaid text-danger strong"></span>
+                <span class="js-total-notpaid text-danger strong"></span>
             </div>
     </button>
 </div>
 
-<div class="menu-card card" data-id="rents-selection-menu">
-    <h4 class="rent-period"></h4>
-    <button type="button" class="btn btn-default btn-block user-action cancel-selection" role="button"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
-    <button type="button" data-id="list-action-pay-rent" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-credit-card"></i> <%= t('Payment') %></button>
-    <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block user-action only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
-    <button type="button" data-id="list-action-print" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-print"></i> <%= t('Print') %></button>
-    <h4 class="list-selection-menu-label"></h4>
-    <div class="list-selected-elements list-group list-group-selection"></div>
+<div class="js-side-menu side-menu card" data-id="rents-selection-menu">
+    <h4 class="js-rent-period"></h4>
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-selection" role="button"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
+    <button type="button" data-id="list-action-pay-rent" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-credit-card"></i> <%= t('Payment') %></button>
+    <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
+    <button type="button" data-id="list-action-print" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-print"></i> <%= t('Print') %></button>
+    <h4 class="js-list-selection-menu-label"></h4>
+    <div class="js-list-selected-elements list-group list-group-selection"></div>
 </div>
 
-<div class="menu-card card" data-id="pay-rent-form-menu" data-target="#pay-rent-form">
-    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
-    <button data-id="list-action-save-form" type="button" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
-    <h4 class="list-selection-menu-label"></h4>
-    <div class="list-selected-elements fixed list-group"></div>
+<div class="js-side-menu side-menu card" data-id="pay-rent-form-menu" data-target="#pay-rent-form">
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <button data-id="list-action-save-form" type="button" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
+    <h4 class="js-list-selection-menu-label"></h4>
+    <div class="js-list-selected-elements fixed list-group"></div>
 </div>
 
-<div class="menu-card card"  data-id="rents-history-menu" data-target="#rents-history">
-    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+<div class="js-side-menu side-menu card"  data-id="rents-history-menu" data-target="#rents-history">
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
 </div>
 
-<div class="menu-card card"  data-id="print-doc-selector-menu" data-target="#print-doc-selector">
-    <h4 class="rent-period"></h4>
-    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
-    <h4 class="title-card list-selection-menu-label"></h4>
-    <div class="list-selected-elements fixed list-group"></div>
+<div class="js-side-menu side-menu card"  data-id="print-doc-selector-menu" data-target="#print-doc-selector">
+    <h4 class="js-rent-period"></h4>
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <h4 class="title-card js-list-selection-menu-label"></h4>
+    <div class="js-list-selected-elements fixed list-group"></div>
 </div>

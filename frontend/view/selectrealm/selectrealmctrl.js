@@ -13,7 +13,7 @@ class SelectRealmCtrl extends ViewController {
     }
 
     onInitListeners() {
-        $(document).on('click', '.realm-action', function() {
+        $(document).on('click', '.js-realm-action', function() {
             const $action = $(this);
             const realmId = $action.data('id');
             requester.ajax({

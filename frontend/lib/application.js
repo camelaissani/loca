@@ -50,7 +50,7 @@ class Application {
         const navMapItem = LOCA.routes[data.viewId],
             ajaxUrl = navMapItem.url(),
             $oldHeaderMenuItem = $('.nav li.active'),
-            $newHeaderMenuItem = $('.nav li .nav-action[data-id="' + data.menuId + '"]').closest('li'),
+            $newHeaderMenuItem = $('.nav li .js-nav-action[data-id="' + data.menuId + '"]').closest('li'),
             $container = $('.js-view-container');
 
         const updateView = (contentHtml) => {
@@ -81,7 +81,7 @@ class Application {
             updateView();
         } else {
             if ($oldHeaderMenuItem) {
-                const oldViewId = $oldHeaderMenuItem.find('.nav-action').data('id');
+                const oldViewId = $oldHeaderMenuItem.find('.js-nav-action').data('id');
                 const oldNavMapItem = LOCA.routes[oldViewId];
                 if (oldNavMapItem && oldNavMapItem.pageExited) {
                     oldNavMapItem.pageExited(() => {

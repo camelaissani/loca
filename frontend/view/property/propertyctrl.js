@@ -74,7 +74,7 @@ class PropertyCtrl extends ViewController {
             this.form.submit((data) => {
                 this.closeForm(() => {
                     this.loadList(() => {
-                        this.list.select($('.list-row#'+data._id), true);
+                        this.list.select($('.js-list-row#'+data._id), true);
                         this.scrollToVisible();
                     });
                 });

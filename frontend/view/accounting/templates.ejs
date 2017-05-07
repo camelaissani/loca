@@ -22,7 +22,7 @@
 <script id="accounting-payments-row-template" type="text/x-handlebars-template">
     <tr>
         <td>
-            <a href="#" class="user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-year="{{year}}">{{name}}</a><br>
+            <a href="#" class="js-user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-year="{{year}}">{{name}}</a><br>
             <small>
                 {{reference}}<br>{{formatDate beginDate}} - {{formatDate endDate}}<br>
                 <%= t('Deposit') %> {{formatMoney deposit emptyForZero=false}}<br>
@@ -37,7 +37,7 @@
         {{else}}
             <td>
                 {{#if payment}}
-                    <a href="#" class="user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-year="{{year}}" data-month="{{month}}">
+                    <a href="#" class="js-user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-year="{{year}}" data-month="{{month}}">
                         {{formatMoney payment emptyForZero=true}}
                     </a>
                     <small>

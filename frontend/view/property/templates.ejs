@@ -1,18 +1,18 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-property-list-row-template" type="text/x-handlebars-template">
-    <div id="{{_id}}" class="list-row card">
+    <div id="{{_id}}" class="js-list-row list-row card">
         <div class="list-col">
             {{#if available}}
-                <div class="list-label list-value text-success "><%= t('Available') %></div>
+                <div class="list-label js-list-value text-success "><%= t('Available') %></div>
             {{else}}
-                <div class="list-label list-value ">{{i18next key='Leased by' name=occupantLabel}}</div>
+                <div class="list-label js-list-value ">{{i18next key='Leased by' name=occupantLabel}}</div>
             {{/if}}
             <div class="clearfix">
                 <div class="list-avatar-col pull-left">
                     {{Image cssClass='fa-2x'}}
                 </div>
                 <div class="pull-left">
-                    <div class="list-title list-value">{{name}}</div>
+                    <div class="list-title js-list-value">{{name}}</div>
                 </div>
             </div>
             <div class="list-label">
@@ -44,7 +44,7 @@
 
 <script id="view-property-selected-list-template" type="text/x-handlebars-template">
     {{#each rows}}
-        <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item user-action">
+        <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item js-user-action">
             <div class="clearfix">
                 <div class="pull-left">{{name}}</div>
                 <div class="pull-right fa fa-times text-right"></div>

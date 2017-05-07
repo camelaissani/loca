@@ -29,7 +29,7 @@ class Anilist{
         this.filterText = '';
 
         // row management
-        $(document).on('click', '#' + this.listId + ' .list-row', function() {
+        $(document).on('click', '#' + this.listId + ' .js-list-row', function() {
             self.select($(this));
             return false;
         });
@@ -121,7 +121,7 @@ class Anilist{
     // -----------------------------------------------------------------------
     bindDom() {
         this.$list = $('#'+this.listId);
-        this.$rowsContainer = this.$list.find('.list-content');
+        this.$rowsContainer = this.$list.find('.js-list-content');
 
         // Handlebars templates
         var rowTemplate = $('#' + this.rowTemplateId);
@@ -136,7 +136,7 @@ class Anilist{
     // ROW MANAGEMENT
     // -----------------------------------------------------------------------
     unselectAll() {
-        this.$list.find('.list-row').removeClass('active');
+        this.$list.find('.js-list-row').removeClass('active');
         this.emit(EVENT_TYPE_SELECTION_CHANGED);
     }
 
@@ -169,7 +169,7 @@ class Anilist{
     }
 
     getSelection() {
-        return this.$list.find('.list-row.active');
+        return this.$list.find('.js-list-row.active');
     }
 
     update(newDataRow) {
@@ -193,7 +193,7 @@ class Anilist{
             }
         }
 
-        $oldRow= this.$list.find('#'+newDataRow._id+'.list-row');
+        $oldRow= this.$list.find('#'+newDataRow._id+'.js-list-row');
         $oldRow.find('.odometer').each(function() {
             var key = $(this).data('key');
             self._set(newDataRowWithoutOdometerValues, key, self._ref(oldDataRow, key));
@@ -213,7 +213,7 @@ class Anilist{
 
         $oldRow.replaceWith($htmlRow);
 
-        $newRow = this.$list.find('#'+newDataRow._id+'.list-row');
+        $newRow = this.$list.find('#'+newDataRow._id+'.js-list-row');
         $newRow.find('[data-toggle=tooltip]').tooltip();
         // this.show($newRow);
 
@@ -229,7 +229,7 @@ class Anilist{
     }
 
     remove(dataRow/*, noAnimation*/) {
-        var $rowToRemove = this.$list.find('#'+dataRow._id+'.list-row');
+        var $rowToRemove = this.$list.find('#'+dataRow._id+'.js-list-row');
 
         // Find data in array and remove it
         for (var i=0; i<this.dataRows.rows.length; ++i) {
@@ -261,7 +261,7 @@ class Anilist{
 
         // Add row in DOM
         this.$rowsContainer.append(htmlRow);
-        $newRow = this.$list.find('#'+dataRow._id+'.list-row');
+        $newRow = this.$list.find('#'+dataRow._id+'.js-list-row');
 
         // Animate add
         $newRow.find('[data-toggle=tooltip]').tooltip();
@@ -314,19 +314,19 @@ class Anilist{
         this.filterText = text;
 
         // remove filter on all rows
-        $allRows = this.$list.find('.list-row');
+        $allRows = this.$list.find('.js-list-row');
         $allRows.removeClass('list-element-filtered');
 
         // hide rows that not match filter
         if (this.filterText) {
             filterValues = this.filterText.split(',');
             for (index = 0; index < filterValues.length; index++) {
-                $rowsToFilter = $allRows.find('.list-value').filter(':contains("'+filterValues[index]+'")').closest('.list-row');
+                $rowsToFilter = $allRows.find('.js-list-value').filter(':contains("'+filterValues[index]+'")').closest('.js-list-row');
                 $rowsToFilter.addClass('list-element-filtered');
             }
 
             $rowsToHide = $allRows.not('.list-element-filtered').not(':hidden');
-            $rowsToShow = this.$list.find('.list-row.list-element-filtered:hidden');
+            $rowsToShow = this.$list.find('.js-list-row.list-element-filtered:hidden');
             // if (!noAnimation) {
 
             // this.hideRows($rowsToHide, function() {
@@ -342,7 +342,7 @@ class Anilist{
             // }
         }
         else {
-            $rowsToShow = this.$list.find('.list-row:hidden');
+            $rowsToShow = this.$list.find('.js-list-row:hidden');
             // if (!noAnimation) {
                 // this.showRows($rowsToShow, callback);
             // }
@@ -362,7 +362,7 @@ class Anilist{
     show($rows) {
         var $rowsToShow = $rows;
         if (this.filterText) {
-            $rowsToShow = $rows.find('.list-value').filter(':contains("'+this.filterText+'")').closest('.list-row:hidden');
+            $rowsToShow = $rows.find('.js-list-value').filter(':contains("'+this.filterText+'")').closest('.js-list-row:hidden');
         }
         $rowsToShow.show();
     }
@@ -448,7 +448,7 @@ class Anilist{
     }
 
     hideAllRows(callback) {
-        this.hideRows(this.$list.find('.list-row').not(':hidden'), callback);
+        this.hideRows(this.$list.find('.js-list-row').not(':hidden'), callback);
     }
 
     // -----------------------------------------------------------------------

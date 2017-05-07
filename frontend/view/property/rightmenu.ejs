@@ -1,22 +1,22 @@
-<div class="filterbar menu-card card" data-id="properties-menu">
-    <button type="button" class="btn btn-default btn-block user-action" data-id="list-action-add-property"><i class="fa fa-plus-circle"></i> <%= t('New') %></button>
+<div class="js-filterbar js-side-menu side-menu card" data-id="properties-menu">
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-action-add-property"><i class="fa fa-plus-circle"></i> <%= t('New') %></button>
     <h4><%= t('Status') %></h4>
-    <button type="button" class="btn btn-default btn-block default-filter user-action" data-id="list-filter" data-toggle="button" role="button"><%= t('All') %> <span class="all-filter-label text-muted"></span></button>
-    <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Leased') %>" data-toggle="button" role="button"><%= t('Lease in progress') %> <span class="all-active-filter-label text-muted"></span></button>
-    <button type="button" class="btn btn-default btn-block user-action" data-id="list-filter" data-value="<%= t('Available') %>" data-toggle="button" role="button"><%= t('Available') %> <span class="all-inactive-filter-label text-muted"></span></button>
+    <button type="button" class="btn btn-default btn-block js-default-filter js-user-action" data-id="list-filter" data-toggle="button" role="button"><%= t('All') %> <span class="js-all-filter-label text-muted"></span></button>
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="<%= t('Leased') %>" data-toggle="button" role="button"><%= t('Lease in progress') %> <span class="all-active-filter-label text-muted"></span></button>
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="<%= t('Available') %>" data-toggle="button" role="button"><%= t('Available') %> <span class="all-inactive-filter-label text-muted"></span></button>
 </div>
 
-<div class="menu-card card" data-id="properties-selection-menu">
-    <button class="btn btn-default btn-block user-action cancel-selection"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
-    <button data-id="list-action-edit-property" class="btn btn-default btn-block user-action only-mono-selection"><i class="fa fa-pencil-square-o"></i> <%= t('Edit') %></button>
-    <h4 class="list-selection-menu-label"></h4>
-    <div class="list-selected-elements list-group list-group-selection"></div>
+<div class="js-side-menu side-menu card" data-id="properties-selection-menu">
+    <button class="btn btn-default btn-block js-user-action js-cancel-selection"><i class="fa fa-reply"></i> <%= t('Cancel selection') %></button>
+    <button data-id="list-action-edit-property" class="btn btn-default btn-block js-user-action js-only-mono-selection"><i class="fa fa-pencil-square-o"></i> <%= t('Edit') %></button>
+    <h4 class="js-list-selection-menu-label"></h4>
+    <div class="js-list-selected-elements list-group list-group-selection"></div>
 </div>
 
-<div class="menu-card card" data-id="property-form-menu" data-target="#property-form">
-    <button type="button" class="btn btn-default btn-block user-action cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
-    <button type="button" data-id="list-action-save-form" class="btn btn-default btn-block user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
-    <button type="button" data-id="list-action-remove-property" class="btn btn-warning btn-block user-action" role="button"><i class="fa fa-trash"></i> <%= t('Remove') %></button>
+<div class="js-side-menu side-menu card" data-id="property-form-menu" data-target="#property-form">
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <button type="button" data-id="list-action-save-form" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
+    <button type="button" data-id="list-action-remove-property" class="btn btn-warning btn-block js-user-action" role="button"><i class="fa fa-trash"></i> <%= t('Remove') %></button>
     <h4><%= t('Rent information') %></h4>
     <div class="row">
         <div class="col-xs-6"><%= t('Rent') %> <a href="#" title="<%= t('Excluding Common Area Maintenance fees Excluding VAT') %>">(<%= t('ECAMEVAT') %>)</a></div>

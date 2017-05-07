@@ -7,7 +7,7 @@ const TRANSITION_DURATION_MENU = 200;
 class Anilayout {
     isMenuVisible(dataId) {
         dataId = dataId.startsWith('#')?dataId.slice(1, dataId.length):dataId;
-        return $('.menu-card[data-id="' + dataId + '"]').hasClass('active');
+        return $('.js-side-menu[data-id="' + dataId + '"]').hasClass('active');
     }
 
     showMenu(dataId, callback) {
@@ -20,7 +20,7 @@ class Anilayout {
         }
 
         dataId = dataId.startsWith('#')?dataId.slice(1, dataId.length):dataId;
-        $cardToSelect = $('.menu-card[data-id="' + dataId + '"]:hidden');
+        $cardToSelect = $('.js-side-menu[data-id="' + dataId + '"]:hidden');
 
         if ($cardToSelect.length > 0) {
             this.hideMenu(function () {
@@ -36,7 +36,7 @@ class Anilayout {
     }
 
     hideMenu(callback) {
-        var $activeCard = $('.menu-card.active').not(':hidden');
+        var $activeCard = $('.js-side-menu.active').not(':hidden');
 
         function callbackEx() {
             if (callback) {
@@ -59,11 +59,11 @@ class Anilayout {
     showSheet(dataId) {
         dataId = dataId.startsWith('#')?dataId.slice(1, dataId.length):dataId;
         this.hideSheet();
-        $('.sheet[data-id="'+dataId+'"]').addClass('active').show();
+        $('.js-sheet[data-id="'+dataId+'"]').addClass('active').show();
     }
 
     hideSheet() {
-        $('.sheet.active').removeClass('active').hide();
+        $('.js-sheet.active').removeClass('active').hide();
     }
 }
 

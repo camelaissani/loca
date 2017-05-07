@@ -26,6 +26,9 @@
         height: 195px;
         padding: 10px;
         color: white;
+        &:not(.disabled) {
+            cursor: pointer;
+        }
 
         .h1, .h2, .h3, .h4, .h5,
         h1, h2, h3, h4, h5 {
@@ -62,30 +65,26 @@
             white-space: nowrap;
         }
 
-        &.nav-action {
-            cursor: pointer;
-        }
-
         &.blue {
             background: rgb(0,172,238);
-            &.nav-action:hover {
+            &:hover:not(.disabled) {
                 background-color: darken(rgb(0,172,238), 10%)
             }
             &.lighter {
                 background: rgb(62,157,215);
-                &.nav-action:hover {
+                &:hover:not(.disabled) {
                     background-color: darken(rgb(62,157,215), 10%)
                 }
             }
             &.light {
                 background: rgb(71,193,228);
-                &.nav-action:hover {
+                &:hover:not(.disabled) {
                     background-color: darken(rgb(71,193,228), 10%)
                 }
             }
             &.dark {
                 background: rgb(0,93,233);
-                &.nav-action:hover {
+                &:hover:not(.disabled) {
                     background-color: darken(rgb(0,93,233), 10%)
                 }
             }
@@ -98,7 +97,7 @@
                 color: #555;
             }
             background: rgb(243,243,243);
-            &.nav-action:hover {
+            &:hover:not(.disabled) {
                 background-color: darken(rgb(243,243,243), 10%)
             }
         }
@@ -116,28 +115,28 @@
 
         &.red {
             background: rgb(175,26,63);
-            &.nav-action:hover {
+            &:hover:not(.disabled) {
                 background-color: darken(rgb(175,26,63), 10%)
             }
         }
 
         &.white {
             background: white;
-            &.nav-action:hover {
+            &:hover:not(.disabled) {
                 background-color: darken(white, 10%)
             }
         }
 
         &.orange {
             background: rgb(209,70,37);
-            &.nav-action:hover {
+            &:hover:not(.disabled) {
                 background-color: darken(rgb(209,70,37), 10%)
             }
         }
 
         &.green {
             background: rgb(0,142,0);
-            &.nav-action:hover {
+            &:hover:not(.disabled) {
                 background-color: darken(rgb(0,142,0), 10%)
             }
         }

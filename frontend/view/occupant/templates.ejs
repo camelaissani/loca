@@ -1,11 +1,11 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-occupant-list-row-template" type="text/x-handlebars-template">
-    <div id="{{_id}}" class="list-row card">
+    <div id="{{_id}}" class="js-list-row list-row card">
         <div class="list-col">
             {{#if terminationDate}}
-            <div class="list-label list-value text-danger hidden-xs"><%= t('Lease terminated') %></div>
+            <div class="list-label js-list-value text-danger hidden-xs"><%= t('Lease terminated') %></div>
             {{else}}
-            <div class="list-label list-value text-success hidden-xs"><%= t('Lease in progress') %></div>
+            <div class="list-label js-list-value text-success hidden-xs"><%= t('Lease in progress') %></div>
             {{/if}}
             <div class="clearfix">
                 <div class="list-avatar-col pull-left">
@@ -15,7 +15,7 @@
                         <i class="fa fa-user fa-2x"></i>
                     {{/if}}
                 </div>
-                <div class="list-title list-value pull-left">
+                <div class="list-title js-list-value pull-left">
                     {{name}}
                 </div>
             </div>
@@ -47,7 +47,7 @@
 
 <script id="view-occupant-selected-list-template" type="text/x-handlebars-template">
     {{#each rows}}
-        <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item clearfix user-action">
+        <a href="#" id="{{_id}}" data-id="remove-item-from-selection" class="list-group-item clearfix js-user-action">
             <div class="pull-left">{{name}}</div>
             <div class="pull-right fa fa-times text-right"></div>
         </div>

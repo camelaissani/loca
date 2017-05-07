@@ -21,10 +21,10 @@ class ViewController {
         if (this.list) {
             this.list.on('list.selection.changed', (selection) => {
                 const selectionCount = (selection && selection.length>0)?selection.length:0;
-                const $selectionCardLabel = $(this.config.domViewId + ' .list-selection-menu-label');
+                const $selectionCardLabel = $(this.config.domViewId + ' .js-list-selection-menu-label');
 
                 if (selectionCount>0) {
-                    const $monoSelectionActions = $(this.config.domViewId + ' .user-action.only-mono-selection');
+                    const $monoSelectionActions = $(this.config.domViewId + ' .js-user-action.js-only-mono-selection');
 
                     if (selectionCount>1) {
                         $monoSelectionActions.addClass('disabled');
@@ -35,7 +35,7 @@ class ViewController {
                         $selectionCardLabel.html(i18next.t(this.config.listSelectionLabel, {count: selectionCount}));
                     }
 
-                    $(this.config.domViewId + ' .list-selected-elements').html(this.templateSelectedRow({rows: selection}));
+                    $(this.config.domViewId + ' .js-list-selected-elements').html(this.templateSelectedRow({rows: selection}));
 
                     anilayout.showMenu(this.config.listSelectionMenuId);
                 }
@@ -55,12 +55,12 @@ class ViewController {
 
         // Manage click on view (form and list)
         const that = this;
-        $(document).on('click', this.config.domViewId + ' .user-action', function() {
+        $(document).on('click', this.config.domViewId + ' .js-user-action', function() {
             const $action = $(this),
                 actionId = $action.data('id');
 
             // here manage cancel selection (internal action)
-            if ($(this).hasClass('cancel-selection')) {
+            if ($(this).hasClass('js-cancel-selection')) {
                 if (that.list) {
                     that.list.unselectAll();
                 }
@@ -68,7 +68,7 @@ class ViewController {
             }
 
             // here manage cancel on form (internal action)
-            if ($(this).hasClass('cancel-form')) {
+            if ($(this).hasClass('js-cancel-form')) {
                 that.closeForm(() => {
                     if (that.list) {
                         that.list.showAllRows(() => {
@@ -79,7 +79,7 @@ class ViewController {
                 return false;
             }
             if ($action.hasClass('disabled') ||
-                ($action.hasClass('only-mono-selection') && that.list && that.list.getSelection().length>1)) {
+                ($action.hasClass('js-only-mono-selection') && that.list && that.list.getSelection().length>1)) {
                 return false;
             }
 
@@ -88,11 +88,11 @@ class ViewController {
                     that.list.unselectAll();
                     that.filterValue = $action.data('value');
                     that.list.filter(that.filterValue);
-                    $(that.config.domViewId + ' .filterbar .user-action').removeClass('active');
+                    $(that.config.domViewId + ' .js-filterbar .js-user-action').removeClass('active');
                     if (that.filterValue) {
-                        $(that.config.domViewId + ' .filterbar .user-action[data-value="'+that.filterValue+'"]').addClass('active');
+                        $(that.config.domViewId + ' .js-filterbar .js-user-action[data-value="'+that.filterValue+'"]').addClass('active');
                     } else {
-                        $(that.config.domViewId + ' .filterbar .default-filter.user-action').addClass('active');
+                        $(that.config.domViewId + ' .js-filterbar .js-default-filter.js-user-action').addClass('active');
                     }
                 }
                 else if (actionId==='remove-item-from-selection') {
@@ -144,21 +144,15 @@ class ViewController {
             const countAll = overviewItems.countAll;
             const countFree = overviewItems.countFree | overviewItems.countInactive;
             const countBusy = overviewItems.countBusy | overviewItems.countActive;
-            $(this.config.domViewId + ' .all-filter-label').html('('+countAll+')');
+            $(this.config.domViewId + ' .js-all-filter-label').html('('+countAll+')');
             $(this.config.domViewId + ' .all-active-filter-label').html('('+countBusy+')');
             $(this.config.domViewId + ' .all-inactive-filter-label').html('('+countFree+')');
 
-            // if (this.filterValue) {
-            //     $(this.config.domViewId + ' .filterbar .user-action').removeClass('active');
-            //     $(this.config.domViewId + ' .filterbar .user-action[data-value="'+this.filterValue+'"]').addClass('active');
-            // } else {
-            //     $(this.config.domViewId + ' .filterbar .user-action[data-value=""]').addClass('active');
-            // }
-            $(this.config.domViewId + ' .filterbar .user-action').removeClass('active');
+            $(this.config.domViewId + ' .js-filterbar .js-user-action').removeClass('active');
             if (this.filterValue) {
-                $(this.config.domViewId + ' .filterbar .user-action[data-value="'+this.filterValue+'"]').addClass('active');
+                $(this.config.domViewId + ' .js-filterbar .js-user-action[data-value="'+this.filterValue+'"]').addClass('active');
             } else {
-                $(this.config.domViewId + ' .filterbar .default-filter.user-action').addClass('active');
+                $(this.config.domViewId + ' .js-filterbar .js-default-filter.js-user-action').addClass('active');
             }
 
             requester.ajax({
@@ -183,7 +177,7 @@ class ViewController {
             }
 
             if (this.list) {
-                this.filterValue = $(this.config.domViewId + ' .filterbar .active.user-action').data('value');
+                this.filterValue = $(this.config.domViewId + ' .js-filterbar .active.js-user-action').data('value');
                 this.list.setFilterText(this.filterValue);
             }
 
@@ -278,7 +272,7 @@ class ViewController {
         if (this.list) {
             const offset = parseInt($('.js-view-container').css('padding-top'), 10);
             if (!selector) {
-                selector = '.list-row.active:first';
+                selector = '.js-list-row.active:first';
             }
             $(selector).velocity('scroll', {
                 duration: 500, offset: -offset

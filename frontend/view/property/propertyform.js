@@ -94,11 +94,11 @@ class PropertyForm extends Form {
 
         if (property && property._id) {
             $(this.getDomSelector() + ' #propertyNameLabel').html(property.name);
-            $('.user-action[data-id="list-action-remove-property"]').show();
+            $('.js-user-action[data-id="list-action-remove-property"]').show();
         }
         else {
             $(this.getDomSelector() + ' #propertyNameLabel').html(i18next.t('Property to rent'));
-            $('.user-action[data-id="list-action-remove-property"]').hide();
+            $('.js-user-action[data-id="list-action-remove-property"]').hide();
         }
 
         this._typeChanged($(this.getDomSelector()+ ' #type'));

@@ -6,12 +6,12 @@
         <!--<div class="collapse navbar-collapse">-->
             <% if (isRealmSelected) { %>
             <ul class="nav navbar-nav">
-                <li><a class="nav-action" data-id="dashboard" href="#"><i class="fa fa-tachometer"></i> <%= t('Dashboard') %></a></li>
-                <li><a class="nav-action" data-id="rent" href="#"><i class="fa fa-money"></i> <%= t('Rents') %></a></li>
-                <li><a class="nav-action" data-id="occupant" href="#"><i class="fa fa-group"></i> <%= t('Tenants') %></a></li>
-                <li><a class="nav-action" data-id="property" href="#"><i class="fa fa-key"></i> <%= t('Properties') %></a></li>
-                <li><a class="nav-action" data-id="accounting" href="#"><i class="fa fa-table"></i> <%= t('Accounting') %></a></li>
-                <li><a class="nav-action" data-id="owner" href="#"><i class="fa fa-user"></i> <%= t('Landloard') %></a></li>
+                <li><a class="js-nav-action" data-id="dashboard" href="#"><i class="fa fa-tachometer"></i> <%= t('Dashboard') %></a></li>
+                <li><a class="js-nav-action" data-id="rent" href="#"><i class="fa fa-money"></i> <%= t('Rents') %></a></li>
+                <li><a class="js-nav-action" data-id="occupant" href="#"><i class="fa fa-group"></i> <%= t('Tenants') %></a></li>
+                <li><a class="js-nav-action" data-id="property" href="#"><i class="fa fa-key"></i> <%= t('Properties') %></a></li>
+                <li><a class="js-nav-action" data-id="accounting" href="#"><i class="fa fa-table"></i> <%= t('Accounting') %></a></li>
+                <li><a class="js-nav-action" data-id="owner" href="#"><i class="fa fa-user"></i> <%= t('Landloard') %></a></li>
             </ul>
             <% } %>
             <% if (isRealmSelected) { %>
@@ -22,7 +22,7 @@
                     <ul class="dropdown-menu" role="menu">
                         <% for (index=0; index<realms.length; index++) { %>
                             <li>
-                                <a href="#" class='realm-action' data-id="<%=realms[index]._id%>"><i class="fa fa-building-o"></i> <%= realms[index].name %> </a>
+                                <a href="#" class='js-realm-action' data-id="<%=realms[index]._id%>"><i class="fa fa-building-o"></i> <%= realms[index].name %> </a>
                             </li>
                         <% } %>
                         <!--li><a href="/selectrealm"><i class="fa fa-plus"></i> <%= t('New organization') %></a></li>

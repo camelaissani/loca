@@ -89,9 +89,9 @@ class ContractDocumentsForm extends Form {
 
         // Remove dynamic rows
         const that = this;
-        $(this.getDomSelector() + ' .form-btn-remove-row').click(function() {
-            const $row = $(this).parents('.form-row');
-            if (!$row.hasClass('master-form-row')) {
+        $(this.getDomSelector() + ' .js-btn-form-remove-row').click(function() {
+            const $row = $(this).parents('.js-form-row');
+            if (!$row.hasClass('js-master-form-row')) {
                 $row.remove();
             }
             else {
@@ -102,20 +102,20 @@ class ContractDocumentsForm extends Form {
         });
 
         // TODO: Put this in css
-        //$(this.getDomSelector() + ' .master-form-row .form-btn-remove-row').hide();
+        //$(this.getDomSelector() + ' .js-master-form-row .js-btn-form-remove-row').hide();
     }
 
     addDocumentRow() {
         // Create new property row
         this.documentRowCount++;
-        const $newRow = $(this.getDomSelector() + ' #documents .master-form-row').clone(true).removeClass('master-form-row');
+        const $newRow = $(this.getDomSelector() + ' #documents .js-master-form-row').clone(true).removeClass('js-master-form-row');
         $('.has-error', $newRow).removeClass('has-error');
         $('label.error', $newRow).remove();
         const itemDocumentName = 'name_'+this.documentRowCount;
         const itemExpirtationDateName = 'expirationDate_'+this.documentRowCount;
         $('#name_0',$newRow).attr('id', itemDocumentName).attr('name', itemDocumentName).val('');
         $('#expirationDate_0',$newRow).attr('id', itemExpirtationDateName).attr('name', itemExpirtationDateName).val('');
-        $('.form-btn-remove-row',$newRow).show();
+        $('.js-btn-form-remove-row',$newRow).show();
         // Add new property row in DOM
         $(this.getDomSelector() + ' #documents').append($newRow);
 

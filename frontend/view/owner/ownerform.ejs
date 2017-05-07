@@ -1,5 +1,5 @@
 <form id="owner-form" role="form">
-    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
     <input type="hidden" id="_id">
 
     <h2 class="page-header"><%= t('Landloard') %></h2>
@@ -15,23 +15,23 @@
                     <option value="true"><%= t('Company') %></option>
                 </select>
             </div>
-            <div class="form-group company-fields">
+            <div class="form-group js-company-fields">
                 <label class="control-label" for="company"><%= t('Company name') %></label>
                 <input type="text" id="company" class="form-control"/>
             </div>
-            <div class="form-group company-fields">
+            <div class="form-group js-company-fields">
                 <label class="control-label" for="legalForm"><%= t('Business entity') %></label>
                 <input type="text" id="legalForm" class="form-control"/>
             </div>
-            <div class="form-group company-fields">
+            <div class="form-group js-company-fields">
                 <label class="control-label" for="siret"><%= t('UIN') %></label>
                 <input type="text" id="siret" class="form-control"/>
             </div>
-            <div class="form-group company-fields">
+            <div class="form-group js-company-fields">
                 <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
                 <input type="text" id="capital" class="form-control"/>
             </div>
-            <div class="form-group company-fields">
+            <div class="form-group js-company-fields">
                 <label class="control-label" for="vatNumber"><%= t('VAT Identification number')%></label>
                 <input type="text" id="vatNumber" class="form-control">
             </div>
@@ -120,5 +120,5 @@
         </div>
     </div>
 
-    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
 </form>

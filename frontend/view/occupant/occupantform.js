@@ -221,20 +221,20 @@ class OccupantForm extends Form {
 
         if (occupant && occupant._id) {
             $(this.getDomSelector() + ' #occupantNameLabel').html(occupant.name);
-            //$(this.getDomSelector() + ' .form-field-not-editable').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+            //$(this.getDomSelector() + ' .js-form-field-not-editable').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
             $(this.getDomSelector() + ' #termination-row').show();
             if (occupant.terminationDate && occupant.terminationDate!=='') {
-                $('.user-action[data-id="list-action-remove-occupant"]').hide();
+                $('.js-user-action[data-id="list-action-remove-occupant"]').hide();
             }
             else {
-                $('.user-action[data-id="list-action-remove-occupant"]').show();
+                $('.js-user-action[data-id="list-action-remove-occupant"]').show();
             }
         }
         else {
             $(this.getDomSelector() + ' #occupantNameLabel').html(i18next.t('Tenant'));
-            //$(this.getDomSelector() + ' .form-field-not-editable').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            //$(this.getDomSelector() + ' .js-form-field-not-editable').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
             $(this.getDomSelector() + ' #termination-row').hide();
-            $('.user-action[data-id="list-action-remove-occupant"]').hide();
+            $('.js-user-action[data-id="list-action-remove-occupant"]').hide();
         }
 
         this._companyChanged($(this.getDomSelector() + ' #isCompany'));
@@ -285,7 +285,7 @@ class OccupantForm extends Form {
         var itemExitDateName;
 
         this.propertyRowCount++;
-        $newRow = $(this.getDomSelector() + ' #properties .master-form-row').clone(true).removeClass('master-form-row');
+        $newRow = $(this.getDomSelector() + ' #properties .js-master-form-row').clone(true).removeClass('js-master-form-row');
         $('.has-error', $newRow).removeClass('has-error');
         $('label.error', $newRow).remove();
         itemPropertyName = 'propertyId_'+this.propertyRowCount;
@@ -294,7 +294,7 @@ class OccupantForm extends Form {
         $('#propertyId_0',$newRow).attr('id', itemPropertyName).attr('name', itemPropertyName).val('');
         $('#entryDate_0',$newRow).attr('id', itemEntryDateName).attr('name', itemEntryDateName).val('');
         $('#exitDate_0',$newRow).attr('id', itemExitDateName).attr('name', itemExitDateName).val('');
-        $('.form-btn-remove-row',$newRow).show();
+        $('.js-btn-form-remove-row',$newRow).show();
         // Add new property row in DOM
         $(this.getDomSelector() + ' #properties').append($newRow);
 
@@ -326,7 +326,7 @@ class OccupantForm extends Form {
         var itemEmail;
 
         this.contactRowCount++;
-        $newRow = $(this.getDomSelector() + ' #contacts .master-form-row').clone(true).removeClass('master-form-row');
+        $newRow = $(this.getDomSelector() + ' #contacts .js-master-form-row').clone(true).removeClass('js-master-form-row');
         $('.has-error', $newRow).removeClass('has-error');
         $('label.error', $newRow).remove();
         itemContact = 'contact_'+this.contactRowCount;
@@ -335,7 +335,7 @@ class OccupantForm extends Form {
         $('#contact_0',$newRow).attr('id', itemContact).attr('name', itemContact).val('');
         $('#phone_0',$newRow).attr('id', itemPhone).attr('name', itemPhone).val('');
         $('#email_0',$newRow).attr('id', itemEmail).attr('name', itemEmail).val('');
-        $('.form-btn-remove-row',$newRow).show();
+        $('.js-btn-form-remove-row',$newRow).show();
         // Add new property row in DOM
         $(this.getDomSelector() + ' #contacts').append($newRow);
 
@@ -405,8 +405,8 @@ class OccupantForm extends Form {
         });
 
         // Remove dynamic rows
-        $(this.getDomSelector() + ' .form-btn-remove-row').click(function() {
-            var $row = $(this).parents('.form-row');
+        $(this.getDomSelector() + ' .js-btn-form-remove-row').click(function() {
+            var $row = $(this).parents('.js-form-row');
             var selectPropertyId = $row.find('select.available-properties').attr('id');
             if (selectPropertyId) {
                 $('#occupant-form select.available-properties option[data-selectedby='+selectPropertyId+']').attr('data-selectedby', '').attr('disabled', false);
@@ -416,7 +416,7 @@ class OccupantForm extends Form {
             return false;
         });
 
-        $(this.getDomSelector() + ' .master-form-row .form-btn-remove-row').hide();
+        $(this.getDomSelector() + ' .js-master-form-row .js-btn-form-remove-row').hide();
     }
 
     //----------------------------------------
@@ -437,11 +437,11 @@ class OccupantForm extends Form {
         var selection = $select.find(':selected').val();
         if (selection === 'true') {
             $('#occupant-form .private-fields').hide();
-            $('#occupant-form .company-fields').show();
+            $('#occupant-form .js-company-fields').show();
             $('#occupant-form #manager-label').html(i18next.t('Effective manager (first and last name)'));
         }
         else {
-            $('#occupant-form .company-fields').hide();
+            $('#occupant-form .js-company-fields').hide();
             $('#occupant-form .private-fields').show();
             $('#occupant-form #manager-label').html(i18next.t('First and last name'));
         }
@@ -473,11 +473,11 @@ class OccupantForm extends Form {
     _vatChanged($select) {
         var selection = $select.find(':selected').val();
         if (selection === 'true') {
-            $('#occupant-form .occupant-form-vatratio').show();
+            $('#occupant-form .js-occupant-form-vatratio').show();
             $('.occupant-form-vat-row').show();
         }
         else {
-            $('#occupant-form .occupant-form-vatratio').hide();
+            $('#occupant-form .js-occupant-form-vatratio').hide();
             $('.occupant-form-vat-row').hide();
         }
     }

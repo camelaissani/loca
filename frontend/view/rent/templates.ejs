@@ -1,10 +1,10 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-rent-list-row-template" type="text/x-handlebars-template">
-    <div id="{{_id}}" class="list-row card">
+    <div id="{{_id}}" class="js-list-row list-row card">
         <div class="list-col">
             <div class="list-label">
                 {{#if status}}
-                <div class="{{cssClassPaymentStatus}} list-value">
+                <div class="{{cssClassPaymentStatus}} js-list-value">
                     {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
                 </div>
                 {{/if}}
@@ -18,7 +18,7 @@
                     </span>
                 </div>
                 <div class="pull-left">
-                    <div class="list-title list-value">{{occupant.name}}</div>
+                    <div class="list-title js-list-value">{{occupant.name}}</div>
                 </div>
             </div>
             <div class="list-label">
@@ -68,7 +68,7 @@
                 <div class="pull-left">
                     <h5>{{occupant.name}}</h5>
                 </div>
-                <div id="{{_id}}" class="pull-right user-action" data-id="remove-item-from-selection">
+                <div id="{{_id}}" class="pull-right js-user-action" data-id="remove-item-from-selection">
                     <i class="fa fa-times"></i>
                 </div>
             </div>

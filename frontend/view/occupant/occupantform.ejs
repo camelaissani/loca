@@ -10,8 +10,8 @@
         {{/each}}
     </script>
     <!-- /HANDLEBAR TEMPLATES -->
-    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
-    <input type="hidden" id="_id" class="">
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+    <input type="hidden" id="_id">
     <h2 id="occupantNameLabel" class="page-header"><%= t('Tenant') %></h2>
     <div class="row">
         <div class="col-xs-12">
@@ -30,28 +30,28 @@
                 </div>
 
                 <div class="col-xs-12">
-                    <div class="form-group company-fields">
+                    <div class="form-group js-company-fields">
                         <label class="control-label"><%= t('Company name') %></label>
                         <input type="text" id="company" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-xs-12">
-                    <div class="form-group company-fields">
+                    <div class="form-group js-company-fields">
                         <label class="control-label"><%= t('Business entity') %></label>
                         <input type="text" id="legalForm" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-xs-12">
-                    <div class="form-group company-fields">
+                    <div class="form-group js-company-fields">
                         <label class="control-label"><%= t('UIN') %></label>
                         <input type="text" id="siret" class="form-control">
                     </div>
                 </div>
 
                 <div class="col-xs-12">
-                    <div class="form-group company-fields">
+                    <div class="form-group js-company-fields">
                         <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
                         <input type="text" id="capital" class="form-control"/>
                     </div>
@@ -136,12 +136,12 @@
             <label><%= t('Select properties to rent')%></label>
         </div>
         <div class="col-xs-12">
-            <div id="properties" class="form-rows">
-                <div class="row form-row master-form-row">
+            <div id="properties" class="js-js-form-rows">
+                <div class="row js-form-row js-master-form-row">
                     <div class="col-xs-12">
                        <div class="form-group">
                             <label class="control-label"><%= t('Property') %></label>
-                            <select id="propertyId_0" class="available-properties form-field-not-editable form-control"></select>
+                            <select id="propertyId_0" class="available-properties js-form-field-not-editable form-control"></select>
                        </div>
                     </div>
                     <div class="col-xs-6">
@@ -157,13 +157,13 @@
                        </div>
                     </div>
                     <div class="col-xs-12 clearfix">
-                        <div class="pull-right form-btn-remove-row form-btn">
+                        <div class="pull-right js-btn-form-remove-row btn btn-sm">
                             <i class="fa fa-trash-o"></i> <%= t('Remove') %>
                         </div>
                     </div>
                 </div>
             </div>
-            <span id="btn-add-property" class="form-btn btn btn-default"><i class="fa fa-plus"></i> <%= t('Add a property') %></span>
+            <span id="btn-add-property" class="btn btn-default"><i class="fa fa-plus"></i> <%= t('Add a property') %></span>
         </div>
     </div>
 
@@ -173,8 +173,8 @@
             <label><%= t('People to contact for all administrative procedures (request of unpaid rents, missing mandatory documents...)') %></label>
         </div>
         <div class="col-xs-12">
-            <div id="contacts" class="form-rows">
-                <div class="row form-row master-form-row">
+            <div id="contacts" class="js-js-form-rows">
+                <div class="row js-form-row js-master-form-row">
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label class="control-label"><%= t('First and last name') %></label>
@@ -194,13 +194,13 @@
                         </div>
                     </div>
                     <div class="col-xs-12 clearfix">
-                        <div class="pull-right form-btn-remove-row form-btn">
+                        <div class="pull-right js-btn-form-remove-row btn btn-sm">
                             <i class="fa fa-trash-o"></i> <%= t('Remove') %>
                         </div>
                     </div>
                 </div>
             </div>
-            <span id="btn-add-contact" class="form-btn btn btn-default btn-sm"><i class="fa fa-plus"></i> <%= t('Add a contact') %></span>
+            <span id="btn-add-contact" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> <%= t('Add a contact') %></span>
         </div>
     </div>
 
@@ -220,16 +220,16 @@
                 <div class="col-xs-4">
                     <div class="form-group">
                         <label class="control-label"><%= t('Subject to VAT') %></label>
-                        <select id='isVat' class="form-field-not-editable form-control" >
+                        <select id='isVat' class="js-form-field-not-editable form-control" >
                             <option value="true"><%= t('Yes') %></option>
                             <option value="false"><%= t('No') %></option>
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-8 occupant-form-vatratio">
+                <div class="col-xs-8 js-occupant-form-vatratio">
                     <div class="form-group">
                         <label class="control-label"><%= t('VAT ratio in %') %></label>
-                        <input type="number" min="0" max="100" id="vatRatio" class="form-field-not-editable form-control">
+                        <input type="number" min="0" max="100" id="vatRatio" class="js-form-field-not-editable form-control">
                     </div>
                 </div>
                 <div class="col-xs-12">
@@ -271,5 +271,5 @@
             </div>
         </div>
     </div>
-    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="form-error-message"></span></div>
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
 </form>

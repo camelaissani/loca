@@ -39,19 +39,19 @@ class RentCtrl extends ViewController {
             const totalToPay = rentsOverview.totalToPay;
             const totalNotPaid = rentsOverview.totalNotPaid;
             const totalPaid = rentsOverview.totalPaid;
-            $('.all-filter-label').html('('+countAll+')');
-            $('.paid-filter-label').html('('+(countPaid + countPartiallyPaid)+')');
-            $('.not-paid-filter-label').html('('+countNotPaid+')');
-            //$('.partially-paid-filter-label').html(countPartiallyPaid);
-            $('.total-topay').html(Helper.formatMoney(totalToPay));
-            $('.total-notpaid').html(Helper.formatMoney(totalNotPaid));
-            $('.total-paid').html(Helper.formatMoney(totalPaid));
+            $('.js-all-filter-label').html('('+countAll+')');
+            $('.js-paid-filter-label').html('('+(countPaid + countPartiallyPaid)+')');
+            $('.js-not-paid-filter-label').html('('+countNotPaid+')');
+            //$('.partially-js-paid-filter-label').html(countPartiallyPaid);
+            $('.js-total-topay').html(Helper.formatMoney(totalToPay));
+            $('.js-total-notpaid').html(Helper.formatMoney(totalNotPaid));
+            $('.js-total-paid').html(Helper.formatMoney(totalPaid));
 
-            $('#view-rent .filterbar .user-action').removeClass('active');
+            $('#view-rent .js-filterbar .js-user-action').removeClass('active');
             if (this.filterValue) {
-                $('#view-rent .filterbar .user-action[data-value="'+this.filterValue+'"]').addClass('active');
+                $('#view-rent .js-filterbar .js-user-action[data-value="'+this.filterValue+'"]').addClass('active');
             } else {
-                $('#view-rent .filterbar .default-filter.user-action').addClass('active');
+                $('#view-rent .js-filterbar .js-default-filter.js-user-action').addClass('active');
             }
 
             requester.ajax({
@@ -117,16 +117,12 @@ class RentCtrl extends ViewController {
             return false;
         });
 
-        $(document).on('click', '#view-rent .rent-period', function() {
-            const $monthButton = $(this),
-                $monthPicker = $('#view-rent .month-picker');
+        $(document).on('click', '#view-rent .js-rent-period', function() {
+            const $monthPicker = $('#view-rent .js-month-picker');
             if ($monthPicker.is(':visible')) {
                 $monthPicker.hide();
             } else {
                 $monthPicker.show();
-                if (!$monthButton.hasClass('mobile-view')) {
-                    $monthButton.hide();
-                }
             }
             return false;
         });
@@ -170,13 +166,13 @@ class RentCtrl extends ViewController {
                         const totalToPay = rentsOverview.totalToPay;
                         const totalNotPaid = rentsOverview.totalNotPaid;
                         const totalPaid = rentsOverview.totalPaid;
-                        $('.all-filter-label').html('('+countAll+')');
-                        $('.paid-filter-label').html('('+(countPaid + countPartiallyPaid)+')');
-                        $('.not-paid-filter-label').html('('+countNotPaid+')');
-                        //$('.partially-paid-filter-label').html(countPartiallyPaid);
-                        $('.total-topay').html(Helper.formatMoney(totalToPay));
-                        $('.total-notpaid').html(Helper.formatMoney(totalNotPaid));
-                        $('.total-paid').html(Helper.formatMoney(totalPaid));
+                        $('.js-all-filter-label').html('('+countAll+')');
+                        $('.js-paid-filter-label').html('('+(countPaid + countPartiallyPaid)+')');
+                        $('.js-not-paid-filter-label').html('('+countNotPaid+')');
+                        //$('.partially-js-paid-filter-label').html(countPartiallyPaid);
+                        $('.js-total-topay').html(Helper.formatMoney(totalToPay));
+                        $('.js-total-notpaid').html(Helper.formatMoney(totalNotPaid));
+                        $('.js-total-paid').html(Helper.formatMoney(totalPaid));
 
                         this.list.update(data);
                         this.list.showAllRows(() => {
@@ -190,7 +186,7 @@ class RentCtrl extends ViewController {
 
     onDataChanged(callback) {
         const that = this;
-        const $monthPicker = $('#view-rent .month-picker');
+        const $monthPicker = $('#view-rent .js-month-picker');
         $monthPicker.datepicker({
             language: LOCA.countryCode,
             autoclose: true,
@@ -200,13 +196,13 @@ class RentCtrl extends ViewController {
         });
 
         $monthPicker.datepicker('setDate', moment('01/'+LOCA.currentMonth+'/'+LOCA.currentYear, 'DD/MM/YYYY').toDate());
-        $('#view-rent .rent-period').html(Helper.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase());
+        $('#view-rent .js-rent-period').html(Helper.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase());
         $monthPicker.on('changeDate', function() {
             const selection = moment($(this).datepicker('getDate'));
             LOCA.currentYear = selection.get('year');
             LOCA.currentMonth = selection.get('month')+1;
             $monthPicker.hide();
-            $('#view-rent .rent-period').html(Helper.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase()).show();
+            $('#view-rent .js-rent-period').html(Helper.formatMonthYear(LOCA.currentMonth, LOCA.currentYear).toUpperCase()).show();
             that.loadList();
         });
 

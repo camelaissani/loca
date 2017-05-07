@@ -1,20 +1,4 @@
 #view-accounting {
-    .filterbar {
-        @iterations: 6;
-
-        .h(@index) when (@index > 0) {
-        h@{index} {
-            margin: 10px 0 0 0;
-        }
-        .h(@index - 1);
-        }
-        .h(0) {}
-        .h(@iterations);
-
-        button {
-            margin: 5px;
-        }
-    }
     table {
         width: auto;
         max-width: auto;

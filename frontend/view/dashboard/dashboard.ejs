@@ -1,12 +1,12 @@
 <div class='tiles'>
     <div class="col-xs-5">
-        <div class="tile cover">
+        <div class="tile cover disabled">
             <h2><%= t('Hello')%>,</h2>
             <h2><%= user.firstname + ' ' + user.lastname %></h2>
         </div>
     </div>
     <div class="col-xs-2">
-        <div class="tile light blue nav-action" data-id="occupant">
+        <div class="tile light blue js-nav-action" data-id="occupant">
             <div class="carousel slide">
                 <div class="carousel-inner">
                     <div class="item active text-center">
@@ -18,19 +18,19 @@
                     <div class="item text-center">
                         <div class="vertical-center">
                             <div id="count-all-occupants" class="tilecaption"></div>
-                            <h4><i class="fa fa-group"></i> <span id="count-all-occupants-label" class=""></span></h4>
+                            <h4><i class="fa fa-group"></i> <span id="count-all-occupants-label"></span></h4>
                         </div>
                     </div>
                     <div class="item text-center">
                         <div class="vertical-center">
                             <div id="count-active-occupants" class="tilecaption"></div>
-                            <h4><i class="fa fa-group"></i> <span id="count-active-occupants-label" class=""></span></h4>
+                            <h4><i class="fa fa-group"></i> <span id="count-active-occupants-label"></span></h4>
                         </div>
                     </div>
                     <div class="item text-center">
                         <div class="vertical-center">
                             <div id="count-inactive-occupants" class="tilecaption"></div>
-                            <h4><i class="fa fa-group"></i> <span id="count-inactive-occupants-label" class=""></span></h4>
+                            <h4><i class="fa fa-group"></i> <span id="count-inactive-occupants-label"></span></h4>
                         </div>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="col-xs-2">
-        <div class="tile dark blue nav-action" data-id="property">
+        <div class="tile dark blue js-nav-action" data-id="property">
             <div class="carousel slide">
                 <div class="carousel-inner">
                     <div class="item active text-center">
@@ -50,19 +50,19 @@
                     <div class="item text-center">
                         <div class="vertical-center">
                             <div id="count-all-properties" class="tilecaption"></div>
-                            <h4><i class="fa fa-key"></i> <span id="count-all-properties-label" class=""></span></h4>
+                            <h4><i class="fa fa-key"></i> <span id="count-all-properties-label"></span></h4>
                         </div>
                     </div>
                     <div class="item text-center">
                         <div class="vertical-center">
                             <div id="count-active-properties" class="tilecaption"></div>
-                            <h4><i class="fa fa-key"></i> <span id="count-active-properties-label" class=""></span></h4>
+                            <h4><i class="fa fa-key"></i> <span id="count-active-properties-label"></span></h4>
                         </div>
                     </div>
                     <div class="item text-center">
                         <div class="vertical-center">
                             <div id="count-inactive-properties" class="tilecaption"></div>
-                            <h4><i class="fa fa-key"></i> <span id="count-inactive-properties-label" class=""></span></h4>
+                            <h4><i class="fa fa-key"></i> <span id="count-inactive-properties-label"></span></h4>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
         </div>
     </div>
     <div class="col-xs-3 last-col">
-        <div class="tile grey text-center">
+        <div class="tile grey text-center disabled">
             <div class="vertical-center">
                 <div id="current-day" class="tilecaption"></div>
                 <h4 class="current-month"></h4>
@@ -78,7 +78,7 @@
         </div>
     </div>
     <div class="col-xs-3">
-        <div class="tile blue text-center nav-action" data-id="rent">
+        <div class="tile blue text-center js-nav-action" data-id="rent">
             <div class="carousel slide">
                 <div class="carousel-inner">
                     <div class="item active text-center">
@@ -89,7 +89,7 @@
                     </div>
                     <div class="item text-center">
                         <div class="vertical-center">
-                            <div class="tilecurrency"><span id="count-total-topay-rents"></span></div>
+                            <div class="tilecurrency"><span id="count-js-total-topay-rents"></span></div>
                             <h4 class="current-month"></h4>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
         </div>
     </div>
     <div class="col-xs-2">
-        <div class="tile green text-center nav-action" data-id="rent">
+        <div class="tile green text-center js-nav-action" data-id="rent">
             <div class="vertical-center">
                 <h4><%= t('Paid') %></h4>
                 <div class="tilecurrency"><span id="count-total-paid-rents"></span></div>
@@ -113,7 +113,7 @@
         </div>
     </div>
     <div class="col-xs-2">
-        <div class="tile orange text-center nav-action" data-id="rent">
+        <div class="tile orange text-center js-nav-action" data-id="rent">
             <div class="vertical-center">
                 <h4><%= t('Not paid') %></h4>
                 <div class="tilecurrency"><span id="count-total-notpaid-rents"></span></div>
@@ -122,7 +122,7 @@
         </div>
     </div>
     <div class="col-xs-5 last-col">
-        <div class="tile dark blue text-center nav-action" data-id="owner">
+        <div class="tile dark blue text-center js-nav-action" data-id="owner">
             <div class="vertical-center">
                 <h4><i class="fa fa-info-circle fa-inverse fa-5x"></i></h4>
                 <h3><%= t('Landloard') %></h3>
@@ -130,7 +130,7 @@
         </div>
     </div>
     <div class="col-xs-12 last-row">
-        <div class="tile grey">
+        <div class="tile grey disabled">
             <div id="carousel-notifications" class="carousel slide">
             </div>
         </div>

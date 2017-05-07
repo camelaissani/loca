@@ -97,7 +97,7 @@ class OccupantCtrl extends ViewController {
             this.form.submit((data) => {
                 this.closeForm(() => {
                     this.loadList(() => {
-                        this.list.select($('.list-row#'+data._id), true);
+                        this.list.select($('.js-list-row#'+data._id), true);
                         this.scrollToVisible();
                     });
                 });
@@ -167,7 +167,7 @@ class OccupantCtrl extends ViewController {
                             const countAll = occupantsOverview.countAll;
                             const countActive = occupantsOverview.countActive;
                             const countInactive = occupantsOverview.countInactive;
-                            $('#view-occupant .all-filter-label').html('('+countAll+')');
+                            $('#view-occupant .js-all-filter-label').html('('+countAll+')');
                             $('#view-occupant .all-active-filter-label').html('('+countActive+')');
                             $('#view-occupant .all-inactive-filter-label').html('('+countInactive+')');
 

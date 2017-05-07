@@ -17,15 +17,11 @@ class AccountingCtrl extends ViewController {
 
     onInitListeners() {
         $(document).on('click', '#view-accounting .accounting-period', function() {
-            const $yearButton = $(this),
-                $yearPicker = $('#view-accounting .year-picker');
+            const $yearPicker = $('#view-accounting .js-year-picker');
             if ($yearPicker.is(':visible')) {
                 $yearPicker.hide();
             } else {
                 $yearPicker.show();
-                if (!$yearButton.hasClass('mobile-view')) {
-                    $yearButton.hide();
-                }
             }
             return false;
         });
@@ -40,7 +36,7 @@ class AccountingCtrl extends ViewController {
     }
 
     onDataChanged(callback) {
-        const $yearPicker = $('#view-accounting .year-picker');
+        const $yearPicker = $('#view-accounting .js-year-picker');
         $yearPicker.datepicker({
             language: LOCA.countryCode,
             autoclose: true,
