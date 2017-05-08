@@ -138,15 +138,16 @@ class RentCtrl extends ViewController {
         }
         else if (actionId==='list-action-rents-history') {
             $('#history-rents-table').html('');
-            requester.ajax({
-                type: 'GET',
-                url: `/api/rents/occupant/${selection[0]._id}`
-            },
-            (rentsHistory) => {
-                $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
-                this.scrollToVisible('#renttable .active');
+            this.openForm('rents-history', null, () => {
+                requester.ajax({
+                    type: 'GET',
+                    url: `/api/rents/occupant/${selection[0]._id}`
+                },
+                (rentsHistory) => {
+                    $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
+                    this.scrollToElement('#history-rents-table .active');
+                });
             });
-            this.openForm('rents-history', true);
         }
         else if (actionId==='list-action-print') {
             this.openForm('print-doc-selector');
@@ -175,9 +176,7 @@ class RentCtrl extends ViewController {
                         $('.js-total-paid').html(Helper.formatMoney(totalPaid));
 
                         this.list.update(data);
-                        this.list.showAllRows(() => {
-                            this.scrollToVisible();
-                        });
+                        this.list.showAllRows( );
                     });
                 });
             });

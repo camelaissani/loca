@@ -107,7 +107,6 @@ class OccupantCtrl extends ViewController {
                 this.closeForm(() => {
                     this.loadList(() => {
                         this.list.select($('.js-list-row#'+data._id), true);
-                        this.scrollToVisible();
                     });
                 });
             });
@@ -181,9 +180,7 @@ class OccupantCtrl extends ViewController {
                             $('#view-occupant .all-inactive-filter-label').html('('+countInactive+')');
 
                             this.list.update(data);
-                            this.list.showAllRows(() => {
-                                this.scrollToVisible();
-                            });
+                            this.list.showAllRows();
                         });
                     }
                 });
@@ -191,12 +188,14 @@ class OccupantCtrl extends ViewController {
         }
         else if (actionId==='list-action-rents-history') {
             $('#history-rents-table').html('');
-            this.openForm('rents-history', true);
-            requester.ajax({
-                type: 'GET',
-                url: `/api/rents/occupant/${selection[0]._id}`
-            }, (rentsHistory) => {
-                $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
+            this.openForm('rents-history', null, () => {
+                requester.ajax({
+                    type: 'GET',
+                    url: `/api/rents/occupant/${selection[0]._id}`
+                }, (rentsHistory) => {
+                    $('#history-rents-table').html(this.templateHistoryRents(rentsHistory));
+                    this.scrollToElement('#history-rents-table .active');
+                });
             });
         }
         else if (actionId==='list-action-print') {

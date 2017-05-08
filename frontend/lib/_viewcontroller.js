@@ -71,9 +71,7 @@ class ViewController {
             if ($(this).hasClass('js-cancel-form')) {
                 that.closeForm(() => {
                     if (that.list) {
-                        that.list.showAllRows(() => {
-                            that.scrollToVisible();
-                        });
+                        that.list.showAllRows();
                     }
                 });
                 return false;
@@ -237,10 +235,18 @@ class ViewController {
     }
 
     openForm(formId, menuId, callback) {
+        const menuCallback = () => {
+            anilayout.showMenu(menuId ? menuId : formId+'-menu', () => {
+                if (callback) {
+                    callback();
+                }
+                window.scroll(0, 0);
+            });
+        };
+
+        this.scrollY = window.scrollY;
+
         anilayout.hideMenu(() => {
-            const menuCallback = () => {
-                anilayout.showMenu(menuId ? menuId : formId+'-menu', callback);
-            };
             if (this.list) {
                 this.list.hideAllRows(() => {
                     anilayout.showSheet(formId);
@@ -254,22 +260,24 @@ class ViewController {
     }
 
     closeForm(callback) {
+        const callbackEx = () => {
+            if (callback) {
+                callback();
+            }
+            window.scroll(0, this.scrollY);
+        };
         anilayout.hideSheet();
         if (this.list && this.list.getSelection().length>0) {
             anilayout.hideMenu(() => {
                 anilayout.showMenu(this.config.listSelectionMenuId);
-                if (callback) {
-                    callback();
-                }
+                callbackEx();
             });
         } else {
             anilayout.hideMenu(() => {
                 if (this.config.defaultMenuId) {
                     anilayout.showMenu(this.config.defaultMenuId);
                 }
-                if (callback) {
-                    callback();
-                }
+                callbackEx();
             });
         }
     }
@@ -282,15 +290,11 @@ class ViewController {
         anilayout.hideMenu(callback);
     }
 
-    scrollToVisible(selector) {
-        if (this.list) {
-            const offset = parseInt($('.js-view-container').css('padding-top'), 10);
-            if (!selector) {
-                selector = '.js-list-row.active:first';
-            }
-            $(selector).velocity('scroll', {
-                duration: 500, offset: -offset
-            });
+    scrollToElement(selector) {
+        const $element = $(selector);
+        if ($element.length > 0) {
+            const bodyTopPadding = parseInt($('body').css('padding-top'), 10);
+            window.scroll(0,  $element.offset().top - bodyTopPadding);
         }
     }
 }
