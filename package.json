@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "npm run buildprod && NODE_ENV=production node bootstrap.js",
+    "start": "npm run buildprod && NODE_ENV=production node server.js",
     "dev": "npm run builddev && babel-watch server.js",
     "lint": "eslint .",
     "test-only": "babel-node node_modules/mocha/bin/_mocha",
