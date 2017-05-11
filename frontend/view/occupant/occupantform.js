@@ -237,6 +237,9 @@ class OccupantForm extends Form {
             $('.js-user-action[data-id="list-action-remove-occupant"]').hide();
         }
 
+        if (occupant.terminationDate) {
+            $('.js-occupant-form-termination-date').html(Helper.formatDate(occupant.terminationDate));
+        }
         this._companyChanged($(this.getDomSelector() + ' #isCompany'));
         this._contractChanged($(this.getDomSelector() + ' #contract'));
         this._vatChanged($(this.getDomSelector() + ' #isVat'));
@@ -530,7 +533,6 @@ class OccupantForm extends Form {
 
         rentWithVat = rentWithDiscount + vat;
 
-        $('.js-occupant-form-termination-date').html(Helper.formatDate(data.terminationDate));
         $('.js-occupant-form-summary-guaranty').html(Helper.formatMoney(data.guaranty, false, false));
         $('.js-occupant-form-summary-rentwithexpenses').html(Helper.formatMoney(rentWithExpenses, false, false));
         $('.js-occupant-form-summary-discount').html(Helper.formatMoney(data.discount, false, false));
