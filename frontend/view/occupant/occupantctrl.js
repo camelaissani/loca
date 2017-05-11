@@ -76,7 +76,10 @@ class OccupantCtrl extends ViewController {
             this.list.unselectAll();
             this._loadPropertyList((properties) => {
                 this.form.setData(null, properties);
-                this.openForm('occupant-form');
+                $('#occupant-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+                $('#occupant-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+                $('#occupant-form .btn').removeClass('hidden');
+                this.openForm('occupant-form', 'occupant-edit-menu');
             });
         }
         else if (actionId==='list-action-remove-occupant') {
