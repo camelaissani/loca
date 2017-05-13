@@ -27,15 +27,29 @@ Run these commands in your terminal in the directory of the cloned repository.
 
 ```
 npm install
-node server.js
+node start
 ```
 
-For developers, run these commands:
+For developing, run these commands:
 
 ```
 npm install
 npm run dev
 ```
+
+Technical Stack
+---------------
+
+Back-end:
+
+Node, Express, MongoDB, EJS (templates), PassportJS (authentication)
+
+Front-End:
+
+JQuery, Bootstrap, Handlebars, and my own implementation for managing routes
+
+Build system based on RollupJS
+
 
 Why I created this application?
 -------------------------------
