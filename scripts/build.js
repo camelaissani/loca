@@ -136,10 +136,10 @@ const copySitemap= () => {
     });
 };
 
-const clean = () => {
+const clean = (directory) => {
     return new Promise((resolve, reject) => {
         try {
-            fs.emptydirSync(dist_directory);
+            fs.emptydirSync(directory || dist_directory);
             resolve();
         } catch (err) {
             reject(err);
@@ -224,18 +224,64 @@ const restricted = {
     bundleOptions: bundleOptions('restricted')
 };
 
-// Build
-clean()
-.then(buildJs(print))
-.then(buildCss(print))
-.then(buildJs(ppublic))
-.then(buildJs(restricted))
-.then(buildCss(ppublic))
-.then(buildCss(restricted))
-.then(buildImg())
-.then(copyLocales())
-.then(copyRobots())
-.then(copySitemap())
-.catch((reason) => {
-    throw reason;
-});
+if (process.argv.length > 2) {
+    // Partial build
+    const buildWhat = process.argv[2].toLowerCase();
+
+    switch (buildWhat) {
+    case 'js':
+        clean(dist_js_directory)
+        .then(buildJs(print))
+        .then(buildJs(ppublic))
+        .then(buildJs(restricted))
+        .then(console.log('js files rebuilt'))
+        .catch((reason) => {
+            throw reason;
+        });
+        break;
+    case 'css':
+        clean(dist_css_directory)
+        .then(buildCss(print))
+        .then(buildCss(ppublic))
+        .then(buildCss(restricted))
+        .then(console.log('less files rebuilt'))
+        .catch((reason) => {
+            throw reason;
+        });
+        break;
+    case 'img':
+        clean(dist_images_directory)
+        .then(buildImg())
+        .then(console.log('image files rebuilt'))
+        .catch((reason) => {
+            throw reason;
+        });
+        break;
+    case 'static':
+        clean(dist_locales_directory)
+        .then(copyLocales())
+        .then(copyRobots())
+        .then(copySitemap())
+        .then(console.log('static files rebuilt'))
+        .catch((reason) => {
+            throw reason;
+        });
+        break;
+    }
+} else {
+    // Full build
+    clean()
+    .then(buildJs(print))
+    .then(buildCss(print))
+    .then(buildJs(ppublic))
+    .then(buildJs(restricted))
+    .then(buildCss(ppublic))
+    .then(buildCss(restricted))
+    .then(buildImg())
+    .then(copyLocales())
+    .then(copyRobots())
+    .then(copySitemap())
+    .catch((reason) => {
+        throw reason;
+    });
+}
