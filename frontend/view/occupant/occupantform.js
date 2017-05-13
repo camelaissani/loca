@@ -237,7 +237,7 @@ class OccupantForm extends Form {
             $('.js-user-action[data-id="list-action-remove-occupant"]').hide();
         }
 
-        if (occupant.terminationDate) {
+        if (occupant && occupant.terminationDate) {
             $('.js-occupant-form-termination-date').html(Helper.formatDate(occupant.terminationDate));
         }
         this._companyChanged($(this.getDomSelector() + ' #isCompany'));
