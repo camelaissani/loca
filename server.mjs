@@ -143,4 +143,11 @@ db.init();
 const http_port = process.env.LOCA_NODEJS_PORT || 8081;
 app.listen(http_port, function() {
     logger.info('Listening port ' + http_port);
+    if (debugMode) {
+        const LiveReloadServer = require('live-reload');
+        LiveReloadServer({
+           _: ['dist'],
+            port: 9091
+        });
+    }
 });
