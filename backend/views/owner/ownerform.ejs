@@ -1,0 +1,124 @@
+<form id="owner-form" role="form">
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+    <input type="hidden" id="_id">
+
+    <h2 class="page-header"><%= t('Landloard') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Landloard information') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="control-label"><%= t('Landloard') %></label>
+                <select id="isCompany" class="form-control uneditable-input" readonly="readonly" disabled>
+                    <option value="false"><%= t('Individual') %></option>
+                    <option value="true"><%= t('Company') %></option>
+                </select>
+            </div>
+            <div class="form-group js-company-fields">
+                <label class="control-label" for="company"><%= t('Company name') %></label>
+                <input type="text" id="company" class="form-control uneditable-input" readonly="readonly" disabled/>
+            </div>
+            <div class="form-group js-company-fields">
+                <label class="control-label" for="legalForm"><%= t('Business entity') %></label>
+                <input type="text" id="legalForm" class="form-control uneditable-input" readonly="readonly" disabled/>
+            </div>
+            <div class="form-group js-company-fields">
+                <label class="control-label" for="siret"><%= t('UIN') %></label>
+                <input type="text" id="siret" class="form-control uneditable-input" readonly="readonly" disabled/>
+            </div>
+            <div class="form-group js-company-fields">
+                <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
+                <input type="text" id="capital" class="form-control uneditable-input" readonly="readonly" disabled/>
+            </div>
+            <div class="form-group js-company-fields">
+                <label class="control-label" for="vatNumber"><%= t('VAT Identification number')%></label>
+                <input type="text" id="vatNumber" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+            <div class="form-group">
+                <label id="manager-label" class="control-label" for="manager"></label>
+                <input type="text" id="manager" class="form-control uneditable-input" readonly="readonly" disabled/>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Address') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Address where invoices and rent notices will be sent') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="control-label"><%= t('Address') %></label>
+                <input type="text" id="street1" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+            <div class="form-group">
+                <input type="text" id="street2" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('ZIP code') %></label>
+                        <input type="text" id="zipCode" class="form-control uneditable-input" readonly="readonly" disabled>
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('City') %></label>
+                        <input type="text" id="city" class="form-control uneditable-input" readonly="readonly" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Contact') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Contact person for all administrative procedures (payment of rents, claims ...)') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="control-label"><%= t('First and last name') %></label>
+                <input type="text" id="contact" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label class="control-label"><%= t('Phone number') %></label>
+                <input type="tel" id="phone1" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label class="control-label"><%= t('Phone number') %></label>
+                <input type="tel" id="phone2" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="control-label"><%= t('E-mail') %></label>
+                <input type="email" id="email" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Banking establishment') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Bank on which payments shall be made') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="control-label" for="vatNumber"><%= t('Bank name') %></label>
+                <input type="text" id="bank" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="vatNumber"><%= t('IBAN') %></label>
+                <input type="text" id="rib" class="form-control uneditable-input" readonly="readonly" disabled>
+            </div>
+        </div>
+    </div>
+
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+</form>

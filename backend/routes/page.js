@@ -5,7 +5,7 @@ import logger from 'winston';
 import config from '../../config';
 
 export const defaultLoggedView = 'dashboard';
-const adminViews = [
+const knownViews = [
     'accounting',
     'dashboard',
     'occupant',
@@ -13,6 +13,7 @@ const adminViews = [
     'property',
     'rent',
     'selectrealm',
+    'website'
 ];
 
 function buildModel(view, req) {
@@ -62,7 +63,7 @@ export default function () {
 
     router.get('/view/:view', (req, res) => {
         const view = req.params.view;
-        if (adminViews.indexOf(view) === -1) {
+        if (knownViews.indexOf(view) === -1) {
             res.redirect(`/page/${defaultLoggedView}`);
             logger.info(`View ${view} is not valid. Redirecting to /page/${defaultLoggedView}`);
             return;
@@ -72,7 +73,7 @@ export default function () {
 
     router.get('/page/:view?', (req, res) => {
         const view = req.params.view;
-        if (adminViews.indexOf(view) === -1) {
+        if (knownViews.indexOf(view) === -1) {
             res.redirect(`/page/${defaultLoggedView}`);
             logger.info(`View ${view} is not valid. Redirecting to /page/${defaultLoggedView}`);
             return;
@@ -80,7 +81,9 @@ export default function () {
         renderPage(view, req, res);
     });
 
+    router.get('/website', (req, res) => renderView('website', req, res));
     router.get('/', (req, res) => renderPage('website', req, res));
+
 
     return router;
 }

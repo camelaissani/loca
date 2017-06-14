@@ -87,7 +87,7 @@ app.use('/public/pdf', express.static(path.join(dist_directory, 'pdf')));
 app.use('/robots.txt', express.static(path.join(dist_directory, 'robots.txt')));
 app.use('/sitemap.xml', express.static(path.join(dist_directory, 'sitemap.xml')));
 
-app.set('views', path.join(__dirname, 'frontend', 'view'));
+app.set('views', path.join(__dirname, 'backend', 'views'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 

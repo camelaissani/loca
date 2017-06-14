@@ -1,0 +1,281 @@
+<form id="occupant-form" class="grid-form" role="form">
+    <!-- HANDLEBAR TEMPLATES -->
+    <script id="occupant-property-selector-template" type="text/x-handlebars-template">
+        {{#each properties}}
+            {{#if available}}
+            <option value="{{_id}}">{{name}} ({{i18next key="Rent with CAM fees:" amount=priceWithExpense}})</option>
+            {{else}}
+            <option value="{{_id}}" {{#if notSelectable}}disabled{{/if}}>{{name}} ({{i18next key="Rent with CAM fees tenanted by" amount=priceWithExpense name=occupantLabel}})</option>
+            {{/if}}
+        {{/each}}
+    </script>
+    <!-- /HANDLEBAR TEMPLATES -->
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+    <input type="hidden" id="_id">
+    <div class="js-lease-state alert alert-danger hidden" role="alert">
+        <div class="row">
+            <div class="col-xs-6"><%= t('Lease terminated') %></div>
+            <div class="js-occupant-form-termination-date col-xs-6 text-right"></div>
+        </div>
+    </div>
+    <h2 id="occupantNameLabel" class="page-header"><%= t('Tenant') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Tenant information') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Tenant') %></label>
+                        <select id="isCompany" class="form-control">
+                            <option value="false"><%= t('Individual') %></option>
+                            <option value="true"><%= t('Company') %></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="form-group js-company-fields">
+                        <label class="control-label"><%= t('Company name') %></label>
+                        <input type="text" id="company" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="form-group js-company-fields">
+                        <label class="control-label"><%= t('Business entity') %></label>
+                        <input type="text" id="legalForm" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="form-group js-company-fields">
+                        <label class="control-label"><%= t('UIN') %></label>
+                        <input type="text" id="siret" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-xs-12">
+                    <div class="form-group js-company-fields">
+                        <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
+                        <input type="text" id="capital" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label id="manager-label" class="control-label"><%= t('Effective manager (first and last name)') %></label>
+                        <input type="text" id="manager" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Lease contract') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Complete the fields to specify the terms of the agreement with the tenant') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Contract') %></label>
+                        <select id='contract' class="form-control">
+                            <option value="residency"><%= t('Residence lease contract 9 years')%></option>
+                            <option value="369"><%= t('Business lease contract 3,6,9 years') %></option>
+                            <option value="custom"><%= t('Short business lease contract') %></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Start date') %></label>
+                        <input id="beginDate" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('End date') %></label>
+                        <input id="endDate" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Deposit amount') %></label>
+                        <input type="number" id="guaranty" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="termination-row">
+        <h2 class="page-header"><%= t('Lease termination') %></h2>
+        <div class="row">
+            <div class="col-xs-12">
+                <label><%= t('Indicate the effective date of the lease termination') %></label>
+            </div>
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label"><%= t('Date') %></label>
+                            <input id="terminationDate" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label"><%= t('Amount of deposit refund') %></label>
+                            <input type="number" id="guarantyPayback" min="0" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Leased properties') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Select properties to rent')%></label>
+        </div>
+        <div class="col-xs-12">
+            <div id="properties" class="js-js-form-rows">
+                <div class="row js-form-row js-master-form-row">
+                    <div class="col-xs-12">
+                       <div class="form-group">
+                            <label class="control-label"><%= t('Property') %></label>
+                            <select id="propertyId_0" class="available-properties js-form-field-not-editable form-control"></select>
+                       </div>
+                    </div>
+                    <div class="col-xs-6">
+                       <div class="form-group">
+                            <label class="control-label"><%= t('Entry date') %></label>
+                            <input id="entryDate_0" class="form-control">
+                       </div>
+                    </div>
+                    <div class="col-xs-6">
+                       <div class="form-group">
+                           <label class="control-label"><%= t('Exit date') %></label>
+                           <input id="exitDate_0" class="form-control">
+                       </div>
+                    </div>
+                    <div class="col-xs-12 clearfix">
+                        <div class="pull-right js-btn-form-remove-row btn btn-sm">
+                            <i class="fa fa-trash-o"></i> <%= t('Remove') %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span id="btn-add-property" class="btn btn-default"><i class="fa fa-plus"></i> <%= t('Add a property') %></span>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Contacts') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('People to contact for all administrative procedures (request of unpaid rents, missing mandatory documents...)') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div id="contacts" class="js-js-form-rows">
+                <div class="row js-form-row js-master-form-row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label"><%= t('First and last name') %></label>
+                            <input type="text" id="contact_0" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label"><%= t('Phone number') %></label>
+                            <input type="tel" id="phone_0" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="form-group">
+                            <label class="control-label"><%= t('E-mail') %></label>
+                            <input type="email" id="email_0" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 clearfix">
+                        <div class="pull-right js-btn-form-remove-row btn btn-sm">
+                            <i class="fa fa-trash-o"></i> <%= t('Remove') %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span id="btn-add-contact" class="btn btn-default btn-sm"><i class="fa fa-plus"></i> <%= t('Add a contact') %></span>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Billing') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label><%= t('Specify the elements for the establishment of invoices and rent notices') %></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Customer Identification Number') %></label>
+                        <input type="text" id="reference" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Subject to VAT') %></label>
+                        <select id='isVat' class="js-form-field-not-editable form-control" >
+                            <option value="true"><%= t('Yes') %></option>
+                            <option value="false"><%= t('No') %></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-8 js-occupant-form-vatratio">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('VAT ratio in %') %></label>
+                        <input type="number" min="0" max="100" id="vatRatio" class="js-form-field-not-editable form-control">
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Billing address') %></label>
+                        <input type="text" id="street1" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <input type="text" id="street2" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('ZIP code') %></label>
+                        <input type="text" id="zipCode" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('City') %></label>
+                        <input type="text" id="city" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-header"><%= t('Discount') %></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label></label>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label class="control-label"><%= t('Amount without VAT') %></label>
+                <input type="number" id="discount" min="0" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="well well-sm form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+</form>

@@ -144,7 +144,7 @@
     "New organization": "Nouvelle organisation",
     "Next": "Suivant",
     "No": "Non",
-    "No account yet?": "Pas encore de compte",
+    "No account yet?": "Pas encore de compte ?",
     "Not paid": "Impayés",
     "Notice letter for rent payment": "Simple demande de paiement de loyer",
     "Only the payment of rent period are authorized. Please enter a date between": "Seul le paiement du loyer de {{period}} est autorisé. La date de règlement doit être entre le {{minDate}} et le {{maxDate}}",

@@ -3,6 +3,8 @@ import fs from 'fs-extra';
 import {rollup} from 'rollup';
 import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
+import commonjs from 'rollup-plugin-commonjs';
+import nodeResolve from 'rollup-plugin-node-resolve';
 import includePaths from 'rollup-plugin-includepaths';
 import path from 'path';
 import less from 'less';
@@ -15,7 +17,9 @@ import imageminPngquant from 'imagemin-pngquant';
 // directories
 const root_directory = path.join(__dirname, '..');
 const frontend_directory = path.join(root_directory, 'frontend');
-const view_directory = path.join(frontend_directory, 'view');
+const backend_directory = path.join(root_directory, 'backend');
+const view_directory = path.join(backend_directory, 'views');
+const js_directory = path.join(frontend_directory, 'js');
 const less_directory = path.join(frontend_directory, 'less');
 const image_directory = path.join(frontend_directory, 'images');
 const locale_directory = path.join(frontend_directory, 'locales');
@@ -32,7 +36,7 @@ const images_pattern = path.join(image_directory, '/**/*.{jpg,png}');
 const buildCss = (opts) => {
     return new Promise(function (resolve, reject) {
         fs.ensureDir(dist_css_directory);
-        const code = fs.readFileSync(path.join(less_directory, `index_${opts.name}.less`), 'utf8');
+        const code = fs.readFileSync(path.join(less_directory, `${opts.name}.less`), 'utf8');
         less.render(code, {
             paths: [less_directory]
         }).then((output) => {
@@ -149,6 +153,11 @@ const clean = (directory) => {
 
 const plugins = () => {
     const list = [
+        nodeResolve({
+            jsnext: true,
+            main: true
+        }),
+        commonjs(),
         babel({
             babelrc: false,
             presets: ['es2015-rollup']
@@ -163,7 +172,8 @@ const plugins = () => {
                 'jquery',
                 'minivents',
                 'moment',
-                'sugar'
+                'sugar',
+                'frontexpress'
             ]
         })
     ];
@@ -189,7 +199,8 @@ const bundleOptions = (name) => {
             'jquery': '$',
             'minivents': 'Events',
             'moment': 'moment',
-            'sugar': 'Sugar'
+            'sugar': 'Sugar',
+            'frontexpress': 'frontexpress'
         },
         sourceMap: true
     };
@@ -199,29 +210,20 @@ const bundleOptions = (name) => {
 const print = {
     name: 'print',
     options: {
-        entry: path.join(view_directory, 'index_print.js'),
+        entry: path.join(js_directory, 'print.js'),
         plugins: plugins()
     },
     bundleOptions: bundleOptions('print')
 };
 
-const ppublic = {
-    name: 'public',
-    options: {
-        entry: path.join(view_directory, 'index_public.js'),
-        plugins: plugins()
-    },
-    bundleOptions: bundleOptions('public')
-};
-
-const restricted = {
-    name: 'restricted',
+const index = {
+    name: 'index',
     extJs: [path.join(root_directory, 'node_modules', 'bootbox', 'bootbox.js')],
     options: {
-        entry: path.join(view_directory, 'index_restricted.js'),
-        plugins: plugins('restricted')
+        entry: path.join(js_directory, 'index.js'),
+        plugins: plugins()
     },
-    bundleOptions: bundleOptions('restricted')
+    bundleOptions: bundleOptions('index')
 };
 
 if (process.argv.length > 2) {
@@ -232,8 +234,7 @@ if (process.argv.length > 2) {
     case 'js':
         clean(dist_js_directory)
         .then(buildJs(print))
-        .then(buildJs(ppublic))
-        .then(buildJs(restricted))
+        .then(buildJs(index))
         .then(console.log('js files rebuilt'))
         .catch((reason) => {
             throw reason;
@@ -242,8 +243,7 @@ if (process.argv.length > 2) {
     case 'css':
         clean(dist_css_directory)
         .then(buildCss(print))
-        .then(buildCss(ppublic))
-        .then(buildCss(restricted))
+        .then(buildCss(index))
         .then(console.log('less files rebuilt'))
         .catch((reason) => {
             throw reason;
@@ -273,10 +273,8 @@ if (process.argv.length > 2) {
     clean()
     .then(buildJs(print))
     .then(buildCss(print))
-    .then(buildJs(ppublic))
-    .then(buildJs(restricted))
-    .then(buildCss(ppublic))
-    .then(buildCss(restricted))
+    .then(buildJs(index))
+    .then(buildCss(index))
     .then(buildImg())
     .then(copyLocales())
     .then(copyRobots())
