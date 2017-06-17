@@ -83,7 +83,7 @@ class Form {
         this.beforeSetData(arguments);
 
         if (!formData) {
-            formData = self.options.defaultData;
+            formData = this.options.defaultData;
         }
         const filteredData = ObjectFilter.filter(this.options.defaultData, formData);
         updateFormWithData(filteredData);
