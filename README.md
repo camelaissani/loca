@@ -45,7 +45,7 @@ Node, Express, MongoDB, EJS (templates), PassportJS (authentication)
 
 Front-End:
 
-JQuery, Bootstrap, Handlebars, and my own implementation for managing routes
+JQuery, Bootstrap, Handlebars, and [frontexpress](https://github.com/camelaissani/frontexpress)
 
 Build system based on RollupJS
 
