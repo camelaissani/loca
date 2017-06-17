@@ -10,29 +10,23 @@ body {
     padding-bottom: 15px;
     margin-bottom: @footer-height;
 
-    &.covered-body {
-        background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
-        webkit-background-size: cover;
-        moz-background-size: cover;
-        o-background-size: cover;
-        background-size: cover;
+}
+.covered-body {
+    background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
+    webkit-background-size: cover;
+    moz-background-size: cover;
+    o-background-size: cover;
+    background-size: cover;
 
-        font-family: "Open Sans",Arial,sans-serif;
-        .view {
+    font-family: "Open Sans",Arial,sans-serif;
+    .view {
+        color: #fff;
+        a {
             color: #fff;
-            a {
-                color: #fff;
-            }
-            .h1, .h2, .h3, .h4, .h5, h1, h2, h3, h4, h5 {
-                color: #fff;
-            }
-            .h1, h1 {
-                font-size: 2em;
-            }
-
-            .h2, h2 {
-                font-size: 1.5em;
-            }
+        }
+        h1, h2, h3, h4, h5, h6,
+        .h1, .h2, .h3, .h4, .h5, .h6 {
+            color: #fff;
         }
     }
 }
