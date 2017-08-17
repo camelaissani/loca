@@ -218,7 +218,6 @@ const print = {
 
 const index = {
     name: 'index',
-    extJs: [path.join(root_directory, 'node_modules', 'bootbox', 'bootbox.js')],
     options: {
         entry: path.join(js_directory, 'index.js'),
         plugins: plugins()
