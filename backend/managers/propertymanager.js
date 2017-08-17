@@ -56,12 +56,12 @@ function add(req, res) {
     const realm = req.realm;
     const property = propertyModel.schema.filter(req.body);
 
-    propertyModel.add(realm, property, (errors) => {
+    propertyModel.add(realm, property, (errors, dbProperty) => {
         if (errors) {
             res.json({errors: errors});
             return;
         }
-        _toPropertiesData(realm, [property], (errors, properties) => {
+        _toPropertiesData(realm, [dbProperty], (errors, properties) => {
             if (errors && errors.length > 0) {
                 res.json({errors: errors});
                 return;
