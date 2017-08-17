@@ -27,14 +27,12 @@ fs.readdirSync(root_pages_dir)
     logger.debug(`loaded page ${page}`);
 });
 
-const list = [
-    ...publicList,
-    ...restrictedList,
-    ...publicRestrictedList
-];
-
 export default {
-    list,
+    list: [
+        ...publicList,
+        ...restrictedList,
+        ...publicRestrictedList
+    ],
     publicList,
     restrictedList,
     publicRestrictedList
