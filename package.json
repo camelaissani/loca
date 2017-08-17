@@ -14,8 +14,8 @@
     "watch:img": "babel-watch -x -e [.png,.jpg] -w frontend/images scripts/build.js img",
     "builddev": "babel-node scripts/build.js static",
     "lint": "eslint .",
-    "test-only": "babel-node node_modules/mocha/bin/_mocha",
-    "test": "npm run lint && babel-node node_modules/babel-istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha",
+    "test-only": "LOCA_DEMOMODE=false LOCA_PRODUCTIVE=true babel-node node_modules/mocha/bin/_mocha",
+    "test": "npm run lint && LOCA_DEMOMODE=false LOCA_PRODUCTIVE=true babel-node node_modules/babel-istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha",
     "mongodump": "node scripts/mongodump.js",
     "mongorestore": "node scripts/mongorestore.js"
   },
