@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+
+	<body>
+		<%
+		rents.forEach(function(rent) {
+			var occupant = rent.occupant;
+			today = rent.invoiceDate;
+		%>
+
+		<div class="page invoice">
+			<%- include partials/header.ejs %>
+
+	        <%- include partials/customeraddress.ejs %>
+
+			<%- include partials/placeanddate.ejs %>
+
+	        <div class="title">Quittance</div>
+
+			<%- include partials/customerreference.ejs %>
+
+			<div class="items">
+				<table>
+				  <%- include partials/invoicebody %>
+
+				  <%- include partials/invoicetotal %>
+				</table>
+			</div>
+			<%- include partials/footer %>
+		</div>
+		<%
+		});
+		%>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

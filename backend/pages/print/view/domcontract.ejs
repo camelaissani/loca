@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+ 	<%- include partials/htmlhead.ejs %>
+
+	<body>
+		<% occupants.forEach(function(occupant, index) { %>
+		<div class="document">
+		<div class="first page contract">
+			<%- include partials/header.ejs %>
+
+			<div class="object">Contrat de<br>domiciliation commerciale</div>
+
+			<div class="items">
+				<p>
+					<strong><u>ENTRE</u></strong></p>
+				</p>
+				<p>
+					<%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
+					<% if (realm.street2 && realm.street2.length>0) { %>
+			        <%= realm.street2 %>
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+				</p>
+
+				<p>Ci-après dénommé « LE DOMICILIATAIRE »</p>
+
+				<p class="text-right"><u>D'UNE PART</u>,</p>
+				<p>
+					<strong><u>ET</u></strong></p>
+				</p>
+
+				<p>
+					<strong><span contenteditable="true"><%= occupant.name %> <%= occupant.legalForm %></span>,</strong>
+					<br>au capital de <span contenteditable="true"><% if (typeof(occupant.capital)=='number') { %> <%=occupant.capital.toFixed(2)%> <% } else { %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% } %></span> EUR,
+					<br>ayant son siège social au :
+					<p>
+						<%= realm.street1 %>
+		            	<% if (realm.street2 && realm.street2.length>0) { %>
+		            	<br><%= realm.street2 %>
+		            	<% } %>
+		            	<br><%= realm.zipCode %> <%= realm.city %>
+					</p>
+				</p>
+
+				<p>
+					<span contenteditable="true">Inscrit au Registre de Commerce de PARIS sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur <%= occupant.manager %></span> en qualité de <span contenteditable="true">gérant</span>.
+				<p>
+
+				<p>Ci-après dénommé « LE DOMICILIÉ »</p>
+
+				<p class="text-right"><u>D'AUTRE PART</u></p>
+			</div>
+			<div class="footer text-right">1/3</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>Il a été arrêté et convenu ce qui suit :</p>
+
+				<p><u>Article 1 : Objet</u></p>
+				<p>
+					Le présent contrat a pour objet la domiciliation du siège social de l'entreprise domiciliée conformément aux dispositions de l'article R. 123-168 du Code de commerce.
+				</p>
+
+				<p><u>Article 2 : Prestations</u></p>
+				<p>
+					Le domiciliataire s'engage à faire bénéficier l'entreprise domiciliée des prestations suivantes : utilisation de l'adresse du domiciliataire comme adresse du siège social de l'entreprise domiciliée, réception et stockage du courrier quotidien.
+				</p>
+
+				<p><u>Article 3 : Obligations</u></p>
+				<p>Article 3-1 : Obligations du domiciliataire</p>
+				<p>
+					Le domiciliataire s'engage à :
+					<ul>
+						<li>être immatriculé au Registre du Commerce et des sociétés ou au Répertoire des Métiers ;</li>
+						<li>mettre à la disposition du domicilié des locaux permettant une réunion régulière des organes chargés de la direction, de l'administration ou de la surveillance de l'entreprise et l'installation des services nécessaires à la tenue, à la conservation et à la consultation des livres, registres et documents prescrits par les lois et règlements ;</li>
+						<li>informer le greffe du tribunal, à l'expiration du contrat ou, en cas de résiliation de celui-ci, de la cessation de la domiciliation de l'entreprise dans ses locaux.</li>
+					</ul>
+				</p>
+				<p>Article 3-2 : Obligations de l'entreprise domiciliée</p>
+				<p>
+					Durant toute la durée du présent contrat, l'entreprise domiciliée s'engage à :
+				    <ul>
+				    	<li>utiliser effectivement et exclusivement les locaux, soit comme siège de l'entreprise, soit si le siège est situé à l'étranger comme agence, succursale ou représentation ;</li><li>tenir informé le domiciliataire de toute modification concernant son activité ;</li>
+				    	<li>déclarer tout changement relatif à sa forme juridique et son objet, ainsi qu'au nom et au domicile personnel des personnes ayant le pouvoir de l'engager à titre habituel ;</li>
+				    	<li>donner mandat au domiciliataire, qui l'accepte, de recevoir en son nom toute notification.</li>
+				    </ul>
+				</p>
+
+				<p><u>Article 4 : Durée</u></p>
+				<p>
+					La domiciliation est consentie pour une durée de <span contenteditable="true">douze mois</span> à compter du <span contenteditable="true"><%= occupant.beginDate %></span>.<br>
+					Elle sera ensuite renouvelée, par tacite reconduction, de <span contenteditable="true">douze mois</span>, sauf résiliation notifiée par l'une ou l'autre des parties par lettre recommandée avec accusé de réception et expédiée au moins <span contenteditable="true">trois mois</span> avant le terme fixé.<br>
+					À l'expiration du présent contrat ou en cas de résiliation de celui-ci, et conformément à l'article 3-1, le domiciliataire s'engage à informer le greffe du tribunal de commerce de <span contenteditable="true">PARIS</span> de la cessation de la domiciliation.
+				</p>
+			</div>
+			<div class="footer text-right">2/3</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><u>Article 5 : Redevance</u></p>
+				<p>
+					Le présent contrat est consenti moyennant un loyer mensuel de <span contenteditable="true">100 euros (cent euros)</span>, hors taxes, payable d'avance, le premier jour de chaque mois, couvrant l'ensemble des prestations mentionnées à l'article 2.
+	 			</p>
+
+	 			<p><u>Article 6 : Dépôt de garantie</u></p>
+				<p>
+		 			L'entreprise domiciliée verse, à la date de signature du présent contrat, à titre de dépôt de garantie, la somme de <span contenteditable="true">100 euros (cent euros)</span> correspondant à <span contenteditable="true">un mois</span> de loyer, hors taxes, en garantie notamment du paiement du loyer.<br>
+					À chaque réajustement du loyer, le dépôt de garantie sera diminué ou majoré de manière à toujours correspondre à <span contenteditable="true">un mois</span> de loyer, hors taxes.<br>
+					À la fin du contrat, ce dépôt de garantie sera remboursé déduction faite des sommes qui pourraient être dues au domiciliataire. Il ne dispense pas l'entreprise domiciliée de payer tous les loyers jusqu'au terme prévu.<br>
+					Les sommes versées à titre de dépôt de garantie ne seront pas productives d'intérêt au profit de l'entreprise domiciliée.
+				</p>
+
+				<p><u>Article 7 : Attribution de juridiction</u></p>
+				<p>
+					Tout litige pouvant survenir entre les parties à l'occasion de l'exécution du présent contrat devra être porté devant le tribunal de commerce de <span contenteditable="true">PARIS</span>.
+				</p>
+
+				<p><u>Article 8 : Élection de domicile</u></p>
+				<p>
+					Les parties font élection de domicile à <%= realm.street1 %>
+					<% if (realm.street2 && realm.street2.length>0) { %>
+			        <%= realm.street2 %>
+			        <% } %> - <%=realm.zipCode%> <%=realm.city%>.
+				</p>
+
+				<p>
+					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span>, le <span contenteditable="true"><%=today%></span>
+				</p>
+				<p>
+					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
+				</p>
+				<p>
+					<br>&nbsp;
+					<br>&nbsp;
+					<br>&nbsp;
+					<br>&nbsp;
+				</p>
+				<p>
+					<span contenteditable="true">Madame/Monsieur <%=occupant.manager%> gérant de <%=occupant.name%> <%=occupant.legalForm%></span>
+				</p>
+			</div>
+			<div class="footer text-right">3/3</div>
+		</div>
+		</div>
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

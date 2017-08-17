@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+
+	<body>
+		<%
+		occupants.forEach(function(occupant, index) {
+		%>
+
+		<div class="page">
+			<%- include partials/header.ejs %>
+
+	        <%- include partials/customeraddress.ejs %>
+
+
+			<%- include partials/placeanddate.ejs %>
+
+			<div class="reference">
+			  <b>Lettre RAR n° <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></b>
+			  <br>Copie lettre simple
+			</div>
+
+			<div class="object">
+	          <strong>Objet</strong> : Paiement de dépôt de garantie
+			</div>
+
+			<div class="items">
+			<p>
+				<span contenteditable="true">Madame, Monsieur,</span>
+				<br>&nbsp;
+			</p>
+
+			<p>
+				Nous avons conclu ensemble un contrat de bail portant sur la location de locaux situés :
+			</p>
+			<p>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.street1 %>
+	    	<% if (occupant.street2 && occupant.street2.length>0) { %>
+	        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.street2 %>
+	        <% } %>
+			<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.zipCode %> <%= occupant.city %>
+			</p>
+			<p>
+				Conformément au paragraphe "DEPOT DE GARANTIE" de ce contrat, nous vous demandons de bien vouloir nous faire parvenir par retour de courrier le réglement de votre dếpôt de garantie correspondant au montant de <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> euros.
+			</p>
+
+			<p>
+				Dans cette attente, veuillez agréer, <span contenteditable="true">Madame, Monsieur</span>, l'assurance de nos sentiments distingués.
+			</p>
+			<%- include partials/ownermanagersignature %>
+			</div>
+
+			<%- include partials/footer %>
+		</div>
+
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

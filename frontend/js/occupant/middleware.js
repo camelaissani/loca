@@ -158,7 +158,7 @@ class OccupantMiddelware extends ViewController {
             const month = $action.data('month');
             const year = $action.data('year');
             const occupantId = $action.data('occupantId');
-            let url = `/api/documents/print/invoice/occupants/${occupantId}/${year}`;
+            let url = `/print/invoice/occupants/${occupantId}/${year}`;
             if (month) {
                 url += `/${month}`;
             }
@@ -212,49 +212,49 @@ class OccupantMiddelware extends ViewController {
     onInitListener() {
         $(document).on('click', '#view-occupant #printofficechecklist', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/checklist/occupants/${selection}`);
+            application.openPrintPreview(`/print/checklist/occupants/${selection}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/contract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/contract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printcustomcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/customcontract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/customcontract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printdomcontract', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/domcontract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/domcontract/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantycertificate', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/guarantycertificate/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/guarantycertificate/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantypayback', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/guarantypaybackcertificate/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/guarantypaybackcertificate/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printguarantyrequest', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/guarantyrequest/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/guarantyrequest/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-occupant #printinsurancerequest', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/insurance/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/insurance/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 

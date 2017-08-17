@@ -1,5 +1,15 @@
 'use strict';
 
+const debugMode = process.env.NODE_ENV !== 'production';
+
+import logger from 'winston';
+// configure default logger
+logger.remove(logger.transports.Console);
+logger.add(logger.transports.Console, {
+    level: debugMode ? 'debug' : 'info',
+    colorize: true
+});
+
 import i18next from 'i18next';
 import i18nMiddleware,{LanguageDetector} from 'i18next-express-middleware';
 import i18nFS from 'i18next-node-fs-backend';
@@ -12,7 +22,6 @@ import bodyParser from 'body-parser';
 import cookieSession from 'cookie-session';
 import errorHandler from 'errorhandler';
 import passport from 'passport';
-import logger from 'winston';
 import expressWinston from 'express-winston';
 import path from 'path';
 import moment from 'moment';
@@ -20,16 +29,8 @@ import config from './config';
 import routes from './backend/routes';
 import db from './backend/models/db';
 
-const debugMode = process.env.NODE_ENV !== 'production';
 
 const dist_directory = path.join(__dirname, 'dist');
-
-// Reconfigure default logger
-logger.remove(logger.transports.Console);
-logger.add(logger.transports.Console, {
-    level: debugMode ? 'debug' : 'info',
-    colorize: true
-});
 
 // Init locale
 i18next.use(LanguageDetector)
@@ -87,7 +88,7 @@ app.use('/public/pdf', express.static(path.join(dist_directory, 'pdf')));
 app.use('/robots.txt', express.static(path.join(dist_directory, 'robots.txt')));
 app.use('/sitemap.xml', express.static(path.join(dist_directory, 'sitemap.xml')));
 
-app.set('views', path.join(__dirname, 'backend', 'views'));
+app.set('views', path.join(__dirname, 'backend', 'pages'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 

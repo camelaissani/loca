@@ -1,17 +1,13 @@
 import $ from 'jquery';
-import BaseViewMiddleware from '../baseview_middleware';
+import frontexpress from 'frontexpress';
 
-class WebsiteMiddleware extends BaseViewMiddleware {
+class WebsiteMiddleware extends frontexpress.Middleware {
 
     // overriden
     entered() {
-        // show footer and background image
         $('body').addClass('covered-body');
         $('body > .footer').show();
     }
-
-    // overriden
-    exited() {}
 }
 
 export default WebsiteMiddleware;

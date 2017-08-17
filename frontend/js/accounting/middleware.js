@@ -64,7 +64,7 @@ class AccountingMiddleware extends ViewController {
             const month = $action.data('month');
             const year = $action.data('year');
             const occupantId = $action.data('occupantId');
-            let url = `/api/documents/print/invoice/occupants/${occupantId}/${year}`;
+            let url = `/print/invoice/occupants/${occupantId}/${year}`;
             if (month) {
                 url += `/${month}`;
             }

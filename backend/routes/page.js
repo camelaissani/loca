@@ -1,25 +1,14 @@
 'use strict';
 
+import path from 'path';
 import express from 'express';
-import logger from 'winston';
 import config from '../../config';
+import pages from '../pages';
 
-export const defaultLoggedView = 'dashboard';
-const knownViews = [
-    'accounting',
-    'dashboard',
-    'occupant',
-    'owner',
-    'property',
-    'rent',
-    'selectrealm',
-    'website'
-];
-
-function buildModel(view, req) {
-    return {
+function buildModel(pageId, req, callback) {
+    req.model = {
         config,
-        view,
+        view: pageId,
         isLogged: req.user ? true : false,
         isRealmSelected: req.realm ? true : false,
         isDefaultRealmSelected: req.realm && req.realm.name === '__default_',
@@ -29,61 +18,30 @@ function buildModel(view, req) {
         realms: req.realms,
         errors: null
     };
+    const modelFn = require(path.join('..', 'pages', pageId, 'model')).default;
+    modelFn(req, callback);
 }
 
-function renderPage(view, req, res) {
-    const model = buildModel(view, req);
-    res.render('index', model);
-}
-
-function renderView(view, req, res) {
-    const model = buildModel(view, req);
-    res.render(`${view}/index`, model);
+function renderPage(pageId, req, res, pageWithHeaders=true) {
+    const page = pageWithHeaders ? 'index' : `${pageId}/view/index`;
+    res.render(page, req.model);
 }
 
 export default function () {
-
     const router = express.Router();
 
-    if (config.subscription) {
-        router.get('/signup', (req, res) => {
-            renderPage('signup', req, res);
+    pages.list.forEach(page => {
+        const params = page.params || '';
+        const path = page.id === 'website' ? params || '/' : `/${page.id}${params}`;
+        router.get(path, (req, res) => {
+            buildModel(page.id, req, () => renderPage(page.id, req, res, page.supportView));
         });
-    }
-
-    if (!config.demomode) {
-        router.get('/login', (req, res) => {
-            renderPage('login', req, res);
-        });
-    }
-
-    router.get('/selectrealm', (req, res) => {
-        renderPage('selectrealm', req, res);
-    });
-
-    router.get('/view/:view', (req, res) => {
-        const view = req.params.view;
-        if (knownViews.indexOf(view) === -1) {
-            res.redirect(`/page/${defaultLoggedView}`);
-            logger.info(`View ${view} is not valid. Redirecting to /page/${defaultLoggedView}`);
-            return;
+        if (page.supportView) {
+            router.get(`/view/${page.id}${params}`, (req, res) => {
+                buildModel(page.id, req, () => renderPage(page.id, req, res, false));
+            });
         }
-        renderView(view, req, res);
     });
-
-    router.get('/page/:view?', (req, res) => {
-        const view = req.params.view;
-        if (knownViews.indexOf(view) === -1) {
-            res.redirect(`/page/${defaultLoggedView}`);
-            logger.info(`View ${view} is not valid. Redirecting to /page/${defaultLoggedView}`);
-            return;
-        }
-        renderPage(view, req, res);
-    });
-
-    router.get('/website', (req, res) => renderView('website', req, res));
-    router.get('/', (req, res) => renderPage('website', req, res));
-
 
     return router;
 }

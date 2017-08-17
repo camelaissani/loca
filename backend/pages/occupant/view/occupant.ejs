@@ -1,0 +1,52 @@
+<div id="occupants" class="list">
+    <div data-id="occupant-form" class="js-sheet sheet card">
+        <%- include occupantform.ejs %>
+    </div>
+
+    <div data-id="contract-documents-form" class="js-sheet sheet card">
+        <%- include contractdocumentsform.ejs %>
+    </div>
+
+     <div data-id="invoices" class="js-sheet sheet card">
+        <h2 class="page-header"><%= t('Rental invoices') %></h2>
+        <%- include invoices.ejs %>
+    </div>
+
+    <div data-id="rents-history" class="js-sheet sheet card">
+        <%- include ../../rent/view/rentshistory.ejs %>
+    </div>
+
+    <div data-id="print-doc-selector" class="js-sheet sheet">
+        <div class="list-group card">
+            <a id="printcontract" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Business lease contract') %></h4>
+                <p class="list-group-item-text"><%= t('Business lease contract terminable after 3,6,9 years') %></p>
+            </a>
+            <a id="printcustomcontract" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Short business lease contract') %></h4>
+                <p class="list-group-item-text"><%= t('Short business lease contract maximum duration 2 years') %></p>
+            </a>
+            <a id="printdomcontract" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Domiciliation contract') %></h4>
+                <p class="list-group-item-text"><%= t('Domiciliation contract (mailbox rental)') %></p>
+            </a>
+            <a id="printofficechecklist" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Inventory') %></h4>
+                <p class="list-group-item-text"><%= t('Print and fill this form before giving the keys to the tenant') %></p>
+            </a>
+            <a id="printguarantycertificate" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-file-text-o"></i> <%= t('Certificate of deposit') %></h4>
+                <p class="list-group-item-text"><%= t('Letter that certifies the payment of deposit by the tenant') %></p>
+            </a>
+            <a id="printguarantyrequest" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> <%= t('Request of certificate of deposit') %></h4>
+                <p class="list-group-item-text"><%= t('Letter for requesting the payment of the deposit') %></p>
+            </a>
+            <a id="printinsurancerequest" href="#" class="list-group-item">
+                <h4 class="list-group-item-heading"><i class="fa fa-envelope-o"></i> <%= t('Request of insurance certificate') %></h4>
+                <p class="list-group-item-text"><%= t('Letter for requesting the insurance certificate - evidence of insurance') %></p>
+            </a>
+        </div>
+    </div>
+    <div class="js-list-content"></div>
+</div>

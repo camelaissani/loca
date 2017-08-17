@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+
+	<body>
+		<% occupants.forEach(function(occupant, index) { %>
+
+		<div class="page certificate">
+			<%- include partials/header.ejs %>
+
+	        <%- include partials/customeraddress.ejs %>
+
+			<%- include partials/placeanddate.ejs %>
+
+			<div class="object">
+	          Remboursement du dépôt de garantie
+			</div>
+
+			<div class="items">
+			<p>
+				Je soussigné <span contenteditable="true">Madame/Monsieur <%=occupant.manager%></span>
+			</p>
+			<p>
+				Avoir reçu la somme de <span contenteditable="true"><%=occupant.guaranty.toFixed(2)%></span> euros par <span contenteditable="true">chèque numéro &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> du bailleur <span contenteditable="true"><%= realm.company %></span>.
+			</p>
+			<p>
+				Ce montant correspond au remboursement du dépôt de garantie de locaux occupés par <%=occupant.name%> dans l'immeuble situé au :
+			</p>
+			<p>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.street1 %>
+		    	<% if (occupant.street2 && occupant.street2.length>0) { %>
+		        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.street2 %>
+		        <% } %>
+				<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.zipCode %> <%= occupant.city %>
+			</p>
+			<p>
+				<div class="signature">Signature du locataire
+				<br>précédée de la mention <i>(lu et approuvé)</i>:</div>
+			</p>
+			</div>
+
+			<%- include partials/footer %>
+		</div>
+	<% }); %>
+	<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

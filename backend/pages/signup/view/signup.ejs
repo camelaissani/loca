@@ -1,0 +1,36 @@
+<div class="form-card">
+    <div class="page-header text-center">
+        <h2><%= t("Create your account in few clicks") %></h2>
+        <h4><%= t("Get started - it's free.") %></h4>
+    </div>
+    <form id="signup-form" role="form" action="/signedup" method='post'>
+        <div class="form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+
+        <span class="small help-block text-right"><%= t('You already have an account?') %> <a class="js-nav-action" data-id="signin" href="#"><%= t('Sign in') %></a></span>
+
+        <div class="form-group">
+            <label class="control-label"><%= t('First name') %></label>
+            <input type="text" class="form-control" placeholder="<%= t('First name') %>" id="firstname" name="firstname">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"><%= t('Last name') %></label>
+            <input type="text" class="form-control" placeholder="<%= t('Last name') %>" id="lastname" name="lastname">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"><%= t('E-mail') %></label>
+            <input type="email" class="form-control" placeholder="<%= t('Your email address') %>" id="email" name="email">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label"><%= t('Password') %></label>
+            <input type="password" class="form-control" placeholder="<%= t('Your password') %>" id="password" name="password">
+        </div>
+
+        <button id="signup-send" type="button" class="btn btn-success"><%= t('Register') %></button>
+
+        <span class="small help-block"><%= t('By clicking Register, you accept the') %> <a href="/public/pdf/cgu.pdf"><%= t('Term of use') %></a></span>
+
+    </form>
+</div>

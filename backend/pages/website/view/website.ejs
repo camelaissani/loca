@@ -1,0 +1,17 @@
+<h1><center><%= t(config.website.product.slogan) %></center></h1>
+<% if (!isLogged) { %>
+<div class="text-center centeredbtn">
+    <% if (config.demomode) { %>
+        <a class="btn btn-success btn-lg" href="/signin"><%= t('Demonstration') %></a>
+    <% } else { %>
+        <% if (!config.subscription) { %>
+            <a class="btn btn-primary btn-lg" disabled><%= t('Free subscription') %></a>
+        <% } else { %>
+            <a class="btn btn-primary btn-lg js-nav-action" data-id="signup" href="#"><%= t('Free subscription') %></a>
+        <% } %>
+        <p>
+            <%= t('You already have an account?') %> <a class="js-nav-action" data-id="signin" href="#"><%= t('Sign in') %></a>
+        </p>
+    <% } %>
+</div>
+<% } %>

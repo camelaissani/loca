@@ -9,7 +9,6 @@ import * as loginManager from '../backend/managers/loginmanager';
 import * as rentManager from '../backend/managers/rentmanager';
 import * as occupantManager from '../backend/managers/occupantmanager';
 import * as documentManager from '../backend/managers/documentmanager';
-import * as printManager from '../backend/managers/printmanager';
 import * as propertyManager from '../backend/managers/propertymanager';
 import * as ownerManager from '../backend/managers/ownermanager';
 import * as notificationManager from '../backend/managers/notificationmanager';
@@ -91,45 +90,6 @@ describe('api', () => {
                 }
                 assert(mocked_update.calledOnce);
                 documentManager.default.update.restore();
-                done();
-            });
-        });
-        it('GET    /api/documents/print/:id/occupants/:ids/:year/:month', (done) => {
-            const mocked_print = sinon.stub(printManager.default, 'print', (req, res) => {res.json({});});
-            requester(apiRouter(), {httpMethod: 'get', uri: '/api/documents/print/adoc/occupants/1234/2017/02'})
-            .expect(200)
-            .end((err) => {
-                if (err) {
-                    throw err;
-                }
-                assert(mocked_print.calledOnce);
-                printManager.default.print.restore();
-                done();
-            });
-        });
-        it('GET    /api/documents/print/:id/occupants/:ids/:year', (done) => {
-            const mocked_print = sinon.stub(printManager.default, 'print', (req, res) => {res.json({});});
-            requester(apiRouter(), {httpMethod: 'get', uri: '/api/documents/print/adoc/occupants/1234/2017'})
-            .expect(200)
-            .end((err) => {
-                if (err) {
-                    throw err;
-                }
-                assert(mocked_print.calledOnce);
-                printManager.default.print.restore();
-                done();
-            });
-        });
-        it('GET    /api/documents/print/:id/occupants/ids', (done) => {
-            const mocked_print = sinon.stub(printManager.default, 'print', (req, res) => {res.json({});});
-            requester(apiRouter(), {httpMethod: 'get', uri: '/api/documents/print/adoc/occupants/1234'})
-            .expect(200)
-            .end((err) => {
-                if (err) {
-                    throw err;
-                }
-                assert(mocked_print.calledOnce);
-                printManager.default.print.restore();
                 done();
             });
         });

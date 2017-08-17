@@ -9,7 +9,6 @@ import propertyManager from '../managers/propertymanager';
 import ownerManager from '../managers/ownermanager';
 import notificationManager from '../managers/notificationmanager';
 import accountingManager from '../managers/accountingmanager';
-import printManager from '../managers/printmanager';
 
 export default function() {
     const router = express.Router();
@@ -28,7 +27,6 @@ export default function() {
 
     const documentsRouter = express.Router();
     documentsRouter.patch('/:id', documentManager.update);
-    documentsRouter.get('/print/:id/occupants/:ids/:year?/:month?', printManager.print);
     router.use('/documents', documentsRouter);
 
     const notificationsRouter = express.Router();

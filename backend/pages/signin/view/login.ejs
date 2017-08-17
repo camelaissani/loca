@@ -1,0 +1,25 @@
+<div class="form-card">
+    <div class="page-header text-center">
+        <h2><%= t('Sign in now') %></h2>
+        <h4><%= t('Manage your real estates') %></h4>
+    </div>
+    <form id="login-form" role="form" action="/signedin" method='post'>
+        <div class="form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
+
+        <% if (config.subscription) { %>
+        <span class="help-block small text-right"><%= t('No account yet?') %> <a class="js-nav-action" data-id="signup" href="#"><%= t('Free subscription') %></a></span>
+        <% } %>
+
+        <div class="form-group">
+            <label class="control-label"><%= t('E-mail') %></label>
+            <input type="email" class="form-control" id="username" name="username" placeholder="<%= t('Your email address') %>">
+        </div>
+        <div class="form-group">
+            <label class="control-label"><%= t('Password') %></label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="<%= t('Your password') %>">
+        </div>
+        <button id="login-send" type="button" class="btn btn-success"><%= t('Sign in') %></button>
+
+        <span class="help-block small text-right"><a id="forgot-password" class="js-nav-action" data-id="forgotpass" href="#"><%= t('Forgot password?') %></a></span>
+    </form>
+</div>

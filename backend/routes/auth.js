@@ -2,7 +2,6 @@ import express from 'express';
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import logger from 'winston';
-import {defaultLoggedView} from './page';
 import config from '../../config';
 import loginManager from '../managers/loginmanager';
 
@@ -34,23 +33,24 @@ export default function() {
 
     if (config.subscription) {
         router.post('/signup', loginManager.signup);
-        router.post('/signedin', (req, res) => {
-            res.redirect('/login');
+        router.post('/signedup', (req, res) => {
+            res.redirect('/signin');
         });
     }
 
     if (config.demomode) {
-        router.get('/login', loginManager.loginDemo);
+        router.get('/signin', loginManager.loginDemo);
     } else {
-        router.post('/login', loginManager.login);
+        router.post('/signin', loginManager.login);
     }
 
-    router.all('/loggedin', (req, res) => {
-        res.redirect(`/page/${defaultLoggedView}`);
+    router.all('/signedin', (req, res) => {
+        // TODO remove harcoded page dashboard
+        res.redirect('/dashboard');
     });
 
-    router.get('/logout', (req, res) => {
-        logger.info('Logout and redirect to /');
+    router.get('/signout', (req, res) => {
+        logger.info('sign out and redirect to /');
         req.logout();
         req.session = null;
         res.redirect('/');

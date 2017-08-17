@@ -9,7 +9,7 @@ class ContractDocumentsForm extends Form {
     constructor() {
         super({
             domSelector,
-            uri: '/api/documents',
+            uri: '',
             manifest: {
                 'name_0': {
                     minlength: 2

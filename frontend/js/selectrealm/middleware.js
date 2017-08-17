@@ -20,7 +20,7 @@ class SelectRealmMiddleware extends ViewController {
                     const response = JSON.parse(res.responseText);
                     const location = window.location;
                     if (response.status === 'success') {
-                        window.location = `${location.origin}/page/dashboard`;
+                        window.location = `${location.origin}/dashboard`;
                     }
                 }
             );

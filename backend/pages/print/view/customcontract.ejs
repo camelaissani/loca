@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+	<body>
+	<% occupants.forEach(function(occupant, index) { %>
+		<div class="document">
+		<div class="first page contract">
+			<%- include partials/header.ejs %>
+
+			<div class="object">
+			BAIL PRECAIRE<br>
+			<small>Non soumis au décret du 30 septembre 1953</small>
+			</div>
+
+			<div class="items">
+				<p>
+					<strong><u>ENTRE LES SOUSSIGNES</u></strong></p>
+				</p>
+				<p>
+					LA SOCIETE <%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
+					<% if (realm.street2 && realm.street2.length>0) { %>
+			        <%= realm.street2 %>
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+				</p>
+
+				<p>Ci-après dénommé « LE BAILLEUR »</p>
+
+				<p class="text-right"><u>D'UNE PART</u>,</p>
+				<p>
+					<strong><u>ET</u></strong></p>
+				</p>
+
+				<p>
+					<strong><%= occupant.name %> <%= occupant.legalForm %>,</strong>
+					<br>au capital de <span contenteditable="true"><% if (typeof(occupant.capital)=='number') { %> <%=occupant.capital.toFixed(2)%> <% } else { %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% } %></span> EUR,
+					<br>ayant son siège social au :
+					<p>
+						<%= realm.street1 %>
+		            	<% if (realm.street2 && realm.street2.length>0) { %>
+		            	<br><%= realm.street2 %>
+		            	<% } %>
+		            	<br><%= realm.zipCode %> <%= realm.city %>
+					</p>
+				</p>
+
+				<p>
+					<span contenteditable="true">Inscrit au Registre de Commerce de PARIS sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur</span> <%= occupant.manager %> en qualité de <span contenteditable="true">gérant</span>.
+				<p>
+
+				<p>Ci-après dénommé « LE PRENEUR »</p>
+
+				<p class="text-right"><u>D'AUTRE PART</u></p>
+			</div>
+			<div class="footer text-right">1/6</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><strong>LESQUELLES ONT ETABLI ENSEMBLE LES CONVENTIONS DE BAIL, OBJET DES PRESENTES : IL A ETE ARRETE ET CONVENU CE QUI SUIT :</strong></p>
+				<p>
+					<%= realm.legalForm+' '+realm.company %> donne à bail au Preneur qui accepte, les locaux dont le plan est joint en annexe A, et dont la consistance, la désignation et la destination sont ci-après établies, tels qu'ils existent.
+				</p>
+
+
+				<p><u>ARTICLE I- DESIGNATION DES LIEUX :</u></p>
+				<p>
+					Dans un immeuble situé à <%= realm.street1 %>
+					<% if (realm.street2 && realm.street2.length>0) { %>
+			        <%= realm.street2 %>
+			        <% } %> - <%=realm.zipCode%> <%=realm.city%>, un local à usage de bureau ou d’activité d'une superficie de <span contenteditable="true"><%= occupant.office.surface.toFixed(2) %></span> m².
+				</p>
+				<p>
+					Tels que lesdits locaux existent, s'étendent, se poursuivent et comportent et sans qu'il soit besoin d'en faire plus ample désignation à la demande du preneur qui déclare parfaitement les connaître pour les avoir vus et visités en vue des présentes.
+				</p>
+
+				<p><u>ARTICLE II- DUREE </u></p>
+				<p>
+					Le présent bail est consenti et accepté pour une durée de <span contenteditable="true"><%=occupant.durationInMonth%></span> MOIS non renouvelable, commençant à courir le <span contenteditable="true"><%= occupant.beginDate %></span>.
+				</p>
+				<p>
+					De convention expresse entre les parties, le présent bail est exclu du champ d’application du Décret du 30 septembre 1953 aux dispositions duquel les parties entendent formellement déroger.
+				</p>
+				<p>
+					Le PRENEUR aura la faculté de donner congé à tout moment par lettre recommandée avec avis de réception et au moins un mois à l’avance.
+				</p>
+
+				<p><u>ARTICLE III- DESTINATION :</u></p>
+				<p>
+					Le preneur devra occuper les  lieux loués par lui-même, paisiblement, conformément aux articles 1728 et 1729 du Code Civil et pour une activité d’ ENTREPOT et toutes activités s’y rapportant.
+				</p>
+
+				<p><u>ARTICLE IV- ENTRETIEN :</u></p>
+				<p>
+					Le preneur aura la charge des réparations locatives et devra rendre les lieux en bon état desdites réparations à l’expiration du bail.
+					Il devra notamment faire entretenir et remplacer, si besoin est, tout ce qui concerne les installations à usage personnel, ainsi que les fermetures et serrures des fenêtres et portes, les glaces, vitres, parquets, carrelage, revêtements de sol.
+				</p>
+				<p>
+					Il sera responsable des accidents causés par et à ces objets.
+				</p>
+				<p>
+					Le PRENEUR sera également responsable de toutes réparations normalement à la charge du BAILLEUR, mais qui seraient nécessitées soit par le défaut d’exécution des réparations dont le PRENEUR a la charge, comme il est dit ci-dessus, soit par des dégradations résultant de son fait, du fait de son personnel ou de ses visiteurs, soit dans les lieux loués, soit dans d’autres parties de l’immeuble.
+				</p>
+
+			</div>
+			<div class="footer text-right">2/6</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><u>ARTICLE V- REPARATIONS ET TRAVAUX DANS L’IMMEUBLE :</u></p>
+
+				<p>
+					Le PRENEUR souffrira, quelque  gêne qu’elles lui causent, les réparations, reconstructions, surélévations et travaux quelconques  qui seront exécutés dans l’immeuble, sans pouvoir demander aucune indemnité ni diminution de loyer, quelles qu’en soient l’importance et la durée et, par dérogation à l’article 1724 du Code Civil, alors même que cette dernière excéderait quarante jours .
+				</p>
+				<p>
+					Le PRENEUR devra aviser immédiatement le BAILLEUR de toute réparation à la charge de ce dernier dont il serait à même de  constater la nécessité sous peine d’être tenu responsable de toute aggravation résultant de son silence ou de son retard.
+				</p>
+				<p>
+					Le PRENEUR devra déposer à ses frais et sans délai tous coffrages et décorations, ainsi que toutes installations qu’il aurait faites et dont l’enlèvement sera utile pour la recherche et la réparation des fuites de toute nature, de fissures dans les conduits de fumée, ou de ventilation, notamment après incendie ou infiltrations et en général pour l’exécution de tous travaux.
+				</p>
+
+				<p><u>ARTICLE VI‑ TRANSFORMATIONS ET AMELIORATIONS PAR LE PRENEUR :</u></p>
+
+				<p>
+					Le PRENEUR ne pourra faire dans les lieux loués, aucun changement de distribution, aucune démolition, aucune amélioration, et plus généralement aucun travail d’aménagement intérieur ou extérieur sans l’accord express du BAILLEUR.
+				</p>
+				<p>
+					En cas d’autorisation, les travaux devront être exécutés sous la surveillance de l’architecte du BAILLEUR dont les honoraires seront à la charge du PRENEUR.
+				</p>
+				<p>
+					Tous embellissements, améliorations, réparations, travaux quelconques effectués par le PRENEUR dans les lieux loués accéderont, de plein droit et sans formalité au BAILLEUR, en fin de bail , sans indemnité d’aucune sorte, à moins que le BAILLEUR préfère une restitution des lieux loués en leur état d’origine.
+				</p>
+
+				<p><u>ARTICLE VII- GARNISSEMENT ET OBLIGATION D’EXPLOITER :</u></p>
+
+				<p>
+					Le PRENEUR devra maintenir les lieux loués constamment utilisés aux usages de sa profession.
+				</p>
+				<p>
+					Il devra en outre les garnir et le tenir constamment garnis de matériel, marchandises et objets mobiliers en quantité et de valeur suffisantes pour répondre en tous temps du paiement des loyers et paiements ou remboursements divers qui en sont l’accessoire
+				</p>
+
+				<p><u>ARTICLE VIII- ASSURANCES :</u></p>
+
+				<p>
+					Le PRENEUR devra faire assurer contre l’incendie, les explosions, la foudre, les dégâts des eaux, le bris de glaces, à une compagnie d’assurance française notoirement solvable, tous mobiliers, matériels, marchandises, glaces, embellissements, ainsi que les risques locatifs, le recours des voisins et sa responsabilité civile recours des voisins et sa responsabilité civile personnelle, étant entendu que le préjudice corporel devra être couvert en illimité et le préjudice matériel à concurrence de la valeur de remise à neuf.
+				</p>
+
+				<p>
+					De convention expresse, toute indemnité dues au PRENEUR  par toute compagnie d’assurance, en cas de sinistre pour quelque cause que ce soit, seront affectées au privilège du BAILLEUR, les présentes valant en tant que  de besoin transport à concurrence des sommes qui pourront être dues.
+				</p>
+			</div>
+			<div class="footer text-right">3/6</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					Si l’activité exercée par le PRENEUR entraînait, soit pour le BAILLEUR, soit pour les voisins ou locataires, des surprimes d’assurances, le PRENEUR sera tenu d’indemniser le BAILLEUR du montant de la surprime payée par lui et de garantir contre toute réclamation d’autres locataires ou voisins.
+				</p>
+
+				<p><u>ARTICLE IX- IMPOTS - TAXES :</u></p>
+
+				<p>
+					Le PRENEUR s’engage à satisfaire à toutes les charges de ville, de police et voirie, ou autres taxes nationales, régionales, départementales, municipales ou autres, de quelque nature que soient ces charges, de manière à ce que le BAILLEUR ne soit jamais inquiété à cet égard, et notamment à acquitter toute contribution personnelle et mobilière, taxe locative, taxe professionnelle et plus généralement tous impôts et taxes dont le BAILLEUR pourrait être responsable à un titre quelconque, de manière à ce que le loyer perçu par le BAILLEUR soit net et franc de tout frais quelconque.
+				</p>
+
+				<p><u>ARTICLE X- RESPECT DES PRESCRIPTIONS ADMNISTRATIVES ET AUTRES :</u></p>
+
+				<p>
+					Le PRENEUR devra se conformer aux prescriptions, règlements et ordonnances en vigueur, notamment en ce qui concerna la voirie, la salubrité, la police, la sécurité, l’inspection du travail et de manière générale à toutes prescriptions relatives à son activité, de façon à ce que le BAILLEUR ne puisse être inquiété, ni recherché.
+				</p>
+
+				<p>
+					S’il existe ou s’il vient à exister un règlement de jouissance ou un règlement de copropriété pour l’immeuble, le PRENEUR devra s’y conformer, comme il devra se conformer à toute décision régulièrement prise par l’assemblée des copropriétaires.
+				</p>
+
+				<p><u>ARTICLE XI- RESTITUTION DES LOCAUX :</u></p>
+
+				<p>
+					A l’occasion de l’expiration du bail, le PRENEUR devra prévenir le BAILLEUR de la date de son déménagement, un mois à l’avance, afin de permettre au BAILLEUR de faire à l’Administration fiscale les déclarations voulues.
+				</p>
+
+				<p>
+					Il devra rendre les clés le jour de son déménagement, même si ce dernier a lieu avant l‘expiration du terme en cours.
+				</p>
+
+				<p><u>ARTICLE XII- LOYER </u></p>
+
+				<p>
+					Le présent bail est consenti et accepté, moyennant un loyer mensuel Hors Charges de <span contenteditable="true"><%= (occupant.office.price).toFixed(2) %></span> EUR H.T, que le PRENEUR s’oblige à payer au BAILLEUR d’avance le premier jour de chaque mois.
+				</p>
+
+				<p>
+					Les paiements devront être effectués au domicile du BAILLEUR ou en tout autre endroit indiqué par lui.
+				</p>
+
+				<p>
+					Toute somme due à titre de loyer, charges ou accessoires et non payé à son échéance exacte sera, de plein droit et à dater de l’adit échéance, productive au profit du BAILLEUR d’un intérêt conventionnellement fixé à 1 % par mois de retard jusqu’à complet paiement.
+				</p>
+
+			</div>
+			<div class="footer text-right">4/6</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><u>ARTICLE XIII – CHARGES :</u></p>
+
+				<p>
+					Indépendamment du loyer et de la taxe qui s’y applique, le PRENEUR devra rembourser au BAILLEUR, sur justification,  toutes les charges locatives, contributions et charges de ville, police et de voirie auxquelles les locataires sont ordinairement tenus.
+				</p>
+
+				<p>
+					Il règlera à chaque terme de loyer la provision <span contenteditable="true"><%= (occupant.office.expense).toFixed(2) %></span> H.T.
+				</p>
+
+				<p>
+					Le compte étant soldé une fois l’an.
+				</p>
+
+				<p><u>ARTICLE XIV- DEPOT DE GARANTIE :</u></p>
+				<p>
+					Pour garantir l’exécution des obligations lui incombant, au titre des présentes, le preneur s’engage à verser au BAILLEUR la somme de <span contenteditable="true"><%= occupant.guaranty.toFixed(2) %></span> EUR, correspondant à <span contenteditable="true">trois mois</span> de loyer en principal, en garantie de paiement du loyer, de la bonne exécution des clauses  et conditions du présent bail, des réparations locatives et des sommes dues par le preneur dont le BAILLEUR pourrait être rendu responsable.
+				</p>
+
+				<p>
+					La différence en plus ou moins sera payée ou restituée après vérification desdites réparations, déménagement, remise des clés et production par le preneur de l’acquit de ses contributions et taxes ou droits quelconques.
+				</p>
+
+				<p>
+					De convention expresse, cette somme ne sera productive d’aucun intérêt au profit du PRENEUR.
+				</p>
+
+				<p>
+					A chaque réajustement de loyer, ce dépôt de garantie sera diminué ou majoré de manière à toujours correspondre à deux mois de loyer.
+				</p>
+
+				<p><u>ARTICLE XV- CLAUSE RESOLUTOIRE :</u></p>
+
+				<p>
+					A défaut de paiement à son échéance exacte d’un seul terme, ou fraction de terme de loyer ou accessoires quelconques, ou en cas d’inexécution de l’une des clauses et conditions du présent bail par le PRENEUR, et un  ( 1 ) mois  après un simple commandement de payer ou une sommation d’exécuter restée en toute ou partie sans effet, pendant ce délai, et contenant déclaration par le BAILLEUR de son intention d’user du bénéfice de la présente clause, le bail sera résilié de plein droit et sans formalité, même dans le cas de paiement ou d’exécution postérieure à l’expiration du délai ci-dessus.
+				</p>
+
+				<p>
+					Dans le cas ou le PRENEUR se refuserait à évacuer les lieux loués, son expulsion pourrait avoir lieu sans délai sur simple ordonnance de référé rendue par Monsieur le Président du Tribunal de Grande Instance de <span contenteditable="true">PARIS</span>, statuant en référé et exécutoire par provision, nonobstant appel.
+				</p>
+
+				<p><u>ARTICLE XVI- FRAIS – ELECTION DE DOMICILE :</u></p>
+
+				<p>
+					Tous les frais, droits et honoraires des présentes, ainsi que ceux qui en seront la suite et la conséquence seront supportés et acquittés par le PRENEUR, qui s’y oblige.
+				</p>
+				<p>
+					Pour l’exécution des présentes et de leurs suites, les parties soussignées font respectivement élection de domicile, savoir :
+					<ul>
+					<li>LE PRENEUR , dans les lieux loués;</li>
+					<li>LE BAILLEUR, en sa demeure sus indiquée.</li>
+					</ul>
+				</p>
+			</div>
+			<div class="footer text-right">5/6</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span>, le <span contenteditable="true"><%=today%></span>
+				</p>
+				<p>
+					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
+				</p>
+				<p>
+					<br>&nbsp;
+					<br>&nbsp;
+					<br>&nbsp;
+					<br>&nbsp;
+				</p>
+				<p>
+					<span contenteditable="true">Madame/Monsieur</span> <%=occupant.manager%> <span contenteditable="true">gérant</span> de <%=occupant.name%> <%=occupant.legalForm%>
+				</p>
+			</div>
+			<div class="footer text-right">6/6</div>
+		</div>
+		</div>
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

@@ -50,7 +50,7 @@ class ConnectionMiddleware extends frontexpress.Middleware {
 
         if (needAuthentication) {
             setTimeout(function(){
-                window.location.replace(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/login');
+                window.location.replace(location.protocol+'//'+location.hostname+(location.port ? ':'+location.port: '')+'/signin');
             }, 2000);
         }
     }

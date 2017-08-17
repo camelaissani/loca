@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import i18next from 'i18next';
 import SignupForm from './signupform.js';
-import BaseViewMiddleware from '../baseview_middleware';
+import frontexpress from 'frontexpress';
 
-class SignUpCtrl extends BaseViewMiddleware {
+class SignupMiddleware extends frontexpress.Middleware {
 
     constructor() {
         super();
@@ -12,15 +12,11 @@ class SignUpCtrl extends BaseViewMiddleware {
 
     // overriden
     entered() {
-        // show footer and background image
         $('body').addClass('covered-body');
         $('body > .footer').show();
     }
 
-    updated(req, res) {
-        super.updated(req, res);
-
-
+    updated() {
         this.form.bindForm();
         $('#signup-send').click(() => {
             this.form.submit((response) => {
@@ -51,4 +47,4 @@ class SignUpCtrl extends BaseViewMiddleware {
     }
 }
 
-export default SignUpCtrl;
+export default SignupMiddleware;

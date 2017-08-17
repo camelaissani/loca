@@ -161,7 +161,7 @@ function toPrintData(realm, doc, fromMonth, month, year, occupants) {
         months: Array.from(Array(13).keys()).slice(1), // [1,2..,12]
         occupants: occupants.map(occupant => toOccupantData(occupant)),
         config,
-        view: `printable/${doc}`,
+        document: doc,
         realm: realm.manager ? realm : {
             manager: '?',
             company: '?',

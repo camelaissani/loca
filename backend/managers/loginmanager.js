@@ -292,7 +292,7 @@ if (config.demomode) {
                     return;
                 }
                 logger.info('Login successful ' + email);
-                res.redirect('/loggedin');
+                res.redirect('/signedin');
             });
         }
 

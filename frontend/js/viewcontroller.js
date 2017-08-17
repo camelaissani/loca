@@ -1,10 +1,10 @@
-import frontexpress from 'frontexpress';
 import i18next from 'i18next';
+import BaseViewMiddleware from './baseview_middleware';
 import application from './application';
 import anilist from './lib/anilist';
 import anilayout from './lib/anilayout';
 
-class ViewController extends frontexpress.Middleware {
+class ViewController extends BaseViewMiddleware {
 
     constructor(config) {
         super();
@@ -117,6 +117,7 @@ class ViewController extends frontexpress.Middleware {
 
     // overriden
     updated() {
+        super.updated();
         const callbackEx = () => {
             if (this.onDataChanged) {
                 this.onDataChanged();
@@ -182,6 +183,8 @@ class ViewController extends frontexpress.Middleware {
     }
 
     entered() {
+        super.entered();
+
         if (this.onPageEntered) {
             this.onPageEntered();
         }

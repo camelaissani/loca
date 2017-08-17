@@ -2,19 +2,21 @@ import $ from 'jquery';
 import moment from 'moment';
 import Handlebars from 'handlebars';
 import i18next from 'i18next';
-import frontexpress from 'frontexpress';
+import BaseViewMiddleware from '../baseview_middleware';
 import application from '../application';
 import Helper from '../lib/helper';
 
-class DashboardMiddleware extends frontexpress.Middleware {
+class DashboardMiddleware extends BaseViewMiddleware {
 
     // overriden
     exited() {
+        super.exited();
         $('#view-dashboard .carousel').carousel('pause');
     }
 
     // overriden
     updated() {
+        super.updated();
         if (!this.notificationListTemplate) {
             this.notificationListTemplate = Handlebars.compile($('#notification-list-template').html());
         }

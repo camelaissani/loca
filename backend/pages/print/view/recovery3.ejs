@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<%- include partials/htmlhead.ejs %>
+
+	<body>
+		<%
+		rents.forEach(function(rent) {
+			var occupant = rent.occupant;
+		%>
+
+		<div class="page">
+			<%- include partials/header.ejs %>
+
+	        <%- include partials/customeraddress.ejs %>
+
+			<%- include partials/placeanddate.ejs %>
+
+			<div class="reference">
+			  <b>Lettre RAR n° <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></b>
+			  <br>Copie lettre simple
+			</div>
+			<div class="object">
+	          <strong>Objet</strong> : Demande de règlement sous peine de rupture du bail commercial
+			</div>
+
+			<div class="items">
+			<p>
+				<span contenteditable="true">Madame, Monsieur,</span>
+				<br>&nbsp;
+			</p>
+
+			<p>
+			Nous vous rappelons que nos relations commerciales avec votre société sont liées par un bail signé le <%=occupant.beginDate%>.
+			</p>
+			<p>
+			Dans ce bail, il est explicitement indiqué que <%=occupant.name%> s'oblige à payer d'avance, la location d'un bureau, à <%= realm.legalForm + ' ' + realm.company %> tous les mois, le premier jour de chaque mois (chapitre Loyers - article II)
+			<p>
+			<u><b>Or, à ce jour, plusieurs loyers n'ont pas été réglés représentant un montant de <%=rent.totalAmount%> euros TTC.</b></u>
+			</p>
+			<p>
+			Nous vous informons que votre dossier sera transmit à notre huissier de justice afin de faire respecter la clause résolutoire  (<i>« Il est convenu qu'à défaut par le preneur d'exécuter une seule des charges et conditions du bail - qui sont toutes de rigueur - ou de payer exactement un seul terme de loyer et charges ou accessoires à son échéance, le présent bail sera, si bon semble au Bailleur, résilié de plein droit et sans aucune formalité judiciaire, un mois après une simple mise en demeure d'exécuter ou un simple commandement de payer signifié à personne ou à domicile, contenant déclaration par le Bailleur de son intention d'user de la présente clause et demeuré sans effet pendant ce délai. »</i>).
+			</p>
+
+			<p>Nous vous prions d'agréer, <span contenteditable="true">Madame, Monsieur,</span> l’expression de nos sentiments les meilleurs.</p>
+
+			<%- include partials/ownermanagersignature %>
+			</div>
+
+			<%- include partials/footer %>
+		</div>
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

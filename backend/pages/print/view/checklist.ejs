@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+	<body>
+	<% occupants.forEach(function(occupant, index) { %>
+		<div class="document">
+		<div class="first page contract">
+			<%- include partials/header.ejs %>
+
+	        <%- include partials/customeraddress.ejs %>
+
+	        <div class="object">ETAT DES LIEUX</div>
+	        <div class="items">
+	        	<p>
+	        	<table>
+	        		<tr style="height:50px"><td style:"width:50%;">ENTREE en date du : </td><td style:"width:50%">SORTIE en date du :</td></tr>
+	        	</table>
+	        	<br>
+	        	</p>
+	        	<p>	<strong>A – NATURE ET CONSISTANCE DES LOCAUX LOUES</strong></p>
+	        	<br>
+	        	<table>
+	        		<tr><td><strong>Adresse :</strong></td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td><strong>Désignation des locaux et équipements :</strong></td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        		<tr><td>&nbsp;</td></tr>
+	        	</table>
+	        	<br>
+				<p><strong>B – EXAMEN DES LOCAUX</strong></p>
+				<br>
+				<table style="border-top:none; border-left:none">
+					<thead>
+						<tr><th style="width:30%;border-left:none;"></th><th style="border-top:1px solid #555;">DESCRIPTION</th></tr>
+					</thead>
+					<tbody>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Plafond</td><td></td></tr>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Murs</td><td></td></tr>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Sol</td><td></td></tr>
+						<tr style="height:50px;"><td>Fenêtres</td><td></td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><strong>C - EQUIPEMENTS</strong></p>
+				<br>
+				<table style="border-top:none; border-left:none">
+					<thead>
+						<tr><th style="width:30%;border-left:none;"></th><th style="border-top:1px solid #555;">DESCRIPTION</th></tr>
+					</thead>
+					<tbody>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Prises électriques</td><td></td></tr>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Prises téléphone</td><td></td></tr>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Lampes</td><td></td></tr>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Radiateurs</td><td></td></tr>
+						<tr style="height:50px;"><td>Serrure</td><td></td></tr>
+					</tbody>
+				</table>
+				<br>
+				<p><strong>D - EXTERIEUR</strong></p>
+				<br>
+				<table style="border-top:none; border-left:none">
+					<thead>
+						<tr><th style="width:30%;border-left:none;"></th><th style="border-top:1px solid #555;">DESCRIPTION</th></tr>
+					</thead>
+					<tbody>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Parking</td><td></td></tr>
+						<tr style="height:50px;border-bottom:1px solid #555;"><td>Boite aux lettres</td><td></td></tr>
+						<tr style="height:50px;"><td>Porte (accès extérieur)</td><td></td></tr>
+					</tbody>
+				</table>
+				<br>
+				<p><strong>E – RELEVE DES COMPTEURS A CE JOUR (1)</strong></p>
+				<br>
+				<table>
+					<thead>
+						<tr><th style="width:25%;">E.D.F.</th><th style="width:25%;">GAZ</th><th style="width:25%;">EAU FROIDE</th><th style="width:25%;">EAU CHAUDE</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+						<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+						<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+						<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+						<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+						<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+						<tr style="height:40px;border-top: 1px solid #555;"><td colspan="4">AUTRE (téléphone, ...)</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><strong>F- CLES REMISES</strong></p>
+				<br>
+				<table style="width:33%">
+					<tr><td>Nombre:</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+				</table>
+				<br>
+				<p><strong>G – OBSERVATIONS COMPLEMENTAIRES</strong></p>
+				<table>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+				</table>
+				<br>
+				<p>
+					Le présent état des lieux, établi et accepté contradictoirement entres les soussignés, fait partie intégrante du
+contrat de location dont il ne peut être dissocié.
+				</p>
+				<p>
+					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span> le <span contenteditable="true"><%=today%></span>, dont un est remis dès à présent au locataire qui le reconnaît.
+				</p>
+				<br>
+				<table>
+					<tr>
+						<td style="width:50%;"><center><strong>Le bailleur ou son mandataire</strong><br><small>Signature précédée de la mention manuscrite "certifié exact"</small></center></td>
+						<td style="width:50%;"><center><strong>Le locataire</strong><br><small>Signature précédée de la mention manuscrite "certifié exact"</small></center></td>
+					</tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+					<tr><td>&nbsp;</td></tr>
+				</table>
+				<p>
+					<small>(1) Ne remplir que les rubriques nécessaires, le locataire ayant généralement un contrat personnel avec l'E.D.F., gaz, ...</small>
+				</p>
+	        </div>
+		</div>
+		</div>
+	<% }); %>
+	<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

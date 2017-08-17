@@ -3,12 +3,9 @@ import application from './application';
 
 function uriFromId(id) {
     if (id === 'website') {
-        return {nav: `/${id}`, history: '/'};
+        return {nav: `/view/${id}`, history: '/'};
     }
-    if (['login', 'signup'].indexOf(id) !== -1) {
-        return {nav: `/${id}`, history: `/${id}`};
-    }
-    return {nav: `/view/${id}`, history:`/page/${id}`};
+    return {nav: `/view/${id}`, history:`/${id}`};
 }
 
 export default () => {

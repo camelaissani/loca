@@ -84,37 +84,37 @@ class RentMiddleware extends ViewController {
     onInitListener() {
         $(document).on('click', '#view-rent #printinvoices', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/invoice/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/invoice/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #rentcall', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/rentcall/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/rentcall/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery1', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/recovery1/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/recovery1/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery2', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/recovery2/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/recovery2/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #recovery3', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/recovery3/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/recovery3/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 
         $(document).on('click', '#view-rent #paymentorder', () => {
             const selection = this.getSelectedIds();
-            application.openPrintPreview(`/api/documents/print/paymentorder/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
+            application.openPrintPreview(`/print/paymentorder/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
             return false;
         });
 

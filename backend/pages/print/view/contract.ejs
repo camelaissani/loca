@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+	<body>
+	<% occupants.forEach(function(occupant, index) { %>
+		<div class="document">
+		<div class="first page contract">
+			<%- include partials/header.ejs %>
+
+			<div class="object">BAIL COMMERCIAL</div>
+
+			<div class="items">
+				<p>
+					<strong><u>ENTRE</u></strong></p>
+				</p>
+				<p>
+					<%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
+					<% if (realm.street2 && realm.street2.length>0) { %>
+			        <%= realm.street2 %>
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+				</p>
+
+				<p>Ci-après dénommé « LE BAILLEUR »</p>
+
+				<p class="text-right"><u>D'UNE PART</u>,</p>
+				<p>
+					<strong><u>ET</u></strong></p>
+				</p>
+
+				<p>
+					<strong><%= occupant.name %> <%= occupant.legalForm %>,</strong>
+					<br>au capital de <span contenteditable="true"><% if (typeof(occupant.capital)=='number') { %> <%=occupant.capital.toFixed(2)%> <% } else { %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% } %></span> EUR,
+					<br>ayant son siège social au :
+					<p>
+						<%= realm.street1 %>
+		            	<% if (realm.street2 && realm.street2.length>0) { %>
+		            	<br><%= realm.street2 %>
+		            	<% } %>
+		            	<br><%= realm.zipCode %> <%= realm.city %>
+					</p>
+				</p>
+
+				<p>
+					<span contenteditable="true">Inscrit au Registre de Commerce de PARIS sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur</span> <%= occupant.manager %> en qualité de <span contenteditable="true">gérant</span>.
+				<p>
+
+				<p>Ci-après dénommé « LE PRENEUR »</p>
+
+				<p class="text-right"><u>D'AUTRE PART</u></p>
+			</div>
+			<div class="footer text-right">1/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><u>IL A ETE CONVENU ET ARRETE CE QUI SUIT</u></p>
+				<p>
+					<%= realm.company %> donne à bail au Preneur qui accepte, les locaux dont le plan est joint en annexe A, et dont la consistance, la désignation et la destination sont ci-après établies, tels qu'ils existent.
+				</p>
+
+
+				<p><u>DESIGNATION DES LOCAUX</u></p>
+				<p>
+					Dans un immeuble situé à <%= realm.street1 %>
+					<% if (realm.street2 && realm.street2.length>0) { %>
+			        <%= realm.street2 %>
+			        <% } %> - <%=realm.zipCode%> <%=realm.city%>, un local à usage de bureau ou d’activité d'une superficie de <span contenteditable="true"><%= occupant.office.surface.toFixed(2) %></span> m².
+				</p>
+				<p>
+					Tels que lesdits locaux existent, s'étendent, se poursuivent et comportent et sans qu'il soit besoin d'en faire plus ample désignation à la demande du preneur qui déclare parfaitement les connaître pour les avoir vus et visités en vue des présentes.
+				</p>
+
+				<p><u>DUREE</u></p>
+				<p>
+					Le présent bail est consenti et accepté pour une durée de neuf années entières et consécutives, qui commenceront à courir le <span contenteditable="true"><%= occupant.beginDate %></span> pour se terminer le <span contenteditable="true"><%= occupant.endDate %></span>.
+				</p>
+				<p>
+					Le Preneur aura la faculté de donner congé à l’expiration d’une période de 3, 6 ou 9 ans, à la date anniversaire du bail, par acte d’huissier, en observant un préavis de six mois.
+				</p>
+
+				<p><u>CHARGES ET CONDITIONS</u></p>
+				<p>
+					Le présent bail est fait aux charges et conditions ordinaires et de droit que le preneur s’oblige à exécuter,  et notamment à celles ci-après,
+				</p>
+				<p>
+					1) De prendre les lieux loués dans leur état actuel, tous les travaux d'installation et de décoration intérieure et extérieure restant à sa charge, sans pouvoir exiger aucune réparation à son entrée en jouissance, ni pendant toute la durée du bail, et d'assurer indépendamment de celle-ci l'ensemble des réparations qui seraient nécessaires aux dits locaux pendant le cours du bail sauf celles prévues à l’article 606 du Code Civil.
+				</p>
+				<p>
+					1 Bis) Le preneur reconnaît que les locaux, objet des présentes sont conformes à la destination prévue au bail.
+				</p>
+				<p>
+					Il fera son affaire personnelle dès à présent et, pendant toute la durée du bail de leur maintien en conformité au regard de toutes les réglementations administratives et de police, applicables en raison de l'activité qui y sera exercée.
+				</p>
+				<p>
+					Il se conformera à toutes les recommandations et injonctions émanant de l'Inspection du Travail, des Commissions d'Hygiène et de Sécurité et plus généralement de tous les Services Administratifs concernés.
+				</p>
+			</div>
+			<div class="footer text-right">2/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>Il fera en sorte que le Bailleur ne puisse être ni inquiété, ni même recherché à ce sujet.</p>
+				<p>
+					2) De tenir les lieux loués constamment garnis d'objets mobiliers, matériels et marchandises pour pouvoir répondre, en tout temps, du loyer principal et de ses accessoires ainsi que de l'entière exécution des charges et conditions du bail, et de tenir les lieux constamment en état d'exploitation commerciale active, conformément à l'usage prévu au paragraphe 8 ci-après.
+				</p>
+				<p>
+					3) D'entretenir les lieux loués de façon constante et en bon état de réparations locatives, et de les rendre en fin de jouissance en parfait état de réparations et d'entretien afin de les rendre à sa sortie conformes à l’état des lieux qui sera dressé avant l’entrée en jouissance par le propriétaire contradictoirement avec le preneur aux frais partagés du preneur et du bailleur, les fermetures extérieures et intérieures devant être entretenues en bon état de fonctionnement, graissage et réparation, par le preneur, sans que le Bailleur ait à intervenir pour quelque cause que ce soit, les vitrages étant également entretenus à ses frais par le preneur, qui ne pourra exercer aucun recours contre le bailleur à raison des dégâts causés par des infiltrations d'eau provenant d'un mauvais entretien ou d'un mauvais usage desdits vitrages et fermetures.
+				</p>
+				<p>
+					Il devra signaler immédiatement au bailleur les fuites d'eau, courts-circuits ou incidents de façon que toutes mesures utiles puissent être prises à temps pour empêcher les dégâts, le preneur restant responsable des conséquences de sa négligence à ce sujet.
+				</p>
+				<p>
+					A défaut d'exécution de ces travaux, passé un délai d'un mois après mise en demeure, le Bailleur pourra se substituer au preneur et les faire réaliser par une entreprise de son choix, aux frais exclusifs du preneur.
+				</p>
+				<p>
+					4) De prendre à sa charge les conséquences de tous accidents imputables au Preneur, quels qu'ils soient, pouvant survenir soit du fait ou de l'usage des appareils et accessoires dépendant des installations (robinets, compteurs, chaudières, conduits de fumée ou de ventilation, radiateurs, appareillage électrique, etc...).
+				</p>
+				<p>
+					5) De souffrir ou de laisser faire, sans pouvoir prétendre à aucune indemnité ni diminution de loyer, les travaux de toute nature que le Bailleur fera dans l'immeuble, tous bouchements de vides, de cours et courettes, jours de souffrance dans les murs mitoyens et toutes constructions voisines pouvant diminuer le jour et la vue ainsi que tous travaux d'amélioration transformations et constructions nouvelles que le bailleur jugerait convenable de faire exécuter, leur durée n'excédant pas quarante jours.
+				</p>
+				<p>
+					Afin de préserver la confidentialité des travaux du locataire, le Bailleur l'informera huit jours au préalable.
+				</p>
+				<p>
+					6) De souffrir également toutes les sujétions découlant des travaux qu'il serait nécessaire d'effectuer pour l'aménagement des autres locaux situés dans l'immeuble.
+				</p>
+				<p>
+					7) De ne pouvoir faire dans les lieux loués, aucun changement de disposition ou modification du gros oeuvre, percement de murs ou autres sans les autorisations administratives éventuellement nécessaires, sans avoir souscrit les assurances appropriées et sans le consentement exprès et par écrit du Bailleur.
+				</p>
+				<p>
+					Ces travaux seront entièrement exécutés aux frais du preneur sous la surveillance de l'architecte du Bailleur dont les honoraires seront à la charge du preneur.
+				</p>
+			</div>
+			<div class="footer text-right">3/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					Toutes les modifications qui auront été apportées ainsi au gros oeuvre resteront acquises sans indemnité à la fin du bail au Bailleur, sauf si ledit Bailleur préfère la remise des lieux en leur état primitif aux frais exclusifs du preneur concernant les travaux qui n’auraient pas été autorisés par le Bailleur. Il en sera de même pour tous les embellissements et les travaux autres que ceux concernant ce gros oeuvre.
+				</p>
+				<p>
+					8) D'utiliser les locaux sus désignés à usage exclusif de bureaux ou d’activité à l’exclusion de tous actes de production industrielle ou d’habitation.
+				</p>
+				<p>
+					9) De jouir des locaux suivants leur destination, telle qu'elle est indiquée ci-dessus. Il ne pourra en aucun cas rien faire ou laisser faire qui puisse les détériorer et il devra prévenir immédiatement par écrit le Bailleur de toute atteinte qui serait portée à la propriété, de toutes dégradations, détériorations et désordres qui viendraient à se produire dans l'immeuble.
+				</p>
+				<p>
+					10) De prendre toutes les précautions nécessaires pour que l'exercice de son activité ne puisse nuire en quoi que ce soit à l'entretien, à la tranquillité, au bon aspect et à la bonne tenue de l'immeuble ; il prendra toutes précautions et assurera toute responsabilité à ce sujet. Le preneur s'interdit d'introduire dans les lieux loués des matières inflammables, explosives ou dangereuses pour la sécurité de l'immeuble, d'utiliser le gaz, sous quelque forme que ce soit. Le preneur s'interdit toute surcharge des planchers supérieure à 250 kg/m2.
+				</p>
+				<p>
+					11) De n'avoir dans les lieux loués aucun appareil bruyant, dangereux ni incommodant, de n'avoir aucun animal, même domestique, qui pourrait être nuisible ou désagréable aux voisins; aucune émanation malodorante ne devra provenir des mêmes lieux.
+				</p>
+				<p>
+					En cas d'utilisation d'instruments ou appareils pouvant produire des «parasites» ou autres troubles pour la réception des ondes chez ses voisins, le preneur devra y porter rapidement remède afin que le Bailleur ne puisse être inquiété à ce sujet.
+				</p>
+				<p>
+					D’exercer une surveillance sur son personnel et veiller à sa bonne tenue.
+				</p>
+				<p>
+					Il ne pourra rien déposer ni laisser séjourner dans les parties communes de l'immeuble qui devront toujours rester libres d'accès.
+				</p>
+				<p>
+					12) De ne pouvoir céder son droit au présent bail sans le consentement exprès et par écrit du bailleur,sous peine de nullité des cessions consenties au mépris de cette clause et même de résiliation des présentes si bon semble au Bailleur. Toutefois, il pourra librement céder ledit droit au bail à l’acquéreur de son fonds de commerce.
+				</p>
+				<p>
+					Toute cession devra avoir lieu par acte notarié ou sous seing privé auquel le Bailleur sera appelé au moins quinze jours à l’avance par lettre recommandée avec accusé de réception. Les cessionnaires devront s'obliger solidairement avec le preneur au paiement des loyers et à l'exécution des conditions du bail , de telle sorte que le Bailleur puisse agir directement contre eux, si bon lui semble, sans préjudice des droits qu’il aura de poursuivre le preneur, sans discussion préalable des cessionnaires. Quant au preneur, il restera répondant solidaire, de son successeur et de tous sous-locataires successifs du paiement des loyers et de l'exécution des conditions du bail.
+				</p>
+				<p>
+					Une copie exécutoire de l'acte de cession ou un original enregistré devra être remis au Bailleur, sans frais pour lui, le preneur étant tenu de respecter les règles de l'article 1690 du Code Civil.
+				</p>
+			</div>
+			<div class="footer text-right">4/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					En outre, tous ceux qui seront devenus successivement cessionnaires du bail demeureront tenus envers le Bailleur, solidairement entre eux et avec le preneur au paiement des loyers et à l'exécution des conditions du bail pendant toute la durée de celui-ci alors même qu'ils ne seraient plus dans les lieux et auraient même cédé leur droit.
+				</p>
+				<p>
+					En tout état de cause, aucune cession ne pourra intervenir si le preneur reste redevable envers le Bailleur de loyer ou accessoire.
+				</p>
+				<p>
+					13) De ne pouvoir sous-louer, totalement ou partiellement ces locaux sans le consentement exprès et par écrit du Bailleur.
+					Il est précisé que dans la commune intention des parties, la présente location est indivisible. En conséquence, en cas de sous-location partielle dûment autorisée, les sous-locataires ne pourront acquérir aucun droit direct à renouvellement à l’encontre du Bailleur.
+				</p>
+				<p>
+					Toute sous-location dûment autorisée devra avoir lieu par acte authentique ou sous seing privé auquel le bailleur sera appelé. Les sous-locataires devront s'obliger solidairement avec le preneur au paiement des loyers et à l'exécution des conditions du bail. Quant au preneur, il restera garant et répondant solidaire de son successeur et de tous sous-locataires successifs au paiement des loyers et de l'exécution du bail.
+				</p>
+				<p>
+					En outre, tous ceux qui seront devenus successivement sous-locataires demeureront tenus envers le bailleur, solidairement entre eux et avec le preneur au paiement des loyers et à l’exécution des conditions du bail pendant toute la durée de celui-ci, alors même qu'ils ne seraient plus dans les lieux et auraient même cédé leur droit.
+				</p>
+				<p>
+					14) De notifier au Bailleur, les modifications des statuts de la société preneuse (transformation, changement de dénomination ou de raison sociale, changement de siège social etc...) dans le mois de la modification.
+				</p>
+				<p>
+					15) De signifier au Bailleur dans les formes prévues par l'article 1690 du Code Civil toute fusion ou apport d'actif. En cas d'apport partiel d'actif, la société apporteuse restera garante et répondante solidaire du bénéficiaire de l'apport, du paiement des loyers et charges et de l'exécution des conditions du bail.
+				</p>
+				<p>
+					16) De payer ses contributions personnelles, mobilières, taxe professionnelle, taxes locatives, et autres de toute nature le concernant particulièrement ou relatives à son activité, auxquelles les locataires sont ou pourront être assujettis.
+				</p>
+				<p>
+					17) De supporter, à compter du jour de la mise à disposition, toutes les charges de ville et de police et de se soumettre à tous les règlements en vigueur, et, spécialement aux règles de sa profession.
+				</p>
+				<p>
+					18) Les charges locatives mises à la charge du Preneur seront les suivantes :
+					<ul>
+						<li>entretien des vitrages des locaux loués ;</li>
+
+						<li>fournitures individuelles (eau et électricité) ;</li>
+
+						<li>quote part, calculée en fonction de la superficie occupée, des prestations communes, des dépenses accessoires au fonctionnement, à la propreté et à l’entretien de l’ensemble immobilier (en particulier nettoyage des parties communes et privatives) et notamment tous frais concernant les dépenses de chauffage et de climatisation, des cours et jardins, ainsi que des aménagements mobiliers et matériels d’exploitation des parties communes ;</li>
+					</ul>
+				</p>
+			</div>
+			<div class="footer text-right">5/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					<ul>
+						<li>quote part, calculée en fonction de la superficie occupée, des salaires et de toutes charges concernant tout le personnel affecté à l’immeuble, tels que gardiens, personnel et société de surveillance, le personnel de nettoyage ainsi que des dépenses de surveillance externe.</li>
+
+						<li>quote-part, calculée en fonction de la superficie occupée, de l’assurance multirisque immeuble, de la taxe foncière et de la taxe sur les bureaux en Ile-de-France. Le Preneur et ses assureurs renoncent à tout recours en responsabilité contre le Bailleur et ses assureurs pour tout dommage s’étant produit dans les lieux loués, et réciproquement.</li>
+					</ul>
+				</p>
+				<p>
+					19) De faire assurer, auprès de compagnies d'assurance notoirement solvables, les risques professionnels de son activité, les risques au titre de la responsabilité civile, la perte d'exploitation, les risques d’incendie, d’explosions, de dégâts, provenant du gaz, de l’électricité et des eaux ainsi que les biens mobiliers, matériels et marchandises.
+				</p>
+				<p>
+					Il devra maintenir et renouveler ces assurances pendant toute la durée du bail, acquitter régulièrement les primes et cotisations et justifier du tout au bailleur à première réquisition de sa part, et, pour la première fois, lors de la signature des présentes. Le Bailleur s’engage à procéder à l'installation d'extincteurs portatifs conformément au règlement de l'assemblée plénière des compagnies et des sociétés d'assurance contre l'incendie, et plus généralement à se conformer à toutes règles de sécurité de l’APCSA.
+				</p>
+				<p>
+					Si l'activité exercée par le preneur entraînait, soit pour le propriétaire, soit pour les voisins ou colocataires, des surprimes d'assurance, le preneur devrait rembourser aux intéressés le montant de ces surprimes.
+				</p>
+				<p>
+					Le preneur renonce expressément à tous recours et actions quelconques contre le Bailleur du fait de la destruction totale ou partielle de tous matériels, objets mobiliers, valeurs quelconques et marchandises soit du fait de leur détérioration, soit de la privation ou trouble de jouissance des lieux et même, au cas de perte totale ou partielle de son fonds de commerce y compris les éléments incorporels attachés audit fonds.
+				</p>
+				<p>
+					Le Bailleur et ses assureurs renoncent en contrepartie à tout recours qu'ils seraient en droit d'exercer contre les occupants à quelque titre que ce soit et leurs préposés, le cas de malveillance excepté.
+				</p>
+				<p>
+					20) De laisser le Bailleur, son représentant ou son architecte et tous autres entrepreneurs et ouvriers pénétrer dans les lieux loués et les visiter pour constater leur état, toutes les fois que cela paraîtra utile. Afin de préserver la confidentialité des travaux du locataire, le Bailleur l'informera huit jours au préalable, sauf cas d’urgence. Il devra également laisser faire tous travaux nécessaires et laisser pénétrer dans les lieux les ouvriers ayant à effectuer tous travaux jugés utiles par le propriétaire ou les propriétaires voisins.
+				</p>
+				<p>
+					De laisser visiter les lieux par le Bailleur ou d'éventuels locataires en cas de résiliation du bail, pendant une période de trois mois précédent la date effective du départ du preneur, de souffrir l'apposition d’écriteaux ou d'affiches à tels emplacements convenant au bailleur pendant la même période.
+				</p>
+				<p>
+					21) De ne pouvoir invoquer la responsabilité du bailleur sauf faute ou négligence de celui-ci, dans les cas suivants :
+					<ul>
+						<li>En cas de vol, cambriolage ou autres actes délictueux, et, généralement, des troubles apportés par des tiers.</li>
+					</ul>
+				</p>
+			</div>
+			<div class="footer text-right">6/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					<ul>
+						<li>En cas d’interruption dans le service des installations de l'immeuble.</li>
+
+						<li>En cas d'accident pouvant survenir du fait de l’installation desdits services dans les lieux loués.</li>
+
+						<li>Dans le cas où les lieux loués seraient inondés ou envahis par les eaux fluviales ou autres, fuites d'eau, écoulement par chêneaux, parties vitrées.</li>
+					</ul>
+				</p>
+				<p>
+					Le preneur fera son affaire personnelle des cas ci-dessus et généralement de tous autres cas fortuits et imprévus, sauf son recours contre qui de droit, en dehors du Bailleur.
+				</p>
+				<p>
+					Pour plus de sécurité, le preneur devra contracter toutes assurances nécessaires de façon à ce que la responsabilité du Bailleur soit entièrement dégagée.
+				</p>
+				<p>
+					22) De ne prétendre à aucune diminution de loyer ou indemnité en cas de suppression temporaire ou réduction des services collectifs tels que l'eau, l'électricité, le chauffage, etc... sauf faute ou négligence du Bailleur.
+				</p>
+				<p>
+					23) Si les locaux objets du présent bail venaient à être détruits en totalité, par vétusté, vice de construction, faits de guerre, guerre civile émeute ou pour toute autre cause indépendante de la volonté du Bailleur, le présent bail serait résilié de plein droit sans indemnité.
+					Si toutefois les locaux loués n’étaient détruits ou rendus inutilisables que partiellement le Preneur ne pourrait obtenir qu’une réduction de loyer en fonction des surfaces détruites à l’exclusion de la résiliation du bail.
+				</p>
+				<p><u>LOYER</u></p>
+				<p>
+					I - Le loyer ci-après fixé constitue une clause déterminante pour les deux parties de la conclusion du présent bail.
+				</p>
+				<p>
+					II - Le loyer annuel est fixé en principal à <span contenteditable="true"><%= occupant.office.m2Price.toFixed(2) %></span> EUR le m², soit <span contenteditable="true"><%= (occupant.office.price*12).toFixed(2) %></span> EUR H.T, que le preneur s'oblige à payer d'avance au Bailleur, le premier jour de chaque mois soit <span contenteditable="true"><%= occupant.office.price.toFixed(2) %></span> EUR  H.T.
+				</p>
+				<p>
+					III - Le Bailleur ayant opté pour l'assujettissement dudit loyer à la TVA, en application de l'article 260-2 du Code Général des Impôts, le loyer ci-dessus indiqué sera majoré de la TVA au taux en vigueur lors de sa facturation.
+				</p>
+				<p>
+					IV - Le loyer est indexé sur l'indice national du coût de la construction publié par l'Institut National de Statistique et des Études Économiques, base 100 du 4ème Trimestre 1953.
+				</p>
+				<p>
+					Le loyer sera indexé annuellement au <span contenteditable="true">1 janvier</span> de chaque année et la première fois le <span contenteditable="true">1 janvier 2009</span>. L'indice de base sera celui du <span contenteditable="true">4ème trimestre 2007</span>. L'indice de référence sera celui du <span contenteditable="true">3ème trimestre</span> de l'année civile en cours.
+				</p>
+				<p>
+					Si l'indice visé au présent article venait à cesser de faire l'objet d'une publication par l'INSEE, les parties décident de se référer à toute autre publication de l'indice retenu qui serait assurée
+				</p>
+			</div>
+			<div class="footer text-right">7/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p>
+					par tel organisme public ou privé des statistiques choisi par elles d'un commun accord, ou, faute d'accord, désigné par le Président du Tribunal de Commerce de PARIS.
+				</p>
+				<p>
+					V - A chaque échéance mensuelle, le preneur réglera, en même temps que le loyer principal, sa participation calculée en fonction de la superficie occupée à toutes les charges et prestations visées ci-dessus aux paragraphes 16 et 18 des «charges et conditions». Le Bailleur est expressément autorisé à faire figurer sur la quittance mensuelle, et à réclamer au preneur en même temps que le loyer principal, une provision sur charges égale à <span contenteditable="true"><%= occupant.office.m2Expense.toFixed(2) %></span> EUR /m², soit
+					<span contenteditable="true"><%= (occupant.office.expense*12).toFixed(2) %></span> HT par an, soit par mois <span contenteditable="true"><%= occupant.office.expense.toFixed(2) %></span> EUR  HT. Le montant de la provision sur charges sera réajusté chaque fin d’année en fonction des dépenses réellement engagées. La provision sur charges de l’année suivante pourra être modifiée en fonction de l’expérience résultant de l’exploitation de l’immeuble et du budget prévisionnel de dépenses. Les sommes correspondantes seront majorées de la TVA au taux en vigueur dans les mêmes conditions que le loyer principal.
+				</p>
+				<p>
+					VI - Le non paiement dans les quinze jours de son échéance d'une quittance de loyer entraînera de plein droit et après mise en demeure préalable demeurée infructueuse, un intérêt égal au taux d'escompte de la Banque de France majoré de quatre points, à compter de la date d'échéance ; le montant de la quittance pourra être, en outre, majoré des frais de procédure. Tout mois commencé sera considéré comme un mois entier. Les paiements auront lieu au domicile du Bailleur ou de son mandataire par chèque ou virement.
+				</p>
+				<p><u>CLAUSE RESOLUTOIRE</u></p>
+				<p>
+					Il est convenu qu'à défaut par le preneur d'exécuter une seule des charges et conditions du bail - qui sont toutes de rigueur - ou de payer exactement un seul terme de loyer et charges ou accessoires à son échéance, le présent bail sera, si bon semble au Bailleur, résilié de plein droit et sans aucune formalité judiciaire, un mois après une simple mise en demeure d'exécuter ou un simple commandement de payer signifié à personne ou à domicile, contenant déclaration par le Bailleur de son intention d'user de la présente clause et demeuré sans effet pendant ce délai.
+				</p>
+				<p>
+					Si le preneur refusait d'évacuer les lieux, il suffirait pour l'y contraindre sans délai, d’une simple ordonnance de référé rendue par le Président du Tribunal de Grande Instance du lieu de situation de l'immeuble, exécutoire par provision et sans caution nonobstant appel. Dans ce cas, et quelle que soit la cause de la résiliation, le dépôt de garantie dont il sera question ci-après demeurera acquis au Bailleur à titre de premiers dommages intérêts sans préjudice de tous les autres.
+				</p>
+				<p>
+					Si le preneur est une personne physique, en cas de décès du preneur, il y aura solidarité et indivisibilité entre ses héritiers tant pour le paiement du principal des loyers que pour l’exécution de toutes les clauses et conditions du présent bail, et lesdits héritiers supporteront les frais de la signification prescrite par l’article 877 du Code Civil.
+				</p>
+			</div>
+			<div class="footer text-right">8/9</div>
+		</div>
+		<div class="next page contract">
+			<div class="items">
+				<p><u>DEPOT DE GARANTIE</u></p>
+				<p>
+					Pour sûreté et garantie de l’exécution de toute obligation du présent bail à la charge du preneur, ce dernier a versé au Bailleur une somme de <span contenteditable="true"><%= occupant.guaranty.toFixed(2) %></span> EUR en dépôt de garantie.
+				</p>
+				<p>
+					Cette somme sera conservée par le Bailleur durant toute la durée du bail jusqu'au règlement entier et définitif de toute indemnité de quelque nature que ce soit que le preneur pourrait devoir au Bailleur à l'expiration du bail et à sa sortie des locaux. Elle ne sera pas productive d’intérêts.
+				</p>
+				<p>
+					Dans le cas de résiliation du bail pour inexécution de ces conditions ou pour une cause quelconque imputable au preneur ce versement de garantie restera acquis au bailleur à titre de premiers dommages intérêts sans préjudice de tous autres.
+				</p>
+				<p>
+					Il est expressément convenu qu'en cas de variation de loyer en vertu de la clause ci-dessus stipulée, la somme versée à titre de dépôt de garantie sera augmentée ou diminuée dans la même proportion.
+				</p>
+				<p>
+					Le remboursement de ce dépôt en fin de jouissance - après déménagement et remise des clefs, déduction faite de toutes les sommes dont le preneur pourrait être débiteur envers le bailleur ou dont celui-ci pourrait être rendu responsable pour le preneur - reste subordonné à l’état des lieux qui doivent être rendus à la sortie du preneur.
+				</p>
+				<p><u>ELECTION DE DOMICILE</u></p>
+				<p>
+					Pour l'exécution des présentes, il est fait élection de domicile, pour le Bailleur, à son siège social, et pour le preneur, dans les locaux loués.
+				</p>
+				<p><u>ATTRIBUTION DE JURIDICTION</u></p>
+				<p>
+					Pour toutes les contestations qui pourraient naître au sujet des présentes, les parties font attribution de juridiction aux tribunaux du ressort de la cour d’appel de <span contenteditable="true">PARIS</span>.
+				</p>
+				<p>
+					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span>, le <span contenteditable="true"><%=today%></span>
+				</p>
+				<p>
+					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
+				</p>
+				<p>
+					<br>&nbsp;
+					<br>&nbsp;
+					<br>&nbsp;
+					<br>&nbsp;
+				</p>
+				<p>
+					<span contenteditable="true">Madame/Monsieur</span> <%=occupant.manager%> <span contenteditable="true">gérant</span> de <%=occupant.name%> <%=occupant.legalForm%>
+				</p>
+			</div>
+			<div class="footer text-right">9/9</div>
+		</div>
+		</div>
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

@@ -5,7 +5,7 @@ class LoginForm extends Form {
         super({
             domSelector: '#login-form',
             httpMethod: 'POST',
-            uri: '/login',
+            uri: '/signin',
             manifest: {
                 'username': {
                     required: true,

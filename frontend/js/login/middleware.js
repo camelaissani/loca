@@ -1,9 +1,9 @@
 import $ from 'jquery';
 import i18next from 'i18next';
 import LoginForm from './loginform';
-import BaseViewMiddleware from '../baseview_middleware';
+import frontexpress from 'frontexpress';
 
-class LoginMiddleware extends BaseViewMiddleware {
+class LoginMiddleware extends frontexpress.Middleware {
     constructor() {
         super();
         this.form =  new LoginForm();
@@ -11,7 +11,6 @@ class LoginMiddleware extends BaseViewMiddleware {
 
     // overriden
     entered() {
-        // show footer and background image
         $('body').addClass('covered-body');
         $('body > .footer').show();
     }

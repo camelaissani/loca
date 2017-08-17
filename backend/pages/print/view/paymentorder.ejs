@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+
+	<body>
+		<%
+		rents.forEach(function(rent) {
+			var occupant = rent.occupant;
+		%>
+
+		<div class="page">
+			<%- include partials/header.ejs %>
+
+	        <div class="customer">
+	        	<h3><span contenteditable="true">Huissier</span></h3>
+	        	<br><span contenteditable="true">Adresse</span>
+				<br><span contenteditable="true">Code Postal Ville</span>
+			</div>
+
+
+			<%- include partials/placeanddate.ejs %>
+			<!--div class="reference">
+			  <b>Lettre RAR n° <span contenteditable="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></b>
+			</div-->
+			<div class="object">
+	          <strong>Objet</strong> : Demande de commandement de payer
+			</div>
+
+			<div class="items">
+			<p>
+				<span contenteditable="true">Madame, Monsieur,</span>
+				<br>&nbsp;
+			</p>
+
+			<p>
+			Suite à plusieurs impayés de loyer de <span contenteditable="true">la société <%=occupant.name%></span>, je vous joins les éléments suivants pour la rédaction d'un commandement de payer :
+			</p>
+			<p>
+			<ul>
+				<li>Dernier avis d'échéance</li>
+				<li>Copie du bail commercial</li>
+				<li>Copie de la carte d'identité du gérant</li>
+				<li>Extrait kbis de notre société</li>
+			</ul>
+			<p>
+
+			<p>Nous vous prions d'agréer, <span contenteditable="true">Madame, Monsieur,</span> l’expression de nos sincères salutations.</p>
+			<%- include partials/ownermanagersignature %>
+			</div>
+
+			<%- include partials/footer %>
+		</div>
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

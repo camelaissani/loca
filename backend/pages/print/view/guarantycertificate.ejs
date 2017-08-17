@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+ 	<%- include partials/htmlhead.ejs %>
+	<body>
+		<%
+		occupants.forEach(function(occupant, index) {
+		%>
+
+		<div class="page certificate">
+			<%- include partials/header.ejs %>
+
+	        <%- include partials/customeraddress.ejs %>
+
+			<%- include partials/placeanddate.ejs %>
+
+			<div class="object">
+	          Reçu du dépôt de garantie
+			</div>
+
+			<div class="items">
+			<p>
+				Reçu de <span contenteditable="true">Madame/Monsieur <%=occupant.manager%></span>
+			</p>
+			<p>
+				La somme de <span contenteditable="true"><%=occupant.guaranty.toFixed(2)%></span> euros.
+			</p>
+			<p>
+				Pour le montant d'un dépôt de garantie correspondant aux locaux occupés par <%=occupant.name%> dans l'immeuble situé au :
+			</p>
+			<p>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.street1 %>
+		    	<% if (occupant.street2 && occupant.street2.length>0) { %>
+		        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.street2 %>
+		        <% } %>
+				<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= occupant.zipCode %> <%= occupant.city %>
+			</p>
+			<%- include partials/ownermanagersignature %>
+			</div>
+
+			<%- include partials/footer %>
+		</div>
+		<% }); %>
+		<%- include partials/printbar %>
+	</body>
+	<%- include partials/scripts %>
+</html>

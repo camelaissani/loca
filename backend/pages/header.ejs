@@ -1,0 +1,39 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+           <a class="navbar-brand js-nav-action" data-id="website" href="#" title="<%=config.website.product.slogan%>"><%=config.website.product.name%></a>
+        </div>
+        <% if (isLogged) { %>
+        <ul class="nav navbar-nav">
+            <li><a class="js-nav-action" data-id="dashboard" href="#"><i class="fa fa-tachometer"></i> <%= t('Dashboard') %></a></li>
+            <li><a class="js-nav-action" data-id="rent" href="#"><i class="fa fa-money"></i> <%= t('Rents') %></a></li>
+            <li><a class="js-nav-action" data-id="occupant" href="#"><i class="fa fa-group"></i> <%= t('Tenants') %></a></li>
+            <li><a class="js-nav-action" data-id="property" href="#"><i class="fa fa-key"></i> <%= t('Properties') %></a></li>
+            <li><a class="js-nav-action" data-id="accounting" href="#"><i class="fa fa-table"></i> <%= t('Accounting') %></a></li>
+            <li><a class="js-nav-action" data-id="owner" href="#"><i class="fa fa-user"></i> <%= t('Landloard') %></a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <% if (isMultipleRealmsAvailable) { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= user.firstname + ' ' + user.lastname %> <%if (!isDefaultRealmSelected) {%>@<%= realm.name %> <%}%><span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <% for (index=0; index<realms.length; index++) { %>
+                        <li>
+                            <a href="#" class='js-realm-action' data-id="<%=realms[index]._id%>"><i class="fa fa-building-o"></i> <%= realms[index].name %> </a>
+                        </li>
+                    <% } %>
+                    <li><a class="js-nav-action" data-id="selectrealm" href="#"><i class="fa fa-plus"></i> <%= t('New organization') %></a></li>
+                    <li role="separator" class="divider"></li-->
+                    <li><a href="/signout"><i class="fa fa-sign-out"></i> <%= t('Sign out') %></a></li>
+                </ul>
+                <% } else { %>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <%= user.firstname + ' ' + user.lastname %><span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="/signout"><i class="fa fa-sign-out"></i> <%= t('Sign out') %></a></li>
+                </ul>
+                <% } %>
+            </li>
+        </ul>
+        <% } %>
+    </div>
+</nav>

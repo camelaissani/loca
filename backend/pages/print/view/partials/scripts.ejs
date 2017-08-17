@@ -1,0 +1,18 @@
+<%
+var min = '';
+if (config.productive) {
+    min = '.min';
+}
+%>
+<script src="/node_modules/sugar/dist/sugar.min.js" type="text/javascript"></script>
+<script src="/node_modules/i18next/i18next.min.js" type="text/javascript"></script>
+<script src="/node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js" type="text/javascript"></script>
+<script src="/node_modules/i18next-localstorage-cache/i18nextLocalStorageCache.min.js" type="text/javascript"></script>
+<script src="/node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js" type="text/javascript"></script>
+<script src="/node_modules/i18next-sprintf-postprocessor/i18nextSprintfPostProcessor.min.js" type="text/javascript"></script>
+<script src="/node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="/node_modules/jquery-validation/dist/jquery.validate.js" type="text/javascript"></script>
+<script src="/node_modules/bootbox/bootbox.min.js" type="text/javascript"></script>
+<script src="/node_modules/frontexpress/frontexpress.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js" type="text/javascript"></script>
+<script src="/public/js/print<%=min%>.js" type="text/javascript"></script>
