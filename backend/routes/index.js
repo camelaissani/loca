@@ -39,13 +39,17 @@ export default [
     () => pages.restrictedList.reduce((router, pageDesc) => {
         const path = `/${pageDesc.id}${pageDesc.params || ''}`;
         router.use(path, _shouldBeLoggedThenRedirect);
-        router.use(`/view${path}`, _shouldBeLoggedThenRedirect);
+        if (pageDesc.supportView) {
+            router.use(`/view${path}`, _shouldBeLoggedThenRedirect);
+        }
         return router;
     }, express.Router()),
     () => pages.publicList.reduce((router, pageDesc) => {
         const path = `/${pageDesc.id}${pageDesc.params || ''}`;
         router.use(path, _shouldNotBeLoggedThenRedirect);
-        router.use(`/view${path}`, _shouldNotBeLoggedThenRedirect);
+        if (pageDesc.supportView) {
+            router.use(`/view${path}`, _shouldNotBeLoggedThenRedirect);
+        }
         return router;
     }, express.Router()),
     () => express.Router().use('/signedin', _shouldBeLogged),
