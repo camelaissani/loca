@@ -6,7 +6,7 @@ import logger from 'winston';
 // configure default logger
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
-    level: debugMode ? 'debug' : 'info',
+    level: process.env.LOCA_LOGGER_LEVEL || (debugMode ? 'debug' : 'info'),
     colorize: true
 });
 
