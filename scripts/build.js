@@ -9,7 +9,6 @@ import includePaths from 'rollup-plugin-includepaths';
 import path from 'path';
 import less from 'less';
 import purify from 'purify-css';
-import cssnano from 'cssnano';
 import imagemin from 'imagemin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
 import imageminPngquant from 'imagemin-pngquant';
@@ -18,7 +17,7 @@ import imageminPngquant from 'imagemin-pngquant';
 const root_directory = path.join(__dirname, '..');
 const frontend_directory = path.join(root_directory, 'frontend');
 const backend_directory = path.join(root_directory, 'backend');
-const view_directory = path.join(backend_directory, 'views');
+const view_directory = path.join(backend_directory, 'pages');
 const js_directory = path.join(frontend_directory, 'js');
 const less_directory = path.join(frontend_directory, 'less');
 const image_directory = path.join(frontend_directory, 'images');
@@ -40,29 +39,24 @@ const buildCss = (opts) => {
         less.render(code, {
             paths: [less_directory]
         }).then((output) => {
-            fs.writeFileSync(path.join(dist_css_directory, `${opts.name}.css`), output.css);
+            const css_file_path = path.join(dist_css_directory, `${opts.name}.css`);
+            const cssmin_file_path = path.join(dist_css_directory, `${opts.name}.min.css`);
+
+            fs.writeFileSync(css_file_path, output.css);
 
             if (process.env.NODE_ENV !== 'production') {
                 resolve(output.css);
+            } else {
+                const content = [opts.bundleOptions.dest, templates_pattern];
+                if (opts.extJs) {
+                    content.push(...opts.extJs);
+                }
+                const purified_css = purify(content, [css_file_path], {minify: true});
+                if (!purified_css) {
+                    throw ('purify exited with an empty css');
+                }
+                fs.writeFileSync(cssmin_file_path, purified_css);
             }
-
-            const content = [opts.bundleOptions.dest, templates_pattern];
-            if (opts.extJs) {
-                content.push(...opts.extJs);
-            }
-            const css = [path.join(dist_css_directory, `${opts.name}.css`)];
-
-            const purified_css = purify(content, css);
-            if (!purified_css) {
-                throw ('purify exited with an empty css');
-            }
-            cssnano.process(purified_css).then((result) => {
-                fs.writeFileSync(path.join(dist_css_directory, `${opts.name}.min.css`), result.css);
-                resolve(result.css);
-            }).catch((error) => {
-                reject(error);
-            });
-
         }, (error) => {
             reject(error);
         });
