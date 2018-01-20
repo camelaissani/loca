@@ -61,7 +61,7 @@ function update(inputContract, modification) {
     }
 
     // Check possible lost payments
-    _checkLostPayments(momentBegin, momentTermination || momentEnd, inputContract.rents);
+    _checkLostPayments(momentBegin, momentTermination || momentEnd, inputContract);
 
     const updatedContract = create(modifiedContract);
 
@@ -98,7 +98,7 @@ function payTerm(contract, term, settlements) {
     const momentBegin = moment(contract.begin, 'DD/MM/YYYY HH:mm');
     const momentEnd = moment(contract.termination || contract.end, 'DD/MM/YYYY HH:mm');
 
-    if (!current.isBetween(momentBegin, momentEnd, 'minutes', '[]')) {
+    if (!current.isBetween(momentBegin, momentEnd, contract.frequency, '[]')) {
         throw Error('payment term is out of the contract time frame');
     }
 
@@ -118,11 +118,12 @@ function payTerm(contract, term, settlements) {
     return contract;
 }
 
-function _checkLostPayments(momentBegin, momentEnd, rents) {
+function _checkLostPayments(momentBegin, momentEnd, contract) {
     const lostPayments =
-    rents.filter(rent => rent.payments.length > 0
-                    && !(rent.term >= Number(momentBegin.format('YYYYMMDDHH'))
-                    && rent.term <= Number(momentEnd.format('YYYYMMDDHH'))))
+    contract.rents.filter(rent => rent.payments.length > 0
+                    && !moment(rent.term, 'YYYYMMDDHH').isBetween(momentBegin, momentEnd, contract.frequency, '[]'))
+                    // && !(rent.term >= Number(momentBegin.format('YYYYMMDDHH'))
+                    // && rent.term <= Number(momentEnd.format('YYYYMMDDHH'))))
     .map(rent => String(rent.term) + ' ' + rent.payments.map(payment => payment.amount).join(' + '));
 
     if (lostPayments.length > 0) {

@@ -10,7 +10,7 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
         const entryMoment = moment(property.entryDate, 'DD/MM/YYYY').startOf('day');
         const exitMoment = moment(property.exitDate, 'DD/MM/YYYY').endOf('day');
 
-        return currentMoment.isBetween(entryMoment, exitMoment, 'day', '[]');
+        return currentMoment.isBetween(entryMoment, exitMoment, contract.frequency, '[]');
     }).forEach(function (property) {
         if (property.property) {
             const name = property.property.name || '';
