@@ -15,6 +15,7 @@ import imageminPngquant from 'imagemin-pngquant';
 
 // directories
 const root_directory = path.join(__dirname, '..');
+const node_modules_directory = path.join(root_directory, 'node_modules');
 const frontend_directory = path.join(root_directory, 'frontend');
 const backend_directory = path.join(root_directory, 'backend');
 const view_directory = path.join(backend_directory, 'pages');
@@ -51,11 +52,21 @@ const buildCss = (opts) => {
                 if (opts.extJs) {
                     content.push(...opts.extJs);
                 }
-                const purified_css = purify(content, [css_file_path], {minify: true});
-                if (!purified_css) {
-                    throw ('purify exited with an empty css');
-                }
-                fs.writeFileSync(cssmin_file_path, purified_css);
+                purify(
+                    content,
+                    [css_file_path],
+                    {
+                        minify: true,
+                        info: false,
+                        rejected: false
+                    },
+                    (purified_css) => {
+                        if (!purified_css) {
+                            throw ('purify exited with an empty css');
+                        }
+                        fs.writeFileSync(cssmin_file_path, purified_css);
+                    }
+                );
             }
         }, (error) => {
             reject(error);
@@ -216,7 +227,11 @@ const index = {
         entry: path.join(js_directory, 'index.js'),
         plugins: plugins()
     },
-    bundleOptions: bundleOptions('index')
+    bundleOptions: bundleOptions('index'),
+    extJs: [
+        path.join(node_modules_directory, 'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'),
+        path.join(node_modules_directory, 'bootbox/bootbox.min.js')
+    ]
 };
 
 if (process.argv.length > 2) {
