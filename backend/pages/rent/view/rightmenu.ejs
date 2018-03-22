@@ -40,6 +40,7 @@
     <button type="button" data-id="list-action-pay-rent" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-credit-card"></i> <%= t('Payment') %></button>
     <button type="button" data-id="list-action-rents-history" class="btn btn-default btn-block js-user-action js-only-mono-selection" role="button"><i class="fa fa-history"></i> <%= t('Timeline rents') %></button>
     <button type="button" data-id="list-action-print" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-print"></i> <%= t('Print') %></button>
+    <button type="button" data-id="list-action-email" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-envelope-o"></i> <%= t('Email') %></button>
     <h4 class="js-list-selection-menu-label"></h4>
     <div class="js-list-selected-elements list-group list-group-selection"></div>
 </div>
@@ -56,6 +57,13 @@
 </div>
 
 <div class="js-side-menu side-menu card"  data-id="print-doc-selector-menu" data-target="#print-doc-selector">
+    <h4 class="js-rent-period"></h4>
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <h4 class="title-card js-list-selection-menu-label"></h4>
+    <div class="js-list-selected-elements fixed list-group"></div>
+</div>
+
+<div class="js-side-menu side-menu card"  data-id="email-doc-selector-menu" data-target="#email-doc-selector">
     <h4 class="js-rent-period"></h4>
     <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
     <h4 class="title-card js-list-selection-menu-label"></h4>

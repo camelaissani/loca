@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import moment from 'moment';
 import Handlebars from 'handlebars';
+import bootbox from 'bootbox';
+import i18next from 'i18next';
 import application from '../application';
 import ViewController from '../viewcontroller';
 import Helper from '../lib/helper';
@@ -82,6 +84,40 @@ class RentMiddleware extends ViewController {
 
     // callback
     onInitListener() {
+        $(document).on('click', '#view-rent #emailinvoice', () => {
+            const tenantIds = this.getSelectedIds();
+            bootbox.confirm(i18next.t('Are you sure to send invoices by email?'), (result) => {
+                if (!result) {
+                    return;
+                }
+                application.sendEmail(tenantIds, 'invoice', LOCA.currentYear, LOCA.currentMonth, () => {
+                    this.closeForm(() => {
+                        if (this.list) {
+                            this.list.showAllRows();
+                        }
+                    });
+                });
+            });
+            return false;
+        });
+
+        $(document).on('click', '#view-rent #emailrentcall', () => {
+            const tenantIds = this.getSelectedIds();
+            bootbox.confirm(i18next.t('Are you sure to send rent notices by email?'), (result) => {
+                if (!result) {
+                    return;
+                }
+                application.sendEmail(tenantIds, 'rentcall', LOCA.currentYear, LOCA.currentMonth, () => {
+                    this.closeForm(() => {
+                        if (this.list) {
+                            this.list.showAllRows();
+                        }
+                    });
+                });
+            });
+            return false;
+        });
+
         $(document).on('click', '#view-rent #printinvoices', () => {
             const selection = this.getSelectedIds();
             application.openPrintPreview(`/print/invoice/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
@@ -153,6 +189,9 @@ class RentMiddleware extends ViewController {
         }
         else if (actionId==='list-action-print') {
             this.openForm('print-doc-selector');
+        }
+        else if (actionId==='list-action-email') {
+            this.openForm('email-doc-selector');
         }
         else if (actionId==='list-action-save-form') {
             this.form.submit((data) => {

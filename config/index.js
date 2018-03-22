@@ -10,5 +10,6 @@ export default Object.assign(website, {
     productive: process.env.NODE_ENV === 'production',
     subscription: process.env.LOCA_PRODUCTIVE !== undefined && process.env.LOCA_PRODUCTIVE.toLowerCase() === 'true',
     demomode,
-    database: demomode ? 'demodb' : process.env.LOCA_DBNAME || 'demodb'
+    database: demomode ? 'demodb' : process.env.LOCA_DBNAME || 'demodb',
+    EMAILER_URI: process.env.EMAILER_URI ||'http://localhost:8083/emailer',
 });

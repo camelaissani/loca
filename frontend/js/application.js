@@ -38,4 +38,21 @@ application.openPrintPreview = (url) => {
     window.open(url, '_blank', 'location=no,menubar=yes,status=no,titlebar=yes,toolbar=yes,scrollbars=yes,resizable=yes,width=1000,height=700');
 };
 
+application.sendEmail = (tenantIds, document, year, month, callback=()=>{}) => {
+    if (!tenantIds) {
+        callback();
+    }
+    application.httpPost({
+        uri: '/api/emails',
+        data: {
+            document,
+            tenantIds,
+            year,
+            month
+        }
+    }, () => {
+        callback();
+    });
+};
+
 export default application;

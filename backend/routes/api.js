@@ -9,6 +9,7 @@ import propertyManager from '../managers/propertymanager';
 import ownerManager from '../managers/ownermanager';
 import notificationManager from '../managers/notificationmanager';
 import accountingManager from '../managers/accountingmanager';
+import emailManager from '../managers/emailmanager';
 
 export default function() {
     const router = express.Router();
@@ -55,6 +56,10 @@ export default function() {
     ownerRouter.get('/', ownerManager.all);
     ownerRouter.patch('/:id', ownerManager.update);
     router.use('/owner', ownerRouter);
+
+    const emailRouter = express.Router();
+    emailRouter.post('/', emailManager.send);
+    router.use('/emails', emailRouter);
 
     const apiRouter = express.Router();
     apiRouter.use('/api', router);
