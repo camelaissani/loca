@@ -24,8 +24,15 @@ function sendEmail(messages) {
                     }
                     return;
                 }
-                logger.info(`GET ${config.EMAILER_URI}/${message.document}/${message.tenantId}/${message.term} ${res.statusCode}`);
-                resolve(res.body);
+                let body = '';
+                res.on('data', chunk => {
+                    body += chunk;
+                });
+                res.on('end', () => {
+                    logger.info(`GET ${config.EMAILER_URI}/${message.document}/${message.tenantId}/${message.term} ${res.statusCode}`);
+                    logger.debug(body);
+                    resolve(JSON.parse(body));
+                });
             });
             req.end();
         });
@@ -45,7 +52,7 @@ export default {
             };
         });
         sendEmail(messages)
-        .then(()=> res.sendStatus(200))
+        .then((resBody)=> res.status(200).json(resBody))
         .catch(err => {
             res.status(500).send(err);
             logger.error(err);
