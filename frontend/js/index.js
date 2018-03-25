@@ -24,7 +24,9 @@ const LOCA = application.get('LOCA');
 ///////////////////////////////////////////////////////////////////////////////
 // routes
 ///////////////////////////////////////////////////////////////////////////////
-application.get(new ConnectionMiddleware());
+const connectionMiddleware = new ConnectionMiddleware();
+application.get(connectionMiddleware);
+application.post(connectionMiddleware);
 application.get(new MenuMiddleware());
 application.get(/^\/view\//, new ViewMiddleware());
 [
