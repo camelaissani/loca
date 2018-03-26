@@ -80,6 +80,10 @@ class RentMiddleware extends ViewController {
         if ($rentsSelected.length >0) {
             this.templateSelectedRow = Handlebars.compile($rentsSelected.html());
         }
+        const $emailStatus = $('#email-status-template');
+        if ($emailStatus.length >0) {
+            this.emailStatus = Handlebars.compile($emailStatus.html());
+        }
     }
 
     // callback
@@ -90,11 +94,13 @@ class RentMiddleware extends ViewController {
                 if (!result) {
                     return;
                 }
-                application.sendEmail(tenantIds, 'invoice', LOCA.currentYear, LOCA.currentMonth, () => {
-                    this.closeForm(() => {
-                        if (this.list) {
-                            this.list.showAllRows();
-                        }
+                application.sendEmail(tenantIds, 'invoice', LOCA.currentYear, LOCA.currentMonth, status => {
+                    bootbox.alert(this.emailStatus({results: status}), () => {
+                        this.closeForm(() => {
+                            if (this.list) {
+                                this.list.showAllRows();
+                            }
+                        });
                     });
                 });
             });
@@ -107,11 +113,13 @@ class RentMiddleware extends ViewController {
                 if (!result) {
                     return;
                 }
-                application.sendEmail(tenantIds, 'rentcall', LOCA.currentYear, LOCA.currentMonth, () => {
-                    this.closeForm(() => {
-                        if (this.list) {
-                            this.list.showAllRows();
-                        }
+                application.sendEmail(tenantIds, 'rentcall', LOCA.currentYear, LOCA.currentMonth, status => {
+                    bootbox.alert(this.emailStatus({results: status}), () => {
+                        this.closeForm(() => {
+                            if (this.list) {
+                                this.list.showAllRows();
+                            }
+                        });
                     });
                 });
             });

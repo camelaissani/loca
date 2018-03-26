@@ -85,4 +85,28 @@
         </div>
     {{/each}}
 </script>
+
+<script id="email-status-template" type="text/x-handlebars-template">
+    <h4><i class="fa fa-envelope-o"></i> {{i18next key="Your mailings"}}</h4>
+    <table class="table table-bordered table-striped">
+    <colgroup>
+        <col class="col-xs-2">
+        <col class="col-xs-6">
+    </colgroup>
+    {{#each results}}
+    <tr class="{{#if error}}danger{{/if}}">
+        <td>{{name}}</td>
+        {{#if error}}
+            {{#if to}}
+            <td>{{i18next key="impossible to send document to"}} {{to}}</td>
+            {{else}}
+            <td>{{i18next key="no emails defined for tenant"}}</td>
+            {{/if}}
+        {{else}}
+        <td>{{i18next key="successfuly sent to"}} {{to}}</td>
+        {{/if}}
+    </tr>
+    {{/each}}
+    </table>
+</script>
 <!-- /HANDLEBAR TEMPLATES -->

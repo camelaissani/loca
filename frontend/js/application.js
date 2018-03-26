@@ -50,8 +50,8 @@ application.sendEmail = (tenantIds, document, year, month, callback=()=>{}) => {
             year,
             month
         }
-    }, () => {
-        callback();
+    }, (req, res) => {
+        callback(JSON.parse(res.responseText));
     });
 };
 
