@@ -1,30 +1,62 @@
 'use strict';
 
+import http from 'http';
 import moment from 'moment';
 import Contract from './contract';
 import FD from './frontdata';
 import rentModel from '../models/rent';
 import occupantModel from '../models/occupant';
+import config from '../../config';
 
-function _findAllOccupantRents(realm, month, year, callback) {
-    occupantModel.findFilter(realm, {
-        $orderby: {
-            name: 1
-        }
-    }, (errors, occupants) => {
-        if (errors && errors.length > 0) {
-            callback(errors);
-            return;
-        }
-        const occupantRents = [];
-        const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
-        occupants.forEach(occupant => {
-            const rents = occupant.rents.filter(rent => rent.term === term);
-            if (rents.length>0) {
-                occupantRents.push(FD.toRentData(rents[0], occupant));
+function _findAllOccupants(realm) {
+    return new Promise((resolve, reject) => {
+        occupantModel.findFilter(realm, {
+            $orderby: {
+                name: 1
             }
+        }, (errors, occupants) => {
+            if (errors && errors.length > 0) {
+                reject(errors);
+                return;
+            }
+            resolve(occupants);
         });
-        callback([], occupantRents);
+    });
+}
+
+function _getEmailStatus(term) {
+    return new Promise((resolve, reject) => {
+        const req = http.request(`${config.EMAILER_URI}/${term}`);
+        req.on('response', subRes => {
+            let body = '';
+            subRes.on('data', chunk => body+=chunk);
+            subRes.on('end', () => {
+                const emailStatus = JSON.parse(body).reduce((acc, status) => {
+                    const data = {
+                        to: status.to,
+                        sentDate: moment(status.sentDate).format('DD/MM/YYYY HH:MM')
+                    };
+                    if (!acc[status.tenantId]) {
+                        acc[status.tenantId] = {[status.document]: data};
+                    } else {
+                        const currentDocument = acc[status.tenantId][status.document];
+                        if (!currentDocument) {
+                            acc[status.tenantId][status.document] = data;
+                        } else {
+                            if (moment(currentDocument.sentDate).isBefore(moment(status.sentDate))) {
+                                acc[status.tenantId][status.document] = data;
+                            }
+                        }
+                    }
+                    return acc;
+                }, {});
+                resolve(emailStatus);
+            });
+        });
+        req.on('error', error => {
+            reject(error);
+        });
+        req.end();
     });
 }
 
@@ -136,21 +168,38 @@ function rentsOfOccupant(req, res) {
 
 function all(req, res) {
     const realm = req.realm;
-    let currentDate = moment();
 
+    let currentDate = moment();
     if (req.params.year && req.params.month) {
         currentDate = moment(`${req.params.month}/${req.params.year}`, 'MM/YYYY');
     }
+    const month = currentDate.month() + 1;
+    const year = currentDate.year();
+    const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
 
-    _findAllOccupantRents(realm, currentDate.month() + 1, currentDate.year(), (errors, rents) => {
-        if (errors && errors.length > 0) {
-            res.json({
-                errors: errors
-            });
-            return;
-        }
-        res.json(rents);
-    });
+    const occupants = [];
+    _findAllOccupants(realm)
+    .then(dbOccupants => {
+        dbOccupants.reduce((acc, occupant) => {
+            const rents = occupant.rents.filter(rent => rent.term === term);
+            if (rents.length>0) {
+                acc.push(occupant);
+            }
+            return acc;
+        }, occupants);
+        return _getEmailStatus(term);
+    })
+    .then(emailStatus => {
+        res.json(occupants.map(occupant => {
+            const rents = occupant.rents.filter(rent => rent.term === term);
+            return FD.toRentData(
+                rents[0],
+                occupant,
+                emailStatus[occupant._id]
+            );
+        }));
+    })
+    .catch(errors => res.json({errors}));
 }
 
 function overview(req, res) {
@@ -160,15 +209,12 @@ function overview(req, res) {
     if (req.params.year && req.params.month) {
         currentDate = moment(`${req.params.month}/${req.params.year}`, 'MM/YYYY');
     }
+    const month = currentDate.month() + 1;
+    const year = currentDate.year();
+    const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
 
-    _findAllOccupantRents(realm, currentDate.month() + 1, currentDate.year(), (errors, rents) => {
-        if (errors && errors.length > 0) {
-            res.json({
-                errors: errors
-            });
-            return;
-        }
-
+    _findAllOccupants(realm)
+    .then(dbOccupants => {
         const overview = {
             countAll: 0,
             countPaid: 0,
@@ -179,24 +225,33 @@ function overview(req, res) {
             totalNotPaid: 0
         };
 
-        if (rents) {
-            rents.reduce((acc, currentRent) => {
-                if (currentRent.totalAmount <= 0 || currentRent.newBalance >= 0) {
-                    acc.countPaid++;
-                } else if (currentRent.payment > 0) {
-                    acc.countPartiallyPaid++;
-                } else {
-                    acc.countNotPaid++;
-                }
-                acc.countAll ++;
-                acc.totalToPay += currentRent.totalToPay;
-                acc.totalPaid += currentRent.payment;
-                acc.totalNotPaid -= currentRent.newBalance;
-
-                return acc;
-            }, overview);
-        }
-        res.json(overview);
+        res.json(dbOccupants
+        .reduce((acc, occupant) => {
+            const rents = occupant.rents.filter(rent => rent.term === term);
+            if (rents.length>0) {
+                acc.push(FD.toRentData(rents[0], occupant));
+            }
+            return acc;
+        }, [])
+        .reduce((acc, rentData) => {
+            if (rentData.totalAmount <= 0 || rentData.newBalance >= 0) {
+                acc.countPaid++;
+            } else if (rentData.payment > 0) {
+                acc.countPartiallyPaid++;
+            } else {
+                acc.countNotPaid++;
+            }
+            acc.countAll ++;
+            acc.totalToPay += rentData.totalToPay;
+            acc.totalPaid += rentData.payment;
+            acc.totalNotPaid -= rentData.newBalance;
+            return acc;
+        }, overview));
+    })
+    .catch(errors => {
+        res.json({
+            errors: errors
+        });
     });
 }
 

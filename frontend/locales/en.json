@@ -1,5 +1,6 @@
 {
     "__fmt_date__": "MM-DD-YYYY",
+    "__fmt_datetime__": "MM-DD-YYYY HH[h]M",
     "__fmt_number_thousand_separator": ",",
     "__fmt_number_decimal_separator": ".",
     "[code: ]": "[code: {{code}}]",
@@ -214,6 +215,7 @@
     "Selected rent_plural": "Selected rents",
     "Selected property": "Selected property",
     "Selected property_plural": "Selected properties",
+    "Sent by email the": "Sent by email the",
     "Server access problem. Check your network connection": "Server access problem. Check your network connection",
     "Server is taking too long to reply": "Server is taking too long to reply",
     "Short business lease contract": "Short business lease contract",

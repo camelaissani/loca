@@ -2,28 +2,24 @@ import moment from 'moment';
 import math from 'mathjs';
 import config from '../../config';
 
-function toRentData(inputRent, inputOccupant) {
-    const rentToReturn = {};
+function toRentData(inputRent, inputOccupant, emailStatus) {
     const rent = JSON.parse(JSON.stringify(inputRent));
-
     const rentMoment = moment(String(rent.term), 'YYYYMMDDHH');
-    Object.assign(
-        rentToReturn,
-        {
-            month: rent.month,
-            year: rent.year,
-            balance: rent.total.balance,
-            newBalance:  rent.total.payment - rent.total.grandTotal,
-            payment: rent.total.payment,
-            discount: rent.total.discount,
-            totalAmount: rent.total.grandTotal,
-            totalWithoutBalanceAmount: rent.total.grandTotal - rent.total.balance,
-            totalToPay: rent.total.grandTotal,
-            description: rent.description,
-            countMonthNotPaid: 0,
-            paymentStatus: []
-        }
-    );
+
+    const rentToReturn = {
+        month: rent.month,
+        year: rent.year,
+        balance: rent.total.balance,
+        newBalance:  rent.total.payment - rent.total.grandTotal,
+        payment: rent.total.payment,
+        discount: rent.total.discount,
+        totalAmount: rent.total.grandTotal,
+        totalWithoutBalanceAmount: rent.total.grandTotal - rent.total.balance,
+        totalToPay: rent.total.grandTotal,
+        description: rent.description,
+        countMonthNotPaid: 0,
+        paymentStatus: []
+    };
 
     // Last payment win :(
     // Currently the UI support only one payment
@@ -98,7 +94,13 @@ function toRentData(inputRent, inputOccupant) {
         }
     }
 
+
     if (inputOccupant) {
+        // email status
+        if (emailStatus) {
+            Object.assign(rentToReturn, {emailStatus});
+        }
+
         const occupant = toOccupantData(inputOccupant);
 
         Object.assign(
@@ -114,18 +116,19 @@ function toRentData(inputRent, inputOccupant) {
         // count number of month rent not paid
         let endCounting = false;
         inputOccupant.rents
-        .reverse()
+        //.reverse()
         .filter(currentRent => {
             if (moment(String(currentRent.term), 'YYYYMMDDHH').isSameOrBefore(moment(), 'month')) {
                 if (endCounting) {
                     return false;
                 }
 
-                const payment = currentRent.total.payment;
+                //const payment = currentRent.total.payment;
                 const totalAmount = currentRent.total.grandTotal;
                 const newBalance =  currentRent.total.payment - currentRent.total.grandTotal;
 
-                if (payment || totalAmount <= 0 || newBalance >= 0) {
+                //if (payment || totalAmount <= 0 || newBalance >= 0) {
+                if (totalAmount <= 0 || newBalance >= 0) {
                     endCounting = true;
                     return false;
                 }

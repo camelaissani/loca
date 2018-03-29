@@ -4,9 +4,9 @@
         <div class="list-col">
             <div class="list-label">
                 {{#if status}}
-                <div class="{{cssClassPaymentStatus}} js-list-value">
-                    {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
-                </div>
+                    <div class="{{cssClassPaymentStatus}} hidden js-list-value">
+                        {{paymentStatus}} <!-- {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}} -->
+                    </div>
                 {{/if}}
                 {{> view-rent-payment-badges-template}}
             </div>
@@ -27,6 +27,11 @@
         </div>
         <div class="list-col">
             <div class="list-label clearfix">
+                <div class="pull-right">
+                {{> view-rent-email-status-badges-template}}
+                </div>
+            </div>
+            <div class="list-label clearfix">
                 <small class="pull-right"><%= t('Payment') %></small>
             </div>
             <div class="list-payment-price text-right">
@@ -38,7 +43,6 @@
                     {{formatMoney newBalance withOdometer='newBalance'}}
                 </div>
             </div>
-
             <div data-toggle="tooltip" data-placement="right" class="list-comment-link" data-html="true" title="{{breaklines description}}" style="{{commentVisible description}}"><span class="glyphicon glyphicon-comment"></span></div>
         </div>
         <div class="list-selection-overlay"></i></div>
@@ -46,13 +50,32 @@
 </script>
 
 <script id="view-rent-payment-badges-template" type="text/x-handlebars-template">
-        <ul class="list-inline">
-            {{#each paymentStatus}}
-            <li>
-                    {{paymentBadgeStatus}}
-            </li>
-            {{/each}}
-        </ul>
+    <ul class="list-inline">
+        {{#each paymentStatus}}
+        <li>
+            {{paymentBadgeStatus}}
+        </li>
+        {{/each}}
+    </ul>
+</script>
+
+<script id="view-rent-email-status-badges-template" type="text/x-handlebars-template">
+    <ul class="list-inline">
+        <li>
+            {{#if emailStatus.rentcall}}
+            <span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.rentcall.sentDate}}"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}}</span>
+            {{else}}
+            <span class="label label-default"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}}</span>
+            {{/if}}
+        </li>
+        <li>
+            {{#if emailStatus.invoice}}
+            <span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.invoice.sentDate}}"><i class="fa fa-envelope-o"></i> {{i18next key="Rental invoice"}}</span>
+            {{else}}
+            <span class="label label-default"><i class="fa fa-envelope-o"></i> {{i18next key="Rental invoice"}}</span>
+            {{/if}}
+        </li>
+    </ul>
 </script>
 
 <script id="view-rent-list-content-template" type="text/x-handlebars-template">
@@ -65,21 +88,25 @@
     {{#each rows}}
         <div class="list-group-item">
             <div class="clearfix">
+            </div>
+            <div class="clearfix">
                 <div class="pull-left">
                     <h5>{{occupant.name}}</h5>
                 </div>
                 <div id="{{_id}}" class="pull-right js-user-action" data-id="remove-item-from-selection">
                     <i class="fa fa-times"></i>
                 </div>
+                <div class="pull-right">
+                    <h5>{{formatMoney totalToPay hideCurrency=false}}</h5>
+                </div>
             </div>
-            <small>
+            <!--small>
                 <div class="{{cssClassPaymentStatus}}">
                     {{paymentStatus}} {{#if countMonthNotPaid}} ({{i18next key='late month' count=countMonthNotPaid}}) {{/if}}
                 </div>
-            </small>
+            </small-->
             <div class="clearfix">
                 <div class="pull-right">
-                    <h4>{{formatMoney totalToPay hideCurrency=false}}</h4>
                 </div>
             </div>
         </div>

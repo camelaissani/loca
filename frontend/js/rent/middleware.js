@@ -73,6 +73,7 @@ class RentMiddleware extends ViewController {
         // Handlebars templates
         Handlebars.registerPartial('history-rent-row-template', $('#history-rent-row-template').html());
         Handlebars.registerPartial('view-rent-payment-badges-template', $('#view-rent-payment-badges-template').html());
+        Handlebars.registerPartial('view-rent-email-status-badges-template', $('#view-rent-email-status-badges-template').html());
 
         this.templateHistoryRents = Handlebars.compile($('#history-rents-template').html());
 

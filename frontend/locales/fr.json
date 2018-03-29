@@ -1,5 +1,6 @@
 {
     "__fmt_date__": "DD/MM/YYYY",
+    "__fmt_datetime__": "DD/MM/YYYY HH[h]MM",
     "__fmt_number_thousand_separator": " ",
     "__fmt_number_decimal_separator": ",",
     "[code: ]": "[code : {{code}}]",
@@ -151,7 +152,7 @@
     "Next": "Suivant",
     "No": "Non",
     "No account yet?": "Pas encore de compte ?",
-    "Not paid": "Impayés",
+    "Not paid": "Impayé",
     "Notice letter for rent payment": "Simple demande de paiement de loyer",
     "Only the payment of rent period are authorized. Please enter a date between": "Seul le paiement du loyer de {{period}} est autorisé. La date de règlement doit être entre le {{minDate}} et le {{maxDate}}",
     "Order to pay or vacate": "Demande de règlement de loyer impayé sous peine d'expulsion",
@@ -214,6 +215,7 @@
     "Selected rent_plural": "Loyers sélectionnés",
     "Selected property": "Bien sélectionné",
     "Selected property_plural": "Biens sélectionnés",
+    "Sent by email the": "Envoyé par email le",
     "Server access problem. Check your network connection": "Problème d'accès au serveur. Vérifiez votre connexion reseau",
     "Server is taking too long to reply": "Réponse trop longue du serveur",
     "Short business lease contract": "Contrat de bail précaire",

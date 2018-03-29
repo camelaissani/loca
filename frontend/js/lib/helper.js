@@ -37,6 +37,10 @@ class Helper {
     static formatDate(text) {
         return moment(text, 'DD/MM/YYYY').format(i18next.t('__fmt_date__'));
     }
+
+    static formatDateTime(text) {
+        return moment(text, 'DD/MM/YYYY HH:MM').format(i18next.t('__fmt_datetime__'));
+    }
 }
 
 //Handlebars helpers
@@ -133,6 +137,11 @@ Handlebars.registerHelper('formatDate', function(text/*, options*/) {
     text = Helper.formatDate(text);
     return new Handlebars.SafeString(text);
 });
+Handlebars.registerHelper('formatDateTime', function(text/*, options*/) {
+    text = Handlebars.Utils.escapeExpression(text);
+    text = Helper.formatDateTime(text);
+    return new Handlebars.SafeString(text);
+});
 Handlebars.registerHelper('formatMonth', function(text/*, options*/) {
     text = Handlebars.Utils.escapeExpression(text);
     text = Helper.formatMonth(text);
@@ -204,13 +213,13 @@ Handlebars.registerHelper('paymentStatus', function() {
 Handlebars.registerHelper('paymentBadgeStatus', function() {
     var html = '';
     if (this.status === 'paid') {
-        html = '<span class="label label-success"><i class="fa fa-check"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
+        html = '<span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="'+i18next.t('Paid')+'"><i class="fa fa-check"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
     }
     else if (this.status === 'partialypaid') {
-        html = '<span class="label label-warning"><i class="fa fa-check"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
+        html = '<span class="label label-warning" data-toggle="tooltip" data-placement="bottom" title="'+i18next.t('Partially paid')+'"><i class="fa fa-exclamation-triangle"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
     }
     else if (this.status === 'notpaid') {
-        html = '<span class="label label-danger"><i class="fa fa-exclamation-triangle"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
+        html = '<span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="'+i18next.t('Not paid')+'"><i class="fa fa-exclamation-triangle"></i> '+moment.monthsShort()[parseInt(this.month, 10)-1].toUpperCase()+'</span>';
     }
     return new Handlebars.SafeString(html);
 });
