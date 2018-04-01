@@ -26,7 +26,7 @@ function _findAllOccupants(realm) {
 
 function _getEmailStatus(term) {
     return new Promise((resolve, reject) => {
-        const req = http.request(`${config.EMAILER_URI}/${term}`);
+        const req = http.request(`${config.EMAILER_URI}/status/${term}`);
         req.on('response', subRes => {
             let body = '';
             subRes.on('data', chunk => body+=chunk);
@@ -34,7 +34,7 @@ function _getEmailStatus(term) {
                 const emailStatus = JSON.parse(body).reduce((acc, status) => {
                     const data = {
                         to: status.to,
-                        sentDate: moment(status.sentDate).format('DD/MM/YYYY HH:MM')
+                        sentDate: moment(new Date(status.sentDate)).format('DD/MM/YYYY HH:MM')
                     };
                     if (!acc[status.tenantId]) {
                         acc[status.tenantId] = {[status.document]: data};
@@ -43,7 +43,7 @@ function _getEmailStatus(term) {
                         if (!currentDocument) {
                             acc[status.tenantId][status.document] = data;
                         } else {
-                            if (moment(currentDocument.sentDate).isBefore(moment(status.sentDate))) {
+                            if (moment(new Date(currentDocument.sentDate)).isBefore(moment(status.sentDate))) {
                                 acc[status.tenantId][status.document] = data;
                             }
                         }
