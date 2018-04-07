@@ -12,7 +12,7 @@ function sendEmail(messages) {
                 'id': message.tenantId,
                 'term': message.term
             });
-            const postUrl = new URL(config.EMAILER_URI);
+            const postUrl = new URL(config.EMAILER_URL);
             const postOption = {
                 hostname: postUrl.hostname,
                 port: postUrl.port,
@@ -32,7 +32,7 @@ function sendEmail(messages) {
                 });
                 res.on('end', () => {
                     if (res.statusCode>299) {
-                        logger.error(`POST ${config.EMAILER_URI} ${res.statusCode}`);
+                        logger.error(`POST ${config.EMAILER_URL} ${res.statusCode}`);
                         logger.error(`data sent: ${postData}`);
                         if (res.body) {
                             logger.error(`response: ${res.body}`);
@@ -43,7 +43,7 @@ function sendEmail(messages) {
                         }
                         return;
                     }
-                    logger.info(`POST ${config.EMAILER_URI} ${res.statusCode}`);
+                    logger.info(`POST ${config.EMAILER_URL} ${res.statusCode}`);
                     logger.debug(`data sent: ${postData}`);
                     logger.debug(`response: ${body}`);
                     resolve(JSON.parse(body));
@@ -51,7 +51,7 @@ function sendEmail(messages) {
             });
             req.on('error', err => {
                 reject(err);
-                logger.error(`POST ${config.EMAILER_URI} failed`);
+                logger.error(`POST ${config.EMAILER_URL} failed`);
                 logger.error(`data sent: ${postData}`);
                 logger.error(err);
             });

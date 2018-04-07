@@ -6,7 +6,7 @@ import logger from 'winston';
 // configure default logger
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
-    level: process.env.LOCA_LOGGER_LEVEL || (debugMode ? 'debug' : 'info'),
+    level: process.env.LOCA_LOGGER_LEVEL || process.env.LOGGER_LEVEL || (debugMode ? 'debug' : 'info'),
     colorize: true
 });
 
@@ -123,27 +123,33 @@ routes.forEach(route => {
 });
 
 // Start web app
-if (!debugMode) {
-    logger.info('In production mode');
-} else {
+if (debugMode) {
     // Create new middleware to handle errors and respond with content negotiation.
     // This middleware is only intended to be used in a development environment,
     // as the full error stack traces will be sent back to the client when an error occurs.
     app.use(errorHandler());
-    logger.info('In development mode (no minify/no uglify)');
-}
-const configdir = process.env.LOCA_CONFIG_DIR || path.join(__dirname, 'config');
-logger.debug('loaded configuration from', configdir);
-logger.debug(JSON.stringify(config, null,'\t'));
-if (config.demomode) {
-    logger.info('In demo mode (login disabled)');
 }
 
 db.init();
 
+if (config.demomode) {
+    require('./scripts/mongorestore.mjs');
+}
+
 const http_port = process.env.LOCA_NODEJS_PORT || 8081;
 app.listen(http_port, function() {
     logger.info('Listening port ' + http_port);
+    if (!debugMode) {
+        logger.info('In production mode');
+    } else {
+        logger.info('In development mode (no minify/no uglify)');
+    }
+    if (config.demomode) {
+        logger.info('In demo mode (login disabled)');
+    }
+    const configdir = process.env.LOCA_CONFIG_DIR || path.join(__dirname, 'config');
+    logger.debug('loaded configuration from', configdir);
+    logger.debug(JSON.stringify(config, null,'\t'));
     if (debugMode) {
         const LiveReloadServer = require('live-reload');
         LiveReloadServer({

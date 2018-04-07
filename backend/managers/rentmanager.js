@@ -1,5 +1,5 @@
 'use strict';
-
+import logger from 'winston';
 import http from 'http';
 import moment from 'moment';
 import Contract from './contract';
@@ -26,7 +26,8 @@ function _findAllOccupants(realm) {
 
 function _getEmailStatus(term) {
     return new Promise((resolve, reject) => {
-        const req = http.request(`${config.EMAILER_URI}/status/${term}`);
+        logger.debug(`get email status ${config.EMAILER_URL}/status/${term}`);
+        const req = http.request(`${config.EMAILER_URL}/status/${term}`);
         req.on('response', subRes => {
             let body = '';
             subRes.on('data', chunk => body+=chunk);
