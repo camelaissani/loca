@@ -32,20 +32,20 @@ function sendEmail(messages) {
                 });
                 res.on('end', () => {
                     if (res.statusCode>299) {
-                        let err = `${res.statusCode} ${res.statusMessage}`;
                         logger.error(`POST ${config.EMAILER_URL} ${res.statusCode}`);
                         logger.error(`data sent: ${postData}`);
                         if (res.body) {
                             logger.error(`response: ${res.body}`);
-                            err = res.body;
+                            reject(res.body);
+                            return;
                         }
                         if (config.demomode) {
                             logger.info('email status fallback workflow activated in demo mode');
                             const result = Object.assign({}, message);
-                            result.error = 'demo mode, mail cannot be sent';
+                            result.error = 'demo mode, emails cannot be sent';
                             resolve([result]);
                         } else {
-                            reject(err);
+                            reject(`${res.statusCode} ${res.statusMessage}`);
                         }
                         return;
                     }
