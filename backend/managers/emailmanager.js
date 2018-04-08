@@ -32,13 +32,19 @@ function sendEmail(messages) {
                 });
                 res.on('end', () => {
                     if (res.statusCode>299) {
+                        let err = `${res.statusCode} ${res.statusMessage}`;
                         logger.error(`POST ${config.EMAILER_URL} ${res.statusCode}`);
                         logger.error(`data sent: ${postData}`);
                         if (res.body) {
                             logger.error(`response: ${res.body}`);
-                            reject(res.body);
+                            err = res.body;
+                        }
+                        if (config.demomode) {
+                            logger.info('email status fallback workflow activated in demo mode');
+                            const result = Object.assign({}, message);
+                            result.error = 'demo mode, mail cannot be sent';
+                            resolve([result]);
                         } else {
-                            const err = `${res.statusCode} ${res.statusMessage}`;
                             reject(err);
                         }
                         return;
@@ -50,10 +56,17 @@ function sendEmail(messages) {
                 });
             });
             req.on('error', err => {
-                reject(err);
                 logger.error(`POST ${config.EMAILER_URL} failed`);
                 logger.error(`data sent: ${postData}`);
                 logger.error(err);
+                if (config.demomode) {
+                    logger.info('email status fallback workflow activated in demo mode');
+                    const result = Object.assign({}, message);
+                    result.error = 'demo mode, mail cannot be sent';
+                    resolve([result]);
+                } else {
+                    reject(err);
+                }
             });
             req.write(postData);
             req.end();

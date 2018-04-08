@@ -55,7 +55,13 @@ function _getEmailStatus(term) {
             });
         });
         req.on('error', error => {
-            reject(error);
+            if (config.demomode) {
+                logger.error(error);
+                logger.info('email status fallback workflow activated in demo mode');
+                resolve({});
+            } else {
+                reject(error);
+            }
         });
         req.end();
     });
