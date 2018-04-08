@@ -6,7 +6,7 @@ import logger from 'winston';
 // configure default logger
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
-    level: process.env.LOCA_LOGGER_LEVEL || process.env.LOGGER_LEVEL || (debugMode ? 'debug' : 'info'),
+    level: process.env.LOCA_LOGGER_LEVEL || process.env.LOGGER_LEVEL || 'debug',
     colorize: true
 });
 
@@ -136,7 +136,7 @@ if (config.demomode) {
     require('./scripts/mongorestore.mjs');
 }
 
-const http_port = process.env.LOCA_NODEJS_PORT || 8081;
+const http_port = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8081;
 app.listen(http_port, function() {
     logger.info('Listening port ' + http_port);
     if (!debugMode) {
@@ -147,7 +147,7 @@ app.listen(http_port, function() {
     if (config.demomode) {
         logger.info('In demo mode (login disabled)');
     }
-    const configdir = process.env.LOCA_CONFIG_DIR || path.join(__dirname, 'config');
+    const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, 'config');
     logger.debug('loaded configuration from', configdir);
     logger.debug(JSON.stringify(config, null,'\t'));
     if (debugMode) {

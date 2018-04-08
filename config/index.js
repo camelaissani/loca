@@ -4,7 +4,7 @@ import fs from 'fs';
 const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, '..', 'config');
 const website = JSON.parse(fs.readFileSync(path.join(configdir, 'website.json'), 'utf8'));
 
-let demomode = process.env.LOCA_DEMOMODE || process.env.DEMOMODE || true;
+let demomode = process.env.LOCA_DEMOMODE || process.env.DEMO_MODE || true;
 if (demomode && typeof(demomode) !== 'boolean') {
     demomode = demomode.toLowerCase() === 'true';
 }
