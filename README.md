@@ -20,21 +20,8 @@ The idea is to make easy the management of properties and occupants by proposing
 [Check out the live demo.](http://demo.nuageprive.fr/)
 
 ## Getting started
-First of all, you must have **nodejs** and **mongodb** installed on your computer.
 
-Run these commands in your terminal in the directory of the cloned repository.
-
-```
-npm install
-node start
-```
-
-For developing, run these commands:
-
-```
-npm install
-npm run dev
-```
+Follow instructions from [here](https://github.com/microrealestate/microrealestate#getting-started)
 
 Technical Stack
 ---------------
