@@ -3,6 +3,15 @@ import moment from 'moment';
 export default function(contract, rentDate, previousRent, settlements, rent) {
     const currentMoment = moment(rentDate, 'DD/MM/YYYY HH:mm');
     rent.term = Number(currentMoment.format('YYYYMMDDHH'));
+    if (contract.frequency === 'months') {
+        rent.term = Number(moment(currentMoment).startOf('month').format('YYYYMMDDHH'));
+    }
+    if (contract.frequency === 'days') {
+        rent.term = Number(moment(currentMoment).startOf('day').format('YYYYMMDDHH'));
+    }
+    if (contract.frequency === 'hours') {
+        rent.term = Number(moment(currentMoment).startOf('hour').format('YYYYMMDDHH'));
+    }
     rent.month = currentMoment.month() + 1; // 0 based
     rent.year = currentMoment.year();
 
