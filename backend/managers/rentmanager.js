@@ -35,7 +35,7 @@ function _getEmailStatus(term) {
                 const emailStatus = JSON.parse(body).reduce((acc, status) => {
                     const data = {
                         to: status.to,
-                        sentDate: moment(new Date(status.sentDate)).tz("Europe/Paris").format('DD/MM/YYYY HH:MM')
+                        sentDate: moment(new Date(status.sentDate)).tz('Europe/Paris').format('DD/MM/YYYY HH:MM')
                     };
                     if (!acc[status.tenantId]) {
                         acc[status.tenantId] = {[status.document]: data};
