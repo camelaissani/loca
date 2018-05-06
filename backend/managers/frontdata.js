@@ -266,14 +266,16 @@ function toOccupantData(inputOccupant) {
     );
 
     // Compute if contract is completed
-    if (!occupant.terminationDate) {
-        const currentDate = moment();
-        const momentTermination = moment(occupant.terminationDate, 'DD/MM/YYYY');
-        if (momentTermination.isBefore(currentDate, 'month')) {
+    occupant.terminated = false;
+    const currentDate = moment();
+    if (occupant.terminationDate) {
+        if (moment(occupant.terminationDate, 'DD/MM/YYYY').isBefore(currentDate, 'month')) {
             occupant.terminated = true;
         }
     } else {
-        occupant.terminated = false;
+        if (moment(occupant.endDate, 'DD/MM/YYYY').isBefore(currentDate, 'month')) {
+            occupant.terminated = true;
+        }
     }
 
     occupant.office = {
