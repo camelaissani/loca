@@ -13,10 +13,10 @@ COPY . .
 FROM base as dependencies
 RUN npm install && \
     npm run buildprod && \
-    NODE_ENV=production npm prune
+    npm prune
 
 FROM base AS release
 RUN npm install forever -g
 COPY --from=dependencies /usr/app .
 EXPOSE 8081
-CMD NODE_ENV=production forever ./server.js
+CMD forever ./server.js
