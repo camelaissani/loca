@@ -1,0 +1,7 @@
+.git
+.gitignore
+.vscode
+lib-cov
+coverage
+**/node_modules
+dist
