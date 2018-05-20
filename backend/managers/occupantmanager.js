@@ -268,6 +268,7 @@ function overview(req, res) {
         countActive: 0,
         countInactive: 0
     };
+    const currentDate = moment();
 
     occupantModel.findFilter(realm, {
         $orderby: {
@@ -283,10 +284,11 @@ function overview(req, res) {
             if (occupants) {
                 result.countAll = occupants.length;
                 result = occupants.reduce((acc, occupant) => {
-                    if (!occupant.terminationDate) {
-                        acc.countActive++;
-                    } else {
+                    const endMoment = moment(occupant.terminationDate || occupant.endDate, 'DD/MM/YYYY');
+                    if (endMoment.isBefore(currentDate, 'day')) {
                         acc.countInactive++;
+                    } else {
+                        acc.countActive++;
                     }
                     return acc;
                 }, result);

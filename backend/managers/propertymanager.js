@@ -159,7 +159,7 @@ function overview(req, res) {
             }
             result.countAll = properties.length;
             properties.reduce( (acc, property) => {
-                if (!property.lastBusyDay || moment(property.lastBusyDay, 'DD/MM/YYYY').isBefore(moment(), 'month')) {
+                if (property.available) {
                     acc.countFree++;
                 } else {
                     acc.countBusy++;

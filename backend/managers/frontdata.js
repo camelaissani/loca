@@ -268,16 +268,10 @@ function toOccupantData(inputOccupant) {
     // Compute if contract is completed
     occupant.terminated = false;
     const currentDate = moment();
-    if (occupant.terminationDate) {
-        if (moment(occupant.terminationDate, 'DD/MM/YYYY').isBefore(currentDate, 'month')) {
-            occupant.terminated = true;
-        }
-    } else {
-        if (moment(occupant.endDate, 'DD/MM/YYYY').isBefore(currentDate, 'month')) {
-            occupant.terminated = true;
-        }
+    const endMoment = moment(occupant.terminationDate || occupant.endDate, 'DD/MM/YYYY');
+    if (endMoment.isBefore(currentDate, 'day')) {
+        occupant.terminated = true;
     }
-
     occupant.office = {
         surface: 0,
         m2Price: 0,
@@ -324,7 +318,7 @@ function toAccountingData(year, inputOccupants) {
     const occupants = JSON.parse(JSON.stringify(inputOccupants))
     .filter(occupant => {
         const beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
-        const endMoment = moment(occupant.terminationDate ? occupant.terminationDate : occupant.endDate, 'DD/MM/YYYY');
+        const endMoment = moment(occupant.terminationDate || occupant.endDate, 'DD/MM/YYYY');
         return beginMoment.isBetween(beginOfYear, endOfYear, 'day', '[]') ||
                endMoment.isBetween(beginOfYear, endOfYear, 'day', '[]')   ||
                (beginMoment.isSameOrBefore(beginOfYear) && endMoment.isSameOrAfter(endOfYear));
@@ -341,7 +335,7 @@ function toAccountingData(year, inputOccupants) {
                     reference: occupant.reference,
                     properties: occupant.properties.map((p) => { return {name: p.property.name, type: p.property.type};}),
                     beginDate: occupant.beginDate,
-                    endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
+                    endDate: occupant.terminationDate || occupant.endDate,
                     deposit: occupant.guaranty,
                     rents: termsOfYear.map(term => {
                         let currentRent = occupant.rents.find(rent => rent.term === term);
@@ -393,7 +387,7 @@ function toAccountingData(year, inputOccupants) {
                         reference: occupant.reference,
                         properties: occupant.properties.map((p) => { return {name: p.property.name, type: p.property.type};}),
                         leaseBroken: occupant.terminationDate && occupant.terminationDate!==occupant.endDate,
-                        endDate: occupant.terminationDate?occupant.terminationDate:occupant.endDate,
+                        endDate: occupant.terminationDate || occupant.endDate,
                         deposit: occupant.guaranty,
                         depositRefund: occupant.guarantyPayback,
                         totalAmount: totalAmount,
@@ -406,6 +400,7 @@ function toAccountingData(year, inputOccupants) {
 }
 
 function toProperty(inputProperty, inputOccupant) {
+    const currentDate = moment();
     const property = {
         _id: inputProperty._id,
         name: inputProperty.name,
@@ -435,7 +430,7 @@ function toProperty(inputProperty, inputOccupant) {
             }
         );
         if (property.lastBusyDay) {
-            property.available = moment(property.lastBusyDay, 'DD/MM/YYYY').isBefore(moment(), 'month');
+            property.available = moment(property.lastBusyDay, 'DD/MM/YYYY').isBefore(currentDate, 'day');
         }
     }
 
