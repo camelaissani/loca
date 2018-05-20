@@ -8,6 +8,15 @@ function uriFromId(id) {
     return {nav: `/view/${id}`, history:`/${id}`};
 }
 
+function resizeRightMenus() {
+    const parentSize = $('#right-menu-pane').width();
+    $('.js-side-menu').each(function() {
+        const $activeMenu = $(this);
+        const affixPadding = $activeMenu.innerWidth() - $activeMenu.width();
+        $activeMenu.width(parentSize - affixPadding);
+    });
+}
+
 export default () => {
     $(document).on('click', '.js-nav-action', function() {
         const viewId = $(this).data('id');
@@ -32,6 +41,7 @@ export default () => {
 
     // affix management for js-side-menu
     $(document).on('before-show-card', '.js-side-menu', function() {
+        resizeRightMenus();
         $(this).affix({offset: { top: 0 }});
     });
 
@@ -45,14 +55,9 @@ export default () => {
     });
 
     $(document).on('affix.bs.affix', '.js-side-menu', function() {
-        $(this).width($(this).width());
+        const $menu = $(this);
+        $menu.width($menu.width());
     });
 
-    $(window).resize(() => {
-        const parentSize = $('#right-menu-pane').width();
-        $('.active.affix').each(function() {
-            const affixPadding = $(this).innerWidth() - $(this).width();
-            $(this).width(parentSize - affixPadding);
-        });
-    });
+    $(window).resize(() => resizeRightMenus());
 };
