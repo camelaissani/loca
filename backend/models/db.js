@@ -67,12 +67,31 @@ let db;
 export default {
     init() {
         if (!db) {
-            logger.silly(`connecting database ${config.database}...`);
-            db = mongojs(config.database, collections);
-            logger.info(`connected to ${config.database}`);
-            return;
+            return new Promise((resolve, reject) => {
+                logger.debug(`connecting database ${config.database}...`);
+                db = mongojs(config.database, collections);
+                db.listCollections(() => {}); // Run this command to force connection a this stage
+                db.on('connect', function() {
+                    logger.info(`connected to ${config.database}`);
+                    resolve();
+                });
+
+                db.on('error', function(err) {
+                    logger.error(`cannot connect to ${config.database}`);
+                    reject(err);
+                });
+            });
         }
-        logger.silly('database already connected');
+        logger.debug('database already connected');
+        return Promise.resolve();
+    },
+
+    exists() {
+        return new Promise((resolve, reject) => {
+            db.getCollectionNames((error, collectionNames) => {
+                resolve(!(error || !collectionNames || collectionNames.length === 0));
+            });
+        });
     },
 
     addCollection(collection) {
