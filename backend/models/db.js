@@ -87,7 +87,7 @@ export default {
     },
 
     exists() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve/*, reject*/) => {
             db.getCollectionNames((error, collectionNames) => {
                 resolve(!(error || !collectionNames || collectionNames.length === 0));
             });
