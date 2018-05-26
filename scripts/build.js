@@ -65,6 +65,7 @@ const buildCss = (opts) => {
                             throw ('purify exited with an empty css');
                         }
                         fs.writeFileSync(cssmin_file_path, purified_css);
+                        resolve(purified_css);
                     }
                 );
             }
