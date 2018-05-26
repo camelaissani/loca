@@ -1,7 +1,8 @@
 <script id="accounting-payments-template" type="text/x-handlebars-template">
     <h3><%= t('Payments') %></h3>
+    <div id="accounting-payments-table-top-hscroll"><div id="accounting-payments-fake-table"></div></div>
     <div class='table-responsive'>
-        <table id="accounting-payments-table" class="table table-condensed table-bordered table-hover">
+        <table id="accounting-payments-per-year-table" class="table table-condensed table-bordered table-hover">
             <thead>
                 <tr>
                     <td class="text-left"><%= t('Tenant') %></td>
