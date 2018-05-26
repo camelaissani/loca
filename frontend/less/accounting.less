@@ -1,4 +1,23 @@
 #view-accounting {
+    .table {
+        width: inherit;
+    }
+
+    tbody tr td {
+        height: 95px;
+        min-width: 90px;
+        max-width: 90px;
+        width: 90px;
+        &.inactive {
+            background-color: lighten(@gray-base, 80%);
+        }
+    }
+
+    tbody tr td:first-child {
+        max-width: none;
+        white-space: nowrap;
+    }
+
     #accounting-payments-table-top-hscroll {
         overflow-x: scroll;
         overflow-y: hidden;
@@ -8,20 +27,6 @@
     }
     #accounting-payments-per-year-table.table {
         margin-bottom: 0;
-        tbody tr td {
-            height: 95px;
-            min-width: 90px;
-            max-width: 90px;
-            width: 90px;
-            &.inactive {
-                background-color: lighten(@gray-base, 80%);
-            }
-        }
-    }
-
-    tbody tr td:first-child {
-        max-width: none;
-        white-space: nowrap;
     }
 
     #accounting-payments-table tbody tr td:first-child {
