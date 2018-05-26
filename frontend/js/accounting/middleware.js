@@ -80,7 +80,7 @@ class AccountingMiddleware extends ViewController {
                 data.payments.months = moment.months();
                 $('#view-accounting #accounting-payments-table').html(this.templatePaymentsTable(data.payments));
                 $('#view-accounting #accounting-entries-exits-table').html(this.templateEntriesExitsTable(data.entriesExists));
-                $('#view-accounting #accounting-payments-fake-table').width($('#view-accounting #accounting-payments-per-year-table').width());
+                $('#view-accounting #accounting-payments-fake-table').width($('#view-accounting #accounting-payments-per-year-table').outerWidth());
 
                 // bind top horizontal scrollbar with table
                 const $topHScroll = $('#view-accounting #accounting-payments-table-top-hscroll');
