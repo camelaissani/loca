@@ -12,6 +12,6 @@ COPY . .
 
 RUN npm install --silent
 
-EXPOSE 8081 9091
+EXPOSE 9229 8081 9091
 
 CMD npm run dev
