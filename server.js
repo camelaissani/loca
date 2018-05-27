@@ -137,12 +137,12 @@ db.init()
     if (config.demomode) {
         if (debugMode) {
             if (!isDbExists) {
-                require('./scripts/mongorestore.mjs');
+                require('./scripts/mongorestore');
             } else {
                 logger.debug('no database restore, it already exists');
             }
         } else {
-            require('./scripts/mongorestore.mjs');
+            require('./scripts/mongorestore');
         }
     }
 
