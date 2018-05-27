@@ -116,18 +116,16 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
         // count number of month rent not paid
         let endCounting = false;
         inputOccupant.rents
-        //.reverse()
+        .reverse()
         .filter(currentRent => {
             if (moment(String(currentRent.term), 'YYYYMMDDHH').isSameOrBefore(moment(), 'month')) {
                 if (endCounting) {
                     return false;
                 }
 
-                //const payment = currentRent.total.payment;
                 const totalAmount = currentRent.total.grandTotal;
                 const newBalance =  currentRent.total.payment - currentRent.total.grandTotal;
 
-                //if (payment || totalAmount <= 0 || newBalance >= 0) {
                 if (totalAmount <= 0 || newBalance >= 0) {
                     endCounting = true;
                     return false;
@@ -136,6 +134,7 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
             }
             return false;
         })
+        .reverse()
         .forEach(currentRent => {
             const payment = currentRent.total.payment;
             const term = moment(String(currentRent.term), 'YYYYMMDDHH');
