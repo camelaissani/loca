@@ -1,17 +1,17 @@
 'use strict';
 
-import express from 'express';
-import loginManager from '../managers/loginmanager';
-import rentManager from '../managers/rentmanager';
-import occupantManager from '../managers/occupantmanager';
-import documentManager from '../managers/documentmanager';
-import propertyManager from '../managers/propertymanager';
-import ownerManager from '../managers/ownermanager';
-import notificationManager from '../managers/notificationmanager';
-import accountingManager from '../managers/accountingmanager';
-import emailManager from '../managers/emailmanager';
+const express = require('express');
+const loginManager = require('../managers/loginmanager');
+const rentManager = require('../managers/rentmanager');
+const occupantManager = require('../managers/occupantmanager');
+const documentManager = require('../managers/documentmanager');
+const propertyManager = require('../managers/propertymanager');
+const ownerManager = require('../managers/ownermanager');
+const notificationManager = require('../managers/notificationmanager');
+const accountingManager = require('../managers/accountingmanager');
+const emailManager = require('../managers/emailmanager');
 
-export default function() {
+module.exports = function() {
     const router = express.Router();
 
     const realmsRouter = express.Router();
@@ -64,4 +64,4 @@ export default function() {
     const apiRouter = express.Router();
     apiRouter.use('/api', router);
     return apiRouter;
-}
+};

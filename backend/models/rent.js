@@ -1,4 +1,4 @@
-import OF from './objectfilter';
+const OF = require('./objectfilter');
 
 class RentModel {
     constructor() {
@@ -35,4 +35,4 @@ class RentModel {
     }
 }
 
-export default new RentModel();
+module.exports = new RentModel();

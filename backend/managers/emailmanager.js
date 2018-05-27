@@ -2,7 +2,7 @@ const moment = require('moment');
 const http = require('http');
 const { URL } = require('url');
 const logger = require('winston');
-const config = require('../../config').default;
+const config = require('../../config');
 
 function sendEmail(messages) {
     return Promise.all(messages.map((message) => {
@@ -74,7 +74,7 @@ function sendEmail(messages) {
     }));
 }
 
-export default {
+module.exports = {
     send(req, res) {
         const body = req.body;
         const document = body.document;

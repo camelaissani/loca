@@ -1,8 +1,8 @@
 /* eslint-env node, mocha */
-import math from 'mathjs';
-import assert from 'assert';
-import moment from 'moment';
-import BL from '../../backend/businesslogic';
+const math = require('mathjs');
+const assert = require('assert');
+const moment = require('moment');
+const BL = require('../../backend/businesslogic');
 
 describe('business logic rent computation', () => {
     describe('one property rented', () => {

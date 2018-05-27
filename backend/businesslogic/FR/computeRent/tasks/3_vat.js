@@ -1,4 +1,4 @@
-export default function(contract, rentDate, previousRent, settlements, rent) {
+module.exports = function(contract, rentDate, previousRent, settlements, rent) {
     if (contract.vatRate) {
         const rate = contract.vatRate || 0;
 
@@ -31,4 +31,4 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
     }
 
     return rent;
-}
+};

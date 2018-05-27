@@ -1,9 +1,9 @@
 'use strict';
 
-import moment from 'moment';
-import FD from './frontdata';
-import occupantModel from '../models/occupant';
-import documentModel from '../models/document';
+const moment = require('moment');
+const FD = require('./frontdata');
+const occupantModel = require('../models/occupant');
+const documentModel = require('../models/document');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
@@ -46,6 +46,6 @@ function update(req, res) {
     });
 }
 
-export default {
+module.exports = {
     update
 };

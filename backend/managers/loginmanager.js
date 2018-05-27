@@ -1,11 +1,11 @@
 'use strict';
 
-import bcrypt from 'bcryptjs';
-import logger from 'winston';
-import passport from 'passport';
-import config from '../../config';
-import accountModel from '../models/account';
-import realmModel from '../models/realm';
+const bcrypt = require('bcryptjs');
+const logger = require('winston');
+const passport = require('passport');
+const config = require('../../config');
+const accountModel = require('../models/account');
+const realmModel = require('../models/realm');
 
 const ResponseTypes = {
     SUCCESS: 'success',
@@ -351,4 +351,4 @@ if (config.demomode) {
     };
 }
 
-export default loginManager;
+module.exports = loginManager;

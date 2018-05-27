@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
 
-export default function(contract, rentDate, previousRent, settlements) {
+module.exports = function(contract, rentDate, previousRent, settlements) {
     const rent = {
         term: 0,
         month: 0,
@@ -62,7 +62,7 @@ export default function(contract, rentDate, previousRent, settlements) {
     const tasks_dir = path.join(__dirname, 'tasks');
     const taskFiles = fs.readdirSync(tasks_dir);
     return taskFiles.reduce((rent, taskFile) => {
-        const task = require(path.join(tasks_dir, taskFile)).default;
+        const task = require(path.join(tasks_dir, taskFile));
         return task(contract, rentDate, previousRent, settlements, rent);
     }, rent);
-}
+};

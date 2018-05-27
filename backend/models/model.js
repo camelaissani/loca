@@ -1,8 +1,8 @@
 'use strict';
-import logger from 'winston';
-import db  from './db';
+const logger = require('winston');
+const db  = require('./db');
 
-export default class Model {
+module.exports = class Model {
 
     constructor(collection) {
         this.collection = collection;
@@ -84,4 +84,4 @@ export default class Model {
             callback(errors && errors.length > 0 ? errors : null);
         });
     }
-}
+};

@@ -1,9 +1,9 @@
 'use strict';
 
-import moment from 'moment';
-import FD from './frontdata';
-import propertyModel from '../models/property';
-import occupantModel from '../models/occupant';
+const moment = require('moment');
+const FD = require('./frontdata');
+const propertyModel = require('../models/property');
+const occupantModel = require('../models/occupant');
 
 function _toPropertiesData(realm, inputProperties, callback) {
     occupantModel.findFilter(
@@ -172,7 +172,7 @@ function overview(req, res) {
     });
 }
 
-export default {
+module.exports = {
     add,
     update,
     remove,

@@ -1,5 +1,5 @@
-import moment from 'moment';
-import BL from '../businesslogic';
+const moment = require('moment');
+const BL = require('../businesslogic');
 
 function create(contract) {
     const supportedFrequencies = ['hours', 'days', 'weeks', 'months', 'years'];
@@ -131,7 +131,7 @@ function _checkLostPayments(momentBegin, momentEnd, contract) {
     }
 }
 
-export default {
+module.exports = {
     create,
     update,
     terminate,

@@ -1,6 +1,6 @@
 'use strict';
-import OF from './objectfilter';
-import Model from './model';
+const OF = require('./objectfilter');
+const Model = require('./model');
 
 class OwnerModel extends Model {
     constructor() {
@@ -28,4 +28,4 @@ class OwnerModel extends Model {
     }
 }
 
-export default new OwnerModel();
+module.exports = new OwnerModel();

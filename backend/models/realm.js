@@ -1,7 +1,7 @@
 'use strict';
-import OF from './objectfilter';
-import Model from './model';
-import logger from 'winston';
+const OF = require('./objectfilter');
+const Model = require('./model');
+const logger = require('winston');
 
 class RealmModel extends Model {
     constructor() {
@@ -109,4 +109,4 @@ class RealmModel extends Model {
     }
 }
 
-export default new RealmModel();
+module.exports = new RealmModel();

@@ -1,10 +1,10 @@
 'use strict';
 
-import moment from 'moment';
-import FD from './frontdata';
-import Contract from './contract';
-import occupantModel from '../models/occupant';
-import propertyModel from '../models/property';
+const moment = require('moment');
+const FD = require('./frontdata');
+const Contract = require('./contract');
+const occupantModel = require('../models/occupant');
+const propertyModel = require('../models/property');
 
 function _buildPropertyMap(realm, callback) {
     propertyModel.findFilter(realm, {
@@ -298,7 +298,7 @@ function overview(req, res) {
     });
 }
 
-export default {
+module.exports = {
     add,
     update,
     remove,

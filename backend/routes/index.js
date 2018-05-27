@@ -1,10 +1,9 @@
-import express from 'express';
-import logger from 'winston';
-import api from './api';
-import auth from './auth';
-import page from './page';
-import pages from '../pages';
-
+const express = require('express');
+const logger = require('winston');
+const api = require('./api');
+const auth = require('./auth');
+const page = require('./page');
+const pages = require('../pages');
 
 function _shouldBeLogged(req, res, next) {
     if (!req.session || !req.user) {
@@ -33,7 +32,7 @@ function _shouldNotBeLoggedThenRedirect(req, res, next) {
     next();
 }
 
-export default [
+module.exports = [
     // control route access
     () => express.Router().use(/^\/api/, _shouldBeLogged),
     () => pages.restrictedList.reduce((router, pageDesc) => {

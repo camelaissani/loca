@@ -1,8 +1,8 @@
 'use strict';
 
-import logger from 'winston';
-import Model from './model';
-import OF from './objectfilter';
+const logger = require('winston');
+const Model = require('./model');
+const OF = require('./objectfilter');
 
 class AccountModel extends Model {
     constructor() {
@@ -39,4 +39,4 @@ class AccountModel extends Model {
     }
 }
 
-export default new AccountModel();
+module.exports = new AccountModel();

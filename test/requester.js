@@ -1,10 +1,10 @@
 'use strict';
-import path from 'path';
-import express from 'express';
-import request from 'supertest';
+const path = require('path');
+const express = require('express');
+const request = require('supertest');
 
 
-export default function(router, {httpMethod, uri}, viewEngineStub) {
+module.exports = function(router, {httpMethod, uri}, viewEngineStub) {
     const app = express();
 
     if (viewEngineStub) {
@@ -16,4 +16,4 @@ export default function(router, {httpMethod, uri}, viewEngineStub) {
     app.use(router);
 
     return request(app)[httpMethod](uri);
-}
+};

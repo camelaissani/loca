@@ -1,12 +1,12 @@
 'use strict';
-import logger from 'winston';
-import http from 'http';
-import moment from 'moment-timezone';
-import Contract from './contract';
-import FD from './frontdata';
-import rentModel from '../models/rent';
-import occupantModel from '../models/occupant';
-import config from '../../config';
+const logger = require('winston');
+const http = require('http');
+const moment = require('moment-timezone');
+const Contract = require('./contract');
+const FD = require('./frontdata');
+const rentModel = require('../models/rent');
+const occupantModel = require('../models/occupant');
+const config = require('../../config');
 
 function _findAllOccupants(realm) {
     return new Promise((resolve, reject) => {
@@ -262,7 +262,7 @@ function overview(req, res) {
     });
 }
 
-export default {
+module.exports = {
     update,
     rentsOfOccupant,
     all,

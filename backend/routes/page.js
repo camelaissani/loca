@@ -1,9 +1,9 @@
 'use strict';
 
-import path from 'path';
-import express from 'express';
-import config from '../../config';
-import pages from '../pages';
+const path = require('path');
+const express = require('express');
+const config = require('../../config');
+const pages = require('../pages');
 
 function buildModel(pageId, req, callback) {
     req.model = {
@@ -18,7 +18,7 @@ function buildModel(pageId, req, callback) {
         realms: req.realms,
         errors: null
     };
-    const modelFn = require(path.join('..', 'pages', pageId, 'model')).default;
+    const modelFn = require(path.join('..', 'pages', pageId, 'model'));
     modelFn(req, callback);
 }
 
@@ -27,7 +27,7 @@ function renderPage(pageId, req, res, pageWithHeaders=true) {
     res.render(page, req.model);
 }
 
-export default function () {
+module.exports = function () {
     const router = express.Router();
 
     pages.list.forEach(page => {
@@ -44,4 +44,4 @@ export default function () {
     });
 
     return router;
-}
+};

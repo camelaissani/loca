@@ -1,17 +1,17 @@
 /* eslint-disable no-console */
-import fs from 'fs-extra';
-import {rollup} from 'rollup';
-import babel from 'rollup-plugin-babel';
-import uglify from 'rollup-plugin-uglify';
-import commonjs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
-import includePaths from 'rollup-plugin-includepaths';
-import path from 'path';
-import less from 'less';
-import purify from 'purify-css';
-import imagemin from 'imagemin';
-import imageminMozjpeg from 'imagemin-mozjpeg';
-import imageminPngquant from 'imagemin-pngquant';
+const fs = require('fs-extra');
+const {rollup} = require('rollup');
+const babel = require('rollup-plugin-babel');
+const uglify = require('rollup-plugin-uglify');
+const commonjs = require('rollup-plugin-commonjs');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const includePaths = require('rollup-plugin-includepaths');
+const path = require('path');
+const less = require('less');
+const purify = require('purify-css');
+const imagemin = require('imagemin');
+const imageminMozjpeg = require('imagemin-mozjpeg');
+const imageminPngquant = require('imagemin-pngquant');
 
 // directories
 const root_directory = path.join(__dirname, '..');

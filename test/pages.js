@@ -1,17 +1,22 @@
 /* eslint-env node, mocha */
 
 'use strict';
-import assert from 'assert';
-import sinon from 'sinon';
-import * as logger from 'winston';
-import * as config from '../config';
-import requester from './requester';
-import pageRouter from '../backend/routes/page';
-import * as printModel from '../backend/pages/print/model';
+const proxyquire = require('proxyquire');
+proxyquire('../backend/routes/page', {
+    '../pages/print/model': (req, callback) => {
+        req.model = Object.assign(req.model, {document: 'adoc'});
+        callback();
+    }
+});
+const assert = require('assert');
+const sinon = require('sinon');
+const logger = require('winston');
+const config = require('../config');
+const requester = require('./requester');
+const pageRouter = require('../backend/routes/page');
 
-logger.info = sinon.stub(logger.default, 'info', ()=>{});
+logger.info = sinon.stub(logger, 'info', ()=>{});
 
-const defaultLoggedView = 'dashboard';
 describe('pages', () => {
     let viewEngine;
     beforeEach(() => {
@@ -19,7 +24,7 @@ describe('pages', () => {
     });
     describe('rendering', () => {
         it('GET  /', (done) => {
-            config.default.subscription = true;
+            config.subscription = true;
             requester(pageRouter(), {httpMethod: 'get', uri: '/'}, viewEngine)
             .expect(200)
             .end((err) => {
@@ -37,7 +42,7 @@ describe('pages', () => {
         });
 
         it('GET  /signup', (done) => {
-            config.default.subscription = true;
+            config.subscription = true;
             requester(pageRouter(), {httpMethod: 'get', uri: '/signup'}, viewEngine)
             .expect(200)
             .end((err) => {
@@ -55,7 +60,7 @@ describe('pages', () => {
         });
 
         it('GET  /signin', (done) => {
-            config.default.demomode = false;
+            config.demomode = false;
             requester(pageRouter(), {httpMethod: 'get', uri: '/signin'}, viewEngine)
             .expect(200)
             .end((err) => {
@@ -147,13 +152,6 @@ describe('pages', () => {
         });
     });
     describe('printable', () => {
-        before(() => {
-            sinon.stub(printModel, 'default', (req, callback) => {
-                req.model = Object.assign(req.model, {document: 'adoc'});
-                callback();
-            });
-        });
-
         it('GET  /print/:id/occupants/:ids/:year/:month', (done) => {
             requester(pageRouter(), {httpMethod: 'get', uri: '/print/adoc/occupants/1234/2017/02'}, viewEngine)
             .expect(200)

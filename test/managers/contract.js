@@ -1,6 +1,6 @@
 /* eslint-env node, mocha */
-import assert from 'assert';
-import Contract from '../../backend/managers/contract';
+const assert = require('assert');
+const Contract = require('../../backend/managers/contract');
 
 describe('contract functionalities', () => {
     it('create contract', () => {

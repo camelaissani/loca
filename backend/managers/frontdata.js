@@ -1,6 +1,6 @@
-import moment from 'moment';
-import math from 'mathjs';
-import config from '../../config';
+const moment = require('moment');
+const math = require('mathjs');
+const config = require('../../config');
 
 function toRentData(inputRent, inputOccupant, emailStatus) {
     const rent = JSON.parse(JSON.stringify(inputRent));
@@ -437,7 +437,7 @@ function toProperty(inputProperty, inputOccupant) {
     return property;
 }
 
-export default {
+module.exports = {
     toOccupantData,
     toProperty,
     toRentData,

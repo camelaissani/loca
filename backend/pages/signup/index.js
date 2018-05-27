@@ -1,6 +1,6 @@
-import config from '../../../config';
+const config = require('../../../config');
 
-export default () => {
+module.exports = () => {
     if (config.subscription) {
         return {
             id:'signup',

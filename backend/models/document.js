@@ -1,5 +1,5 @@
 'use strict';
-import OF from './objectfilter';
+const OF = require('./objectfilter');
 
 class DocumentModel {
     constructor() {
@@ -10,4 +10,4 @@ class DocumentModel {
     }
 }
 
-export default new DocumentModel();
+module.exports = new DocumentModel();

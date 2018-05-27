@@ -1,6 +1,6 @@
 'use strict';
-import OF from './objectfilter';
-import Model from './model';
+const OF = require('./objectfilter');
+const Model = require('./model');
 
 class NotificationModel extends Model {
     constructor() {
@@ -12,4 +12,4 @@ class NotificationModel extends Model {
     }
 }
 
-export default new NotificationModel();
+module.exports = new NotificationModel();

@@ -1,7 +1,7 @@
 'use strict';
 
-import FD from './frontdata';
-import occupantModel from '../models/occupant';
+const FD = require('./frontdata');
+const occupantModel = require('../models/occupant');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
@@ -20,6 +20,6 @@ function print(req, res) {
     });
 }
 
-export default {
+module.exports = {
     print
 };

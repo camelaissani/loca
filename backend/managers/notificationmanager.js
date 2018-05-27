@@ -1,10 +1,10 @@
 'use strict';
 
-import moment from 'moment';
-import crypto from 'crypto';
-import sugar from 'sugar';
-import occupantModel from '../models/occupant';
-import notificationModel from '../models/notification';
+const moment = require('moment');
+const crypto = require('crypto');
+const sugar = require('sugar');
+const occupantModel = require('../models/occupant');
+const notificationModel = require('../models/notification');
 
 // TODO remove this lib
 sugar.extend();
@@ -170,7 +170,7 @@ function update(req, res) {
     });
 }
 
-export default {
+module.exports = {
     update,
     all,
     generateId,

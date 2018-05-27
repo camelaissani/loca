@@ -1,5 +1,5 @@
-import FD from './frontdata';
-import occupantModel from '../models/occupant';
+const FD = require('./frontdata');
+const occupantModel = require('../models/occupant');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
@@ -16,6 +16,6 @@ function all(req, res) {
     });
 }
 
-export default {
+module.exports = {
     all
 };

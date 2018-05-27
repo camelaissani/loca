@@ -1,4 +1,4 @@
-export default function(contract, rentDate, previousRent, settlements, rent) {
+module.exports = function(contract, rentDate, previousRent, settlements, rent) {
     if (contract.discount) {
         rent.discounts.push({
             origin: 'contract',
@@ -17,4 +17,4 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
         });
     }
     return rent;
-}
+};

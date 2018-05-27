@@ -1,9 +1,9 @@
 'use strict';
-import sugar from 'sugar';
-import logger from 'winston';
+const sugar = require('sugar');
+const logger = require('winston');
 sugar.extend();
 
-export default class ObjectFilter {
+module.exports = class ObjectFilter {
     constructor(schema) {
         this.schema = schema;
     }
@@ -64,4 +64,4 @@ export default class ObjectFilter {
             return filteredData;
         }, {});
     }
-}
+};

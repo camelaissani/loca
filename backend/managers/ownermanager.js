@@ -1,6 +1,6 @@
 'use strict';
 
-import ownerModel from '../models/owner';
+const ownerModel = require('../models/owner');
 
 // function _findOwner(realm, callback) {
 //     ownerModel.findOne(null, realm._id, (errors, dbRealm) => {
@@ -52,8 +52,7 @@ function update(req, res) {
     }
 }
 
-
-export default {
+module.exports = {
     all,
     update
 };

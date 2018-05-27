@@ -1,8 +1,8 @@
 'use strict';
 
-import config from '../../config';
-import mongojs from 'mongojs';
-import logger from 'winston';
+const config = require('../../config');
+const mongojs = require('mongojs');
+const logger = require('winston');
 
 require('sugar').extend();
 
@@ -64,7 +64,7 @@ function logDBError(err) {
 const collections = [];
 let db;
 
-export default {
+module.exports = {
     init() {
         if (!db) {
             return new Promise((resolve, reject) => {

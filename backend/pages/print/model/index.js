@@ -1,8 +1,7 @@
-import FD from '../../../managers/frontdata';
-import occupantModel from '../../../models/occupant';
+const FD = require('../../../managers/frontdata');
+const occupantModel = require('../../../models/occupant');
 
-
-export default function(req, callback) {
+module.exports = function(req, callback) {
     const realm = req.realm;
     const doc = req.params.id;
     const month = req.params.month;
@@ -18,4 +17,4 @@ export default function(req, callback) {
         req.model = Object.assign(req.model, data);
         callback();
     });
-}
+};

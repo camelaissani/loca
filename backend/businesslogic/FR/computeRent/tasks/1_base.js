@@ -1,6 +1,6 @@
-import moment from 'moment';
+const moment = require('moment');
 
-export default function(contract, rentDate, previousRent, settlements, rent) {
+module.exports = function(contract, rentDate, previousRent, settlements, rent) {
     const currentMoment = moment(rentDate, 'DD/MM/YYYY HH:mm');
     rent.term = Number(currentMoment.format('YYYYMMDDHH'));
     if (contract.frequency === 'months') {
@@ -38,4 +38,4 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
         }
     });
     return rent;
-}
+};

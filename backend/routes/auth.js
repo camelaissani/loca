@@ -1,11 +1,11 @@
-import express from 'express';
-import passport from 'passport';
-import passportLocal from 'passport-local';
-import logger from 'winston';
-import config from '../../config';
-import loginManager from '../managers/loginmanager';
+const express = require('express');
+const passport = require('passport');
+const passportLocal = require('passport-local');
+const logger = require('winston');
+const config = require('../../config');
+const loginManager = require('../managers/loginmanager');
 
-export default function() {
+module.exports = function() {
     ////////////////////////////////////////////////////////////////////////////////
     // Set up passport
     ////////////////////////////////////////////////////////////////////////////////
@@ -57,4 +57,4 @@ export default function() {
     });
 
     return router;
-}
+};

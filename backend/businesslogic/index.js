@@ -1,5 +1,5 @@
-import config from '../../config';
+const config = require('../../config');
 
-export default {
-    computeRent: require(`./${config.businesslogic}/computeRent`).default
+module.exports = {
+    computeRent: require(`./${config.businesslogic}/computeRent`)
 };

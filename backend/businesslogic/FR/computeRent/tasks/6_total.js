@@ -1,6 +1,6 @@
-import math from 'mathjs';
+const math = require('mathjs');
 
-export default function(contract, rentDate, previousRent, settlements, rent) {
+module.exports = function(contract, rentDate, previousRent, settlements, rent) {
     const preTaxAmount = rent.preTaxAmounts.reduce((total, preTaxAmount) => total + preTaxAmount.amount, 0);
     const charges = rent.charges.reduce((total, charges) => total + charges.amount, 0);
     const discount = rent.discounts.reduce((total, discount) => total + discount.amount, 0);
@@ -15,4 +15,4 @@ export default function(contract, rentDate, previousRent, settlements, rent) {
     rent.total.payment = payment;
 
     return rent;
-}
+};

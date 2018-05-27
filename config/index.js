@@ -1,5 +1,5 @@
-import path from 'path';
-import fs from 'fs';
+const path = require('path');
+const fs = require('fs');
 
 const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, '..', 'config');
 const website = JSON.parse(fs.readFileSync(path.join(configdir, 'website.json'), 'utf8'));
@@ -14,7 +14,7 @@ if (subscription && typeof(subscription) !== 'boolean') {
     subscription = subscription.toLowerCase() === 'true';
 }
 
-export default Object.assign(website, {
+module.exports = Object.assign(website, {
     businesslogic: 'FR',
     productive: process.env.NODE_ENV === 'production',
     subscription,

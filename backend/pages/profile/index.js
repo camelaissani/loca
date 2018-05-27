@@ -1,4 +1,4 @@
-export default () => {
+module.exports = () => {
     return {
         id: 'profile',
         restricted: true

@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import logger from 'winston';
+const fs = require('fs');
+const path = require('path');
+const logger = require('winston');
 
 const restrictedList = []; // list of  {id, params}
 const publicList = []; // list of  {id, params}
@@ -15,7 +15,7 @@ fs.readdirSync(root_pages_dir)
         public: false,
         restricted: false,
         supportView: true
-    }, require(`./${page}`).default());
+    }, require(`./${page}`)());
 
     if (pageDesc.public && pageDesc.restricted) {
         publicRestrictedList.push(pageDesc);
@@ -27,7 +27,7 @@ fs.readdirSync(root_pages_dir)
     logger.debug(`loaded page ${page}`);
 });
 
-export default {
+module.exports = {
     list: [
         ...publicList,
         ...restrictedList,
