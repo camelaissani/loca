@@ -265,11 +265,13 @@ function toOccupantData(inputOccupant) {
     );
 
     // Compute if contract is completed
+    occupant.status = 'inprogress';
     occupant.terminated = false;
     const currentDate = moment();
     const endMoment = moment(occupant.terminationDate || occupant.endDate, 'DD/MM/YYYY');
     if (endMoment.isBefore(currentDate, 'day')) {
         occupant.terminated = true;
+        occupant.status = 'stopped';
     }
     occupant.office = {
         surface: 0,
@@ -416,7 +418,8 @@ function toProperty(inputProperty, inputOccupant) {
         endDate: '',
         lastBusyDay: '',
         occupantLabel: '',
-        available: true
+        available: true,
+        status: 'vacant'
     };
     if (inputOccupant) {
         Object.assign(
@@ -430,6 +433,10 @@ function toProperty(inputProperty, inputOccupant) {
         );
         if (property.lastBusyDay) {
             property.available = moment(property.lastBusyDay, 'DD/MM/YYYY').isBefore(currentDate, 'day');
+            if (!property.available) {
+                property.status = 'occupied';
+            }
+
         }
     }
 

@@ -2,8 +2,8 @@
     <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-action-add-property"><i class="fa fa-plus-circle"></i> <%= t('New') %></button>
     <h4><%= t('Status') %></h4>
     <button type="button" class="btn btn-default btn-block js-default-filter js-user-action" data-id="list-filter" data-toggle="button" role="button"><%= t('All') %> <span class="js-all-filter-label text-muted"></span></button>
-    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="<%= t('Leased') %>" data-toggle="button" role="button"><%= t('Lease in progress') %> <span class="all-active-filter-label text-muted"></span></button>
-    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="<%= t('Available') %>" data-toggle="button" role="button"><%= t('Available') %> <span class="all-inactive-filter-label text-muted"></span></button>
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="occupied" data-toggle="button" role="button"><%= t('Lease in progress') %> <span class="all-active-filter-label text-muted"></span></button>
+    <button type="button" class="btn btn-default btn-block js-user-action" data-id="list-filter" data-value="vacant" data-toggle="button" role="button"><%= t('Available') %> <span class="all-inactive-filter-label text-muted"></span></button>
 </div>
 
 <div class="js-side-menu side-menu card" data-id="properties-selection-menu">

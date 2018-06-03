@@ -1,6 +1,6 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-property-list-row-template" type="text/x-handlebars-template">
-    <div id="{{_id}}" class="js-list-row list-row card">
+    <div id="{{_id}}" class="js-list-row list-row card" data-filter-values="{{name}},{{status}}">
         <div class="list-col">
             {{#if available}}
                 <div class="list-label js-list-value text-success "><%= t('Available') %></div>

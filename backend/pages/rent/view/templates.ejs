@@ -1,6 +1,6 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-rent-list-row-template" type="text/x-handlebars-template">
-    <div id="{{_id}}" class="js-list-row list-row card">
+    <div id="{{_id}}" class="js-list-row list-row card" data-filter-values="{{occupant.name}},{{status}}">
         <div class="list-col">
             <div class="list-label">
                 {{#if status}}

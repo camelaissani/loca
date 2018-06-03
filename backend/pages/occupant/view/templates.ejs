@@ -1,6 +1,6 @@
 <!-- HANDLEBAR TEMPLATES -->
 <script id="view-occupant-list-row-template" type="text/x-handlebars-template">
-    <div id="{{_id}}" class="js-list-row list-row card">
+    <div id="{{_id}}" class="js-list-row list-row card" data-filter-values="{{name}},{{status}}">
         <div class="list-col">
             {{#if terminated}}
             <div class="list-label js-list-value text-danger hidden-xs"><%= t('Lease terminated') %></div>

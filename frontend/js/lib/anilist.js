@@ -304,54 +304,40 @@ class Anilist{
 
     filter(text, noAnimation, callback) {
         // var that = this;
-        var $allRows;
-        var $rowsToFilter;
-        var $rowsToShow;
-        var $rowsToHide;
-        var filterValues;
-        var index;
+        let $rowsToShow;
 
         this.filterText = text;
 
         // remove filter on all rows
-        $allRows = this.$list.find('.js-list-row');
+        const $allRows = this.$list.find('.js-list-row');
         $allRows.removeClass('list-element-filtered');
 
         // hide rows that not match filter
         if (this.filterText) {
-            filterValues = this.filterText.split(',');
-            for (index = 0; index < filterValues.length; index++) {
-                $rowsToFilter = $allRows.find('.js-list-value').filter(':contains("'+filterValues[index]+'")').closest('.js-list-row');
-                $rowsToFilter.addClass('list-element-filtered');
-            }
+            const filterValues = this.filterText.split(',');
+            $allRows.each(function() {
+                const $row = $(this);
+                const rowFilterValues = $row.data('filter-values').split(',');
+                if (rowFilterValues.some(value => filterValues.indexOf(value) !== -1)) {
+                    $row.addClass('list-element-filtered');
+                }
+            });
 
-            $rowsToHide = $allRows.not('.list-element-filtered').not(':hidden');
+            const $rowsToHide = $allRows.not('.list-element-filtered').not(':hidden');
             $rowsToShow = this.$list.find('.js-list-row.list-element-filtered:hidden');
-            // if (!noAnimation) {
 
-            // this.hideRows($rowsToHide, function() {
-            //     that.showRows($rowsToShow, callback);
-            // });
-            // }
-            // else {
             $rowsToHide.hide();
             $rowsToShow.show();
             if (callback) {
                 callback();
             }
-            // }
         }
         else {
             $rowsToShow = this.$list.find('.js-list-row:hidden');
-            // if (!noAnimation) {
-                // this.showRows($rowsToShow, callback);
-            // }
-            // else {
             $rowsToShow.show();
             if (callback) {
                 callback();
             }
-            // }
         }
     }
 

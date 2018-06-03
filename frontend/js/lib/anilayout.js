@@ -1,7 +1,5 @@
 import $ from 'jquery';
 
-let anilayout;
-
 const TRANSITION_DURATION_MENU = 200;
 
 class Anilayout {
@@ -67,8 +65,4 @@ class Anilayout {
     }
 }
 
-if (!anilayout) {
-    anilayout = new Anilayout();
-}
-
-export default anilayout;
+export default new Anilayout();
