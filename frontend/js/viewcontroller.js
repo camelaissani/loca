@@ -11,9 +11,11 @@ class ViewController extends BaseViewMiddleware {
         this.config = config;
         this.filterValue = '';
         if (config.domListId) {
-            this.list = new anilist(config.domListId,
-                                    config.domViewId + '-list-row-template',
-                                    config.domViewId + '-list-content-template');
+            this.list = new anilist(
+                config.domListId,
+                config.domViewId + '-list-row-template',
+                config.domViewId + '-list-content-template'
+            );
         }
         this.initListener();
     }

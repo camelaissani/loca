@@ -132,44 +132,44 @@ if (debugMode) {
 }
 
 db.init()
-.then(db.exists)
-.then((isDbExists) => {
-    if (config.demomode) {
-        if (debugMode) {
-            if (!isDbExists) {
-                require('./scripts/mongorestore');
-            } else {
-                logger.debug('no database restore, it already exists');
-            }
-        } else {
-            require('./scripts/mongorestore');
-        }
-    }
-
-    const http_port = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8081;
-    app.listen(http_port, function() {
-        logger.info('Listening port ' + http_port);
-        if (!debugMode) {
-            logger.info('In production mode');
-        } else {
-            logger.info('In development mode (no minify/no uglify)');
-        }
+    .then(db.exists)
+    .then((isDbExists) => {
         if (config.demomode) {
-            logger.info('In demo mode (login disabled)');
+            if (debugMode) {
+                if (!isDbExists) {
+                    require('./scripts/mongorestore');
+                } else {
+                    logger.debug('no database restore, it already exists');
+                }
+            } else {
+                require('./scripts/mongorestore');
+            }
         }
-        const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, 'config');
-        logger.debug('loaded configuration from', configdir);
-        logger.debug(JSON.stringify(config, null,'\t'));
-        if (debugMode) {
-            const LiveReloadServer = require('live-reload');
-            LiveReloadServer({
-                _: ['dist'],
-                port: 9091
-            });
-        }
+
+        const http_port = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8081;
+        app.listen(http_port, function() {
+            logger.info('Listening port ' + http_port);
+            if (!debugMode) {
+                logger.info('In production mode');
+            } else {
+                logger.info('In development mode (no minify/no uglify)');
+            }
+            if (config.demomode) {
+                logger.info('In demo mode (login disabled)');
+            }
+            const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, 'config');
+            logger.debug('loaded configuration from', configdir);
+            logger.debug(JSON.stringify(config, null,'\t'));
+            if (debugMode) {
+                const LiveReloadServer = require('live-reload');
+                LiveReloadServer({
+                    _: ['dist'],
+                    port: 9091
+                });
+            }
+        });
+    })
+    .catch((err) => {
+        logger.error(err);
+        process.exit(1);
     });
-})
-.catch((err) => {
-    logger.error(err);
-    process.exit(1);
-});

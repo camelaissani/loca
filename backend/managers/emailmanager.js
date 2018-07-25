@@ -87,16 +87,16 @@ module.exports = {
             };
         });
         sendEmail(messages)
-        .then(status => {
-            const results = status.reduce((acc, result) => {
-                acc.push(...result);
-                return acc;
-            }, []);
-            res.status(200).json(results);
-        })
-        .catch(err => {
-            res.status(500).send(err);
-            logger.error(err);
-        });
+            .then(status => {
+                const results = status.reduce((acc, result) => {
+                    acc.push(...result);
+                    return acc;
+                }, []);
+                res.status(200).json(results);
+            })
+            .catch(err => {
+                res.status(500).send(err);
+                logger.error(err);
+            });
     }
 };

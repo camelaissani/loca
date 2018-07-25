@@ -276,7 +276,7 @@ class Anilist{
     init(dataRows, noAnimation, callback) {
         var htmlRows, $htmlRows;
 
-         // Add initial rows
+        // Add initial rows
         if (!dataRows) {
             this.dataRows = {rows:[]};
         }

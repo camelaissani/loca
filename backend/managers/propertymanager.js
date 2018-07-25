@@ -26,23 +26,23 @@ function _toPropertiesData(realm, inputProperties, callback) {
                 return FD.toProperty(
                     property,
                     occupants
-                    .reduce((acc, occupant) => {
-                        const occupant_property = occupant.properties.find(currentProperty => currentProperty.propertyId === property._id.toString());
-                        if (occupant_property) {
-                            if (!acc.occupant) {
-                                acc.occupant = occupant;
-                            } else {
-                                const acc_property = acc.occupant.properties.find(currentProperty => currentProperty.propertyId === property._id.toString());
-                                const beginDate =  moment(occupant_property.entryDate, 'DD/MM/YYYY').startOf('day');
-                                const lastBeginDate = moment(acc_property.entryDate, 'DD/MM/YYYY').startOf('day');
-                                if (beginDate.isAfter(lastBeginDate)) {
+                        .reduce((acc, occupant) => {
+                            const occupant_property = occupant.properties.find(currentProperty => currentProperty.propertyId === property._id.toString());
+                            if (occupant_property) {
+                                if (!acc.occupant) {
                                     acc.occupant = occupant;
+                                } else {
+                                    const acc_property = acc.occupant.properties.find(currentProperty => currentProperty.propertyId === property._id.toString());
+                                    const beginDate =  moment(occupant_property.entryDate, 'DD/MM/YYYY').startOf('day');
+                                    const lastBeginDate = moment(acc_property.entryDate, 'DD/MM/YYYY').startOf('day');
+                                    if (beginDate.isAfter(lastBeginDate)) {
+                                        acc.occupant = occupant;
+                                    }
                                 }
                             }
-                        }
-                        return acc;
-                    }, {occupant:null})
-                    .occupant
+                            return acc;
+                        }, {occupant:null})
+                        .occupant
                 );
             }));
         }

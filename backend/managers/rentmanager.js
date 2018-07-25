@@ -186,27 +186,27 @@ function all(req, res) {
 
     const occupants = [];
     _findAllOccupants(realm)
-    .then(dbOccupants => {
-        dbOccupants.reduce((acc, occupant) => {
-            const rents = occupant.rents.filter(rent => rent.term === term);
-            if (rents.length>0) {
-                acc.push(occupant);
-            }
-            return acc;
-        }, occupants);
-        return _getEmailStatus(term);
-    })
-    .then(emailStatus => {
-        res.json(occupants.map(occupant => {
-            const rents = occupant.rents.filter(rent => rent.term === term);
-            return FD.toRentData(
-                rents[0],
-                occupant,
-                emailStatus[occupant._id]
-            );
-        }));
-    })
-    .catch(errors => res.json({errors}));
+        .then(dbOccupants => {
+            dbOccupants.reduce((acc, occupant) => {
+                const rents = occupant.rents.filter(rent => rent.term === term);
+                if (rents.length>0) {
+                    acc.push(occupant);
+                }
+                return acc;
+            }, occupants);
+            return _getEmailStatus(term);
+        })
+        .then(emailStatus => {
+            res.json(occupants.map(occupant => {
+                const rents = occupant.rents.filter(rent => rent.term === term);
+                return FD.toRentData(
+                    rents[0],
+                    occupant,
+                    emailStatus[occupant._id]
+                );
+            }));
+        })
+        .catch(errors => res.json({errors}));
 }
 
 function overview(req, res) {
@@ -221,45 +221,45 @@ function overview(req, res) {
     const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
 
     _findAllOccupants(realm)
-    .then(dbOccupants => {
-        const overview = {
-            countAll: 0,
-            countPaid: 0,
-            countPartiallyPaid: 0,
-            countNotPaid: 0,
-            totalToPay: 0,
-            totalPaid: 0,
-            totalNotPaid: 0
-        };
+        .then(dbOccupants => {
+            const overview = {
+                countAll: 0,
+                countPaid: 0,
+                countPartiallyPaid: 0,
+                countNotPaid: 0,
+                totalToPay: 0,
+                totalPaid: 0,
+                totalNotPaid: 0
+            };
 
-        res.json(dbOccupants
-        .reduce((acc, occupant) => {
-            const rents = occupant.rents.filter(rent => rent.term === term);
-            if (rents.length>0) {
-                acc.push(FD.toRentData(rents[0], occupant));
-            }
-            return acc;
-        }, [])
-        .reduce((acc, rentData) => {
-            if (rentData.totalAmount <= 0 || rentData.newBalance >= 0) {
-                acc.countPaid++;
-            } else if (rentData.payment > 0) {
-                acc.countPartiallyPaid++;
-            } else {
-                acc.countNotPaid++;
-            }
-            acc.countAll ++;
-            acc.totalToPay += rentData.totalToPay;
-            acc.totalPaid += rentData.payment;
-            acc.totalNotPaid -= rentData.newBalance;
-            return acc;
-        }, overview));
-    })
-    .catch(errors => {
-        res.json({
-            errors: errors
+            res.json(dbOccupants
+                .reduce((acc, occupant) => {
+                    const rents = occupant.rents.filter(rent => rent.term === term);
+                    if (rents.length>0) {
+                        acc.push(FD.toRentData(rents[0], occupant));
+                    }
+                    return acc;
+                }, [])
+                .reduce((acc, rentData) => {
+                    if (rentData.totalAmount <= 0 || rentData.newBalance >= 0) {
+                        acc.countPaid++;
+                    } else if (rentData.payment > 0) {
+                        acc.countPartiallyPaid++;
+                    } else {
+                        acc.countNotPaid++;
+                    }
+                    acc.countAll ++;
+                    acc.totalToPay += rentData.totalToPay;
+                    acc.totalPaid += rentData.payment;
+                    acc.totalNotPaid -= rentData.newBalance;
+                    return acc;
+                }, overview));
+        })
+        .catch(errors => {
+            res.json({
+                errors: errors
+            });
         });
-    });
 }
 
 module.exports = {

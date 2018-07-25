@@ -66,13 +66,13 @@ function update(inputContract, modification) {
     const updatedContract = create(modifiedContract);
 
     inputContract.rents
-    .filter(rent => rent.payments.length > 0 || rent.discounts.some(discount => discount.origin === 'settlement'))
-    .forEach(paidRent => {
-        payTerm(updatedContract, moment(String(paidRent.term), 'YYYYMMDDHH').format('DD/MM/YYYY HH:mm'), {
-            payments: paidRent.payments,
-            discounts: paidRent.discounts.filter(discount => discount.origin === 'settlement')
+        .filter(rent => rent.payments.length > 0 || rent.discounts.some(discount => discount.origin === 'settlement'))
+        .forEach(paidRent => {
+            payTerm(updatedContract, moment(String(paidRent.term), 'YYYYMMDDHH').format('DD/MM/YYYY HH:mm'), {
+                payments: paidRent.payments,
+                discounts: paidRent.discounts.filter(discount => discount.origin === 'settlement')
+            });
         });
-    });
 
     return updatedContract;
 }
@@ -120,11 +120,12 @@ function payTerm(contract, term, settlements) {
 
 function _checkLostPayments(momentBegin, momentEnd, contract) {
     const lostPayments =
-    contract.rents.filter(rent => rent.payments.length > 0
-                    && !moment(rent.term, 'YYYYMMDDHH').isBetween(momentBegin, momentEnd, contract.frequency, '[]'))
-                    // && !(rent.term >= Number(momentBegin.format('YYYYMMDDHH'))
-                    // && rent.term <= Number(momentEnd.format('YYYYMMDDHH'))))
-    .map(rent => String(rent.term) + ' ' + rent.payments.map(payment => payment.amount).join(' + '));
+    contract.rents
+        .filter(rent => rent.payments.length > 0
+            && !moment(rent.term, 'YYYYMMDDHH').isBetween(momentBegin, momentEnd, contract.frequency, '[]'))
+    // && !(rent.term >= Number(momentBegin.format('YYYYMMDDHH'))
+    // && rent.term <= Number(momentEnd.format('YYYYMMDDHH'))))
+        .map(rent => String(rent.term) + ' ' + rent.payments.map(payment => payment.amount).join(' + '));
 
     if (lostPayments.length > 0) {
         throw Error(`Some payments will be lost because they are out of the contract time frame:\n${lostPayments.join('\n')}`);
