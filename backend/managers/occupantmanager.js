@@ -154,7 +154,7 @@ function update(req, res) {
                 frequency: 'months',
                 terms: Math.round(
                     moment(dbOccupant.endDate, 'DD/MM/YYYY')
-                    .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),
+                        .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),
                 properties: dbOccupant.proprerties,
                 vatRate: dbOccupant.vatRatio,
                 discount: dbOccupant.discount,
@@ -215,15 +215,18 @@ function remove(req, res) {
             if (occupants) {
                 const occupantsWithPaidRents = occupants.filter(occupant => {
                     return occupant.rents
-                    .some(rent => rent.payments.length > 0 ||
-                                rent.discounts.some(discount => discount.origin === 'settlement'));
+                        .some(rent => (rent.payments && rent.payments.some(payment => payment.amount > 0)) ||
+                            rent.discounts.some(discount => discount.origin === 'settlement'));
                 });
                 if (occupantsWithPaidRents.length > 0) {
                     // TODO: to localize
                     callback(['Impossible de supprimer le locataire : ' + occupantsWithPaidRents[0].name + '. Des loyers ont été encaissés.']);
                     return;
                 }
-                callback([]);
+                occupantModel.remove(
+                    realm,
+                    occupants.map(occupant => occupant._id.toString()),
+                    error => error ? callback([error]) : callback([]));
             }
         });
     }
