@@ -156,7 +156,7 @@ class Form {
                         self.onSubmit(response, callback);
                     },
                     (/*req, res*/) => {
-                        self.showErrorMessage(i18next.t('A technical issue has occured (-_-\')'));
+                        self.showErrorMessage(i18next.t('A technical issue has occurred (-_-\')'));
                     }
                 );
             } else {
@@ -173,7 +173,7 @@ class Form {
                         self.onSubmit(response, callback);
                     },
                     (/*req, res*/) => {
-                        self.showErrorMessage(i18next.t('A technical issue has occured (-_-\')'));
+                        self.showErrorMessage(i18next.t('A technical issue has occurred (-_-\')'));
                     }
                 );
             }

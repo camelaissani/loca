@@ -37,7 +37,7 @@ class LoginMiddleware extends frontexpress.Middleware {
                 } else if (response.status === 'missing-field') {
                     message = i18next.t('Please fill missing fields');
                 } else {
-                    message = i18next.t('A technical issue has occured (-_-\')');
+                    message = i18next.t('A technical issue has occurred (-_-\')');
                 }
                 this.form.showErrorMessage(message);
             });

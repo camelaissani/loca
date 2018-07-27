@@ -32,7 +32,7 @@ class SignupMiddleware extends frontexpress.Middleware {
                 } else if (response.status === 'signup-email-taken') {
                     message = i18next.t('This user already exists');
                 } else {
-                    message = i18next.t('A technical issue has occured (-_-\')');
+                    message = i18next.t('A technical issue has occurred (-_-\')');
                 }
 
                 this.form.showErrorMessage(message);
