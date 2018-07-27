@@ -65,7 +65,7 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "eslint": "^5.2.0",
     "fs-extra": "^2.0.0",
-    "imagemin": "^5.2.2",
+    "imagemin": "^6.0.0",
     "imagemin-mozjpeg": "^7.0.0",
     "imagemin-pngquant": "^6.0.0",
     "less": "^3.8.0",

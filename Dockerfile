@@ -4,7 +4,7 @@ RUN echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.6 main" | 
 RUN apt-get update -qq && \
     apt-get upgrade -qqy && \
     apt-get install -qqy \
-    mongodb-org-tools
+    mongodb-org-tools nasm
 WORKDIR /usr/app
 RUN npm set progress=false && \
     npm config set depth 0
