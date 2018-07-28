@@ -8,7 +8,7 @@ const now = new Date();
 application.set('LOCA', {
     currentMonth: now.getMonth() + 1,
     currentYear: now.getFullYear(),
-    countryCode: 'en_us'
+    countryCode: 'en-US'
 });
 
 const httpPostPatchTransformer = {
