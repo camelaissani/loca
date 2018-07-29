@@ -16,7 +16,7 @@ class Helper {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, '€', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), hideCurrency?'%v':'%v %s');
+        return accounting.formatMoney(text, i18next.t('__currency_symbol'), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), hideCurrency?'%v':'%v %s');
     }
 
     static formatPercent(text, hidePercent, emptyForZero) {
@@ -96,7 +96,7 @@ Handlebars.registerHelper('formatMoney', function(text, options) {
     var classes = 'price-amount';
     var key = '';
     var amount;
-    var symbol = '€';
+    var symbol = i18next.t('__currency_symbol');
 
     text = Handlebars.Utils.escapeExpression(text);
     amount = accounting.formatMoney(text, '', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');

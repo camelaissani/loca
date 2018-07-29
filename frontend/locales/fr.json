@@ -1,4 +1,5 @@
 {
+    "__currency_symbol": "€",
     "__fmt_date__": "DD/MM/YYYY",
     "__fmt_datetime__": "DD/MM/YYYY HH[h]MM",
     "__fmt_number_thousand_separator": " ",
@@ -262,6 +263,7 @@
     "Unknown error": "Erreur non répertoriée",
     "Warning": "Attention",
     "Where the property is located": "Lieu où se trouve le bien",
+    "with share capital of": "au capital de",
     "Year": "Année",
     "Yes": "Oui",
     "You already have an account?": "Vous avez déjà un compte ?",

@@ -1,41 +1,41 @@
 <tr>
   <td colspan="1" class="blank"> </td>
   <td colspan="2" class="total-line">Sous total H.T.</td>
-  <td class="total-value"><div class="subtotal"><%= rent.totalWithoutVatAmount.toFixed(2) %> €</div></td>
+  <td class="total-value"><div class="subtotal"><%= formatMoney(rent.totalWithoutVatAmount) %></div></td>
 </tr>
 <tr>
   <td colspan="1" class="blank"> </td>
-  <td colspan="2" class="total-line">TVA <%= (rent.vatRatio*100).toFixed(2) %> %</td>
-  <td class="total-value"><div class="subtotal"><%= rent.vatAmount.toFixed(2) %> €</div></td>
+  <td colspan="2" class="total-line">TVA <%= formatPercent(rent.vatRatio) %></td>
+  <td class="total-value"><div class="subtotal"><%= formatMoney(rent.vatAmount) %></div></td>
 </tr>
 <tr>
   <td colspan="1" class="blank"> </td>
   <td colspan="2" class="total-line">Solde antérieur</td>
-  <td class="total-value"><div class="subtotal"><%= rent.balance.toFixed(2) %> €</div></td>
+  <td class="total-value"><div class="subtotal"><%= formatMoney(rent.balance) %></div></td>
 </tr>
 <% if (rent.promo > 0) { %>
 <tr>
   <td colspan="1" class="blank"> </td>
   <td colspan="2" class="total-line"><%= rent.notepromo %></td>
-  <td class="total-value"><div class="subtotal"><%= (-1*rent.promo).toFixed(2) %> €</div></td>
+  <td class="total-value"><div class="subtotal"><%= formatMoney(-1*rent.promo) %></div></td>
 </tr>
 <% } %>
 <tr>
   <td colspan="1" class="blank"> </td>
   <td colspan="2" class="total-line">Total T.T.C.</td>
-  <td class="total-value"><div class="total"><%= rent.totalAmount>0?rent.totalAmount.toFixed(2):Number(0).toFixed(2) %> €</div></td>
+  <td class="total-value"><div class="total"><%= formatMoney(rent.totalAmount) %></div></td>
 </tr>
 
 
 <tr>
   <td colspan="1" class="blank"> </td>
   <td colspan="2" class="total-line">Montant payé</td>
-  <td class="total-value"><div class="total"><%= rent.payment.toFixed(2) %> €</div></td>
+  <td class="total-value"><div class="total"><%= formatMoney(rent.payment) %></div></td>
 </tr>
 
 
 <tr>
   <td colspan="1" class="blank"> </td>
   <td colspan="2" class="total-line balance"><%= rent.newBalance > 0 ? "Solde en votre faveur" : "Montant restant à payer" %></td>
-  <td class="total-value balance"><div class="due"><%= Math.abs(rent.newBalance).toFixed(2) %> €</div></td>
+  <td class="total-value balance"><div class="due"><%= formatMoney(Math.abs(rent.newBalance)) %></div></td>
 </tr>

@@ -1,4 +1,5 @@
 {
+    "__currency_symbol": "$",
     "__fmt_date__": "MM-DD-YYYY",
     "__fmt_datetime__": "MM-DD-YYYY HH[h]M",
     "__fmt_number_thousand_separator": ",",
@@ -261,6 +262,7 @@
     "unknown": "unknown",
     "Unknown error": "Unknown error",
     "Warning": "Warning",
+    "with share capital of": "with share capital of",
     "Where the property is located": "Where the property is located",
     "Year": "Year",
     "Yes": "Yes",

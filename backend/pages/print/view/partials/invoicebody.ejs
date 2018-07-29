@@ -21,13 +21,13 @@
 	    if (property.surface) {
 	        m2Price = property.price / property.surface;
 	  %>
-		  <td class="txtAlignRight"><%= property.surface.toFixed(2) %></td>
-		  <td class="txtAlignRight"><%= m2Price.toFixed(2) %></td>
+		  <td class="txtAlignRight"><%= formatNumber(property.surface) %></td>
+		  <td class="txtAlignRight"><%= formatNumber(m2Price) %></td>
 	  <% } else { %>
 		  <td class="txtAlignRight">1</td>
-		  <td class="txtAlignRight"><%= property.price.toFixed(2) %></td>
+		  <td class="txtAlignRight"><%= formatNumber(property.price) %></td>
 	  <% } %>
-	  <td class="txtAlignRight"><%= property.price.toFixed(2) %></td>
+	  <td class="txtAlignRight"><%= formatNumber(property.price) %></td>
 	</tr>
 
 	<% if (property.expense) { %>
@@ -39,13 +39,13 @@
 		    if (property.surface) {
 		        m2Expense = property.expense / property.surface;
 		  %>
-		      <td class="txtAlignRight"><%= property.surface.toFixed(2) %></td>
-		      <td class="txtAlignRight"><%= m2Expense.toFixed(2) %></td>
+		      <td class="txtAlignRight"><%= formatNumber(property.surface) %></td>
+		      <td class="txtAlignRight"><%= formatNumber(m2Expense) %></td>
 		  <% } else { %>
 		      <td class="txtAlignRight">1</td>
-		      <td class="txtAlignRight"><%= property.expense.toFixed(2) %></td>
+		      <td class="txtAlignRight"><%= formatNumber(property.expense) %></td>
 		  <% } %>
-		  <td class="txtAlignRight"><%= property.expense.toFixed(2) %></td>
+		  <td class="txtAlignRight"><%= formatNumber(property.expense) %></td>
 		</tr>
 	<% } %>
 <% } %>
@@ -57,8 +57,8 @@
 		Remise exceptionnelle
 	  </td>
 	  <td class="txtAlignRight">1.00</td>
-	  <td class="txtAlignRight">- <%= occupant.discount.toFixed(2) %></td>
-	  <td class="txtAlignRight">- <%= occupant.discount.toFixed(2) %></td>
+	  <td class="txtAlignRight">- <%= formatNumber(occupant.discount) %></td>
+	  <td class="txtAlignRight">- <%= formatNumber(occupant.discount) %></td>
 	</tr>
 <% } %>
 

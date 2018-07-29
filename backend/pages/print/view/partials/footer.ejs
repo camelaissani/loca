@@ -1,1 +1,5 @@
-<div class="footer"><%= realm.company+' '+realm.legalForm+' au capital de '+realm.capital+' € '+realm.siret %></div>
+<div class="footer">
+    <% if (realm.isCompany) { %>
+        <%= `${realm.company} ${realm.legalForm} ${t('with share capital of')} ${formatMoney(realm.capital)} ${realm.siret}` %>
+    <% } %>
+</div>

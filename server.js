@@ -29,7 +29,7 @@ const moment = require('moment');
 const config = require('./config');
 const routes = require('./backend/routes');
 const db = require('./backend/models/db');
-
+const ejsHelpers = require('./backend/pages/ejshelpers');
 
 const dist_directory = path.join(__dirname, 'dist');
 
@@ -72,7 +72,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(i18nMiddleware.handle(i18next));
 app.use(function(req, res, next) {
-    var splitedLanguage = req.language.split('-');
+    const splitedLanguage = req.language.split('-');
     moment.locale(splitedLanguage[0]);
     next();
 });
@@ -130,6 +130,12 @@ if (debugMode) {
     // as the full error stack traces will be sent back to the client when an error occurs.
     app.use(errorHandler());
 }
+
+// init ejs helpers
+app.locals = {
+    ...app.locals,
+    ...ejsHelpers
+};
 
 db.init()
     .then(db.exists)

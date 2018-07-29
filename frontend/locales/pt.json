@@ -1,4 +1,5 @@
 {
+    "__currency_symbol": "€",
     "__fmt_date__": "DD-MM-YYYY",
     "__fmt_datetime__": "DD-MM-YYYY HH[h]M",
     "__fmt_number_thousand_separator": ",",
