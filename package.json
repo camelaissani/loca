@@ -80,7 +80,7 @@
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-includepaths": "^0.1.8",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^1.0.1",
+    "rollup-plugin-terser": "^1.0.1",
     "sinon": "^1.17.7",
     "supertest": "^3.0.0"
   }

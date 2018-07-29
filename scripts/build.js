@@ -2,7 +2,7 @@
 const fs = require('fs-extra');
 const {rollup} = require('rollup');
 const babel = require('rollup-plugin-babel');
-const uglify = require('rollup-plugin-uglify');
+const {terser} = require('rollup-plugin-terser');
 const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const includePaths = require('rollup-plugin-includepaths');
@@ -145,7 +145,7 @@ const plugins = () => {
     ];
 
     if (process.env.NODE_ENV === 'production') {
-        list.push(uglify());
+        list.push(terser());
     }
 
     return list;
