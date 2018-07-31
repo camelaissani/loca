@@ -4,8 +4,8 @@
         <div class="list-group">
             {{#each months}}
                 <a href="#" class="list-group-item js-user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-month="{{month}}" data-year="{{year}}">
-                    {{formatMonth month}} <span class="text-muted">({{i18next key='Rent'}} {{formatMoney totalToPay hideCurrency=false}})</span>
-                    <span class="pull-right">{{formatMoney payment hideCurrency=false}}</span>
+                    {{formatMonth month}} <span class="text-muted">({{i18next key='Rent'}} {{formatMoney totalToPay}})</span>
+                    <span class="pull-right">{{formatMoney payment}}</span>
                 </a>
             {{/each}}
         </div>

@@ -16,7 +16,12 @@ class Helper {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, i18next.t('__currency_symbol'), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), hideCurrency?'%v':'%v %s');
+
+        if (hideCurrency) {
+            return accounting.formatMoney(text, i18next.t('__currency_symbol'), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');
+        }
+
+        return accounting.formatMoney(text, i18next.t('__currency_symbol'), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'));
     }
 
     static formatPercent(text, hidePercent, emptyForZero) {
@@ -92,37 +97,30 @@ Handlebars.registerHelper('formatSurface', function(text, options) {
     return new Handlebars.SafeString(text);
 });
 Handlebars.registerHelper('formatMoney', function(text, options) {
-    var html = '';
-    var classes = 'price-amount';
-    var key = '';
-    var amount;
-    var symbol = i18next.t('__currency_symbol');
 
     text = Handlebars.Utils.escapeExpression(text);
-    amount = accounting.formatMoney(text, '', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');
+
+    let html = '';
+    const symbol = i18next.t('__currency_symbol');
+    let classes = 'price-amount';
+    const amount = accounting.formatMoney(text, symbol, 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');
+    const amountWithCurrencySymbol = accounting.formatMoney(text, symbol, 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'));
 
     if (!options) {
-        html = '<span class="price-content"><span class="'+classes+'">'+amount+'</span><span class="price-symbol">'+symbol+'</span></span>';
+        html = `<span class="price-content"><span class="${classes}">${amountWithCurrencySymbol}</span></span>`;
     }
     else {
         if (parseFloat(text) === 0 && (options.hash.emptyForZero)) {
-            return html;
+            return '';
         }
 
+        let key = '';
         if (options.hash.withOdometer) {
             classes += ' odometer';
             key = options.hash.withOdometer;
         }
 
-        if (options.hash.hideCurrency) {
-            html = '<span class="price-content"><span class="'+classes+'" data-key="'+key+'">'+amount+'</span></span>';
-        }
-        else {
-            if (options.hash.symbolExtension) {
-                symbol += ' ' + options.hash.symbolExtension;
-            }
-            html = '<span class="price-content"><span class="'+classes+'" data-key="'+key+'">'+amount+'</span><span class="price-symbol">'+symbol+'</span></span>';
-        }
+        html = `<span class="price-content"><span class="${classes}" data-key="${key}">${options.hash.hideCurrency ? amount : amountWithCurrencySymbol}</span></span>`;
     }
 
     return new Handlebars.SafeString(html);

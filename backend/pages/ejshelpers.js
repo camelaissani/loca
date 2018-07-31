@@ -17,7 +17,12 @@ module.exports = {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, this.t('__currency_symbol'), 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'), hideCurrency?'%v':'%v %s');
+
+        if (hideCurrency) {
+            return accounting.formatMoney(text, this.t('__currency_symbol'), 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'), '%v');
+        }
+
+        return accounting.formatMoney(text, this.t('__currency_symbol'), 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'));
     },
 
     formatPercent(text, hidePercent, emptyForZero) {
