@@ -1,5 +1,5 @@
 {
-    "__currency_symbol": "€",
+    "__currency_symbol": "R$",
     "__fmt_date__": "DD-MM-YYYY",
     "__fmt_datetime__": "DD-MM-YYYY HH[h]M",
     "__fmt_number_thousand_separator": ",",
@@ -208,7 +208,7 @@
     "Request of insurance certificate": "Requisição de certificado de seguro",
     "Request rent recovery by a third party (company, justice)": "Requisição de recuperação de aluguel por terceiro (compania, justiça)",
     "Residence lease contract 9 years": "Contrato de aluguel residencial 9 anos",
-    "Room": "Quarto",
+    "Room": "Sala",
     "successfuly sent to": "enviado com sucesso para",
     "Save": "Salvar",
     "Select properties to rent": "Selecione propriedade para alugar",
