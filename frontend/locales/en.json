@@ -1,9 +1,8 @@
 {
+    "__currency_code": "USD",
     "__currency_symbol": "$",
     "__fmt_date__": "MM-DD-YYYY",
     "__fmt_datetime__": "MM-DD-YYYY HH[h]M",
-    "__fmt_number_thousand_separator": ",",
-    "__fmt_number_decimal_separator": ".",
     "[code: ]": "[code: {{code}}]",
     "#": "#{{number}}",
     "'s documents": "{{name}}'s documents",

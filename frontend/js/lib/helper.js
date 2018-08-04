@@ -1,15 +1,32 @@
 import i18next from 'i18next';
 import Handlebars from 'handlebars';
 import moment from 'moment';
-import accounting from 'accounting';
+//import Intl from 'intl';
+
 
 class Helper {
     // Method helpers
+    static get _Intl() {
+        return {
+            NumberFormat: new Intl.NumberFormat(i18next.language, { maximumSignificantDigits: 2 }),
+            NumberFormatCurrency: new Intl.NumberFormat(i18next.language, { style: 'currency', currency: i18next.t('__currency_code') })
+        };
+    }
+
     static formatSurface(text, hideUnit, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, 'm<sup>2</sup>', 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), hideUnit?'%v':'%v %s');
+
+        if (hideUnit) {
+            return this._Intl.NumberFormat.format(text);
+        }
+
+        return `${this._Intl.NumberFormat.format(text)} m<sup>2</sup>`;
+    }
+
+    static formatNumber(text) {
+        return this._Intl.NumberFormat.format(text);
     }
 
     static formatMoney(text, hideCurrency, emptyForZero) {
@@ -18,17 +35,22 @@ class Helper {
         }
 
         if (hideCurrency) {
-            return accounting.formatMoney(text, i18next.t('__currency_symbol'), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');
+            return this._Intl.NumberFormat.format(text);
         }
 
-        return accounting.formatMoney(text, i18next.t('__currency_symbol'), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'));
+        return this._Intl.NumberFormatCurrency.format(text);
     }
 
     static formatPercent(text, hidePercent, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatNumber(accounting.toFixed(text*100, 2), 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator')) + (hidePercent?'':' %');
+
+        if (hidePercent) {
+            return this._Intl.NumberFormat.format(text);
+        }
+
+        return `${this._Intl.NumberFormat.format(text*100)} %`;
     }
 
     static formatMonth(text) {
@@ -101,10 +123,9 @@ Handlebars.registerHelper('formatMoney', function(text, options) {
     text = Handlebars.Utils.escapeExpression(text);
 
     let html = '';
-    const symbol = i18next.t('__currency_symbol');
     let classes = 'price-amount';
-    const amount = accounting.formatMoney(text, symbol, 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'), '%v');
-    const amountWithCurrencySymbol = accounting.formatMoney(text, symbol, 2, i18next.t('__fmt_number_thousand_separator'), i18next.t('__fmt_number_decimal_separator'));
+    const amount = Helper.formatNumber(text);
+    const amountWithCurrencySymbol = Helper.formatMoney(text);
 
     if (!options) {
         html = `<span class="price-content"><span class="${classes}">${amountWithCurrencySymbol}</span></span>`;

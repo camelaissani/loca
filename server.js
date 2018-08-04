@@ -15,6 +15,7 @@ const i18nMiddleware = require('i18next-express-middleware');
 const {LanguageDetector} = require('i18next-express-middleware');
 const i18nFS = require('i18next-node-fs-backend');
 const i18nSprintf = require('i18next-sprintf-postprocessor');
+const Intl = require('intl');
 const express = require('express');
 const favicon = require('serve-favicon');
 const methodOverride = require('method-override');
@@ -72,6 +73,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(i18nMiddleware.handle(i18next));
 app.use(function(req, res, next) {
+    app.locals.Intl = {
+        NumberFormat: new Intl.NumberFormat(req.language, { maximumSignificantDigits: 2 }),
+        NumberFormatCurrency: new Intl.NumberFormat(req.language, { style: 'currency', currency: req.t('__currency_code') })
+    };
     const splitedLanguage = req.language.split('-');
     moment.locale(splitedLanguage[0]);
     next();

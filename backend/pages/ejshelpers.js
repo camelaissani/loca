@@ -1,16 +1,20 @@
 const moment = require('moment');
-const accounting = require('accounting');
 
 module.exports = {
     formatSurface(text, hideUnit, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatMoney(text, 'm<sup>2</sup>', 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'), hideUnit?'%v':'%v %s');
+
+        if (hideUnit) {
+            return this.Intl.NumberFormat.format(text);
+        }
+
+        return `${this.Intl.NumberFormat.format(text)} m<sup>2</sup>`;
     },
 
     formatNumber(text) {
-        return accounting.formatNumber(text, 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'));
+        return this.Intl.NumberFormat.format(text);
     },
 
     formatMoney(text, hideCurrency, emptyForZero) {
@@ -19,17 +23,22 @@ module.exports = {
         }
 
         if (hideCurrency) {
-            return accounting.formatMoney(text, this.t('__currency_symbol'), 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'), '%v');
+            return this.Intl.NumberFormat.format(text);
         }
 
-        return accounting.formatMoney(text, this.t('__currency_symbol'), 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator'));
+        return this.Intl.NumberFormatCurrency.format(text);
     },
 
     formatPercent(text, hidePercent, emptyForZero) {
         if (parseFloat(text) === 0 && emptyForZero) {
             return '';
         }
-        return accounting.formatNumber(accounting.toFixed(text*100, 2), 2, this.t('__fmt_number_thousand_separator'), this.t('__fmt_number_decimal_separator')) + (hidePercent?'':' %');
+
+        if (hidePercent) {
+            return this.Intl.NumberFormat.format(text);
+        }
+
+        return `${this.Intl.NumberFormat.format(text*100)} %`;
     },
 
     formatMonth(text) {
