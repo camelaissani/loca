@@ -285,7 +285,8 @@
 
 // Extra small screen / phone
 //** Deprecated `@screen-xs` as of v3.0.1
-@screen-xs:                  480px;
+// @screen-xs:                  480px; // disabled phone screen
+@screen-xs:                  0px;
 //** Deprecated `@screen-xs-min` as of v3.2.0
 @screen-xs-min:              @screen-xs;
 //** Deprecated `@screen-phone` as of v3.0.1
@@ -293,15 +294,18 @@
 
 // Small screen / tablet
 //** Deprecated `@screen-sm` as of v3.0.1
-@screen-sm:                  768px;
+//@screen-sm:                  768px; // disabled phone screen
+@screen-sm:                  @screen-xs;
 @screen-sm-min:              @screen-sm;
 //** Deprecated `@screen-tablet` as of v3.0.1
 @screen-tablet:              @screen-sm-min;
 
 // Medium screen / desktop
 //** Deprecated `@screen-md` as of v3.0.1
-@screen-md:                  992px;
-@screen-md-min:              @screen-md;
+//@screen-md:                  992px; // set minimum screen to 1024px
+@screen-md:                  1024px;
+//@screen-md-min:              @screen-md;
+@screen-md-min:              @screen-xs-min; // set minimum screen to 1024px
 //** Deprecated `@screen-desktop` as of v3.0.1
 @screen-desktop:             @screen-md-min;
 
@@ -343,12 +347,14 @@
 @container-sm:                 @container-tablet;
 
 // Medium screen / desktop
-@container-desktop:            (940px + @grid-gutter-width);
+//@container-desktop:            (940px + @grid-gutter-width);
+@container-desktop:            (1024px + @grid-gutter-width);
 //** For `@screen-md-min` and up.
 @container-md:                 @container-desktop;
 
 // Large screen / wide desktop
-@container-large-desktop:      (1140px + @grid-gutter-width);
+//@container-large-desktop:      (1140px + @grid-gutter-width);
+@container-large-desktop:      (1200px + @grid-gutter-width);
 //** For `@screen-lg-min` and up.
 @container-lg:                 @container-large-desktop;
 

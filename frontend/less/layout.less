@@ -13,9 +13,6 @@ body {
 }
 .covered-body {
     background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
-    webkit-background-size: cover;
-    moz-background-size: cover;
-    o-background-size: cover;
     background-size: cover;
 
     font-family: "Open Sans",Arial,sans-serif;
@@ -74,5 +71,12 @@ body {
     .loading {
         padding-left: 10px;
         font-size: 18px;
+    }
+}
+
+@media(max-width: @screen-md) {
+    body {
+        padding-top: 0;
+        overflow-x: auto;
     }
 }
