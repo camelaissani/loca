@@ -24,10 +24,6 @@
             <%- include(view+'/view/index') %>
         </div>
 
-        <% if (user && config.demomode && config.productive) { %>
-            <div id="demo-popover" style="display:none;"></div>
-        <% } %>
-
         <div id="waitwindow" class="alert" style="display:none;">
             <i class="fa fa-refresh fa-spin fa-2x"></i><span class="loading"><%= t('Loading') %>...</span>
         </div>

@@ -4,17 +4,14 @@ import bootbox from 'bootbox';
 
 class ConnectionMiddleware extends frontexpress.Middleware {
     entered() {
-        bootbox.hideAll();
         $('#waitwindow').show();
     }
 
     updated() {
-        bootbox.hideAll();
         $('#waitwindow').hide();
     }
 
     exited() {
-        bootbox.hideAll();
         $('#waitwindow').hide();
     }
 
