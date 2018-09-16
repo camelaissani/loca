@@ -106,12 +106,12 @@ class Anilist{
             if ((range>0 && current >= end) ||
                 (range<0 && current <= end)) {
                 // TODO: manage number format
-                $element.html(Helper.formatMoney(end, true));
+                $element.html(Helper.formatMoney(end));
                 clearInterval(timer);
             }
             else {
                 // TODO: manage number format
-                $element.html(Helper.formatMoney(current, true));
+                $element.html(Helper.formatMoney(current));
             }
         }, stepTime);
     }
