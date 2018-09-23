@@ -17,12 +17,12 @@ export default () => {
         } else if (moment.isDate(minDate)) {
             momentMin = moment(minDate);
         } else {
-            momentMin = moment(minDate, i18next.t('__fmt_date__'), true);
+            momentMin = moment(minDate, 'L', true);
         }
 
-        momentValue = moment(value, i18next.t('__fmt_date__'), true);
+        momentValue = moment(value, 'L', true);
 
-        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date after the', {date: momentMin.format(i18next.t('__fmt_date__'))});
+        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date after the', {date: momentMin.format('L')});
         return this.optional(element) || (momentValue.isValid() && momentMin.isValid() && (momentValue.isSame(momentMin) || momentValue.isAfter(momentMin)));
     }, '{1}');
 
@@ -40,12 +40,12 @@ export default () => {
         } else if (moment.isDate(maxDate)) {
             momentMax = moment(maxDate);
         } else {
-            momentMax = moment(maxDate, i18next.t('__fmt_date__'), true);
+            momentMax = moment(maxDate, 'L', true);
         }
 
-        momentValue = moment(value, i18next.t('__fmt_date__'), true);
+        momentValue = moment(value, 'L', true);
 
-        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date before the', {date: momentMax.format(i18next.t('__fmt_date__'))});
+        params[1] = params[0].message?i18next.t(params[0].message):i18next.t('Please set a date before the', {date: momentMax.format('L')});
         return this.optional(element) || (momentValue.isValid() && momentMax.isValid() && (momentValue.isSame(momentMax) || momentValue.isBefore(momentMax)));
     }, '{1}');
 
@@ -55,9 +55,9 @@ export default () => {
         var endDate;
         var momentBegin, momentEnd;
         var contractDuration;
-        var momentValue = moment(value, i18next.t('__fmt_date__'), true);
+        var momentValue = moment(value, 'L', true);
 
-        momentBegin = moment(beginDate, i18next.t('__fmt_date__'), true);
+        momentBegin = moment(beginDate, 'L', true);
         if (momentBegin.isValid()) {
             if (contract === 'custom') {
                 contractDuration = moment.duration(2, 'years');
@@ -66,17 +66,17 @@ export default () => {
             }
             contractDuration = moment.duration(9, 'years');
             momentEnd = moment(momentBegin).add(contractDuration).subtract(1, 'days');
-            endDate = momentEnd.format(i18next.t('__fmt_date__'));
+            endDate = momentEnd.format('L');
             return endDate === value;
         }
         return this.optional(element);
     }, i18next.t('The end date of contract is not compatible with contract selected'));
 
     $.validator.methods.date = function(value, element) {
-        return this.optional(element) || moment(value, i18next.t('__fmt_date__'), true).isValid();
+        return this.optional(element) || moment(value, 'L', true).isValid();
     };
 
-    $.validator.messages.date = i18next.t('The date is not valid (Sample date:)', {date: moment().format(i18next.t('__fmt_date__'))});
+    $.validator.messages.date = i18next.t('The date is not valid (Sample date:)', {date: moment().format('L')});
 
     $.validator.addMethod('phoneFR', function(phone_number, element) {
         phone_number = phone_number.replace(/\(|\)|\s+|-/g, '');

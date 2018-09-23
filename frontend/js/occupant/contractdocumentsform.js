@@ -37,7 +37,7 @@ class ContractDocumentsForm extends Form {
         if (occupant.documents) {
             occupant.documents.forEach((doc, index) => {
                 if (doc.expirationDate) {
-                    doc.expirationDate = moment(doc.expirationDate).format(i18next.t('__fmt_date__')); //db formtat to display one
+                    doc.expirationDate = moment(doc.expirationDate).format('L'); //db formtat to display one
                 }
                 if (index !==0) { // Except first one row still exists
                     this.addDocumentRow();
@@ -56,7 +56,7 @@ class ContractDocumentsForm extends Form {
         if (data.documents) {
             data.documents.forEach((doc) => {
                 if (doc.expirationDate) {
-                    doc.expirationDate = moment(doc.expirationDate, i18next.t('__fmt_date__')).toDate(); //display format to db one
+                    doc.expirationDate = moment(doc.expirationDate, 'L').toDate(); //display format to db one
                 }
             });
         }

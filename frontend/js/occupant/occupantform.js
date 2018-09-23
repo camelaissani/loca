@@ -147,24 +147,24 @@ class OccupantForm extends Form {
 
         if (occupant) {
             if (occupant.beginDate) {
-                occupant.beginDate = moment(occupant.beginDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                occupant.beginDate = moment(occupant.beginDate, 'DD/MM/YYYY').format('L'); //display format date
             }
 
             if (occupant.endDate) {
-                occupant.endDate = moment(occupant.endDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                occupant.endDate = moment(occupant.endDate, 'DD/MM/YYYY').format('L'); //display format date
             }
 
             if (occupant.terminationDate) {
-                occupant.terminationDate = moment(occupant.terminationDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                occupant.terminationDate = moment(occupant.terminationDate, 'DD/MM/YYYY').format('L'); //display format date
             }
 
             if (occupant.properties) {
                 occupant.properties.forEach((property, index) => {
                     if (property.entryDate) {
-                        property.entryDate = moment(property.entryDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                        property.entryDate = moment(property.entryDate, 'DD/MM/YYYY').format('L'); //display format date
                     }
                     if (property.exitDate) {
-                        property.exitDate = moment(property.exitDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //display format date
+                        property.exitDate = moment(property.exitDate, 'DD/MM/YYYY').format('L'); //display format date
                     }
                     if (index !==0) {
                         this.addPropertyRow();
@@ -240,24 +240,24 @@ class OccupantForm extends Form {
         }
 
         if (data.beginDate) {
-            data.beginDate = moment(data.beginDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+            data.beginDate = moment(data.beginDate, 'L').format('DD/MM/YYYY'); //display format to db one
         }
 
         if (data.endDate) {
-            data.endDate = moment(data.endDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+            data.endDate = moment(data.endDate, 'L').format('DD/MM/YYYY'); //display format to db one
         }
 
         if (data.terminationDate) {
-            data.terminationDate = moment(data.terminationDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+            data.terminationDate = moment(data.terminationDate, 'L').format('DD/MM/YYYY'); //display format to db one
         }
 
         data.properties.forEach(function(property) {
             if (property.entryDate) {
-                property.entryDate = moment(property.entryDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+                property.entryDate = moment(property.entryDate, 'L').format('DD/MM/YYYY'); //display format to db one
             }
 
             if (property.exitDate) {
-                property.exitDate = moment(property.exitDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+                property.exitDate = moment(property.exitDate, 'L').format('DD/MM/YYYY'); //display format to db one
             }
         });
 
@@ -448,12 +448,12 @@ class OccupantForm extends Form {
         var beginDate = $element.val();
         var contract = $('#occupant-form #contract').val();
         var contractDuration = moment.duration(9, 'years');
-        var momentBegin = moment(beginDate, i18next.t('__fmt_date__'), true);
+        var momentBegin = moment(beginDate, 'L', true);
         var momentEnd;
 
         if (momentBegin.isValid() && contract !== 'custom') {
             momentEnd = moment(momentBegin).add(contractDuration).subtract(1, 'days');
-            $('#occupant-form #endDate').val(momentEnd.format(i18next.t('__fmt_date__')));
+            $('#occupant-form #endDate').val(momentEnd.format('L'));
         }
     }
 

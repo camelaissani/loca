@@ -35,20 +35,17 @@ function _getEmailStatus(term) {
                 const emailStatus = JSON.parse(body).reduce((acc, status) => {
                     const data = {
                         to: status.to,
-                        sentDate: moment(new Date(status.sentDate)).tz('Europe/Paris').format('DD/MM/YYYY HH:MM')
+                        sentDate: status.sentDate
                     };
                     if (!acc[status.tenantId]) {
-                        acc[status.tenantId] = {[status.document]: data};
-                    } else {
-                        const currentDocument = acc[status.tenantId][status.document];
-                        if (!currentDocument) {
-                            acc[status.tenantId][status.document] = data;
-                        } else {
-                            if (moment(new Date(currentDocument.sentDate)).isBefore(moment(status.sentDate))) {
-                                acc[status.tenantId][status.document] = data;
-                            }
-                        }
+                        acc[status.tenantId] = {[status.document]: []};
                     }
+                    let documents = acc[status.tenantId][status.document];
+                    if (!documents) {
+                        documents = [];
+                        acc[status.tenantId][status.document] = documents;
+                    }
+                    documents.push(data);
                     return acc;
                 }, {});
                 resolve(emailStatus);

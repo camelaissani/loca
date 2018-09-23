@@ -31,11 +31,11 @@ class PaymentForm extends Form {
                     date: true,
                     mindate: [{
                         minDate,
-                        message: i18next.t('Only the payment of rent period are authorized. Please enter a date between', {period: period(), minDate: minDate().format(i18next.t('__fmt_date__')), maxDate: maxDate().format(i18next.t('__fmt_date__'))})
+                        message: i18next.t('Only the payment of rent period are authorized. Please enter a date between', {period: period(), minDate: minDate().format('L'), maxDate: maxDate().format('L')})
                     }],
                     maxdate: [{
                         maxDate,
-                        message: i18next.t('Only the payment of rent period are authorized. Please enter a date between', {period: period(), minDate: minDate().format(i18next.t('__fmt_date__')), maxDate: maxDate().format(i18next.t('__fmt_date__'))})
+                        message: i18next.t('Only the payment of rent period are authorized. Please enter a date between', {period: period(), minDate: minDate().format('L'), maxDate: maxDate().format('L')})
                     }]
                 },
                 'paymentType': {
@@ -93,7 +93,7 @@ class PaymentForm extends Form {
         }
 
         if (payment.paymentDate) {
-            payment.paymentDate = moment(payment.paymentDate, 'DD/MM/YYYY').format(i18next.t('__fmt_date__')); //db formtat to display one
+            payment.paymentDate = moment(payment.paymentDate, 'DD/MM/YYYY').format('L'); //db formtat to display one
         }
     }
 
@@ -107,7 +107,7 @@ class PaymentForm extends Form {
 
     onGetData(data) {
         if (data.paymentDate) {
-            data.paymentDate = moment(data.paymentDate, i18next.t('__fmt_date__')).format('DD/MM/YYYY'); //display format to db one
+            data.paymentDate = moment(data.paymentDate, 'L').format('DD/MM/YYYY'); //display format to db one
         }
         return data;
     }

@@ -50,10 +50,10 @@ module.exports = {
     },
 
     formatDate(text) {
-        return moment(text, 'DD/MM/YYYY').format(this.t('__fmt_date__'));
+        return moment(text, 'DD/MM/YYYY').format('L');
     },
 
     formatDateTime(text) {
-        return moment(text, 'DD/MM/YYYY HH:MM').format(this.t('__fmt_datetime__'));
+        return moment(text, 'DD/MM/YYYY HH:MM').format('L LTS');
     }
 };

@@ -1,8 +1,6 @@
 {
     "__currency_code": "EUR",
     "__currency_symbol": "€",
-    "__fmt_date__": "DD/MM/YYYY",
-    "__fmt_datetime__": "DD/MM/YYYY HH[h]MM",
     "[code: ]": "[code : {{code}}]",
     "#": "n°{{number}}",
     "'s documents": "Documents de {{name}}",

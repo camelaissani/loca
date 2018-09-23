@@ -62,11 +62,19 @@ class Helper {
     }
 
     static formatDate(text) {
-        return moment(text, 'DD/MM/YYYY').format(i18next.t('__fmt_date__'));
+        let date = moment(text, 'DD/MM/YYYY');
+        if (!date.isValid()) {
+            date = moment(text);
+        }
+        return date.format('L');
     }
 
     static formatDateTime(text) {
-        return moment(text, 'DD/MM/YYYY HH:MM').format(i18next.t('__fmt_datetime__'));
+        let dateTime = moment(text);
+        if (!dateTime.isValid()) {
+            dateTime = moment(text, 'DD/MM/YYYY HH:MM');
+        }
+        return dateTime.format('L LTS');
     }
 }
 

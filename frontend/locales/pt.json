@@ -1,8 +1,6 @@
 {
     "__currency_code": "BRL",
     "__currency_symbol": "R$",
-    "__fmt_date__": "DD-MM-YYYY",
-    "__fmt_datetime__": "DD-MM-YYYY HH[h]M",
     "[code: ]": "[code: {{code}}]",
     "#": "#{{number}}",
     "'s documents": "Documentos do {{name}}",

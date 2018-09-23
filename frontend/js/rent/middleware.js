@@ -98,9 +98,7 @@ class RentMiddleware extends ViewController {
                 application.sendEmail(tenantIds, 'invoice', LOCA.currentYear, LOCA.currentMonth, status => {
                     bootbox.alert(this.emailStatus({results: status}), () => {
                         this.closeForm(() => {
-                            if (this.list) {
-                                this.list.showAllRows();
-                            }
+                            this.loadList();
                         });
                     });
                 });
@@ -117,9 +115,7 @@ class RentMiddleware extends ViewController {
                 application.sendEmail(tenantIds, 'rentcall', LOCA.currentYear, LOCA.currentMonth, status => {
                     bootbox.alert(this.emailStatus({results: status}), () => {
                         this.closeForm(() => {
-                            if (this.list) {
-                                this.list.showAllRows();
-                            }
+                            this.loadList();
                         });
                     });
                 });
@@ -136,9 +132,7 @@ class RentMiddleware extends ViewController {
                 application.sendEmail(tenantIds, 'rentcall_reminder', LOCA.currentYear, LOCA.currentMonth, status => {
                     bootbox.alert(this.emailStatus({results: status}), () => {
                         this.closeForm(() => {
-                            if (this.list) {
-                                this.list.showAllRows();
-                            }
+                            this.loadList();
                         });
                     });
                 });

@@ -63,14 +63,14 @@
     <ul class="list-inline">
         <li>
             {{#if emailStatus.rentcall}}
-            <span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.rentcall.sentDate}}"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}}</span>
+            <span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.rentcall.0.sentDate}}"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}} [{{emailStatus.rentcall.length}}]</span>
             {{else}}
             <span class="label label-default"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}}</span>
             {{/if}}
         </li>
         <li>
             {{#if emailStatus.invoice}}
-            <span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.invoice.sentDate}}"><i class="fa fa-envelope-o"></i> {{i18next key="Rental invoice"}}</span>
+            <span class="label label-success" data-toggle="tooltip" data-placement="bottom" title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.invoice.0.sentDate}}"><i class="fa fa-envelope-o"></i> {{i18next key="Rental invoice"}} [{{emailStatus.invoice.length}}]</span>
             {{else}}
             <span class="label label-default"><i class="fa fa-envelope-o"></i> {{i18next key="Rental invoice"}}</span>
             {{/if}}

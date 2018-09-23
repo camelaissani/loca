@@ -53,7 +53,7 @@ const feeders = [
                             notificationId: generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD-MM-YYYY') + document.name),
                             expirationDate: document.expirationDate,
                             title: occupant.name,
-                            description: t('has expired', {document: document.name, date: moment(document.expirationDate).format(t('__fmt_date__')), interpolation: {escape: false}}),
+                            description: t('has expired', {document: document.name, date: moment(document.expirationDate).format('L'), interpolation: {escape: false}}),
                             actionUrl: ''
                         });
                     });
