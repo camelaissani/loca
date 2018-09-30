@@ -98,7 +98,34 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
     if (inputOccupant) {
         // email status
         if (emailStatus) {
-            Object.assign(rentToReturn, {emailStatus});
+            const computedEmailStatus = {
+                status: {
+                    rentcall: !!((emailStatus.rentcall && emailStatus.rentcall.length) || (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length)),
+                    invoice: !!(emailStatus.invoice && emailStatus.invoice.length)
+                },
+                last: {
+                    rentcall: (emailStatus.rentcall && emailStatus.rentcall.length && emailStatus.rentcall[0]) || undefined,
+                    invoice: (emailStatus.invoice && emailStatus.invoice.length && emailStatus.invoice[0]) || undefined
+                },
+                count: {
+                    rentcall: (emailStatus.rentcall && emailStatus.rentcall.length) || 0,
+                    rentcall_reminder: (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length) || 0,
+                    get allRentcall() {
+                        return this.rentcall + this.rentcall_reminder;
+                    },
+                    invoice: (emailStatus.invoice && emailStatus.invoice.length) || 0
+                },
+                ...emailStatus
+            };
+
+            if (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length && computedEmailStatus.last.rentcall) {
+                const lastRentCallReminder = emailStatus.rentcall_reminder[0];
+                if (moment(computedEmailStatus.last.rentcall.sentDate).isBefore(moment(lastRentCallReminder.sentDate))){
+                    computedEmailStatus.last.rentcall = lastRentCallReminder;
+                }
+            }
+
+            Object.assign(rentToReturn, {emailStatus: computedEmailStatus});
         }
 
         const occupant = toOccupantData(inputOccupant);
