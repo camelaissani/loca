@@ -118,9 +118,13 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
                 ...emailStatus
             };
 
-            if (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length && computedEmailStatus.last.rentcall) {
+            if (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length) {
                 const lastRentCallReminder = emailStatus.rentcall_reminder[0];
-                if (moment(computedEmailStatus.last.rentcall.sentDate).isBefore(moment(lastRentCallReminder.sentDate))){
+                if (computedEmailStatus.last.rentcall) {
+                    if (moment(computedEmailStatus.last.rentcall.sentDate).isBefore(moment(lastRentCallReminder.sentDate))){
+                        computedEmailStatus.last.rentcall = lastRentCallReminder;
+                    }
+                } else {
                     computedEmailStatus.last.rentcall = lastRentCallReminder;
                 }
             }
