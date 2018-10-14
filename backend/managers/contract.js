@@ -66,7 +66,7 @@ function update(inputContract, modification) {
     const updatedContract = create(modifiedContract);
 
     inputContract.rents
-        .filter(rent => rent.payments.length > 0 || rent.discounts.some(discount => discount.origin === 'settlement'))
+        .filter(rent => _isPayment(rent) || rent.discounts.some(discount => discount.origin === 'settlement'))
         .forEach(paidRent => {
             payTerm(updatedContract, moment(String(paidRent.term), 'YYYYMMDDHH').format('DD/MM/YYYY HH:mm'), {
                 payments: paidRent.payments,
@@ -118,13 +118,16 @@ function payTerm(contract, term, settlements) {
     return contract;
 }
 
+function _isPayment(rent) {
+    return !!(rent.payments.length > 0 && rent.payments.some(payment => payment.amount && payment.amount > 0));
+}
+
 function _checkLostPayments(momentBegin, momentEnd, contract) {
     const lostPayments =
     contract.rents
-        .filter(rent => rent.payments.length > 0
-            && !moment(rent.term, 'YYYYMMDDHH').isBetween(momentBegin, momentEnd, contract.frequency, '[]'))
-    // && !(rent.term >= Number(momentBegin.format('YYYYMMDDHH'))
-    // && rent.term <= Number(momentEnd.format('YYYYMMDDHH'))))
+        .filter(rent =>
+            !moment(rent.term, 'YYYYMMDDHH').isBetween(momentBegin, momentEnd, contract.frequency, '[]') &&
+            _isPayment(rent))
         .map(rent => String(rent.term) + ' ' + rent.payments.map(payment => payment.amount).join(' + '));
 
     if (lostPayments.length > 0) {

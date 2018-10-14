@@ -212,7 +212,7 @@ class OccupantForm extends Form {
             }
             else {
                 $('.js-lease-state').addClass('hidden');
-                $('.js-user-action[data-id="list-action-remove-occupant"]').removeClass('disable');
+                $('.js-user-action[data-id="list-action-remove-occupant"]').removeClass('disabled');
             }
         }
         else {
