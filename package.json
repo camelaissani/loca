@@ -15,7 +15,7 @@
     "builddev": "node scripts/build.js static",
     "lint": "eslint .",
     "test": "LOCA_DEMOMODE=false LOCA_PRODUCTIVE=true mocha",
-    "coverage": "LOCA_DEMOMODE=false LOCA_PRODUCTIVE=true nyc mocha",
+    "coverage": "LOCA_DEMOMODE=false LOCA_PRODUCTIVE=true nyc --reporter=lcov --reporter=text-summary mocha",
     "mongodump": "node scripts/mongodump.js",
     "mongorestore": "node scripts/mongorestore.js"
   },
