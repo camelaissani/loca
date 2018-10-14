@@ -10,5 +10,9 @@ node_js:
 before_script:
   - npm install coveralls
 
+script:
+  - npm run lint
+  - npm run coverage
+
 after_script:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
