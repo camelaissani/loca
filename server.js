@@ -19,9 +19,9 @@ const Intl = require('intl');
 const express = require('express');
 const favicon = require('serve-favicon');
 const methodOverride = require('method-override');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
+const session = require('express-session');
+
 const errorHandler = require('errorhandler');
 const passport = require('passport');
 const expressWinston = require('express-winston');
@@ -62,11 +62,11 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(methodOverride());
-app.use(cookieParser());
-app.use(cookieSession({
+app.use(session({
     secret: 'loca-secret',
     cookie: {
-        maxAge: 3600000
+        //      min  s     ms
+        maxAge: 5 * 60 * 1000 // 5 minutes
     }
 }));
 app.use(passport.initialize());
