@@ -154,13 +154,18 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
                         return false;
                     }
 
-                    const totalAmount = currentRent.total.grandTotal;
-                    const newBalance =  currentRent.total.payment - currentRent.total.grandTotal;
+                    const { grandTotal, payment } = currentRent.total;
+                    const newBalance =  payment - grandTotal;
 
-                    if (totalAmount <= 0 || newBalance >= 0) {
+                    if (grandTotal <= 0 || newBalance >= 0) {
                         endCounting = true;
                         return false;
                     }
+
+                    if (payment > 0) {
+                        endCounting = true;
+                    }
+
                     return true;
                 }
                 return false;
