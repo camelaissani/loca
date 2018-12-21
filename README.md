@@ -1,4 +1,4 @@
-Loca
+VRC Property Management System
 ====
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/microrealestate)
@@ -6,7 +6,7 @@ Loca
 [![Coverage Status](https://coveralls.io/repos/github/camelaissani/loca/badge.svg?branch=master)](https://coveralls.io/github/camelaissani/loca?branch=master)
 <sup>Only backend code is covered see issues [#8](https://github.com/camelaissani/loca/issues/8) and [#9](https://github.com/camelaissani/loca/issues/9)</sup>
 
-## What's Loca?
+## What's PMS?
 
 This nodejs project is a tentative of web application that offers a toolkit for owners of buildings, flats, offices, meeting rooms, car parks, letter boxes...
 
