@@ -1,4 +1,4 @@
-VRC Property Management System
+Open Source Real Estate Property Management System
 
 ## Status
 
