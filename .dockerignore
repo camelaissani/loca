@@ -1,9 +1,13 @@
-!backend
-!bkp
-!config
-!frontend
-!scripts
-!test
-!package-lock.json
-!package.json
-!server.js
+# Coverage directory used by tools like istanbul
+coverage
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
+
+.*
+bkp/locadb
+dist
+documentation
+Dockerfile
+*.Dockerfile

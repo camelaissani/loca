@@ -9,8 +9,7 @@ RUN apt-get update -qq && \
 WORKDIR /usr/app
 
 COPY . .
-
-RUN npm install --silent
+RUN npm ci
 
 EXPOSE 9229 8081 9091
 

@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 const fs = require('fs-extra');
-const {rollup} = require('rollup');
+const { rollup } = require('rollup');
 const babel = require('rollup-plugin-babel');
-const {terser} = require('rollup-plugin-terser');
+const { terser } = require('rollup-plugin-terser');
 const commonjs = require('rollup-plugin-commonjs');
 const nodeResolve = require('rollup-plugin-node-resolve');
 const includePaths = require('rollup-plugin-includepaths');
@@ -33,14 +33,14 @@ const dist_locales_directory = path.join(dist_directory, 'locales');
 const templates_pattern = path.join(view_directory, '/**/*.ejs');
 const images_pattern = path.join(image_directory, '/**/*.{jpg,png}');
 
-const buildCss = async (opts) => {
+const buildCss = async ({inputOptions, outputOptions}) => {
     await fs.ensureDir(dist_css_directory);
-    const code = fs.readFileSync(path.join(less_directory, `${opts.name}.less`), 'utf8');
+    const code = fs.readFileSync(path.join(less_directory, `${outputOptions.name}.less`), 'utf8');
     const output = await less.render(code, {
         paths: [less_directory]
     });
-    const css_file_path = path.join(dist_css_directory, `${opts.name}.css`);
-    const cssmin_file_path = path.join(dist_css_directory, `${opts.name}.min.css`);
+    const css_file_path = path.join(dist_css_directory, `${outputOptions.name}.css`);
+    const cssmin_file_path = path.join(dist_css_directory, `${outputOptions.name}.min.css`);
 
     fs.writeFileSync(css_file_path, output.css);
 
@@ -48,9 +48,9 @@ const buildCss = async (opts) => {
         return output.css;
     }
 
-    const content = [opts.bundleOptions.dest, templates_pattern];
-    if (opts.extJs) {
-        content.push(...opts.extJs);
+    const content = [outputOptions.file, templates_pattern];
+    if (inputOptions.external) {
+        content.push(...inputOptions.external);
     }
     return await new Promise((resolve, reject) => {
         try {
@@ -62,7 +62,7 @@ const buildCss = async (opts) => {
                     info: false,
                     rejected: false
                 },
-                (purified_css) => {
+                purified_css => {
                     if (!purified_css) {
                         reject('purify exited with an empty css');
                     }
@@ -76,10 +76,10 @@ const buildCss = async (opts) => {
     });
 };
 
-const buildJs = async (opts) => {
+const buildJs = async ({inputOptions, outputOptions}) => {
     await fs.ensureDir(dist_js_directory);
-    const bundle = await rollup(opts.options);
-    bundle.write(opts.bundleOptions);
+    const bundle = await rollup(inputOptions);
+    await bundle.write(outputOptions);
 };
 
 const buildImg = async () => {
@@ -87,26 +87,26 @@ const buildImg = async () => {
     await imagemin([images_pattern], dist_images_directory, {
         plugins: [
             imageminMozjpeg(),
-            imageminPngquant({quality: '65-80'})
+            imageminPngquant({ quality: '65-80' })
         ]
     });
 };
 
-const copyLocales= () => {
+const copyLocales = () => {
     fs.copySync(
         locale_directory,
         dist_locales_directory
     );
 };
 
-const copyRobots= () => {
+const copyRobots = () => {
     fs.copySync(
         path.join(frontend_directory, 'robots.txt'),
         path.join(dist_directory, 'robots.txt')
     );
 };
 
-const copySitemap= () => {
+const copySitemap = () => {
     fs.copySync(
         path.join(frontend_directory, 'sitemap.xml'),
         path.join(dist_directory, 'sitemap.xml')
@@ -125,8 +125,7 @@ const plugins = () => {
         }),
         commonjs(),
         babel({
-            babelrc: false,
-            presets: ['es2015-rollup']
+            exclude: 'node_modules/**'
         }),
         includePaths({
             external: [
@@ -151,48 +150,51 @@ const plugins = () => {
     return list;
 };
 
-const bundleOptions = (name) => {
-    const suffix = process.env.NODE_ENV === 'production' ? '.min' : '';
-    const opts = {
-        dest: path.join(dist_js_directory, `${name}${suffix}.js`),
-        format: 'umd',
-        globals: {
-            'accounting': 'accounting',
-            'bootbox': 'bootbox',
-            'handlebars': 'Handlebars',
-            'historyjs': 'History',
-            'i18next': 'i18next',
-            'jquery': '$',
-            'minivents': 'Events',
-            'moment': 'moment',
-            'sugar': 'Sugar',
-            'frontexpress': 'frontexpress'
-        },
-        sourceMap: true
-    };
-    return opts;
+const outputFileSuffix =  (process.env.NODE_ENV === 'production' && '.min') || '';
+
+const outputOptions ={
+    format: 'umd',
+    globals: {
+        'accounting': 'accounting',
+        'bootbox': 'bootbox',
+        'handlebars': 'Handlebars',
+        'historyjs': 'History',
+        'i18next': 'i18next',
+        'jquery': '$',
+        'minivents': 'Events',
+        'moment': 'moment',
+        'sugar': 'Sugar',
+        'frontexpress': 'frontexpress'
+    },
+    sourceMap: true
 };
 
 const print = {
-    name: 'print',
-    options: {
-        entry: path.join(js_directory, 'print.js'),
+    inputOptions: {
+        input: path.join(js_directory, 'print.js'),
         plugins: plugins()
     },
-    bundleOptions: bundleOptions('print')
+    outputOptions: {
+        name: 'print',
+        file: path.join(dist_js_directory, `print${outputFileSuffix}.js`),
+        ...outputOptions
+    }
 };
 
 const index = {
-    name: 'index',
-    options: {
-        entry: path.join(js_directory, 'index.js'),
-        plugins: plugins()
+    inputOptions: {
+        input: path.join(js_directory, 'index.js'),
+        plugins: plugins(),
+        external: [
+            path.join(node_modules_directory, 'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'),
+            path.join(node_modules_directory, 'bootbox/bootbox.min.js')
+        ]
     },
-    bundleOptions: bundleOptions('index'),
-    extJs: [
-        path.join(node_modules_directory, 'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'),
-        path.join(node_modules_directory, 'bootbox/bootbox.min.js')
-    ]
+    outputOptions: {
+        name: 'index',
+        file: path.join(dist_js_directory, `index${outputFileSuffix}.js`),
+        ...outputOptions
+    }
 };
 
 const build = async (buildWhat) => {
@@ -203,25 +205,25 @@ const build = async (buildWhat) => {
                 clean(dist_js_directory);
                 await buildJs(print);
                 await buildJs(index);
-                console.log('js files rebuilt');
+                console.log('js files built');
                 break;
             case 'css':
                 clean(dist_css_directory);
                 await buildCss(print);
                 await buildCss(index);
-                console.log('less files rebuilt');
+                console.log('less files built');
                 break;
             case 'img':
                 clean(dist_images_directory);
                 await buildImg();
-                console.log('image files rebuilt');
+                console.log('image files built');
                 break;
             case 'static':
                 clean(dist_locales_directory);
                 copyLocales();
                 copyRobots();
                 copySitemap();
-                console.log('static files rebuilt');
+                console.log('static files built');
                 break;
             default:
                 console.error('target not found');
@@ -238,8 +240,9 @@ const build = async (buildWhat) => {
             copyLocales();
             copyRobots();
             copySitemap();
+            console.log('files built');
         }
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     }
 };

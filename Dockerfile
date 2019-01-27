@@ -11,7 +11,7 @@ RUN npm set progress=false && \
 COPY . .
 
 FROM base as dependencies
-RUN npm install && \
+RUN npm ci && \
     npm run buildprod && \
     NODE_ENV=production npm prune
 
