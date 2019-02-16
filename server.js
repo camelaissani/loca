@@ -156,8 +156,9 @@ db.init()
                 require('./scripts/mongorestore');
             }
         }
-
-        const http_port = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8081;
+        const debug_http_port = 9091;
+        const app_http_port = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8080;
+        const http_port = debugMode ? debug_http_port : app_http_port;
         app.listen(http_port, function() {
             logger.info('Listening port ' + http_port);
             if (!debugMode) {
@@ -170,12 +171,17 @@ db.init()
             }
             const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, 'config');
             logger.debug('loaded configuration from', configdir);
-            logger.debug(JSON.stringify(config, null,'\t'));
+            logger.debug(JSON.stringify(config, null, 1));
             if (debugMode) {
-                const LiveReloadServer = require('live-reload');
-                LiveReloadServer({
-                    _: ['dist'],
-                    port: 9091
+                const browserSync = require('browser-sync');
+                browserSync.init({
+                    proxy: `localhost:${debug_http_port}`,
+                    files: ['dist'],
+                    port: app_http_port,
+                    weinre: {
+                        port: 8080
+                    },
+                    open: false
                 });
             }
         });

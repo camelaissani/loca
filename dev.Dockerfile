@@ -11,6 +11,6 @@ WORKDIR /usr/app
 COPY . .
 RUN npm ci
 
-EXPOSE 9229 8081 9091
+EXPOSE 9229 8080 3001
 
 CMD npm run dev
