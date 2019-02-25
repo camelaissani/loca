@@ -192,9 +192,29 @@ class RentMiddleware extends ViewController {
         const selection = this.list.getSelectedData();
 
         if (actionId==='list-action-pay-rent') {
+            const rent = selection[0];
             this.form.bindForm();
-            this.form.setData(selection[0]);
-            this.openForm('pay-rent-form');
+            this.form.setData(rent);
+            if (rent.occupant.terminated) {
+                $('#rent-payment-form select').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+                $('#rent-payment-form input').attr('readonly', true).addClass('uneditable-input');
+                $('#rent-payment-form textarea').attr('readonly', true).addClass('uneditable-input');
+                this.openForm('pay-rent-form', 'pay-rent-view-menu');
+            } else {
+                this.openForm('pay-rent-form', 'pay-rent-edit-menu');
+            }
+        }
+        else if (actionId==='list-action-edit-pay-rent') {
+            $('#rent-payment-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#rent-payment-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#rent-payment-form textarea').attr('readonly', false).removeClass('uneditable-input');
+            this.showMenu('pay-rent-edit-menu');
+        }
+        else if (actionId==='list-action-edit-occupant') {
+            $('#occupant-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#occupant-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#occupant-form .btn').removeClass('hidden');
+            this.showMenu('pay-rent-edit-menu');
         }
         else if (actionId==='list-action-rents-history') {
             $('#history-rents-table').html('');

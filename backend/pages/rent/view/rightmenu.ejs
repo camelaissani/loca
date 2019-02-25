@@ -47,9 +47,16 @@
     <div class="js-list-selected-elements list-group list-group-selection"></div>
 </div>
 
-<div class="js-side-menu side-menu card" data-id="pay-rent-form-menu" data-target="#pay-rent-form">
+<div class="js-side-menu side-menu card" data-id="pay-rent-edit-menu">
     <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
     <button data-id="list-action-save-form" type="button" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-save"></i> <%= t('Save') %></button>
+    <h4 class="js-list-selection-menu-label"></h4>
+    <div class="js-list-selected-elements fixed list-group"></div>
+</div>
+
+<div class="js-side-menu side-menu card" data-id="pay-rent-view-menu">
+    <button type="button" class="btn btn-default btn-block js-user-action js-cancel-form" role="button"><i class="fa fa-reply"></i> <%= t('Cancel') %></button>
+    <button type="button" data-id="list-action-edit-pay-rent" class="btn btn-default btn-block js-user-action" role="button"><i class="fa fa-pencil-square-o"></i> <%= t('Edit') %></button>
     <h4 class="js-list-selection-menu-label"></h4>
     <div class="js-list-selected-elements fixed list-group"></div>
 </div>

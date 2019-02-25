@@ -3,6 +3,7 @@ import moment from 'moment';
 import i18next from 'i18next';
 import application from '../application';
 import Form from '../form';
+import Helper from '../lib/helper';
 
 const LOCA = application.get('LOCA');
 const domSelector = '#rent-payment-form';
@@ -84,24 +85,35 @@ class PaymentForm extends Form {
     }
 
     beforeSetData(args) {
-        const payment = args[0];
-        if (!payment.payment) {
-            payment.payment= '';
-        }
-        if (!payment.promo) {
-            payment.promo= '';
+        const rent = args[0];
+        const { occupant } = rent;
+
+        if (occupant.terminated) {
+            $(`${domSelector} .js-lease-state`).removeClass('hidden');
+            $(`${domSelector} .js-contract-termination-date`).html(Helper.formatDate(occupant.terminationDate));
+            const { mindate, maxdate, ...paymentDate } = this.validator.settings.rules.paymentDate;
+            this.validator.settings.rules.paymentDate = paymentDate;
+        } else {
+            $(`${domSelector} .js-lease-state`).addClass('hidden');
         }
 
-        if (payment.paymentDate) {
-            payment.paymentDate = moment(payment.paymentDate, 'DD/MM/YYYY').format('L'); //db formtat to display one
+        if (!rent.payment) {
+            rent.payment= '';
+        }
+        if (!rent.promo) {
+            rent.promo= '';
+        }
+
+        if (rent.paymentDate) {
+            rent.paymentDate = moment(rent.paymentDate, 'DD/MM/YYYY').format('L'); //db formtat to display one
         }
     }
 
     afterSetData(args) {
-        const payment = args[0],
-            paymentPeriod = moment.months()[payment.month-1] + ' ' + payment.year;
+        const rent = args[0],
+            paymentPeriod = moment.months()[rent.month-1] + ' ' + rent.year;
 
-        $(domSelector + ' #occupantNameLabel').html(payment.occupant.name);
+        $(domSelector + ' #occupantNameLabel').html(rent.occupant.name);
         $(domSelector + ' #paymentPeriod').html(paymentPeriod);
     }
 

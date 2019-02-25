@@ -10,7 +10,8 @@
         "indent": ["error", 4],
         "quotes": ["error", "single"],
         "linebreak-style": ["error", "unix"],
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": true }]
     },
     "env": {
         "node": true,
