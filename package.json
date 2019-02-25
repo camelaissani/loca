@@ -23,7 +23,7 @@
     "bcryptjs": "2.4.3",
     "body-parser": "1.18.3",
     "bootbox": "4.4.0",
-    "bootstrap": "3.4.0",
+    "bootstrap": "3.4.1",
     "bootstrap-datepicker": "1.8.0",
     "ejs": "2.6.1",
     "errorhandler": "1.5.0",
