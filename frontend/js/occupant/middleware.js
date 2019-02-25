@@ -62,14 +62,14 @@ class OccupantMiddelware extends ViewController {
             this._loadPropertyList((properties) => {
                 this.form.setData(selection[0], properties);
                 $('#occupant-form select').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
-                $('#occupant-form input').attr('readonly', true).attr('disabled', true).addClass('uneditable-input');
+                $('#occupant-form input').attr('readonly', true).addClass('uneditable-input');
                 $('#occupant-form .btn').addClass('hidden');
                 this.openForm('occupant-form', 'occupant-view-menu');
             });
         }
         else if (actionId==='list-action-edit-occupant') {
             $('#occupant-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
-            $('#occupant-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+            $('#occupant-form input').attr('readonly', false).removeClass('uneditable-input');
             $('#occupant-form .btn').removeClass('hidden');
             this.showMenu('occupant-edit-menu');
         }
@@ -78,7 +78,7 @@ class OccupantMiddelware extends ViewController {
             this._loadPropertyList((properties) => {
                 this.form.setData(null, properties);
                 $('#occupant-form select').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
-                $('#occupant-form input').attr('readonly', false).attr('disabled', false).removeClass('uneditable-input');
+                $('#occupant-form input').attr('readonly', false).removeClass('uneditable-input');
                 $('#occupant-form .btn').removeClass('hidden');
                 this.openForm('occupant-form', 'occupant-edit-menu');
             });
