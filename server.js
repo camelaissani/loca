@@ -64,9 +64,10 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(session({
     secret: 'loca-secret',
+    rolling: true,
     cookie: {
         //      min  s     ms
-        maxAge: 5 * 60 * 1000 // 5 minutes
+        maxAge: 10 * 60 * 1000 // 10 minutes
     }
 }));
 app.use(passport.initialize());
