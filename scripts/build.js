@@ -166,7 +166,7 @@ const outputOptions ={
         'sugar': 'Sugar',
         'frontexpress': 'frontexpress'
     },
-    sourceMap: true
+    sourcemap: true
 };
 
 const print = {
