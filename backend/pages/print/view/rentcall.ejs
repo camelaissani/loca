@@ -4,9 +4,8 @@
 
 	<body>
 		<%
-		rents.forEach(function(rent) {
-			var occupant = rent.occupant;
-			today = rent.callDate;
+			occupants.forEach(function(occupant) {
+				occupant.rents.forEach(function(rent) {
 		%>
 
 		<div class="page">
@@ -23,7 +22,7 @@
 	        <div class="title">Avis d'échéance</div>
 
 			<div class="limit">
-				Montant total de <strong><%= formatMoney(rent.totalAmount) %></strong> à nous faire parvenir avant le <strong><%= rent.dueDate %></strong>.
+				Montant total de <strong><%= formatMoney(rent.total.grandTotal) %></strong> à nous faire parvenir avant le <strong><%= rent.dueDate %></strong>.
 			</div>
 
 			<div class="items">
@@ -40,7 +39,10 @@
 
 			<%- include partials/footer %>
 		</div>
-			<% }); %>
+		<%
+				});
+			});
+		%>
 		<%- include partials/printbar %>
 	</body>
 	<%- include partials/scripts %>

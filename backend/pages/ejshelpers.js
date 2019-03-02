@@ -1,44 +1,64 @@
 const moment = require('moment');
 
+const _textToNumber = text => {
+    let value = parseFloat(text);
+    if (isNaN(value)) {
+        value = 0;
+    }
+    return value;
+};
+
 module.exports = {
     formatSurface(text, hideUnit, emptyForZero) {
-        if (parseFloat(text) === 0 && emptyForZero) {
+        const value = _textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
             return '';
         }
 
         if (hideUnit) {
-            return this.Intl.NumberFormat.format(text);
+            return this.Intl.NumberFormat.format(value);
         }
 
-        return `${this.Intl.NumberFormat.format(text)} m<sup>2</sup>`;
+        return `${this.Intl.NumberFormat.format(value)} m<sup>2</sup>`;
     },
 
-    formatNumber(text) {
-        return this.Intl.NumberFormat.format(text);
+    formatNumber(text, emptyForZero) {
+        const value = _textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
+            return '';
+        }
+
+        return this.Intl.NumberFormat.format(value);
     },
 
     formatMoney(text, hideCurrency, emptyForZero) {
-        if (parseFloat(text) === 0 && emptyForZero) {
+        const value = _textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
             return '';
         }
 
         if (hideCurrency) {
-            return this.Intl.NumberFormat.format(text);
+            return this.Intl.NumberFormat.format(value);
         }
 
-        return this.Intl.NumberFormatCurrency.format(text);
+        return this.Intl.NumberFormatCurrency.format(value);
     },
 
     formatPercent(text, hidePercent, emptyForZero) {
-        if (parseFloat(text) === 0 && emptyForZero) {
+        const value = _textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
             return '';
         }
 
         if (hidePercent) {
-            return this.Intl.NumberFormat.format(text);
+            return this.Intl.NumberFormat.format(value);
         }
 
-        return `${this.Intl.NumberFormat.format(text*100)} %`;
+        return this.Intl.NumberFormatPercent.format(value);
     },
 
     formatMonth(text) {
@@ -51,6 +71,10 @@ module.exports = {
 
     formatDate(text) {
         return moment(text, 'DD/MM/YYYY').format('L');
+    },
+
+    formatDateText(text) {
+        return moment(text, 'DD/MM/YYYY').format('LL');
     },
 
     formatDateTime(text) {

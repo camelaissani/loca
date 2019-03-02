@@ -4,8 +4,8 @@
 
 	<body>
 		<%
-		rents.forEach(function(rent) {
-			var occupant = rent.occupant;
+			occupants.forEach(function(occupant) {
+				occupant.rents.forEach(function(rent) {
 		%>
 
 		<div class="page">
@@ -50,7 +50,10 @@
 
 			<%- include partials/footer %>
 		</div>
-		<% }); %>
+		<%
+				});
+			});
+		%>
 		<%- include partials/printbar %>
 	</body>
 	<%- include partials/scripts %>

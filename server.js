@@ -75,7 +75,8 @@ app.use(passport.session());
 app.use(i18nMiddleware.handle(i18next));
 app.use(function(req, res, next) {
     app.locals.Intl = {
-        NumberFormat: new Intl.NumberFormat(req.language, { maximumSignificantDigits: 2 }),
+        NumberFormat: new Intl.NumberFormat(req.language, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        NumberFormatPercent: new Intl.NumberFormat(req.language, { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         NumberFormatCurrency: new Intl.NumberFormat(req.language, { style: 'currency', currency: req.t('__currency_code') })
     };
     const splitedLanguage = req.language.split('-');

@@ -4,9 +4,8 @@
 
 	<body>
 		<%
-		rents.forEach(function(rent) {
-			var occupant = rent.occupant;
-			today = rent.invoiceDate;
+		occupants.forEach(function(occupant) {
+			occupant.rents.forEach(function(rent) {
 		%>
 
 		<div class="page invoice">
@@ -30,6 +29,7 @@
 			<%- include partials/footer %>
 		</div>
 		<%
+			});
 		});
 		%>
 		<%- include partials/printbar %>

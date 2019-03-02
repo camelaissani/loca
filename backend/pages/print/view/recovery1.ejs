@@ -3,10 +3,10 @@
 	<%- include partials/htmlhead.ejs %>
 
 	<body>
-	<%
-	rents.forEach(function(rent) {
-			var occupant = rent.occupant;
-	%>
+		<%
+			occupants.forEach(function(occupant) {
+				occupant.rents.forEach(function(rent) {
+		%>
 
 		<div class="page">
 			<%- include partials/header.ejs %>
@@ -20,7 +20,7 @@
 	        <div class="title">Avis d'échéance</div>
 
 			<div class="limit">
-				Montant total de <strong><%= formatMoney(rent.totalAmount) %></strong> était à nous faire parvenir avant le <strong><%= rent.dueDate %></strong>.
+				Montant total de <strong><%= formatMoney(rent.total.grandTotal) %></strong> était à nous faire parvenir avant le <strong><%= rent.dueDate %></strong>.
 			</div>
 
 			<div class="items">
@@ -40,8 +40,10 @@
 				Rappel<br>Loyer impayé
 			</div>
 		</div>
-
-	<% }); %>
+		<%
+				});
+			});
+		%>
 	<%- include partials/printbar %>
 	</body>
 	<%- include partials/scripts %>

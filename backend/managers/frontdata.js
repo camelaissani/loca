@@ -186,18 +186,62 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
 }
 
 function toPrintData(realm, doc, fromMonth, month, year, occupants) {
+    let months = Array.from(Array(13).keys()).slice(1);
     if (month) {
         month = month > 12 ? 12 : month;
+        months = [Number(month)];
     }
     if (fromMonth) {
         fromMonth = fromMonth > 12 ? 12 : fromMonth;
+        months = Array.from(Array(13).keys()).slice(fromMonth); // [fromMonth,..,12]
     }
 
+    const terms = months.map(month => Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH')));
+    const momentToday = moment();
+
     const data = {
-        today: moment().format('LL'),
-        year: moment().format('YYYY'),
+        today: momentToday.format('LL'),
+        year: momentToday.format('YYYY'),
         months: Array.from(Array(13).keys()).slice(1), // [1,2..,12]
-        occupants: occupants.map(occupant => toOccupantData(occupant)),
+        occupants: occupants.map(occupant => {
+            const data = toOccupantData(occupant);
+            data.rents = occupant.rents
+                .filter(rent => terms.indexOf(rent.term) !== -1 )
+                .map(rent => {
+                    const momentTerm = moment(rent.term, 'YYYYMMDDHH');
+                    const dueDate = moment(momentTerm).add(10, 'days');
+                    const dueDay = dueDate.isoWeekday();
+                    let today = momentToday;
+
+                    if ( dueDay === 6 ) {
+                        dueDate.subtract(1, 'days');
+                    } else if ( dueDay === 7 ) {
+                        dueDate.add(1, 'days');
+                    }
+
+                    if (dueDate.isSameOrBefore(momentToday)) {
+                        today = moment(momentTerm);
+                        const day = today.isoWeekday();
+                        if ( day === 6 ) {
+                            today.subtract(1, 'days');
+                        } else if ( day === 7 ) {
+                            today.add(1, 'days');
+                        }
+                    }
+
+                    rent.today = today.format('LL');
+                    rent.dueDate = dueDate.format('LL');
+                    rent.callDate = moment(`20/${rent.month}/${year}`, 'DD/MM/YYYY').subtract(1, 'months').format('LL'),
+                    rent.invoiceDate = moment(`20/${rent.month}/${year}`, 'DD/MM/YYYY').format('LL'),
+                    rent.period = moment(`01/${rent.month}/${year}`, 'DD/MM/YYYY').format('MMMM YYYY'),
+                    rent.billingReference = `${momentTerm.format('MM_YY_')}${occupant.reference}`,
+                    rent.total.payment = rent.total.payment || 0;
+                    rent.total.subTotal = rent.total.preTaxAmount + rent.total.charges - rent.total.discount;
+                    rent.total.newBalance = rent.total.grandTotal - rent.total.payment;
+                    return rent;
+                });
+            return data;
+        }),
         config,
         document: doc,
         realm: realm.manager ? realm : {
@@ -217,65 +261,13 @@ function toPrintData(realm, doc, fromMonth, month, year, occupants) {
             email: '?',
             bank: '?',
             rib: '?'
-        },
-        rents: []
+        }
     };
-    if (month) {
-        data.months = [Number(month)];
-    }
-    if (fromMonth) {
-        data.months = Array.from(Array(13).keys()).slice(fromMonth); // [fromMonth,..,12]
+
+    if (months) {
+        data.months = months;
     }
 
-    const terms = data.months.map(month => Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH')));
-    occupants.forEach(currentOccupant => {
-        currentOccupant.rents
-            .filter(currentRent => terms.indexOf(currentRent.term) !== -1 )
-            .reduce((acc, currentRent) => {
-                const rent = JSON.parse(JSON.stringify(currentRent));
-                const occupant = JSON.parse(JSON.stringify(currentOccupant));
-
-                const beginMoment = moment(occupant.beginDate, 'DD/MM/YYYY');
-                const endMoment = moment(occupant.endDate, 'DD/MM/YYYY');
-                const fyear = String(Number(year) - 2000);
-                const fmonth = rent.month > 9 ? `${rent.month}` : `0${rent.month}`;
-
-                // find first day of renting to display on invoice
-                let beginRentMoment = moment(`01/${month}/${year}`, 'DD/MM/YYYY').startOf('day');
-                if (beginMoment.month() === Number(month)-1 && beginMoment.year() === Number(year)) {
-                    beginRentMoment = moment(beginMoment).startOf('day');
-                }
-                // find last day of renting to display on invoice
-                let endRentMoment = moment(beginRentMoment).endOf('month').endOf('day');
-                if (endMoment.month() === Number(month)-1 && endMoment.year() === Number(year)) {
-                    endRentMoment = moment(endMoment).endOf('day');
-                }
-
-                occupant.properties = occupant.properties.map(property => {
-                    const entryMoment = moment(property.entryDate, 'DD/MM/YYYY').startOf('day');
-                    const exitMoment = moment(property.exitDate, 'DD/MM/YYYY').endOf('day');
-                    if (beginRentMoment.isBetween(entryMoment, exitMoment, 'day', '[]') &&
-                        endRentMoment.isBetween(entryMoment, exitMoment, 'day', '[]')) {
-                        property.visibleOnInvoice = true;
-                    }
-                    return property;
-                });
-
-                occupant.durationInMonth = Math.round(moment.duration(endMoment.diff(beginMoment)).asMonths());
-                acc.push(Object.assign(
-                    toRentData(rent, occupant),
-                    {
-                        callDate: moment(`20/${rent.month}/${year}`, 'DD/MM/YYYY').subtract(1, 'months').format('LL'),
-                        invoiceDate: moment(`20/${rent.month}/${year}`, 'DD/MM/YYYY').format('LL'),
-                        period: moment(`01/${rent.month}/${year}`, 'DD/MM/YYYY').format('MMMM YYYY'),
-                        dueDate: moment(`05/${rent.month}/${year}`, 'DD/MM/YYYY').format('LL'),
-                        reference: `${fmonth}_${fyear}_${occupant.reference}`,
-                        month: fmonth,
-                    }
-                ));
-                return acc;
-            }, data.rents);
-    });
     return data;
 }
 

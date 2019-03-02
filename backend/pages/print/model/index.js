@@ -8,6 +8,7 @@ module.exports = function(req, callback) {
     const fromMonth = req.params.fromMonth;
     const year = req.params.year;
     const occupantIds = req.params.ids ? req.params.ids.split(',') : [];
+
     occupantModel.findFilter(realm, {$query: {_id: {$in: occupantIds}}}, (errors, occupants) => {
         if (errors && errors.length>0) {
             callback(errors);

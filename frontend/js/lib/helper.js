@@ -8,49 +8,64 @@ class Helper {
     // Method helpers
     static get _Intl() {
         return {
-            NumberFormat: new Intl.NumberFormat(i18next.language, { maximumSignificantDigits: 2 }),
+            NumberFormat: new Intl.NumberFormat(i18next.language, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+            NumberFormatPercent: new Intl.NumberFormat(i18next.language, { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
             NumberFormatCurrency: new Intl.NumberFormat(i18next.language, { style: 'currency', currency: i18next.t('__currency_code') })
         };
     }
 
+    static _textToNumber(text) {
+        let value = parseFloat(text);
+        if (isNaN(value)) {
+            value = 0;
+        }
+        return value;
+    }
+
     static formatSurface(text, hideUnit, emptyForZero) {
-        if (parseFloat(text) === 0 && emptyForZero) {
+        const value = Helper._textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
             return '';
         }
 
         if (hideUnit) {
-            return this._Intl.NumberFormat.format(text);
+            return Helper._Intl.NumberFormat.format(value);
         }
 
-        return `${this._Intl.NumberFormat.format(text)} m<sup>2</sup>`;
+        return `${Helper._Intl.NumberFormat.format(value)} m<sup>2</sup>`;
     }
 
     static formatNumber(text) {
-        return this._Intl.NumberFormat.format(text);
+        return Helper._Intl.NumberFormat.format(text);
     }
 
     static formatMoney(text, hideCurrency, emptyForZero) {
-        if (parseFloat(text) === 0 && emptyForZero) {
+        const value = Helper._textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
             return '';
         }
 
         if (hideCurrency) {
-            return this._Intl.NumberFormat.format(text);
+            return Helper._Intl.NumberFormat.format(value);
         }
 
-        return this._Intl.NumberFormatCurrency.format(text);
+        return Helper._Intl.NumberFormatCurrency.format(value);
     }
 
     static formatPercent(text, hidePercent, emptyForZero) {
-        if (parseFloat(text) === 0 && emptyForZero) {
+        const value = Helper._textToNumber(text);
+
+        if (value === 0 && emptyForZero) {
             return '';
         }
 
         if (hidePercent) {
-            return this._Intl.NumberFormat.format(text);
+            return Helper._Intl.NumberFormat.format(value);
         }
 
-        return `${this._Intl.NumberFormat.format(text*100)} %`;
+        return Helper._Intl.NumberFormatPercent.format(value);
     }
 
     static formatMonth(text) {
@@ -67,6 +82,14 @@ class Helper {
             date = moment(text);
         }
         return date.format('L');
+    }
+
+    static formatDateText(text) {
+        let date = moment(text, 'DD/MM/YYYY');
+        if (!date.isValid()) {
+            date = moment(text);
+        }
+        return date.format('LL');
     }
 
     static formatDateTime(text) {
