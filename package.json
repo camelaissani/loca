@@ -36,7 +36,7 @@
     "i18next-browser-languagedetector": "2.2.4",
     "i18next-express-middleware": "1.7.1",
     "i18next-localstorage-cache": "1.1.1",
-    "i18next-node-fs-backend": "2.1.1",
+    "i18next-node-fs-backend": "2.1.2",
     "i18next-sprintf-postprocessor": "0.2.2",
     "i18next-xhr-backend": "1.5.1",
     "intl": "1.2.5",
