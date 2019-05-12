@@ -51,9 +51,7 @@ module.exports = function() {
 
     router.get('/signout', (req, res) => {
         logger.info('sign out and redirect to /');
-        req.logout();
-        req.session = null;
-        res.redirect('/');
+        req.session.destroy(() => res.redirect('/'));
     });
 
     return router;

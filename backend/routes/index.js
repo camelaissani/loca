@@ -39,7 +39,7 @@ module.exports = [
         const path = `/${pageDesc.id}${pageDesc.params || ''}`;
         router.use(path, _shouldBeLoggedThenRedirect);
         if (pageDesc.supportView) {
-            router.use(`/view${path}`, _shouldBeLoggedThenRedirect);
+            router.use(`/view${path}`, _shouldBeLogged);
         }
         return router;
     }, express.Router()),
