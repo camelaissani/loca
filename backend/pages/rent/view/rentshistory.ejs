@@ -4,33 +4,49 @@
         <table id="renttable" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <td class="hidden-xs hidden-sm"><%= t('Year') %></td>
-                    <td class="hidden-xs hidden-sm"><%= t('Month') %></td>
                     <td class="visible-xs"><%= t('Period') %></td>
-                    <td class="hidden-xs hidden-sm text-right"><%= t('VAT ratio') %></td>
-                    <td class="text-right"><%= t('Rent to pay') %></td>
-                    <td class="text-right"><%= t('Payment') %></td>
-                    <td class="hidden-xs hidden-sm text-left"><%= t('Status') %></td>
+                    <td class="text-center"><%= t('Rent') %></td>
+                    <td class="text-center"><%= t('VAT') %> ({{formatPercent occupant.vatRatio}})</td>
+                    <td class="text-center"><%= t('Discount') %></td>
+                    <td class="text-center"><%= t('Total') %></td>
+                    <td class="text-center"><%= t('Payment') %></td>
                 </tr>
             </thead>
             <tbody>
             {{#each rents}}
                 {{> history-rent-row-template}}
             {{/each}}
-            </tbody>
+            </tbodys>
         </table>
     </div>
 </script>
 
 <script id="history-rent-row-template" type="text/x-handlebars-template">
     <tr id="{{_id}}" class="{{active}}" data-value="{{uid}}">
-        <td class="visible-xs visible-sm">{{month}}/{{year}}</td>
-        <td class="hidden-xs hidden-sm">{{year}}</td>
-        <td class="hidden-xs hidden-sm">{{formatMonth month}}</td>
-        <td class="hidden-xs hidden-sm text-right">{{formatPercent vatRatio}}</td>
+        <td>{{formatMonthYear month=month year=year}}</td>
+        <td class="text-right">{{formatMoney totalWithoutVatAmount}}</td>
+        <td class="text-right">{{formatMoney vatAmount}}</td>
+        <td>
+            <div class="text-right">{{formatMoney promo emptyForZero=true}}</div>
+            {{#if notepromo}}
+                <div class="text-center">{{notepromo}}</div>
+            {{/if}}
+        </td>
         <td class="text-right">{{formatMoney totalToPay}}</td>
-        <td class="text-right txthighlight">{{formatMoney payment emptyForZero=true}}{{#if paymentType}}<br>{{paymentType paymentType}} {{#if paymentReference}}{{i18next key='#' number=paymentReference}}{{/if}}{{/if}}{{#if paymentDate}}<br>{{i18next key='Paid date' date=paymentDate}}{{/if}}</td>
-        <td class="hidden-xs hidden-sm txtstatus text-left {{status}}">{{paymentStatus}}</td>
+        <td>
+            <div class="text-right">{{formatMoney payment emptyForZero=true}}</div>
+            {{#if paymentType}}
+                <div class="text-center">
+                    {{paymentType paymentType}}
+                    {{#if paymentReference}}
+                        {{i18next key='#' number=paymentReference}}
+                    {{/if}}
+                </div>
+            {{/if}}
+            {{#if paymentDate}}
+                <div class="text-center">{{i18next key='Paid date' date=paymentDate}}</div>
+            {{/if}}
+        </td>
     </tr>
 </script>
 
