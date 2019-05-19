@@ -140,6 +140,23 @@ class RentMiddleware extends ViewController {
             return false;
         });
 
+        $(document).on('click', '#view-rent #emaillastrentcallreminder', () => {
+            const tenantIds = this.getSelectedIds();
+            bootbox.confirm(i18next.t('Are you sure to send rent notices by email?'), (result) => {
+                if (!result) {
+                    return;
+                }
+                application.sendEmail(tenantIds, 'rentcall_last_reminder', LOCA.currentYear, LOCA.currentMonth, status => {
+                    bootbox.alert(this.emailStatus({results: status}), () => {
+                        this.closeForm(() => {
+                            this.loadList();
+                        });
+                    });
+                });
+            });
+            return false;
+        });
+
         $(document).on('click', '#view-rent #printinvoices', () => {
             const selection = this.getSelectedIds();
             application.openPrintPreview(`/print/invoice/occupants/${selection}/${LOCA.currentYear}/${LOCA.currentMonth}`);
