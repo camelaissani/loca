@@ -55,6 +55,19 @@ class PaymentForm extends Form {
                         }
                     }
                 },
+                'extracharge': {
+                    number: true,
+                    min: 0
+                },
+                'noteextracharge': {
+                    minlength: 2,
+                    required: {
+                        depends: (/*element*/) => {
+                            const amount = Number($(domSelector + ' #extracharge').val());
+                            return amount>0;
+                        }
+                    }
+                },
                 'promo': {
                     number: true,
                     min: 0
@@ -78,6 +91,8 @@ class PaymentForm extends Form {
                 paymentReference: '',
                 paymentDate: '',
                 description: '',
+                extracharge: '',
+                noteextracharge: '',
                 promo: '',
                 notepromo: ''
             }
@@ -100,8 +115,13 @@ class PaymentForm extends Form {
         if (!rent.payment) {
             rent.payment= '';
         }
+
         if (!rent.promo) {
             rent.promo= '';
+        }
+
+        if (!rent.extracharge) {
+            rent.extracharge= '';
         }
 
         if (rent.paymentDate) {

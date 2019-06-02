@@ -83,9 +83,15 @@ function update(req, res) {
         paymentData.paymentDate = null;
         paymentData.paymentType = null;
     }
+
     if (!paymentData.promo && paymentData.promo <= 0) {
         paymentData.promo = 0;
         paymentData.notepromo = null;
+    }
+
+    if (!paymentData.extracharge && paymentData.extracharge <= 0) {
+        paymentData.extracharge = 0;
+        paymentData.noteextracharge = null;
     }
 
     occupantModel.findOne(realm, paymentData._id, (errors, dbOccupant) => {
@@ -106,6 +112,7 @@ function update(req, res) {
 
         const settlements = {
             payments: [],
+            debts: [],
             discounts: []
         };
         if (paymentData) {
@@ -116,11 +123,19 @@ function update(req, res) {
                 reference: paymentData.paymentReference || '',
                 description: paymentData.description || ''
             });
+
             if (paymentData.promo) {
                 settlements.discounts.push({
                     origin: 'settlement',
                     description: paymentData.notepromo || '',
-                    amount: paymentData.promo * (1 / (1 + contract.vatRate))
+                    amount: paymentData.promo * (contract.vatRate ? (1 / (1 + contract.vatRate)) : 1)
+                });
+            }
+
+            if (paymentData.extracharge) {
+                settlements.debts.push({
+                    description: paymentData.noteextracharge || '',
+                    amount: paymentData.extracharge * (contract.vatRate ? (1 / (1 + contract.vatRate)) : 1)
                 });
             }
         }

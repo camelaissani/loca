@@ -38,8 +38,19 @@
 	</tr>
 <% }); %>
 
+<% rent.debts.forEach(function(debt) { %>
+		<tr class="item-row">
+		  <td class="description">
+		  	<%= debt.description %>
+		  </td>
+			<td class="txtAlignRight">1</td>
+			<td class="txtAlignRight"><%= formatNumber(debt.amount) %></td>
+			<td class="txtAlignRight"><%= formatNumber(debt.amount) %></td>
+		</tr>
+<% }); %>
+
 <%
-	var emptyRowCount = 9 - rent.preTaxAmounts.length - rent.charges.length - rent.discounts.length;
+	var emptyRowCount = 9 - rent.preTaxAmounts.length - rent.charges.length - rent.discounts.length - rent.debts.length;
 	for (var idx=0; idx<emptyRowCount; idx++) {
 %>
 	<tr class="item-row">

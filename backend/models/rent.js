@@ -12,7 +12,9 @@ class RentModel {
             paymentDate: String,
             description: String,
             promo: Number,
-            notepromo: String
+            notepromo: String,
+            extracharge: Number,
+            noteextracharge: String
         });
 
         this.rentSchema = new OF({
@@ -30,7 +32,9 @@ class RentModel {
             paymentDate: String,
             description: String,
             promo: Number,
-            notepromo: String
+            notepromo: String,
+            extracharge: Number,
+            noteextracharge: String
         });
     }
 }

@@ -21,7 +21,7 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
         paymentStatus: []
     };
 
-    // Last payment win :(
+    // Last payment wins :(
     // Currently the UI support only one payment
     Object.assign(
         rentToReturn,
@@ -50,15 +50,29 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
                 };
             }, {promo:0, notepromo:''})
     );
+
     Object.assign(
         rentToReturn,
-        rent.vats
-            .filter(vat => vat.origin === 'settlement')
-            .reduce((acc, vat) => {
-                acc.promo -= vat.amount;
-                return acc;
-            }, rentToReturn)
+        rent.debts
+            .reduce((acc, debt) => {
+                return {
+                    extracharge: acc.extracharge + debt.amount,
+                    noteextracharge: `${acc.noteextracharge}${debt.description}\n`
+                };
+            }, {extracharge:0, noteextracharge:''})
     );
+
+    // Get the first vat rate found in vats.
+    const vatRate = (rent.vats && rent.vats.length) ? rent.vats.filter(vat => vat.origin === 'contract')[0].rate : 0;
+    if (vatRate) {
+        if (rentToReturn.promo > 0) {
+            rentToReturn.promo = Math.round(rentToReturn.promo * ( 1 + vatRate ) * 100) / 100;
+        }
+
+        if (rentToReturn.extracharge > 0) {
+            rentToReturn.extracharge = Math.round(rentToReturn.extracharge * ( 1 + vatRate ) * 100) / 100;
+        }
+    }
 
     Object.assign(
         rentToReturn,
@@ -236,7 +250,7 @@ function toPrintData(realm, doc, fromMonth, month, year, occupants) {
                     rent.period = moment(`01/${rent.month}/${year}`, 'DD/MM/YYYY').format('MMMM YYYY'),
                     rent.billingReference = `${momentTerm.format('MM_YY_')}${occupant.reference}`,
                     rent.total.payment = rent.total.payment || 0;
-                    rent.total.subTotal = rent.total.preTaxAmount + rent.total.charges - rent.total.discount;
+                    rent.total.subTotal = rent.total.preTaxAmount + rent.total.debts + rent.total.charges - rent.total.discount;
                     rent.total.newBalance = rent.total.grandTotal - rent.total.payment;
                     return rent;
                 });

@@ -20,6 +20,15 @@ module.exports = function(contract, rentDate, previousRent, settlements, rent) {
             });
         });
 
+        rent.debts.forEach((debt) => {
+            rent.vats.push({
+                origin: 'debts',
+                description: `${debt.description} T.V.A. (${rate*100}%)`,
+                amount: debt.amount*rate,
+                rate
+            });
+        });
+
         rent.discounts.forEach((discount) => {
             rent.vats.push({
                 origin: discount.origin,
