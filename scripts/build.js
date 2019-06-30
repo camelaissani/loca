@@ -187,7 +187,7 @@ const index = {
         plugins: plugins(),
         external: [
             path.join(node_modules_directory, 'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'),
-            path.join(node_modules_directory, 'bootbox/bootbox.min.js')
+            path.join(node_modules_directory, 'bootbox/dist/bootbox.min.js')
         ]
     },
     outputOptions: {
