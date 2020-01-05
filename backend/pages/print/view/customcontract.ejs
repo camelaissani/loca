@@ -20,7 +20,7 @@
 					LA SOCIETE <%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
 					<% if (realm.street2 && realm.street2.length>0) { %>
 			        <%= realm.street2 %>
-			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">Bobigny sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
 				</p>
 
 				<p>Ci-après dénommé « LE BAILLEUR »</p>
@@ -44,7 +44,7 @@
 				</p>
 
 				<p>
-					<span contenteditable="true">Inscrit au Registre de Commerce de PARIS sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur</span> <%= occupant.manager %> en qualité de <span contenteditable="true">gérant</span>.
+					<span contenteditable="true">Inscrit au Registre de Commerce de Bobigny sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur</span> <%= occupant.manager %> en qualité de <span contenteditable="true">gérant</span>.
 				<p>
 
 				<p>Ci-après dénommé « LE PRENEUR »</p>
@@ -239,7 +239,7 @@
 				</p>
 
 				<p>
-					Dans le cas ou le PRENEUR se refuserait à évacuer les lieux loués, son expulsion pourrait avoir lieu sans délai sur simple ordonnance de référé rendue par Monsieur le Président du Tribunal de Grande Instance de <span contenteditable="true">PARIS</span>, statuant en référé et exécutoire par provision, nonobstant appel.
+					Dans le cas ou le PRENEUR se refuserait à évacuer les lieux loués, son expulsion pourrait avoir lieu sans délai sur simple ordonnance de référé rendue par Monsieur le Président du Tribunal de Grande Instance de <span contenteditable="true">Bobigny</span>, statuant en référé et exécutoire par provision, nonobstant appel.
 				</p>
 
 				<p><u>ARTICLE XVI- FRAIS – ELECTION DE DOMICILE :</u></p>
@@ -260,7 +260,7 @@
 		<div class="next page contract">
 			<div class="items">
 				<p>
-					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span>, le <span contenteditable="true"><%=today%></span>
+					<br>Fait en deux exemplaires à <span contenteditable="true"><%= realm.city %></span>, le <span contenteditable="true"><%=today%></span>
 				</p>
 				<p>
 					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>

@@ -19,7 +19,7 @@
 					<%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
 					<% if (realm.street2 && realm.street2.length>0) { %>
 			        <%= realm.street2 %>
-			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">PARIS sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">Bobigny sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
 				</p>
 
 				<p>Ci-après dénommé « LE DOMICILIATAIRE »</p>
@@ -43,7 +43,7 @@
 				</p>
 
 				<p>
-					<span contenteditable="true">Inscrit au Registre de Commerce de PARIS sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur <%= occupant.manager %></span> en qualité de <span contenteditable="true">gérant</span>.
+					<span contenteditable="true">Inscrit au Registre de Commerce de Bobigny sous le No <%= occupant.siret %></span>, représentée par <span contenteditable="true">Madame/Monsieur <%= occupant.manager %></span> en qualité de <span contenteditable="true">gérant</span>.
 				<p>
 
 				<p>Ci-après dénommé « LE DOMICILIÉ »</p>
@@ -90,7 +90,7 @@
 				<p>
 					La domiciliation est consentie pour une durée de <span contenteditable="true">douze mois</span> à compter du <span contenteditable="true"><%= occupant.beginDate %></span>.<br>
 					Elle sera ensuite renouvelée, par tacite reconduction, de <span contenteditable="true">douze mois</span>, sauf résiliation notifiée par l'une ou l'autre des parties par lettre recommandée avec accusé de réception et expédiée au moins <span contenteditable="true">trois mois</span> avant le terme fixé.<br>
-					À l'expiration du présent contrat ou en cas de résiliation de celui-ci, et conformément à l'article 3-1, le domiciliataire s'engage à informer le greffe du tribunal de commerce de <span contenteditable="true">PARIS</span> de la cessation de la domiciliation.
+					À l'expiration du présent contrat ou en cas de résiliation de celui-ci, et conformément à l'article 3-1, le domiciliataire s'engage à informer le greffe du tribunal de commerce de <span contenteditable="true">Bobigny</span> de la cessation de la domiciliation.
 				</p>
 			</div>
 			<div class="footer text-right">2/3</div>
@@ -112,7 +112,7 @@
 
 				<p><u>Article 7 : Attribution de juridiction</u></p>
 				<p>
-					Tout litige pouvant survenir entre les parties à l'occasion de l'exécution du présent contrat devra être porté devant le tribunal de commerce de <span contenteditable="true">PARIS</span>.
+					Tout litige pouvant survenir entre les parties à l'occasion de l'exécution du présent contrat devra être porté devant le tribunal de commerce de <span contenteditable="true"><%= realm.city %></span>.
 				</p>
 
 				<p><u>Article 8 : Élection de domicile</u></p>
@@ -124,7 +124,7 @@
 				</p>
 
 				<p>
-					<br>Fait en deux exemplaires à <span contenteditable="true">PARIS</span>, le <span contenteditable="true"><%=today%></span>
+					<br>Fait en deux exemplaires à <span contenteditable="true"><%= realm.city %></span>, le <span contenteditable="true"><%=today%></span>
 				</p>
 				<p>
 					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
