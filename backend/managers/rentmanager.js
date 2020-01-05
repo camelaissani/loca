@@ -10,11 +10,7 @@ const config = require('../../config');
 
 function _findAllOccupants(realm) {
     return new Promise((resolve, reject) => {
-        occupantModel.findFilter(realm, {
-            $orderby: {
-                name: 1
-            }
-        }, (errors, occupants) => {
+        occupantModel.findAll(realm, (errors, occupants) => {
             if (errors && errors.length > 0) {
                 reject(errors);
                 return;

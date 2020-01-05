@@ -6,20 +6,6 @@ const logger = require('winston');
 
 require('sugar').extend();
 
-
-// function objectId2StringId(obj) {
-//     if (obj) {
-//         Object.keys(obj).forEach(key => {
-//             if (key === '_id' && obj[key]) {
-//                 obj[key] = String(obj[key]);
-//             } else if (typeof obj[key] == 'object') {
-//                 obj[key] = objectId2StringId(obj[key]);
-//             }
-//         });
-//     }
-//     return obj;
-// }
-
 function stringId2ObjectId(obj) {
     if (obj) {
         Object.keys(obj).forEach(key => {

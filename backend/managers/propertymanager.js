@@ -102,13 +102,7 @@ function remove(req, res) {
 function all(req, res) {
     const realm = req.realm;
 
-    propertyModel.findFilter(realm, {
-        $query: {},
-        $orderby: {
-            type: 1,
-            name: 1
-        }
-    }, (errors, properties) => {
+    propertyModel.findAll(realm, (errors, properties) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
@@ -136,13 +130,7 @@ function overview(req, res) {
         countBusy: 0
     };
 
-    propertyModel.findFilter(realm, {
-        $query: {},
-        $orderby: {
-            type: 1,
-            name: 1
-        }
-    }, (errors, properties) => {
+    propertyModel.findAll(realm, (errors, properties) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors

@@ -7,11 +7,7 @@ const occupantModel = require('../models/occupant');
 function all(req, res) {
     const year = req.params.year;
 
-    occupantModel.findFilter(req.realm, {
-        $orderby: {
-            name: 1
-        }
-    }, (errors, occupants) => {
+    occupantModel.findAll(req.realm, (errors, occupants) => {
         res.json(FD.toAccountingData(year, occupants));
     });
 }

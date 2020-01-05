@@ -7,16 +7,10 @@ const occupantModel = require('../models/occupant');
 const propertyModel = require('../models/property');
 
 function _buildPropertyMap(realm, callback) {
-    propertyModel.findFilter(realm, {
-        $query: {},
-        $orderby: {
-            type: 1,
-            name: 1
-        }
-    }, (errors, properties) => {
+    propertyModel.findAll(realm, (errors, properties) => {
         const propertyMap = {};
         if (properties) {
-            properties.reduce( (acc, property) => {
+            properties.reduce((acc, property) => {
                 acc[property._id.toString()] = property;
                 return acc;
             }, propertyMap);
@@ -196,14 +190,11 @@ function remove(req, res) {
     const occupantIds = req.params.ids.split(',');
 
     function releaseRent(callback) {
-        const occupantfilters = occupantIds.map(_id => {return {_id};});
+        const occupantfilters = occupantIds.map(_id => { return { _id }; });
 
         occupantModel.findFilter(realm, {
             $query: {
                 $or: occupantfilters
-            },
-            $orderby: {
-                company: 1
             }
         }, (errors, occupants) => {
             if (errors) {
@@ -249,11 +240,7 @@ function remove(req, res) {
 
 function all(req, res) {
     const realm = req.realm;
-    occupantModel.findFilter(realm, {
-        $orderby: {
-            name: 1
-        }
-    }, (errors, occupants) => {
+    occupantModel.findAll(realm, (errors, occupants) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors
@@ -273,11 +260,7 @@ function overview(req, res) {
     };
     const currentDate = moment();
 
-    occupantModel.findFilter(realm, {
-        $orderby: {
-            name: 1
-        }
-    }, (errors, occupants) => {
+    occupantModel.findAll(realm, (errors, occupants) => {
         if (errors && errors.length > 0) {
             res.json({
                 errors: errors

@@ -33,6 +33,22 @@ class OccupantModel extends Model {
             rents: Array
         });
     }
+
+    findAll(realm, callback) {
+        super.findAll(realm, (errors, occupants) => {
+            if (errors && errors.length > 0) {
+                callback(errors);
+                return;
+            }
+
+            callback(null, occupants.sort((o1, o2) => {
+                const name1 = (o1.isCompany ? o1.company : o1.name) || '';
+                const name2 = (o2.isCompany ? o2.company : o2.name) || '';
+
+                return name1.localeCompare(name2);
+            }));
+        });
+    }
 }
 
 module.exports = new OccupantModel();

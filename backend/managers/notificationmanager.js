@@ -35,11 +35,7 @@ const feeders = [
     //function expiredDocuments(t, realm, callback) {
     (t, realm, callback) => {
         const notifications = [];
-        occupantModel.findFilter(realm, {
-            $orderby: {
-                name: 1
-            }
-        }, (errors, occupants) => {
+        occupantModel.findAll(realm, (errors, occupants) => {
             if (errors || (occupants && occupants.length === 0)) {
                 callback(notifications);
                 return;
@@ -53,7 +49,7 @@ const feeders = [
                             notificationId: generateId(occupant._id.toString() + '_document_' + moment(document.expirationDate).format('DD-MM-YYYY') + document.name),
                             expirationDate: document.expirationDate,
                             title: occupant.name,
-                            description: t('has expired', {document: document.name, date: moment(document.expirationDate).format('L'), interpolation: {escape: false}}),
+                            description: t('has expired', { document: document.name, date: moment(document.expirationDate).format('L'), interpolation: { escape: false } }),
                             actionUrl: ''
                         });
                     });
@@ -64,7 +60,7 @@ const feeders = [
                                 type: 'warning',
                                 notificationId: generateId(occupant._id.toString() + '_no_document'),
                                 title: occupant.name,
-                                description:  t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
+                                description: t('There are no documents attached to the lease contract. Is the insurance certficate is missing?'),
                                 actionUrl: ''
                             });
                             return true;
