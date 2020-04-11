@@ -1,5 +1,4 @@
 'use strict';
-
 const moment = require('moment');
 const FD = require('./frontdata');
 const Contract = require('./contract');
@@ -149,7 +148,7 @@ function update(req, res) {
                 terms: Math.round(
                     moment(dbOccupant.endDate, 'DD/MM/YYYY')
                         .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),
-                properties: dbOccupant.proprerties,
+                properties: dbOccupant.properties,
                 vatRate: dbOccupant.vatRatio,
                 discount: dbOccupant.discount,
                 rents: dbOccupant.rents

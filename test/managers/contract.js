@@ -191,6 +191,77 @@ describe('contract functionalities', () => {
         });
     });
 
+    it('pay terms and update contract properties', () => {
+        const p1 = {
+            entryDate: '01/01/2020',
+            exitDate: '31/12/2020',
+            property: {
+                name: 'office1',
+                price: 300,
+                expense: 10
+            }
+        };
+
+        let termP1 = p1.property.price + p1.property.expense;
+        termP1 *= 1.2; // VAT
+
+        const contract = Contract.create({
+            begin: '01/01/2020 00:00',
+            end: '31/12/2020 23:59',
+            frequency: 'months',
+            vatRate: 0.2,
+            properties: [p1]
+        });
+        Contract.payTerm(contract, '01/01/2020 00:00', {payments:[{amount: 372}]});
+        Contract.payTerm(contract, '01/02/2020 00:00', {payments:[{amount: 372}]});
+        Contract.payTerm(contract, '01/03/2020 00:00', {payments:[{amount: 372}]});
+        Contract.payTerm(contract, '01/04/2020 00:00', {payments:[{amount: 372}]});
+        Contract.payTerm(contract, '01/05/2020 00:00', {payments:[{amount: 372}]});
+        Contract.payTerm(contract, '01/06/2020 00:00', {payments:[{amount: 372}]});
+
+        let termsGrandTotal = Array(contract.terms).fill(1).reduce((acc, value, index) => {
+            const prevTerm = index > 6 ? acc[index - 1] : 0;
+            const currentTerm = prevTerm + termP1;
+            acc.push(currentTerm);
+            return acc;
+        }, []);
+
+        assert.deepStrictEqual(contract.rents.map(r => r.total.grandTotal), termsGrandTotal);
+
+        // update contract with a new properties
+        const p2 = {
+            entryDate: '01/02/2020',
+            exitDate: '31/12/2020',
+            property: {
+                name: 'office',
+                price: 320,
+                expense: 32
+            }
+        };
+
+        let termP2 = p2.property.price + p2.property.expense;
+        termP2 *= 1.2; // VAT
+
+        const newContract = Contract.update(contract, {properties: [p1, p2]});
+
+        termsGrandTotal = [
+            Math.round(termP1 * 10) / 10,          // jan
+            Math.round((termP1 + termP2) * 10) / 10,      // feb
+            Math.round((termP1 + 2 * termP2) * 10) / 10,      // mar
+            Math.round((termP1 + 3 * termP2) * 10) / 10,      // apr
+            Math.round((termP1 + 4 * termP2) * 10) / 10,      // may
+            Math.round((termP1 + 5 * termP2) * 10) / 10,      // jun
+            Math.round((termP1 + 6 * termP2) * 10) / 10,      // jul
+            Math.round((2 * termP1 + 7 * termP2) * 10) / 10,  // aou
+            Math.round((3 * termP1 + 8 * termP2) * 10) / 10,  // sep
+            Math.round((4 * termP1 + 9 * termP2) * 10) / 10, // oct
+            Math.round((5 * termP1 + 10 * termP2) * 10) / 10, // nov
+            Math.round((6 * termP1 + 11 * termP2) *10) / 10   // dec
+        ];
+
+        assert.deepStrictEqual(newContract.rents.map(r => r.total.grandTotal), termsGrandTotal);
+    });
+
     it('pay a term and renew', () => {
         const contract = Contract.create({begin: '01/01/2017 00:00', end: '31/12/2025 23:59', frequency: 'months', properties: [{}, {}]});
         Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
@@ -200,5 +271,82 @@ describe('contract functionalities', () => {
         assert.strictEqual(newContract.rents.find(rent => rent.term === 2025120100).payments[0].amount, 200);
         assert.strictEqual(newContract.terms, 108, 'incorrect number of terms');
         assert.strictEqual(newContract.rents.length, 108 * 2, 'incorrect number of rents');
+    });
+
+    it('compute terms', () => {
+        const property = {
+            entryDate: '01/01/2020',
+            exitDate: '31/08/2020',
+            property: {
+                name: 'mon bureau',
+                price: 300,
+                expense: 10
+            }
+        };
+
+        let rentAmountProperty1 = property.property.price + property.property.expense;
+        rentAmountProperty1 *= 1.2; // VAT
+
+        const contract = Contract.create({
+            begin: '01/01/2020 00:00',
+            end: '31/12/2020 23:59',
+            frequency: 'months',
+            vatRate: 0.2,
+            properties: [property]
+        });
+
+        const termsGrandTotal = Array(contract.terms).fill(1).reduce((acc, value, index) => {
+            const prevTerm = index > 0 ? acc[index - 1] : 0;
+            const currentTerm = index > 7 ? prevTerm : prevTerm + rentAmountProperty1; // 7 because property rented for 8 months
+            acc.push(currentTerm);
+            return acc;
+        }, []);
+
+        assert.deepStrictEqual(contract.rents.map(r => r.total.grandTotal), termsGrandTotal);
+    });
+
+    it('compute terms of two properties', () => {
+        const p1 = {
+            entryDate: '01/01/2020',
+            exitDate: '31/12/2020',
+            property: {
+                name: 'office1',
+                price: 300,
+                expense: 10
+            }
+        };
+
+        let termP1 = p1.property.price + p1.property.expense;
+        termP1 *= 1.2; // VAT
+
+        const p2 = {
+            entryDate: '01/07/2020',
+            exitDate: '31/12/2020',
+            property: {
+                name: 'office',
+                price: 320,
+                expense: 32
+            }
+        };
+
+        let termP2 = p2.property.price + p2.property.expense;
+        termP2 *= 1.2; // VAT
+
+        const contract = Contract.create({
+            begin: '01/01/2020 00:00',
+            end: '31/12/2020 23:59',
+            frequency: 'months',
+            vatRate: 0.2,
+            properties: [p1, p2]
+        });
+
+        const termsGrandTotal = Array(contract.terms).fill(1).reduce((acc, value, index) => {
+            const prevTerm = index > 0 ? acc[index - 1] : 0;
+            const currentTerm = Math.round((index > 5 ? prevTerm + termP1 + termP2: prevTerm + termP1)*10) / 10; // 5 because after July 2 properties are rented
+            acc.push(currentTerm);
+            return acc;
+        }, []);
+
+        assert.deepStrictEqual(contract.rents.map(r => r.total.grandTotal), termsGrandTotal);
     });
 });
