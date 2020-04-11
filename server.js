@@ -1,12 +1,11 @@
 'use strict';
-
-const debugMode = process.env.NODE_ENV !== 'production';
+const config = require('./config');
 
 const logger = require('winston');
 // configure default logger
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {
-    level: process.env.LOCA_LOGGER_LEVEL || process.env.LOGGER_LEVEL || 'debug',
+    level: config.loggerLevel,
     colorize: true
 });
 
@@ -27,7 +26,6 @@ const passport = require('passport');
 const expressWinston = require('express-winston');
 const path = require('path');
 const moment = require('moment');
-const config = require('./config');
 const routes = require('./backend/routes');
 const db = require('./backend/models/db');
 const ejsHelpers = require('./backend/pages/ejshelpers');
@@ -131,7 +129,7 @@ routes.forEach(route => {
 });
 
 // Start web app
-if (debugMode) {
+if (!config.productive) {
     // Create new middleware to handle errors and respond with content negotiation.
     // This middleware is only intended to be used in a development environment,
     // as the full error stack traces will be sent back to the client when an error occurs.
@@ -147,39 +145,37 @@ app.locals = {
 db.init()
     .then(db.exists)
     .then((isDbExists) => {
-        if (config.demomode) {
-            if (debugMode) {
-                if (!isDbExists) {
-                    require('./scripts/mongorestore');
-                } else {
-                    logger.debug('no database restore, it already exists');
-                }
-            } else {
-                require('./scripts/mongorestore');
-            }
+        if (config.restoreDatabase) {
+            require('./scripts/mongorestore');
+            logger.debug('database restored');
+            isDbExists = true;
         }
-        const debug_http_port = 9091;
-        const app_http_port = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8080;
-        const http_port = debugMode ? debug_http_port : app_http_port;
+
+        if (config.demoMode && !isDbExists) {
+            require('./scripts/mongorestore');
+            logger.debug('database restored');
+        }
+
+        const appDebugHttPort = 9091;
+        const http_port = config.productive ? config.appHttpPort : appDebugHttPort;
         app.listen(http_port, function() {
             logger.info('Listening port ' + http_port);
-            if (!debugMode) {
+            if (config.productive) {
                 logger.info('In production mode');
             } else {
                 logger.info('In development mode (no minify/no uglify)');
             }
-            if (config.demomode) {
+            if (config.demoMode) {
                 logger.info('In demo mode (login disabled)');
             }
-            const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, 'config');
-            logger.debug('loaded configuration from', configdir);
+            logger.debug('loaded configuration from', config.configdir);
             logger.debug(JSON.stringify(config, null, 1));
-            if (debugMode) {
+            if (!config.productive) {
                 const browserSync = require('browser-sync');
                 browserSync.init({
-                    proxy: `localhost:${debug_http_port}`,
+                    proxy: `localhost:${appDebugHttPort}`,
                     files: ['dist'],
-                    port: app_http_port,
+                    port: config.appHttpPort,
                     weinre: {
                         port: 8080
                     },

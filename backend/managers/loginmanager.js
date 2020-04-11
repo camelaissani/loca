@@ -276,7 +276,7 @@ if (config.subscription) {
     };
 }
 
-if (config.demomode) {
+if (config.demoMode) {
     loginManager.loginDemo = function(req, res) {
         const firstname = 'Camel';
         const lastname = 'Aissani';

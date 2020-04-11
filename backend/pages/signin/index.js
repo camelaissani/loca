@@ -1,7 +1,7 @@
 const config = require('../../../config');
 
 module.exports = () => {
-    if (!config.demomode) {
+    if (!config.demoMode) {
         return {
             id: 'signin',
             public: true

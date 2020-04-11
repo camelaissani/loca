@@ -48,7 +48,7 @@ function _getEmailStatus(term) {
             });
         });
         req.on('error', error => {
-            if (config.demomode) {
+            if (config.demoMode) {
                 logger.error(error);
                 logger.info('email status fallback workflow activated in demo mode');
                 resolve({});

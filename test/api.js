@@ -48,7 +48,7 @@ describe('api', () => {
     //         });
     //     });
     //     it('POST   /api/login (demo mode)', (done) => {
-    //         config.demomode = true;
+    //         config.demoMode = true;
     //         loginManager.loginDemo = () => {};
     //         const mocked_loginDemo = sinon.stub(loginManager, 'loginDemo', (req, res) => {res.json({});});
     //         requester(apiRouter(), {httpMethod: 'post', uri: '/api/login'})
@@ -58,7 +58,7 @@ describe('api', () => {
     //                 throw err;
     //             }
     //             assert(mocked_loginDemo.calledOnce);
-    //             config.demomode = false;
+    //             config.demoMode = false;
     //             loginManager.loginDemo.restore();
     //             delete loginManager.loginDemo;
     //             done();

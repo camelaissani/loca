@@ -38,7 +38,7 @@ module.exports = function() {
         });
     }
 
-    if (config.demomode) {
+    if (config.demoMode) {
         router.get('/signin', loginManager.loginDemo);
     } else {
         router.post('/signin', loginManager.login);

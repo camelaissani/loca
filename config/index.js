@@ -1,24 +1,31 @@
 const path = require('path');
-const fs = require('fs');
 
-const configdir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, '..', 'config');
-const website = JSON.parse(fs.readFileSync(path.join(configdir, 'website.json'), 'utf8'));
+const toBoolean = (value) => {
+    if (value && typeof (value) !== 'boolean') {
+        value = value.toLowerCase() === 'true';
+    }
+    return value;
+};
 
-let demomode = process.env.LOCA_DEMOMODE || process.env.DEMO_MODE || true;
-if (demomode && typeof(demomode) !== 'boolean') {
-    demomode = demomode.toLowerCase() === 'true';
-}
+const loggerLevel = process.env.LOCA_LOGGER_LEVEL || process.env.LOGGER_LEVEL || 'debug';
+const appHttpPort = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8080;
+const configDir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, '..', 'config');
+const demoMode = toBoolean(process.env.LOCA_DEMOMODE || process.env.DEMO_MODE || true);
+const restoreDatabase = toBoolean(process.env.RESTORE_DB || true);
+const subscription = toBoolean(process.env.LOCA_PRODUCTIVE || process.env.PRODUCTIVE || false);
 
-let subscription = process.env.LOCA_PRODUCTIVE || process.env.PRODUCTIVE || false;
-if (subscription && typeof(subscription) !== 'boolean') {
-    subscription = subscription.toLowerCase() === 'true';
-}
+const website = require(path.join(configDir, 'website.json'));
 
-module.exports = Object.assign(website, {
+module.exports = {
+    ...website,
+    loggerLevel,
+    appHttpPort,
+    configDir,
     businesslogic: 'FR',
     productive: process.env.NODE_ENV === 'production',
     subscription,
-    demomode,
+    restoreDatabase,
+    demoMode,
     database: process.env.LOCA_DBNAME || process.env.BASE_DB_URL || 'mongodb://localhost/demodb',
-    EMAILER_URL: process.env.EMAILER_URL ||'http://localhost:8083/emailer',
-});
+    EMAILER_URL: process.env.EMAILER_URL || 'http://localhost:8083/emailer',
+};

@@ -60,7 +60,7 @@ describe('pages', () => {
         });
 
         it('GET  /signin', (done) => {
-            config.demomode = false;
+            config.demoMode = false;
             requester(pageRouter(), { httpMethod: 'get', uri: '/signin' }, viewEngine)
                 .expect(200)
                 .end((err) => {

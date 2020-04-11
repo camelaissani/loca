@@ -39,7 +39,7 @@ function sendEmail(messages) {
                             reject(res.body);
                             return;
                         }
-                        if (config.demomode) {
+                        if (config.demoMode) {
                             logger.info('email status fallback workflow activated in demo mode');
                             const result = Object.assign({}, message);
                             result.error = 'demo mode, emails cannot be sent';
@@ -59,7 +59,7 @@ function sendEmail(messages) {
                 logger.error(`POST ${config.EMAILER_URL} failed`);
                 logger.error(`data sent: ${postData}`);
                 logger.error(err);
-                if (config.demomode) {
+                if (config.demoMode) {
                     logger.info('email status fallback workflow activated in demo mode');
                     const result = Object.assign({}, message);
                     result.error = 'demo mode, mail cannot be sent';

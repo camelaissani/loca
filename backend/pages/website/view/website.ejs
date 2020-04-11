@@ -1,7 +1,7 @@
 <h1><center><%= t(config.website.product.slogan) %></center></h1>
 <% if (!isLogged) { %>
 <div class="text-center centeredbtn">
-    <% if (config.demomode) { %>
+    <% if (config.demoMode) { %>
         <a class="btn btn-success btn-lg" href="/signin"><%= t('Demonstration') %></a>
     <% } else { %>
         <% if (!config.subscription) { %>
