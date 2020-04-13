@@ -4,7 +4,6 @@ const { rollup } = require('rollup');
 const babel = require('rollup-plugin-babel');
 const { terser } = require('rollup-plugin-terser');
 const commonjs = require('rollup-plugin-commonjs');
-const nodeResolve = require('rollup-plugin-node-resolve');
 const includePaths = require('rollup-plugin-includepaths');
 const path = require('path');
 const less = require('less');
@@ -119,10 +118,6 @@ const clean = (directory) => {
 
 const plugins = () => {
     const list = [
-        nodeResolve({
-            jsnext: true,
-            main: true
-        }),
         commonjs(),
         babel({
             exclude: 'node_modules/**'

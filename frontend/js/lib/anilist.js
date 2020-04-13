@@ -66,7 +66,9 @@ class Anilist{
         if (obj instanceof Object) {
             copy = {};
             for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = this._cloneObject(obj[attr]);
+                if (Object.prototype.hasOwnProperty.call(obj, attr)) {
+                    copy[attr] = this._cloneObject(obj[attr]);
+                }
             }
             return copy;
         }
@@ -214,7 +216,9 @@ class Anilist{
         $oldRow.replaceWith($htmlRow);
 
         $newRow = this.$list.find('#'+newDataRow._id+'.js-list-row');
-        $newRow.find('[data-toggle=tooltip]').tooltip();
+        $(() => {
+            $newRow.find('[data-toggle=tooltip]').tooltip();
+        });
         // this.show($newRow);
 
         // Play odometers
@@ -264,7 +268,9 @@ class Anilist{
         $newRow = this.$list.find('#'+dataRow._id+'.js-list-row');
 
         // Animate add
-        $newRow.find('[data-toggle=tooltip]').tooltip();
+        $(() => {
+            $newRow.find('[data-toggle=tooltip]').tooltip();
+        });
         // if (!noAnimation) {
         //     $newRow.velocity('transition.swoopIn');
         // }
@@ -289,7 +295,9 @@ class Anilist{
             this.$rowsContainer.html($htmlRows);
 
             // Tooltip management
-            this.$rowsContainer.find('[data-toggle=tooltip]').tooltip();
+            $(() => {
+                this.$rowsContainer.find('[data-toggle=tooltip]').tooltip();
+            });
 
             this.filter(this.filterText, false, callback);
         }

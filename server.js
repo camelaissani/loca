@@ -11,7 +11,7 @@ logger.add(logger.transports.Console, {
 
 const i18next = require('i18next');
 const i18nMiddleware = require('i18next-express-middleware');
-const {LanguageDetector} = require('i18next-express-middleware');
+const { LanguageDetector } = require('i18next-express-middleware');
 const i18nFS = require('i18next-node-fs-backend');
 const i18nSprintf = require('i18next-sprintf-postprocessor');
 const Intl = require('intl');
@@ -71,7 +71,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(i18nMiddleware.handle(i18next));
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     app.locals.Intl = {
         NumberFormat: new Intl.NumberFormat(req.language, { style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
         NumberFormatPercent: new Intl.NumberFormat(req.language, { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 }),
@@ -158,7 +158,7 @@ db.init()
 
         const appDebugHttPort = 9091;
         const http_port = config.productive ? config.appHttpPort : appDebugHttPort;
-        app.listen(http_port, function() {
+        app.listen(http_port, () => {
             logger.info('Listening port ' + http_port);
             if (config.productive) {
                 logger.info('In production mode');
