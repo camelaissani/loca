@@ -1,6 +1,6 @@
 'use strict';
 const logger = require('winston');
-const http = require('http');
+const axios = require('axios');
 const moment = require('moment-timezone');
 const Contract = require('./contract');
 const FD = require('./frontdata');
@@ -20,44 +20,36 @@ function _findAllOccupants(realm) {
     });
 }
 
-function _getEmailStatus(term) {
-    return new Promise((resolve, reject) => {
+async function _getEmailStatus(term) {
+    try {
         logger.debug(`get email status ${config.EMAILER_URL}/status/${term}`);
-        const req = http.request(`${config.EMAILER_URL}/status/${term}`);
-        req.on('response', subRes => {
-            let body = '';
-            subRes.on('data', chunk => body+=chunk);
-            subRes.on('end', () => {
-                const emailStatus = JSON.parse(body).reduce((acc, status) => {
-                    const data = {
-                        to: status.to,
-                        sentDate: status.sentDate
-                    };
-                    if (!acc[status.tenantId]) {
-                        acc[status.tenantId] = {[status.document]: []};
-                    }
-                    let documents = acc[status.tenantId][status.document];
-                    if (!documents) {
-                        documents = [];
-                        acc[status.tenantId][status.document] = documents;
-                    }
-                    documents.push(data);
-                    return acc;
-                }, {});
-                resolve(emailStatus);
-            });
-        });
-        req.on('error', error => {
-            if (config.demoMode) {
-                logger.error(error);
-                logger.info('email status fallback workflow activated in demo mode');
-                resolve({});
-            } else {
-                reject(error);
+        const response = await axios.get(`${config.EMAILER_URL}/status/${term}`);
+        logger.debug(response.data);
+        const emailStatus = response.data.reduce((acc, status) => {
+            const data = {
+                to: status.to,
+                sentDate: status.sentDate
+            };
+            if (!acc[status.tenantId]) {
+                acc[status.tenantId] = { [status.document]: [] };
             }
-        });
-        req.end();
-    });
+            let documents = acc[status.tenantId][status.document];
+            if (!documents) {
+                documents = [];
+                acc[status.tenantId][status.document] = documents;
+            }
+            documents.push(data);
+            return acc;
+        }, {});
+        return emailStatus;
+    } catch (error) {
+        if (config.demoMode) {
+            logger.info('email status fallback workflow activated in demo mode');
+            return {};
+        } else {
+            throw error;
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +84,7 @@ function update(req, res) {
 
     occupantModel.findOne(realm, paymentData._id, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
-            res.json({errors: errors});
+            res.json({ errors: errors });
             return;
         }
 
@@ -140,7 +132,7 @@ function update(req, res) {
 
         occupantModel.update(realm, dbOccupant, (errors) => {
             if (errors) {
-                res.json({errors: errors});
+                res.json({ errors: errors });
                 return;
             }
             const rent = dbOccupant.rents.filter(rent => rent.term === Number(currentDate.format('YYYYMMDDHH')))[0];
@@ -163,7 +155,7 @@ function rentsOfOccupant(req, res) {
             return;
         }
 
-        const rentsToReturn = dbOccupant.rents.map( currentRent => {
+        const rentsToReturn = dbOccupant.rents.map(currentRent => {
             const rent = FD.toRentData(currentRent);
             if (currentRent.term === term) {
                 rent.active = 'active';
@@ -181,7 +173,7 @@ function rentsOfOccupant(req, res) {
     });
 }
 
-function all(req, res) {
+async function all(req, res) {
     const realm = req.realm;
 
     let currentDate = moment();
@@ -192,29 +184,30 @@ function all(req, res) {
     const year = currentDate.year();
     const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
 
-    const occupants = [];
-    _findAllOccupants(realm)
-        .then(dbOccupants => {
-            dbOccupants.reduce((acc, occupant) => {
-                const rents = occupant.rents.filter(rent => rent.term === term);
-                if (rents.length>0) {
-                    acc.push(occupant);
-                }
-                return acc;
-            }, occupants);
-            return _getEmailStatus(term);
-        })
-        .then(emailStatus => {
-            res.json(occupants.map(occupant => {
-                const rents = occupant.rents.filter(rent => rent.term === term);
-                return FD.toRentData(
-                    rents[0],
-                    occupant,
-                    emailStatus[occupant._id]
-                );
-            }));
-        })
-        .catch(errors => res.json({errors}));
+    try {
+        const [dbOccupants, emailStatus = {}] = await Promise.all([
+            _findAllOccupants(realm),
+            _getEmailStatus(term).catch(logger.error)
+        ]);
+        const occupants = dbOccupants.reduce((acc, occupant) => {
+            const rents = occupant.rents.filter(rent => rent.term === term);
+            if (rents.length > 0) {
+                acc.push(occupant);
+            }
+            return acc;
+        }, []);
+        res.json(occupants.map(occupant => {
+            const rents = occupant.rents.filter(rent => rent.term === term);
+            return FD.toRentData(
+                rents[0],
+                occupant,
+                emailStatus && emailStatus[occupant._id]
+            );
+        }));
+    } catch (errors) {
+        logger.error(errors);
+        res.status(500).json({ errors });
+    }
 }
 
 function overview(req, res) {
@@ -243,7 +236,7 @@ function overview(req, res) {
             res.json(dbOccupants
                 .reduce((acc, occupant) => {
                     const rents = occupant.rents.filter(rent => rent.term === term);
-                    if (rents.length>0) {
+                    if (rents.length > 0) {
                         acc.push(FD.toRentData(rents[0], occupant));
                     }
                     return acc;
@@ -256,7 +249,7 @@ function overview(req, res) {
                     } else {
                         acc.countNotPaid++;
                     }
-                    acc.countAll ++;
+                    acc.countAll++;
                     acc.totalToPay += rentData.totalToPay;
                     acc.totalPaid += rentData.payment;
                     acc.totalNotPaid -= rentData.newBalance;
