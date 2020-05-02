@@ -26,6 +26,6 @@ module.exports = {
     subscription,
     restoreDatabase,
     demoMode,
-    database: process.env.LOCA_DBNAME || process.env.BASE_DB_URL || 'mongodb://localhost/demodb',
+    database: process.env.MONGO_URL || process.env.LOCA_DBNAME || process.env.BASE_DB_URL || 'mongodb://localhost/demodb',
     EMAILER_URL: process.env.EMAILER_URL || 'http://localhost:8083/emailer',
 };

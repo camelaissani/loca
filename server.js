@@ -173,12 +173,10 @@ db.init()
             if (!config.productive) {
                 const browserSync = require('browser-sync');
                 browserSync.init({
+                    port: config.appHttpPort,
                     proxy: `localhost:${appDebugHttPort}`,
                     files: ['dist'],
-                    port: config.appHttpPort,
-                    weinre: {
-                        port: 8080
-                    },
+                    ui: false,
                     open: false
                 });
             }

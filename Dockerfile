@@ -18,5 +18,4 @@ RUN npm ci && \
 FROM base AS release
 RUN npm install forever -g --silent
 COPY --from=dependencies /usr/app .
-EXPOSE 8081
 CMD forever ./server.js
