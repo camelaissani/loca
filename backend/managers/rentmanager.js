@@ -1,4 +1,3 @@
-'use strict';
 const logger = require('winston');
 const axios = require('axios');
 const moment = require('moment-timezone');
@@ -8,19 +7,18 @@ const rentModel = require('../models/rent');
 const occupantModel = require('../models/occupant');
 const config = require('../../config');
 
-function _findAllOccupants(realm) {
+const _findAllOccupants = realm => {
     return new Promise((resolve, reject) => {
         occupantModel.findAll(realm, (errors, occupants) => {
             if (errors && errors.length > 0) {
-                reject(errors);
-                return;
+                return reject(errors);
             }
             resolve(occupants);
         });
     });
-}
+};
 
-async function _getEmailStatus(term) {
+const _getEmailStatus = async term => {
     try {
         logger.debug(`get email status ${config.EMAILER_URL}/status/${term}`);
         const response = await axios.get(`${config.EMAILER_URL}/status/${term}`);
@@ -50,12 +48,12 @@ async function _getEmailStatus(term) {
             throw error;
         }
     }
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
 ////////////////////////////////////////////////////////////////////////////////
-function update(req, res) {
+const update = (req, res) => {
     const realm = req.realm;
     let paymentData = rentModel.paymentSchema.filter(req.body);
     let currentDate = moment();
@@ -84,8 +82,7 @@ function update(req, res) {
 
     occupantModel.findOne(realm, paymentData._id, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
-            res.json({ errors: errors });
-            return;
+            return res.json({ errors: errors });
         }
 
         const contract = {
@@ -132,27 +129,25 @@ function update(req, res) {
 
         occupantModel.update(realm, dbOccupant, (errors) => {
             if (errors) {
-                res.json({ errors: errors });
-                return;
+                return res.json({ errors: errors });
             }
             const rent = dbOccupant.rents.filter(rent => rent.term === Number(currentDate.format('YYYYMMDDHH')))[0];
 
             res.json(FD.toRentData(rent, dbOccupant));
         });
     });
-}
+};
 
-function rentsOfOccupant(req, res) {
+const rentsOfOccupant = (req, res) => {
     const realm = req.realm;
     const id = req.params.id;
     const term = Number(moment().startOf('month').format('YYYYMMDDHH'));
 
     occupantModel.findOne(realm, id, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.json({
                 errors: errors
             });
-            return;
         }
 
         const rentsToReturn = dbOccupant.rents.map(currentRent => {
@@ -171,9 +166,9 @@ function rentsOfOccupant(req, res) {
             rents: rentsToReturn
         });
     });
-}
+};
 
-async function all(req, res) {
+const all = async (req, res) => {
     const realm = req.realm;
 
     let currentDate = moment();
@@ -208,60 +203,59 @@ async function all(req, res) {
         logger.error(errors);
         res.status(500).json({ errors });
     }
-}
+};
 
-function overview(req, res) {
-    const realm = req.realm;
-    let currentDate = moment();
+const overview = async (req, res) => {
+    try {
+        const realm = req.realm;
+        let currentDate = moment();
 
-    if (req.params.year && req.params.month) {
-        currentDate = moment(`${req.params.month}/${req.params.year}`, 'MM/YYYY');
-    }
-    const month = currentDate.month() + 1;
-    const year = currentDate.year();
-    const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
+        if (req.params.year && req.params.month) {
+            currentDate = moment(`${req.params.month}/${req.params.year}`, 'MM/YYYY');
+        }
+        const month = currentDate.month() + 1;
+        const year = currentDate.year();
+        const term = Number(moment(`01/${month}/${year} 00:00`, 'DD/MM/YYYY HH:mm').format('YYYYMMDDHH'));
 
-    _findAllOccupants(realm)
-        .then(dbOccupants => {
-            const overview = {
-                countAll: 0,
-                countPaid: 0,
-                countPartiallyPaid: 0,
-                countNotPaid: 0,
-                totalToPay: 0,
-                totalPaid: 0,
-                totalNotPaid: 0
-            };
+        const dbOccupants = await _findAllOccupants(realm);
+        const overview = {
+            countAll: 0,
+            countPaid: 0,
+            countPartiallyPaid: 0,
+            countNotPaid: 0,
+            totalToPay: 0,
+            totalPaid: 0,
+            totalNotPaid: 0
+        };
 
-            res.json(dbOccupants
-                .reduce((acc, occupant) => {
-                    const rents = occupant.rents.filter(rent => rent.term === term);
-                    if (rents.length > 0) {
-                        acc.push(FD.toRentData(rents[0], occupant));
-                    }
-                    return acc;
-                }, [])
-                .reduce((acc, rentData) => {
-                    if (rentData.totalAmount <= 0 || rentData.newBalance >= 0) {
-                        acc.countPaid++;
-                    } else if (rentData.payment > 0) {
-                        acc.countPartiallyPaid++;
-                    } else {
-                        acc.countNotPaid++;
-                    }
-                    acc.countAll++;
-                    acc.totalToPay += rentData.totalToPay;
-                    acc.totalPaid += rentData.payment;
-                    acc.totalNotPaid -= rentData.newBalance;
-                    return acc;
-                }, overview));
-        })
-        .catch(errors => {
-            res.json({
-                errors: errors
-            });
+        res.json(dbOccupants
+            .reduce((acc, occupant) => {
+                const rents = occupant.rents.filter(rent => rent.term === term);
+                if (rents.length > 0) {
+                    acc.push(FD.toRentData(rents[0], occupant));
+                }
+                return acc;
+            }, [])
+            .reduce((acc, rentData) => {
+                if (rentData.totalAmount <= 0 || rentData.newBalance >= 0) {
+                    acc.countPaid++;
+                } else if (rentData.payment > 0) {
+                    acc.countPartiallyPaid++;
+                } else {
+                    acc.countNotPaid++;
+                }
+                acc.countAll++;
+                acc.totalToPay += rentData.totalToPay;
+                acc.totalPaid += rentData.payment;
+                acc.totalNotPaid -= rentData.newBalance;
+                return acc;
+            }, overview));
+    } catch(errors) {
+        res.json({
+            errors: errors
         });
-}
+    }
+};
 
 module.exports = {
     update,

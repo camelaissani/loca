@@ -146,7 +146,7 @@ describe('contract functionalities', () => {
 
     it('pay a term', () => {
         const contract = Contract.create({begin: '01/01/2017 00:00', end: '31/12/2025 23:59', frequency: 'months', properties: [{}, {}]});
-        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['discount']});
 
         assert.strictEqual(contract.rents.filter(rent => rent.payments.length === 0).length, contract.terms - 1);
         assert.strictEqual(contract.rents.find(rent => rent.term === 2025120100).payments[0].amount, 200);
@@ -154,17 +154,17 @@ describe('contract functionalities', () => {
         assert.strictEqual(contract.rents.length, 108, 'incorrect number of rents');
 
         assert.throws(() => {
-            Contract.payTerm(contract, '01/12/2026 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+            Contract.payTerm(contract, '01/12/2026 00:00', {payments:[{amount: 200}], discounts:['discount']});
         });
 
         assert.throws(() => {
-            Contract.payTerm(contract, '01/12/2016 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+            Contract.payTerm(contract, '01/12/2016 00:00', {payments:[{amount: 200}], discounts:['discount']});
         });
     });
 
     it('pay first term', () => {
         const contract = Contract.create({begin: '01/01/2017 00:00', end: '31/12/2025 23:59', frequency: 'months', properties: [{}, {}]});
-        Contract.payTerm(contract, '01/01/2017 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+        Contract.payTerm(contract, '01/01/2017 00:00', {payments:[{amount: 200}], discounts:['discount']});
 
         assert.strictEqual(contract.rents.find(rent => rent.term === 2017010100).payments[0].amount, 200);
         assert.strictEqual(contract.rents.findIndex(rent => rent.term === 2017010100), 0);
@@ -172,15 +172,45 @@ describe('contract functionalities', () => {
 
     it('pay last term', () => {
         const contract = Contract.create({begin: '01/01/2017 00:00', end: '31/12/2025 23:59', frequency: 'months', properties: [{}, {}]});
-        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['discount']});
 
         assert.strictEqual(contract.rents.find(rent => rent.term === 2025120100).payments[0].amount, 200);
         assert.strictEqual(contract.rents.findIndex(rent => rent.term === 2025120100), contract.rents.length - 1);
     });
 
+    it('pay a term in reverse chronological order', () => {
+        const contract = Contract.create({
+            begin: '01/01/2020 00:00',
+            end: '31/12/2020 23:59',
+            frequency: 'months',
+            vatRate: 0.2,
+            properties: [{
+                entryDate: '01/01/2020',
+                exitDate: '31/12/2020',
+                property: {
+                    name: 'office1',
+                    price: 100,
+                    expense: 10
+                }
+            }]
+        });
+
+        let termAmount = (100 + 10) * 1.2; // VAT
+        assert.strictEqual(contract.rents.find(rent => rent.term === 2020020100).total.balance, termAmount);
+
+
+        Contract.payTerm(contract, '01/05/2020 00:00', {payments:[{amount: termAmount}]});
+        Contract.payTerm(contract, '01/04/2020 00:00', {payments:[{amount: termAmount}]});
+        Contract.payTerm(contract, '01/03/2020 00:00', {payments:[{amount: termAmount}]});
+        Contract.payTerm(contract, '01/02/2020 00:00', {payments:[{amount: termAmount}]});
+        Contract.payTerm(contract, '01/01/2020 00:00', {payments:[{amount: termAmount}]});
+
+        assert.strictEqual(contract.rents.find(rent => rent.term === 2020060100).total.balance, 0);
+    });
+
     it('pay a term and update contract duration', () => {
         const contract = Contract.create({begin: '01/01/2017 00:00', end: '31/12/2025 23:59', frequency: 'months', properties: [{}, {}]});
-        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['discount']});
 
         const newContract = Contract.update(contract, {begin:'01/01/2019 00:00', end: '31/12/2025 23:59'});
         assert.strictEqual(newContract.rents.find(rent => rent.term === 2025120100).payments[0].amount, 200);
@@ -264,7 +294,7 @@ describe('contract functionalities', () => {
 
     it('pay a term and renew', () => {
         const contract = Contract.create({begin: '01/01/2017 00:00', end: '31/12/2025 23:59', frequency: 'months', properties: [{}, {}]});
-        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['dsicout']});
+        Contract.payTerm(contract, '01/12/2025 00:00', {payments:[{amount: 200}], discounts:['discount']});
         const newContract = Contract.renew(contract);
 
         assert.strictEqual(newContract.rents.filter(rent => rent.payments.length === 0).length, (contract.terms * 2) - 1);

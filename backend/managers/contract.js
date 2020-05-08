@@ -1,7 +1,7 @@
 const moment = require('moment');
 const BL = require('../businesslogic');
 
-function create(contract) {
+const create = contract => {
     const supportedFrequencies = ['hours', 'days', 'weeks', 'months', 'years'];
 
     if (!contract.frequency || supportedFrequencies.indexOf(contract.frequency) === -1) {
@@ -27,13 +27,11 @@ function create(contract) {
     }
 
     const terms = Math.round(momentEnd.diff(momentBegin, contract.frequency, true));
-    Object.assign(
-        contract,
-        {
-            terms,
-            rents: []
-        }
-    );
+    contract = {
+        ...contract,
+        terms,
+        rents: []
+    };
 
     const current = moment(momentBegin);
     let previousRent;
@@ -44,14 +42,14 @@ function create(contract) {
         current.add(1, contract.frequency);
     }
     return contract;
-}
+};
 
-function update(inputContract, modification) {
-    const modifiedContract = JSON.parse(JSON.stringify(inputContract));
-    Object.assign(
-        modifiedContract,
-        modification
-    );
+const update = (inputContract, modification) => {
+    const originalContract = JSON.parse(JSON.stringify(inputContract));
+    const modifiedContract = {
+        ...originalContract,
+        ...modification
+    };
 
     const momentBegin = moment(modifiedContract.begin, 'DD/MM/YYYY HH:mm');
     const momentEnd = moment(modifiedContract.end, 'DD/MM/YYYY HH:mm');
@@ -75,25 +73,23 @@ function update(inputContract, modification) {
         });
 
     return updatedContract;
-}
+};
 
-function renew(contract) {
+const renew = contract => {
     const momentEnd = moment(contract.end, 'DD/MM/YYYY HH:mm');
     const momentNewEnd = moment(momentEnd).add(contract.terms, contract.frequency);
 
-    return Object.assign(
-        update(contract, {end: momentNewEnd.format('DD/MM/YYYY HH:mm')}),
-        {
-            terms: contract.terms
-        }
-    );
-}
+    return {
+        ...update(contract, {end: momentNewEnd.format('DD/MM/YYYY HH:mm')}),
+        terms: contract.terms
+    };
+};
 
-function terminate(inputContract, termination) {
+const terminate = (inputContract, termination) => {
     return update(inputContract, {termination});
-}
+};
 
-function payTerm(contract, term, settlements) {
+const payTerm = (contract, term, settlements) => {
     const current = moment(term, 'DD/MM/YYYY HH:mm');
     const momentBegin = moment(contract.begin, 'DD/MM/YYYY HH:mm');
     const momentEnd = moment(contract.termination || contract.end, 'DD/MM/YYYY HH:mm');
@@ -108,21 +104,24 @@ function payTerm(contract, term, settlements) {
     let previousRent = previousRentIndex >-1 ? contract.rents[previousRentIndex] : null;
     contract.rents.forEach((rent, index) => {
         if (index > previousRentIndex) {
+            if (index > previousRentIndex + 1) {
+                const { debts, discounts, payments } = rent;
+                settlements = { debts, discounts: discounts.filter(d => d.origin === 'settlement'), payments };
+            }
             contract.rents[index] = BL.computeRent(contract, current.format('DD/MM/YYYY HH:mm'), previousRent, settlements);
             previousRent = contract.rents[index];
             current.add(1, contract.frequency);
-            settlements = null;
         }
     });
 
     return contract;
-}
+};
 
-function _isPayment(rent) {
+const _isPayment = rent => {
     return !!(rent.payments.length > 0 && rent.payments.some(payment => payment.amount && payment.amount > 0));
-}
+};
 
-function _checkLostPayments(momentBegin, momentEnd, contract) {
+const _checkLostPayments = (momentBegin, momentEnd, contract) => {
     const lostPayments =
     contract.rents
         .filter(rent =>
@@ -133,7 +132,7 @@ function _checkLostPayments(momentBegin, momentEnd, contract) {
     if (lostPayments.length > 0) {
         throw Error(`Some payments will be lost because they are out of the contract time frame:\n${lostPayments.join('\n')}`);
     }
-}
+};
 
 module.exports = {
     create,
