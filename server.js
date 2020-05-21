@@ -175,9 +175,12 @@ db.init()
                 browserSync.init({
                     port: config.appHttpPort,
                     proxy: `localhost:${appDebugHttPort}`,
+                    socket: {
+                        domain: `localhost:${config.nginxPort}`
+                    },
                     files: ['dist'],
-                    ui: false,
-                    open: false
+                    open: false,
+                    ui: false
                 });
             }
         });

@@ -8,6 +8,7 @@ const toBoolean = (value) => {
 };
 
 const loggerLevel = process.env.LOCA_LOGGER_LEVEL || process.env.LOGGER_LEVEL || 'debug';
+const nginxPort = process.env.NGINX_PORT || 8080;
 const appHttpPort = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8080;
 const configDir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, '..', 'config');
 const demoMode = toBoolean(process.env.LOCA_DEMOMODE || process.env.DEMO_MODE || true);
@@ -19,6 +20,7 @@ const website = require(path.join(configDir, 'website.json'));
 module.exports = {
     ...website,
     loggerLevel,
+    nginxPort,
     appHttpPort,
     configDir,
     businesslogic: 'FR',
