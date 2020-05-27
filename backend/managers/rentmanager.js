@@ -23,29 +23,28 @@ const _getEmailStatus = async term => {
         logger.debug(`get email status ${config.EMAILER_URL}/status/${term}`);
         const response = await axios.get(`${config.EMAILER_URL}/status/${term}`);
         logger.debug(response.data);
-        const emailStatus = response.data.reduce((acc, status) => {
+        return response.data.reduce((acc, status) => {
             const data = {
-                to: status.to,
+                sentTo: status.sentTo,
                 sentDate: status.sentDate
             };
-            if (!acc[status.tenantId]) {
-                acc[status.tenantId] = { [status.document]: [] };
+            if (!acc[status.recordId]) {
+                acc[status.recordId] = { [status.templateName]: [] };
             }
-            let documents = acc[status.tenantId][status.document];
+            let documents = acc[status.recordId][status.templateName];
             if (!documents) {
                 documents = [];
-                acc[status.tenantId][status.document] = documents;
+                acc[status.recordId][status.templateName] = documents;
             }
             documents.push(data);
             return acc;
         }, {});
-        return emailStatus;
     } catch (error) {
         if (config.demoMode) {
             logger.info('email status fallback workflow activated in demo mode');
             return {};
         } else {
-            throw error;
+            throw error.data;
         }
     }
 };

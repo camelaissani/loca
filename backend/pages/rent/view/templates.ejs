@@ -67,7 +67,7 @@
                     class="label label-success"
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.last.rentcall.sentDate}}">
+                    title="{{i18next key="Sent to" email=emailStatus.last.rentcall.sentTo datetime=emailStatus.last.rentcall.sentDate}}">
                     <i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}} [{{emailStatus.count.allRentcall}}]
                 </span>
             {{else}}
@@ -79,7 +79,7 @@
                 <span class="label label-success"
                     data-toggle="tooltip"
                     data-placement="bottom"
-                    title="{{i18next key="Sent by email the"}} {{formatDateTime emailStatus.last.invoice.sentDate}}">
+                    title="{{i18next key="Sent to" email=emailStatus.last.invoice.sentTo datetime=emailStatus.last.invoice.sentDate}}">
                     <i class="fa fa-envelope-o"></i> {{i18next key="Rental invoice"}} [{{emailStatus.count.invoice}}]
                 </span>
             {{else}}
@@ -136,7 +136,7 @@
         <td>{{name}}</td>
         {{#if error}}
             {{#if to}}
-            <td>{{i18next key="impossible to send document to"}} {{to}}</td>
+            <td>{{i18next key="impossible to send document to"}} {{email}}</td>
             {{else}}
             <% if (config.demoMode) { %>
             <td>{{i18next key="emails cannot be sent in demo mode"}}</td>
@@ -145,7 +145,7 @@
             <% } %>
             {{/if}}
         {{else}}
-        <td>{{i18next key="successfuly sent to"}} {{to}}</td>
+        <td>{{i18next key="successfuly sent to"}} {{email}}</td>
         {{/if}}
     </tr>
     {{/each}}

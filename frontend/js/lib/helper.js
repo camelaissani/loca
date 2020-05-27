@@ -123,6 +123,9 @@ Handlebars.registerHelper('i18next', function(params) {
                 if (attr.toLowerCase() === 'date') {
                     options[attr] = Helper.formatDate(params.hash[attr]);
                 }
+                else if (attr.toLowerCase() === 'datetime') {
+                    options[attr] = Helper.formatDateTime(params.hash[attr]);
+                }
                 else if (attr.toLowerCase() === 'amount') {
                     options[attr] = Helper.formatMoney(params.hash[attr]);
                 }

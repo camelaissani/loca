@@ -219,7 +219,7 @@
     "Selected rent_plural": "Selected rents",
     "Selected property": "Selected property",
     "Selected property_plural": "Selected properties",
-    "Sent by email the": "Sent by email the",
+    "Sent to": "Sent to {{email}} on {{datetime}}",
     "Server access problem. Check your network connection": "Server access problem. Check your network connection",
     "Server is taking too long to reply": "Server is taking too long to reply",
     "Short business lease contract": "Short business lease contract",

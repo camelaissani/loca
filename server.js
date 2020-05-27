@@ -148,12 +148,6 @@ db.init()
         if (config.restoreDatabase) {
             require('./scripts/mongorestore');
             logger.debug('database restored');
-            isDbExists = true;
-        }
-
-        if (config.demoMode && !isDbExists) {
-            require('./scripts/mongorestore');
-            logger.debug('database restored');
         }
 
         const appDebugHttPort = 9091;

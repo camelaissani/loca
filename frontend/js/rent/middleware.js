@@ -112,8 +112,8 @@ class RentMiddleware extends ViewController {
                 if (!result) {
                     return;
                 }
-                application.sendEmail(tenantIds, 'rentcall', LOCA.currentYear, LOCA.currentMonth, status => {
-                    bootbox.alert(this.emailStatus({results: status}), () => {
+                application.sendEmail(tenantIds, 'rentcall', LOCA.currentYear, LOCA.currentMonth, results => {
+                    bootbox.alert(this.emailStatus({results}), () => {
                         this.closeForm(() => {
                             this.loadList();
                         });
