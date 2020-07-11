@@ -57,10 +57,11 @@ module.exports = {
         const { document, tenantIds, year, month } = req.body;
         const term = moment(`${year}/${month}/01`, 'YYYY/MM/DD').format('YYYYMMDDHH');
         const findTenant = promisify(occupantModel.findOne).bind(occupantModel);
-        const messages = await tenantIds.reduce(async (acc, tenantId) => {
+        const messages = [];
+        await Promise.all(tenantIds.map(async tenantId => {
             try {
                 const tenant = await findTenant(realm, tenantId);
-                acc.push({
+                messages.push({
                     name: tenant.name,
                     tenantId,
                     document,
@@ -69,9 +70,7 @@ module.exports = {
             } catch (error) {
                 logger.error(error);
             }
-
-            return acc;
-        }, []);
+        }));
         const statusList = await Promise.all(messages.map(message => _sendEmail(req.language, message)));
         try {
             const results = statusList.reduce((acc, statuses, index) => {
