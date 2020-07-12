@@ -71,8 +71,8 @@ export default (defaultCountryCode, callback) => {
                 }
             });
 
-        i18next.on('languageChanged', function(countryCode) {
-            const splittedCountryCode = (countryCode && countryCode.split('-')) || defaultCountryCode.split('-');
+        i18next.on('languageChanged', function(countryCode = defaultCountryCode) {
+            const splittedCountryCode = countryCode.split('-');
             const lang = splittedCountryCode[0].toLowerCase();
             const langForJQueryValidate = LangsForJQueryValidate[lang] || lang;
             try {
@@ -86,6 +86,9 @@ export default (defaultCountryCode, callback) => {
             }
 
             moment.locale(lang);
+            const dateFormat = moment.localeData().longDateFormat('L').toLowerCase();
+            $.fn.datepicker.defaults.language = countryCode;
+            $.fn.datepicker.defaults.format = dateFormat;
             if (callback) {
                 callback(lang);
             }

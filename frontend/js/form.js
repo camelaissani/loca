@@ -5,7 +5,7 @@ import ObjectFilter from './lib/objectfilter';
 import application from './application';
 
 class Form {
-    constructor(options) {
+    constructor(options = {}) {
         const defaultOptions = {
             domSelector: '',
             httpMethod: null,
@@ -15,18 +15,24 @@ class Form {
             alertOnFieldError: true
         };
 
-        this.options = Object.assign(defaultOptions, options || {});
+        this.options = {
+            ...defaultOptions,
+            ...options
+        };
+        this.datepickersChangeHandler = () => {
+            $(`${this.options.domSelector} .datepicker`).datepicker('update');
+        };
     }
 
-    beforeSetData() {}
+    beforeSetData() { }
 
-    afterSetData() {}
+    afterSetData() { }
 
     onGetData(data) {
         return data;
     }
 
-    onBind() {}
+    onBind() { }
 
     onSubmit(response, callback) {
         if (callback) {
@@ -35,7 +41,7 @@ class Form {
     }
 
     // METHODS THAT MAKE THE JOB
-    showErrorMessage (message) {
+    showErrorMessage(message) {
         this.$alertMsg.html(message);
         this.$alert.show();
     }
@@ -69,7 +75,7 @@ class Form {
                         // else {
                         //    value = v;
                         // }
-                        updateFormWithData(v, keyPostfix+'_'+i);
+                        updateFormWithData(v, keyPostfix + '_' + i);
                     });
                 }
             });
@@ -88,6 +94,8 @@ class Form {
         const filteredData = ObjectFilter.filter(this.options.defaultData, formData);
         updateFormWithData(filteredData);
 
+        $(`${this.options.domSelector} .datepicker`).datepicker('update');
+
         this.afterSetData(arguments);
     }
 
@@ -96,7 +104,7 @@ class Form {
         var values;
         var key, value;
 
-        this.$form.find('.js-js-form-rows').each(function () {
+        this.$form.find('.js-form-rows').each(function () {
             var $formRows = $(this);
             var id = $formRows.attr('id');
             var $rows = $formRows.find('.js-form-row');
@@ -115,7 +123,7 @@ class Form {
             });
         });
         values = this.$form.serializeArray();
-        for (var i=0; i<values.length; ++i) {
+        for (var i = 0; i < values.length; ++i) {
             if (values[i].name.match(/_\d+$/)) {
                 continue;
             }
@@ -186,66 +194,75 @@ class Form {
 
     unbindForm() {
         if (this.$form) {
+            $(`${this.options.domSelector} .datepicker`).datepicker('destroy');
             this.$form.off('.validate').removeData('validator');
         }
     }
 
     bindForm() {
-        var self = this;
-        var $input, id;
+        const self = this;
 
-        self.onBind(arguments);
+        this.onBind(arguments);
 
-        self.$form = $(self.options.domSelector);
-        if (self.$form.length ===0) {
-            return self.$form;
+        this.$form = $(this.options.domSelector);
+        if (this.$form.length === 0) {
+            return this.$form;
         }
 
-        self.$alert = $(self.options.domSelector + ' .form-error').hide();
-        self.$alertMsg = self.$alert.find('.js-form-error-message');
+        this.$alert = $(this.options.domSelector + ' .form-error').hide();
+        this.$alertMsg = this.$alert.find('.js-form-error-message');
 
-        $(self.options.domSelector + ' input, ' + self.options.domSelector + ' select, ' + self.options.domSelector + ' textarea').each(function(/*index*/) {
-            $input = $(this);
-            id = $input.attr('id');
-            if (!$input.attr('name')) {
-                $input.attr('name', id);
-            }
-            // if ($input.attr('type')==='date') {
-            //     $input.attr('pattern', 'dd/mm/yyyy');
-            // }
-        });
-
-        self.validator = self.$form.validate( {
+        this.validator = this.$form.validate({
             debug: true,
             ignore: 'hidden',
-            rules : self.options.manifest,
-            highlight: function(element/*, errorClass, validClass*/) {
-                var $element = $(element);
-                $element.closest('.form-group').addClass('has-error');
+            rules: this.options.manifest,
+            highlight: function (element/*, errorClass, validClass*/) {
+                $(element).closest('.form-group').addClass('has-error');
             },
-            success: function(element) {
+            success: function (element) {
                 $(element).closest('.form-group').removeClass('has-error');
                 $(element).closest('label.error').remove();
             },
-            showErrors: function(/*errorMap, errorList*/) {
+            showErrors: function (/*errorMap, errorList*/) {
                 var errorCount;
                 if (self.options.alertOnFieldError) {
                     errorCount = this.numberOfInvalids();
                     if (errorCount) {
-                        self.$alertMsg.html(i18next.t('The form is not valid. Please check the field with error', {count: errorCount}));
+                        self.$alertMsg.html(i18next.t('The form is not valid. Please check the field with error', { count: errorCount }));
                         self.$alert.show();
                     }
                 }
                 this.defaultShowErrors();
                 $(self.options.domSelector + ' label.error').addClass('control-label');
             },
-            submitHandler: function(form) {
+            submitHandler: function (form) {
                 if (self.$form.attr('action')) {
                     form.submit();
                 }
             }
         });
-        return self.$form;
+
+        this.formHasBeenUpdated();
+        return this.$form;
+    }
+
+    formHasBeenUpdated() {
+        $(`${this.options.domSelector} input, ${this.options.domSelector} select, ${this.options.domSelector} textarea`).each(function () {
+            const $input = $(this);
+            const id = $input.attr('id');
+            if (!$input.attr('name')) {
+                $input.attr('name', id);
+            }
+        });
+
+        const $datepickers = $(`${this.options.domSelector} .datepicker`);
+        $datepickers.off('change', this.datepickersChangeHandler);
+        $datepickers.datepicker('destroy');
+
+        $datepickers.datepicker({
+            enableOnReadonly: false
+        });
+        $datepickers.change(this.datepickersChangeHandler);
     }
 }
 

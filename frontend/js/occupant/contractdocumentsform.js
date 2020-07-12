@@ -82,9 +82,7 @@ class ContractDocumentsForm extends Form {
             }
             return false;
         });
-
-        // TODO: Put this in css
-        //$(domSelector + ' .js-master-form-row .js-btn-form-remove-row').hide();
+        $(domSelector + ' .js-master-form-row .js-btn-form-remove-row').hide();
     }
 
     addDocumentRow() {

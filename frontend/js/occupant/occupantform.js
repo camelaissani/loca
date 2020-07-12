@@ -272,7 +272,10 @@ class OccupantForm extends Form {
         var itemExitDateName;
 
         this.propertyRowCount++;
-        $newRow = $(domSelector + ' #properties .js-master-form-row').clone(true).removeClass('js-master-form-row');
+        $(domSelector + ' #properties .js-master-form-row .datepicker').datepicker('destroy');
+        $newRow = $(domSelector + ' #properties .js-master-form-row')
+            .clone(true)
+            .removeClass('js-master-form-row');
         $('.has-error', $newRow).removeClass('has-error');
         $('label.error', $newRow).remove();
         itemPropertyName = 'propertyId_'+this.propertyRowCount;
@@ -281,7 +284,7 @@ class OccupantForm extends Form {
         $('#propertyId_0',$newRow).attr('id', itemPropertyName).attr('name', itemPropertyName).val('');
         $('#entryDate_0',$newRow).attr('id', itemEntryDateName).attr('name', itemEntryDateName).val('');
         $('#exitDate_0',$newRow).attr('id', itemExitDateName).attr('name', itemExitDateName).val('');
-        $('.js-btn-form-remove-row',$newRow).show();
+        $('.js-btn-form-remove-row', $newRow).show();
         // Add new property row in DOM
         $(domSelector + ' #properties').append($newRow);
 
@@ -313,7 +316,9 @@ class OccupantForm extends Form {
         var itemEmail;
 
         this.contactRowCount++;
-        $newRow = $(domSelector + ' #contacts .js-master-form-row').clone(true).removeClass('js-master-form-row');
+        $newRow = $(domSelector + ' #contacts .js-master-form-row')
+            .clone(true)
+            .removeClass('js-master-form-row');
         $('.has-error', $newRow).removeClass('has-error');
         $('label.error', $newRow).remove();
         itemContact = 'contact_'+this.contactRowCount;
@@ -322,7 +327,8 @@ class OccupantForm extends Form {
         $('#contact_0',$newRow).attr('id', itemContact).attr('name', itemContact).val('');
         $('#phone_0',$newRow).attr('id', itemPhone).attr('name', itemPhone).val('');
         $('#email_0',$newRow).attr('id', itemEmail).attr('name', itemEmail).val('');
-        $('.js-btn-form-remove-row',$newRow).show();
+        $('.js-btn-form-remove-row', $newRow).show();
+
         // Add new property row in DOM
         $(domSelector + ' #contacts').append($newRow);
 
@@ -351,7 +357,7 @@ class OccupantForm extends Form {
             that._contractChanged($(this));
         });
 
-        $(domSelector + ' #beginDate').keyup(function() {
+        $(domSelector + ' #beginDate').change(function() {
             that._contractBeginDateChanged($(this));
         });
 
@@ -380,6 +386,7 @@ class OccupantForm extends Form {
         // Dynamic contact rows
         $(domSelector + ' #btn-add-contact').click(() => {
             this.addContactRow();
+            this.formHasBeenUpdated();
             return false;
         });
 
@@ -388,6 +395,7 @@ class OccupantForm extends Form {
             this.addPropertyRow();
             this._propertyChanged();
             this._computeRent();
+            this.formHasBeenUpdated();
             return false;
         });
 
@@ -400,6 +408,7 @@ class OccupantForm extends Form {
             }
             $row.remove();
             that._computeRent();
+            that.formHasBeenUpdated();
             return false;
         });
 
