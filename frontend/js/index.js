@@ -63,8 +63,7 @@ language(LOCA.countryCode, (countryCode) => {
     const $demoPopover = $('#demo-popover');
     if ($demoPopover.length) {
         bootbox.alert({
-            message: i18next.t('Site data is reset every 30 minutes'),
-            title: i18next.t('Caution')
+            message: i18next.t('Site data is reset every 30 minutes')
         });
     }
 });

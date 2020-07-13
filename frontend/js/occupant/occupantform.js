@@ -96,16 +96,6 @@ class OccupantForm extends Form {
                 },
                 'propertyId_0': {
                     required: true
-                },
-                'entryDate_0': {
-                    required: true,
-                    mindate: [{domSelector: domSelector + ' #beginDate'}],
-                    maxdate: [{domSelector: domSelector + ' #endDate'}]
-                },
-                'exitDate_0': {
-                    required: true,
-                    mindate: [{domSelector: domSelector + ' #entryDate_0'}],
-                    maxdate: [{domSelector: domSelector + ' #endDate'}]
                 }
             },
             defaultData: {
@@ -127,7 +117,7 @@ class OccupantForm extends Form {
                 endDate: '',
                 terminationDate: '',
                 guarantyPayback: '',
-                properties: [{propertyId:'', property:{}, entryDate:'', exitDate:''}],
+                properties: [{propertyId:''}],
                 guaranty: '',
                 reference: '',
                 isVat: false,
@@ -160,12 +150,6 @@ class OccupantForm extends Form {
 
             if (occupant.properties) {
                 occupant.properties.forEach((property, index) => {
-                    if (property.entryDate) {
-                        property.entryDate = moment(property.entryDate, 'DD/MM/YYYY').format('L'); //display format date
-                    }
-                    if (property.exitDate) {
-                        property.exitDate = moment(property.exitDate, 'DD/MM/YYYY').format('L'); //display format date
-                    }
                     if (index !==0) {
                         this.addPropertyRow();
                     }
@@ -206,6 +190,7 @@ class OccupantForm extends Form {
         if (occupant && occupant._id) {
             $(domSelector + ' #occupantNameLabel').html(occupant.name);
             $(domSelector + ' #termination-row').show();
+            $('.js-user-action[data-id="list-action-remove-occupant"]').show();
             if (occupant.terminationDate) {
                 $('.js-lease-state').removeClass('hidden');
                 $('.js-user-action[data-id="list-action-remove-occupant"]').addClass('disabled');
@@ -251,39 +236,20 @@ class OccupantForm extends Form {
             data.terminationDate = moment(data.terminationDate, 'L').format('DD/MM/YYYY'); //display format to db one
         }
 
-        data.properties.forEach(function(property) {
-            if (property.entryDate) {
-                property.entryDate = moment(property.entryDate, 'L').format('DD/MM/YYYY'); //display format to db one
-            }
-
-            if (property.exitDate) {
-                property.exitDate = moment(property.exitDate, 'L').format('DD/MM/YYYY'); //display format to db one
-            }
-        });
-
         return data;
     }
 
     addPropertyRow() {
         // Create new property row
-        var $newRow;
-        var itemPropertyName;
-        var itemEntryDateName;
-        var itemExitDateName;
-
         this.propertyRowCount++;
         $(domSelector + ' #properties .js-master-form-row .datepicker').datepicker('destroy');
-        $newRow = $(domSelector + ' #properties .js-master-form-row')
+        const $newRow = $(domSelector + ' #properties .js-master-form-row')
             .clone(true)
             .removeClass('js-master-form-row');
         $('.has-error', $newRow).removeClass('has-error');
         $('label.error', $newRow).remove();
-        itemPropertyName = 'propertyId_'+this.propertyRowCount;
-        itemEntryDateName = 'entryDate_'+this.propertyRowCount;
-        itemExitDateName = 'exitDate_'+this.propertyRowCount;
+        const itemPropertyName = 'propertyId_'+this.propertyRowCount;
         $('#propertyId_0',$newRow).attr('id', itemPropertyName).attr('name', itemPropertyName).val('');
-        $('#entryDate_0',$newRow).attr('id', itemEntryDateName).attr('name', itemEntryDateName).val('');
-        $('#exitDate_0',$newRow).attr('id', itemExitDateName).attr('name', itemExitDateName).val('');
         $('.js-btn-form-remove-row', $newRow).show();
         // Add new property row in DOM
         $(domSelector + ' #properties').append($newRow);
@@ -291,20 +257,6 @@ class OccupantForm extends Form {
         //Add jquery validation rules for new added fields
         $('#'+itemPropertyName, $newRow).rules('add', {
             required:true
-        });
-
-        $('#'+itemEntryDateName, $newRow).rules('add', {
-            required: true,
-            date: true,
-            mindate: [{domSelector: domSelector + ' #beginDate'}],
-            maxdate: [{domSelector: domSelector + ' #endDate'}]
-        });
-
-        $('#'+itemExitDateName, $newRow).rules('add', {
-            required: true,
-            date: true,
-            mindate: [{domSelector: domSelector + ' #' +itemEntryDateName}],
-            maxdate: [{domSelector: domSelector + ' #endDate'}]
         });
     }
 

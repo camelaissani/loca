@@ -101,6 +101,8 @@ class OccupantMiddelware extends ViewController {
                             this.loadList(() => {
                                 this.closeForm();
                             });
+                        } else {
+                            bootbox.alert({message: response.errors});
                         }
                     }
                 );

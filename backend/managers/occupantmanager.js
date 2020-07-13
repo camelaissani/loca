@@ -131,13 +131,10 @@ function update(req, res) {
                     itemToKeep = {
                         propertyId: item.propertyId,
                         property: propertyMap[item.propertyId],
-                        entryDate: item.entryDate,
-                        exitDate: item.exitDate
                     };
-                } else {
-                    itemToKeep.entryDate = item.entryDate;
-                    itemToKeep.exitDate = item.exitDate;
                 }
+                itemToKeep.entryDate = occupant.beginDate;
+                itemToKeep.exitDate = occupant.endDate;
                 return itemToKeep;
             });
 
