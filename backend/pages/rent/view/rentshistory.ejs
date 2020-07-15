@@ -23,7 +23,7 @@
 
 <script id="history-rent-row-template" type="text/x-handlebars-template">
     <tr id="{{_id}}" class="{{active}}" data-value="{{uid}}">
-        <td>{{formatMonthYear month=month year=year}}</td>
+        <td class="text-nowrap">{{formatMonthYear month=month year=year}}</td>
         <td class="text-right">{{formatMoney totalWithoutVatAmount}}</td>
         <td class="text-right">{{formatMoney vatAmount}}</td>
         <td>
@@ -34,17 +34,29 @@
         </td>
         <td class="text-right">{{formatMoney totalToPay}}</td>
         <td>
-            <div class="text-right">{{formatMoney payment emptyForZero=true}}</div>
-            {{#if paymentType}}
-                <div class="text-center">
-                    {{paymentType paymentType}}
-                    {{#if paymentReference}}
-                        {{i18next key='#' number=paymentReference}}
-                    {{/if}}
-                </div>
-            {{/if}}
-            {{#if paymentDate}}
-                <div class="text-center">{{i18next key='Paid date' date=paymentDate}}</div>
+            {{#if payment}}
+                <table class="table table-sm">
+                    <tbody>
+                        {{#each payments}}
+                            <tr class="small">
+                                <td>
+                                    {{#if reference}}
+                                        {{paymentType type}} {{i18next key='#' number=reference}} {{formatDate date}}
+                                    {{else}}
+                                        {{paymentType type}} {{formatDate date}}
+                                    {{/if}}
+                                </td>
+                                <td class="text-right">
+                                    {{formatMoney amount emptyForZero=true}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                        <tr>
+                            <td>{{i18next key='Total'}}</td>
+                            <td class="text-right"><b>{{formatMoney payment emptyForZero=true}}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
             {{/if}}
         </td>
     </tr>

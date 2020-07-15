@@ -66,7 +66,7 @@ module.exports = {
     },
 
     formatMonthYear(month, year) {
-        return moment.months()[parseInt(month, 10)-1] + ' ' + year;
+        return moment.monthsShort()[parseInt(month, 10)-1] + ' ' + year;
     },
 
     formatDate(text) {

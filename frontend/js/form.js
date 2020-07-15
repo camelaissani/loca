@@ -80,10 +80,10 @@ class Form {
                 }
             });
         };
-        //self.validator.resetForm();
+        this.validator.resetForm();
         this.$form[0].reset();
         this.$alert.hide();
-        this.$form.find('.has-error').removeClass('has-error');
+        this.$form.find('.has-error').removeClass('has-error text-danger');
         this.$form.find('.js-form-row:not(.js-master-form-row)').remove();
 
         this.beforeSetData(arguments);
@@ -217,10 +217,10 @@ class Form {
             ignore: 'hidden',
             rules: this.options.manifest,
             highlight: function (element/*, errorClass, validClass*/) {
-                $(element).closest('.form-group').addClass('has-error');
+                $(element).closest('.form-group').addClass('has-error text-danger');
             },
             success: function (element) {
-                $(element).closest('.form-group').removeClass('has-error');
+                $(element).closest('.form-group').removeClass('has-error text-danger');
                 $(element).closest('label.error').remove();
             },
             showErrors: function (/*errorMap, errorList*/) {
@@ -234,6 +234,9 @@ class Form {
                 }
                 this.defaultShowErrors();
                 $(self.options.domSelector + ' label.error').addClass('control-label');
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo($(element).closest('.form-group'));
             },
             submitHandler: function (form) {
                 if (self.$form.attr('action')) {

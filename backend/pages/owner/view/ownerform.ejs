@@ -10,7 +10,7 @@
         <div class="col-xs-12">
             <div class="form-group">
                 <label class="control-label"><%= t('Landloard') %></label>
-                <select id="isCompany" class="form-control uneditable-input" readonly="readonly" disabled>
+                <select id="isCompany" class="custom-select form-control uneditable-input" readonly="readonly" disabled>
                     <option value="false"><%= t('Individual') %></option>
                     <option value="true"><%= t('Company') %></option>
                 </select>
@@ -29,7 +29,10 @@
             </div>
             <div class="form-group js-company-fields">
                 <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
-                <input type="text" id="capital" class="form-control uneditable-input" readonly="readonly" disabled/>
+                <div class="input-group">
+                    <input type="text" id="capital" class="form-control uneditable-input" readonly="readonly" disabled/>
+                    <span class="input-group-addon"><%= t('__currency_symbol') %></span>
+                </div>
             </div>
             <div class="form-group js-company-fields">
                 <label class="control-label" for="vatNumber"><%= t('VAT Identification number')%></label>
@@ -86,13 +89,13 @@
         <div class="col-xs-6">
             <div class="form-group">
                 <label class="control-label"><%= t('Phone number') %></label>
-                <input type="tel" id="phone1" class="form-control uneditable-input" readonly="readonly" disabled>
+                <input type="text" id="phone1" class="form-control uneditable-input" readonly="readonly" disabled>
             </div>
         </div>
         <div class="col-xs-6">
             <div class="form-group">
                 <label class="control-label"><%= t('Phone number') %></label>
-                <input type="tel" id="phone2" class="form-control uneditable-input" readonly="readonly" disabled>
+                <input type="text" id="phone2" class="form-control uneditable-input" readonly="readonly" disabled>
             </div>
         </div>
         <div class="col-xs-12">

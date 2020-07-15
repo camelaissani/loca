@@ -9,7 +9,7 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <label><%= t('Type') %></label>
-                    <select id="type" class="form-control">
+                    <select id="type" class="custom-select form-control">
                         <option value="office"><%= t('Room') %></option>
                         <option value="parking"><%= t('Car park') %></option>
                         <option value="letterbox"><%= t('Letterbox') %></option>
@@ -69,11 +69,17 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <label><%= t('Monthly rent amount without CAM without VAT') %></label>
-                    <input type="text" id="price" class="form-control"/>
+                    <div class="input-group">
+						<input type="text" id="price" class="form-control"/>
+						<span class="input-group-addon"><%= t('__currency_symbol') %></span>
+					</div>
                 </div>
                 <div class="property-no-expense form-group">
                     <label><%= t('Monthly CAM amount without VAT') %></label>
-                    <input type="text" id="expense" class="form-control"/>
+                    <div class="input-group">
+						<input type="text" id="expense" class="form-control"/>
+						<span class="input-group-addon"><%= t('__currency_symbol') %></span>
+					</div>
                 </div>
             </div>
         </div>

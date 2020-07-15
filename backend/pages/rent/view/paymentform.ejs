@@ -15,43 +15,51 @@
 		<div class="col-xs-12">
 			<label><%= t('Indicate the amount, the type, and the date of payment') %></label>
 		</div>
+	</div>
+	<div id="payments" class="js-form-rows">
+		<div class="row js-form-row js-master-form-row">
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="control-label" for="paymentDate_0"><%= t('Date') %></label>
+					<input type="text" class="datepicker form-control" id="paymentDate_0" />
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="control-label" for="paymentAmount_0"><%= t('Amount') %></label>
+					<div class="input-group">
+						<input type="text" id="paymentAmount_0" class="form-control text-right" />
+						<span class="input-group-addon"><%= t('__currency_symbol') %></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="control-label" for="paymentType_0"><%= t('Type') %></label>
+					<select id="paymentType_0" class="custom-select form-control">
+						<option value="cheque"><%= t('cheque') %></option>
+						<option value="cash"><%= t('cash') %></option>
+						<option value="levy"><%= t('levy') %></option>
+						<option value="transfer"><%= t('transfer') %></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="form-group">
+					<label class="control-label" for="paymentReference_0"><%= t('Reference') %></label>
+					<input type="text" id="paymentReference_0" class="form-control" />
+				</div>
+			</div>
+			<div class="col-xs-12 clearfix">
+				<div class="pull-right js-btn-form-remove-row btn btn-sm">
+					<i class="fa fa-trash-o"></i> <%= t('Remove') %>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-xs-12">
-			<div class="row">
-				<div class="col-xs-6">
-					<div class="form-group">
-						<label class="control-label" for="payment"><%= t('Amount') %></label>
-						<div class="input-group">
-							<input type="text" id="payment" class="form-control text-right" />
-							<span class="input-group-addon"><%= t('__currency_symbol') %></span>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6">
-					<div class="form-group">
-						<label class="control-label" for="paymentType"><%= t('Type') %></label>
-						<select id="paymentType" class="form-control">
-							<option value="cheque"><%= t('cheque') %></option>
-							<option value="cash"><%= t('cash') %></option>
-							<option value="levy"><%= t('levy') %></option>
-							<option value="transfer"><%= t('transfer') %></option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xs-6">
-					<div class="form-group">
-						<label class="control-label" for="paymentDate"><%= t('Date') %></label>
-						<input type="text" class="datepicker form-control" id="paymentDate" />
-					</div>
-				</div>
-				<div class="col-xs-6">
-					<div class="form-group">
-						<label class="control-label" for="paymentReference"><%= t('Reference') %></label>
-						<input type="text" id="paymentReference" class="form-control" />
-					</div>
-				</div>
-			</div>
+			<span id="btn-add-payment" class="btn btn-default"><i class="fa fa-plus"></i> <%= t('Add a payment') %></span>
 		</div>
 	</div>
 	<h2 class="page-header"><%= t('Additional cost') %></h2>
@@ -59,11 +67,18 @@
 		<div class="col-xs-12">
 			<label><%= t('Additional cost on current rent') %></label>
 		</div>
-		<div class="col-xs-12">
+	</div>
+	<div class="row">
+		<div class="col-xs-3">
 			<div class="form-group">
 				<label class="control-label" for="extracharge"><%= t('Amount') %></label>
-				<input type="text" id="extracharge" class="form-control" />
+				<div class="input-group">
+					<input type="text" id="extracharge" class="form-control" />
+					<span class="input-group-addon"><%= t('__currency_symbol') %></span>
+				</div>
 			</div>
+		</div>
+		<div class="col-xs-9">
 			<div class="form-group">
 				<label class="control-label" for="noteextracharge"><%= t('Reason of additional cost') %></label>
 				<input type="text" id="noteextracharge" class="form-control" />
@@ -75,11 +90,18 @@
 		<div class="col-xs-12">
 			<label><%= t('Discount on current rent') %></label>
 		</div>
-		<div class="col-xs-12">
+	</div>
+	<div class="row">
+		<div class="col-xs-3">
 			<div class="form-group">
 				<label class="control-label" for="promo"><%= t('Amount') %></label>
-				<input type="text" id="promo" class="form-control" />
+				<div class="input-group">
+					<input type="text" id="promo" class="form-control" />
+					<span class="input-group-addon"><%= t('__currency_symbol') %></span>
+				</div>
 			</div>
+		</div>
+		<div class="col-xs-9">
 			<div class="form-group">
 				<label class="control-label" for="notepromo"><%= t('Reason for reduction') %></label>
 				<input type="text" id="notepromo" class="form-control" />
@@ -93,7 +115,6 @@
 		</div>
 		<div class="col-xs-12">
 			<div class="form-group">
-				<label class="control-label" for="description"><%= t('Comments') %></label>
 				<textarea type="text" class="form-control" id="description" rows="4" /></textarea>
 			</div>
 		</div>

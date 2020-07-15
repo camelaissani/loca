@@ -301,49 +301,49 @@ class OccupantForm extends Form {
     onBind() {
         const that = this;
         this.templatePropertySelector =  Handlebars.compile($(domSelector + ' #occupant-property-selector-template').html());
-        $(domSelector + ' #isCompany').change(function() {
+        $(domSelector + ' #isCompany').off('change').change(function() {
             that._companyChanged($(this));
         });
 
-        $(domSelector + ' #contract').change(function() {
+        $(domSelector + ' #contract').off('change').change(function() {
             that._contractChanged($(this));
         });
 
-        $(domSelector + ' #beginDate').change(function() {
+        $(domSelector + ' #beginDate').off('change').change(function() {
             that._contractBeginDateChanged($(this));
         });
 
-        $(domSelector + ' #isVat').change(function() {
+        $(domSelector + ' #isVat').off('change').change(function() {
             that._vatChanged($(this));
             that._computeRent();
         });
 
-        $(domSelector + ' #vatRatio').keyup(function() {
+        $(domSelector + ' #vatRatio').off('keyup').keyup(function() {
             that._computeRent();
         });
 
-        $(domSelector + ' .available-properties').change(function() {
+        $(domSelector + ' .available-properties').off('change').change(function() {
             that._propertyChanged();
             that._computeRent();
         });
 
-        $(domSelector + ' #discount').keyup(function() {
+        $(domSelector + ' #discount').off('keyup').keyup(function() {
             that._computeRent();
         });
 
-        $(domSelector + ' #guaranty').keyup(function() {
+        $(domSelector + ' #guaranty').off('keyup').keyup(function() {
             that._computeRent();
         });
 
         // Dynamic contact rows
-        $(domSelector + ' #btn-add-contact').click(() => {
+        $(domSelector + ' #btn-add-contact').off('click').click(() => {
             this.addContactRow();
             this.formHasBeenUpdated();
             return false;
         });
 
         // Dynamic property rows
-        $(domSelector + ' #btn-add-property').click(() => {
+        $(domSelector + ' #btn-add-property').off('click').click(() => {
             this.addPropertyRow();
             this._propertyChanged();
             this._computeRent();
@@ -352,7 +352,7 @@ class OccupantForm extends Form {
         });
 
         // Remove dynamic rows
-        $(domSelector + ' .js-btn-form-remove-row').click(function() {
+        $(domSelector + ' .js-btn-form-remove-row').off('click').click(function() {
             var $row = $(this).parents('.js-form-row');
             var selectPropertyId = $row.find('select.available-properties').attr('id');
             if (selectPropertyId) {

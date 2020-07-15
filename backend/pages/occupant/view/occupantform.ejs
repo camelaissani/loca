@@ -28,7 +28,7 @@
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label class="control-label"><%= t('Tenant') %></label>
-                        <select id="isCompany" class="form-control">
+                        <select id="isCompany" class="custom-select form-control">
                             <option value="false"><%= t('Individual') %></option>
                             <option value="true"><%= t('Company') %></option>
                         </select>
@@ -59,7 +59,10 @@
                 <div class="col-xs-12">
                     <div class="form-group js-company-fields">
                         <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
-                        <input type="text" id="capital" class="form-control"/>
+                        <div class="input-group">
+                            <input type="text" id="capital" class="form-control"/>
+                            <span class="input-group-addon"><%= t('__currency_symbol') %></span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-12">
@@ -82,7 +85,7 @@
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label class="control-label"><%= t('Contract') %></label>
-                        <select id='contract' class="form-control">
+                        <select id='contract' class="custom-select form-control">
                             <option value="residency"><%= t('Residence lease contract 9 years')%></option>
                             <option value="369"><%= t('Business lease contract 3,6,9 years') %></option>
                             <option value="custom"><%= t('Short business lease contract') %></option>
@@ -104,7 +107,10 @@
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label class="control-label"><%= t('Deposit amount') %></label>
-                        <input type="number" id="guaranty" min="0" class="form-control">
+                        <div class="input-group">
+						    <input type="text" id="guaranty" min="0" class="form-control">
+						    <span class="input-group-addon"><%= t('__currency_symbol') %></span>
+					    </div>
                     </div>
                 </div>
             </div>
@@ -128,7 +134,7 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label class="control-label"><%= t('Amount of deposit refund') %></label>
-                            <input type="number" id="guarantyPayback" min="0" class="form-control">
+                            <input type="text" id="guarantyPayback" min="0" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -147,7 +153,7 @@
                     <div class="col-xs-12">
                        <div class="form-group">
                             <label class="control-label"><%= t('Property') %></label>
-                            <select id="propertyId_0" class="available-properties js-form-field-not-editable form-control"></select>
+                            <select id="propertyId_0" class="custom-select available-properties js-form-field-not-editable form-control"></select>
                        </div>
                     </div>
                     <div class="col-xs-12 clearfix">
@@ -169,19 +175,19 @@
         <div class="col-xs-12">
             <div id="contacts" class="js-form-rows">
                 <div class="row js-form-row js-master-form-row">
-                    <div class="col-xs-12">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label"><%= t('First and last name') %></label>
                             <input type="text" id="contact_0" class="form-control">
                         </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label"><%= t('Phone number') %></label>
-                            <input type="tel" id="phone_0" class="form-control">
+                            <input type="text" id="phone_0" class="form-control">
                         </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
                         <div class="form-group">
                             <label class="control-label"><%= t('E-mail') %></label>
                             <input type="email" id="email_0" class="form-control">
@@ -214,7 +220,7 @@
                 <div class="col-xs-4">
                     <div class="form-group">
                         <label class="control-label"><%= t('Subject to VAT') %></label>
-                        <select id='isVat' class="js-form-field-not-editable form-control" >
+                        <select id='isVat' class="custom-select js-form-field-not-editable form-control" >
                             <option value="true"><%= t('Yes') %></option>
                             <option value="false"><%= t('No') %></option>
                         </select>
@@ -223,7 +229,7 @@
                 <div class="col-xs-8 js-occupant-form-vatratio">
                     <div class="form-group">
                         <label class="control-label"><%= t('VAT ratio in %') %></label>
-                        <input type="number" min="0" max="100" id="vatRatio" class="js-form-field-not-editable form-control">
+                        <input type="text" min="0" max="100" id="vatRatio" class="js-form-field-not-editable form-control">
                     </div>
                 </div>
                 <div class="col-xs-12">
@@ -261,7 +267,10 @@
         <div class="col-xs-12">
             <div class="form-group">
                 <label class="control-label"><%= t('Amount without VAT') %></label>
-                <input type="number" id="discount" min="0" class="form-control">
+                <div class="input-group">
+					<input type="text" id="discount" min="0" class="form-control">
+					<span class="input-group-addon"><%= t('__currency_symbol') %></span>
+				</div>
             </div>
         </div>
     </div>

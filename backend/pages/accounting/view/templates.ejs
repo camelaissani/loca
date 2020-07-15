@@ -41,17 +41,6 @@
                     <a href="#" class="js-user-action" data-id="invoice-link" data-occupant-id="{{occupantId}}" data-year="{{year}}" data-month="{{month}}">
                         {{formatMoney payment emptyForZero=true}}
                     </a>
-                    <small>
-                    {{#if paymentType}}
-                        <br>{{paymentType paymentType}}
-                        {{#if paymentReference}}
-                            <br>{{i18next key='#' number=paymentReference}}
-                        {{/if}}
-                    {{/if}}
-                    {{#if paymentDate}}
-                        <br>{{formatDate paymentDate}}
-                    {{/if}}
-                    </small>
                 {{/if}}
             </td>
         {{/if}}

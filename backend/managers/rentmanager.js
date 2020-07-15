@@ -61,14 +61,6 @@ const update = (req, res) => {
         currentDate = moment(`${req.body.month}/${req.body.year}`, 'MM/YYYY');
     }
 
-    if (!paymentData.payment || paymentData.payment <= 0) {
-        paymentData.payment = 0;
-        paymentData.reference = null;
-        paymentData.paymentReference = null;
-        paymentData.paymentDate = null;
-        paymentData.paymentType = null;
-    }
-
     if (!paymentData.promo && paymentData.promo <= 0) {
         paymentData.promo = 0;
         paymentData.notepromo = null;
@@ -100,13 +92,17 @@ const update = (req, res) => {
             discounts: []
         };
         if (paymentData) {
-            settlements.payments.push({
-                date: paymentData.paymentDate || '',
-                amount: paymentData.payment || 0,
-                type: paymentData.paymentType || '',
-                reference: paymentData.paymentReference || '',
-                description: paymentData.description || ''
-            });
+            if (paymentData.payments && paymentData.payments.length) {
+                settlements.payments = paymentData.payments
+                    .filter(({ amount }) => amount && Number(amount) > 0)
+                    .map(payment => ({
+                        date: payment.date || '',
+                        amount: Number(payment.amount),
+                        type: payment.type || '',
+                        reference: payment.reference || '',
+                        description: payment.description || ''
+                    }));
+            }
 
             if (paymentData.promo) {
                 settlements.discounts.push({

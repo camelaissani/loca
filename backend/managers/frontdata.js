@@ -6,12 +6,13 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
     const rent = JSON.parse(JSON.stringify(inputRent));
     const rentMoment = moment(String(rent.term), 'YYYYMMDDHH');
 
-    const rentToReturn = {
+    let rentToReturn = {
         month: rent.month,
         year: rent.year,
         balance: rent.total.balance,
         newBalance:  rent.total.payment - rent.total.grandTotal,
         payment: rent.total.payment || 0,
+        payments: rent.payments,
         discount: rent.total.discount,
         totalAmount: rent.total.grandTotal,
         totalWithoutBalanceAmount: rent.total.grandTotal - rent.total.balance,
@@ -20,24 +21,6 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
         countMonthNotPaid: 0,
         paymentStatus: []
     };
-
-    // Last payment wins :(
-    // Currently the UI support only one payment
-    Object.assign(
-        rentToReturn,
-        rent.payments
-            .reduce((acc, payment) => {
-                return {
-                    paymentType: payment.type,
-                    paymentReference: payment.reference,
-                    paymentDate: payment.date,
-                };
-            }, {
-                paymentType: '',
-                paymentReference: '',
-                paymentDate: ''
-            })
-    );
 
     Object.assign(
         rentToReturn,
