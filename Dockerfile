@@ -7,7 +7,15 @@ RUN apt-get update -qq && \
     apt-get install -qqy mongodb-org-tools
 
 WORKDIR /usr/app
-COPY . .
+COPY backend backend
+COPY bkp/demodb bkp/demodb
+COPY config config
+COPY frontend frontend
+COPY scripts scripts
+COPY LICENSE .
+COPY package.json .
+COPY package-lock.json .
+COPY server.js .
 
 RUN npm set progress=false && \
     npm config set depth 0 && \
