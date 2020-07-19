@@ -37,5 +37,6 @@ module.exports = function(contract, rentDate, previousRent, settlements, rent) {
             });
         }
     });
+    rent.description = settlements.description;
     return rent;
 };

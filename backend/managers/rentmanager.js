@@ -89,7 +89,8 @@ const update = (req, res) => {
         const settlements = {
             payments: [],
             debts: [],
-            discounts: []
+            discounts: [],
+            description: ''
         };
         if (paymentData) {
             if (paymentData.payments && paymentData.payments.length) {
@@ -117,6 +118,10 @@ const update = (req, res) => {
                     description: paymentData.noteextracharge || '',
                     amount: paymentData.extracharge * (contract.vatRate ? (1 / (1 + contract.vatRate)) : 1)
                 });
+            }
+
+            if (paymentData.description) {
+                settlements.description = paymentData.description;
             }
         }
 

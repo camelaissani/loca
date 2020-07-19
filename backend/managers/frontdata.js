@@ -11,6 +11,7 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
         year: rent.year,
         balance: rent.total.balance,
         newBalance:  rent.total.payment - rent.total.grandTotal,
+        hasMultiplePayments: !!(rent.payments && rent.payments.length > 1),
         payment: rent.total.payment || 0,
         payments: rent.payments,
         discount: rent.total.discount,
