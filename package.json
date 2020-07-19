@@ -61,7 +61,7 @@
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
     "babel-eslint": "10.1.0",
-    "browser-sync": "2.26.7",
+    "browser-sync": "^2.26.10",
     "eslint": "6.8.0",
     "fs-extra": "9.0.0",
     "imagemin": "6.1.0",
