@@ -35,28 +35,49 @@
         <td class="text-right">{{formatMoney totalToPay}}</td>
         <td>
             {{#if payment}}
-                <table class="table table-sm">
-                    <tbody>
-                        {{#each payments}}
-                            <tr class="small">
-                                <td>
-                                    {{#if reference}}
-                                        {{paymentType type}} {{i18next key='#' number=reference}} {{formatDate date}}
-                                    {{else}}
-                                        {{paymentType type}} {{formatDate date}}
-                                    {{/if}}
-                                </td>
-                                <td class="text-right">
-                                    {{formatMoney amount emptyForZero=true}}
-                                </td>
+                {{#if hasMultiplePayments}}
+                    <table class="table">
+                        <tbody>
+                            {{#each payments}}
+                                <tr class="small">
+                                    <td>
+                                        {{#if reference}}
+                                            {{paymentType type}} {{i18next key='#' number=reference}} {{formatDate date}}
+                                        {{else}}
+                                            {{paymentType type}} {{formatDate date}}
+                                        {{/if}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{formatMoney amount emptyForZero=true}}
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            <tr>
+                                <td>{{i18next key='Total'}}</td>
+                                <td class="text-right">{{formatMoney payment emptyForZero=true}}</td>
                             </tr>
-                        {{/each}}
-                        <tr>
-                            <td>{{i18next key='Total'}}</td>
-                            <td class="text-right"><b>{{formatMoney payment emptyForZero=true}}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                {{else}}
+                    <table class="table table-borderless">
+                        <tbody>
+                            {{#each payments}}
+                                <tr>
+                                    <td>
+                                        {{#if reference}}
+                                            {{paymentType type}} {{i18next key='#' number=reference}} {{formatDate date}}
+                                        {{else}}
+                                            {{paymentType type}} {{formatDate date}}
+                                        {{/if}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{formatMoney amount emptyForZero=true}}
+                                    </td>
+                                </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                {{/if}}
             {{/if}}
         </td>
     </tr>
