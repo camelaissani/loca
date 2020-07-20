@@ -80,7 +80,9 @@ class Form {
                 }
             });
         };
-        this.validator.resetForm();
+        try {
+            this.validator.resetForm();
+        } catch (e) { }
         this.$form[0].reset();
         this.$alert.hide();
         this.$form.find('.has-error').removeClass('has-error text-danger');
@@ -235,7 +237,7 @@ class Form {
                 this.defaultShowErrors();
                 $(self.options.domSelector + ' label.error').addClass('control-label');
             },
-            errorPlacement: function(error, element) {
+            errorPlacement: function (error, element) {
                 error.appendTo($(element).closest('.form-group'));
             },
             submitHandler: function (form) {
