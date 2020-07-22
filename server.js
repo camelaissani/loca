@@ -55,6 +55,7 @@ i18next.use(LanguageDetector)
 
 // Init express
 const app = express();
+app.set('trust proxy', true);
 app.use(bodyParser.urlencoded({
     extended: true
 }));
