@@ -36,18 +36,20 @@ const _sendEmail = async (locale, message) => {
         logger.error(`POST ${config.EMAILER_URL} failed`);
         logger.error(`data sent: ${JSON.stringify(postData)}`);
         logger.error(error.data);
+        let result = {
+            ...message,
+            error
+        };
         if (config.demoMode) {
             logger.info('email status fallback workflow activated in demo mode');
-            const result = {
+            result = {
                 ...message,
                 error: {
                     message: 'demo mode, mail cannot be sent'
                 }
             };
-            return [ result ];
-        } else {
-            throw error;
         }
+        return [ result ];
     }
 };
 
