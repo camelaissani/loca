@@ -17,8 +17,6 @@ COPY package.json .
 COPY package-lock.json .
 COPY server.js .
 
-COPY deployment/dokku/nginx.conf.sigil .
-
 RUN npm set progress=false && \
     npm config set depth 0 && \
     npm install forever -g --silent  && \
