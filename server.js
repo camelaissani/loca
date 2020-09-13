@@ -18,6 +18,7 @@ const Intl = require('intl');
 const express = require('express');
 const favicon = require('serve-favicon');
 const methodOverride = require('method-override');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
@@ -56,6 +57,7 @@ i18next.use(LanguageDetector)
 // Init express
 const app = express();
 app.set('trust proxy', true);
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
     extended: true
 }));

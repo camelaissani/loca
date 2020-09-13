@@ -29,6 +29,7 @@ module.exports = function() {
     // Session routes
     ////////////////////////////////////////////////////////////////////////////////
     const router = express.Router();
+    router.use(loginManager.updateRequestWithUserFromRefreshToken);
     router.use(loginManager.updateRequestWithRealmsOfUser);
 
     if (config.subscription) {

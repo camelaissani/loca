@@ -3,6 +3,7 @@
 const bcrypt = require('bcryptjs');
 const logger = require('winston');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const config = require('../../config');
 const accountModel = require('../models/account');
 const realmModel = require('../models/realm');
@@ -215,18 +216,30 @@ const loginManager = {
         });
     },
 
+    updateRequestWithUserFromRefreshToken(req, res, next) {
+        const refreshToken = req.cookies.refreshToken;
+
+        if (refreshToken) {
+            try {
+                const decoded = jwt.verify(refreshToken, config.REFRESH_TOKEN_SECRET);
+                req.user = decoded.account;
+            } catch (err) {
+                logger.warn(err);
+            }
+        }
+        next();
+    },
+
     updateRequestWithRealmsOfUser(req, res, next) {
         if (!req.user) {
             delete req.realm;
             delete req.realms;
-            next();
-            return;
+            return next();
         }
 
         realmModel.findByEmail(req.user.email, (err, realms) => {
             if (err) {
-                next(err);
-                return;
+                return next(err);
             }
             if (realms) {
                 req.realms = realms;
