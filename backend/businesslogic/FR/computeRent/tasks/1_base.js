@@ -37,6 +37,8 @@ module.exports = function(contract, rentDate, previousRent, settlements, rent) {
             });
         }
     });
-    rent.description = settlements.description;
+    if (settlements) {
+        rent.description = settlements.description || '';
+    }
     return rent;
 };
