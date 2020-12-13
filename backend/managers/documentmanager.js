@@ -1,14 +1,35 @@
 'use strict';
 
 const moment = require('moment');
+const config = require('../../config');
 const FD = require('./frontdata');
 const occupantModel = require('../models/occupant');
 const documentModel = require('../models/document');
+const axios = require('axios');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Exported functions
 ////////////////////////////////////////////////////////////////////////////////
-function update(req, res) {
+const get = async (req, res) => {
+    const { language } = req;
+    const { document, id, term } = req.params;
+    let url = `${config.PDFGENERATOR_URL}/${document}/${id}`;
+    if (term) {
+        url = `${url}/${term}`;
+    }
+
+    const response = await axios.get(url, {
+        responseType: 'stream',
+        headers: {
+            'Application-Locale': language
+        }
+    });
+
+    response.data.pipe(res);
+};
+
+
+const update = (req, res) => {
     const realm = req.realm;
     const occupant = documentModel.schema.filter(req.body);
 
@@ -44,8 +65,9 @@ function update(req, res) {
             res.json(FD.toOccupantData(dbOccupant));
         });
     });
-}
+};
 
 module.exports = {
+    get,
     update
 };

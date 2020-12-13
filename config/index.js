@@ -30,6 +30,7 @@ module.exports = {
     demoMode,
     database: process.env.MONGO_URL || process.env.LOCA_DBNAME || process.env.BASE_DB_URL || 'mongodb://localhost/demodb',
     EMAILER_URL: process.env.EMAILER_URL || 'http://localhost:8083/emailer',
+    PDFGENERATOR_URL: process.env.PDFGENERATOR_URL || 'http://localhost:8082/pdfgenerator',
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET || 'access_token_secret',
     REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET || 'refresh_token_secret',
 };

@@ -9,6 +9,7 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
     let rentToReturn = {
         month: rent.month,
         year: rent.year,
+        term: rent.term,
         balance: rent.total.balance,
         newBalance:  rent.total.payment - rent.total.grandTotal,
         hasMultiplePayments: !!(rent.payments && rent.payments.length > 1),
@@ -86,7 +87,7 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
         if (rentToReturn.totalAmount <= 0 || rentToReturn.newBalance >= 0) {
             rentToReturn.status = 'paid';
         } else if (rentToReturn.payment > 0) {
-            rentToReturn.status = 'partialypaid';
+            rentToReturn.status = 'partiallypaid';
         } else {
             rentToReturn.status = 'notpaid';
         }
@@ -98,34 +99,39 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
         if (emailStatus) {
             const computedEmailStatus = {
                 status: {
-                    rentcall: !!((emailStatus.rentcall && emailStatus.rentcall.length) || (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length)),
+                    rentcall: !!(emailStatus.rentcall && emailStatus.rentcall.length),
+                    rentcall_reminder: !!(emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length),
+                    rentcall_last_reminder: !!(emailStatus.rentcall_last_reminder && emailStatus.rentcall_last_reminder.length),
                     invoice: !!(emailStatus.invoice && emailStatus.invoice.length)
                 },
                 last: {
                     rentcall: (emailStatus.rentcall && emailStatus.rentcall.length && emailStatus.rentcall[0]) || undefined,
+                    rentcall_reminder: (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length && emailStatus.rentcall_reminder[0]) || undefined,
+                    rentcall_last_reminder: (emailStatus.rentcall_last_reminder && emailStatus.rentcall_last_reminder.length && emailStatus.rentcall_last_reminder[0]) || undefined,
                     invoice: (emailStatus.invoice && emailStatus.invoice.length && emailStatus.invoice[0]) || undefined
                 },
                 count: {
                     rentcall: (emailStatus.rentcall && emailStatus.rentcall.length) || 0,
                     rentcall_reminder: (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length) || 0,
+                    rentcall_last_reminder: (emailStatus.rentcall_last_reminder && emailStatus.rentcall_last_reminder.length) || 0,
                     get allRentcall() {
-                        return this.rentcall + this.rentcall_reminder;
+                        return this.rentcall + this.rentcall_reminder + this.rentcall_last_reminder;
                     },
                     invoice: (emailStatus.invoice && emailStatus.invoice.length) || 0
                 },
                 ...emailStatus
             };
 
-            if (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length) {
-                const lastRentCallReminder = emailStatus.rentcall_reminder[0];
-                if (computedEmailStatus.last.rentcall) {
-                    if (moment(computedEmailStatus.last.rentcall.sentDate).isBefore(moment(lastRentCallReminder.sentDate))){
-                        computedEmailStatus.last.rentcall = lastRentCallReminder;
-                    }
-                } else {
-                    computedEmailStatus.last.rentcall = lastRentCallReminder;
-                }
-            }
+            // if (emailStatus.rentcall_reminder && emailStatus.rentcall_reminder.length) {
+            //     const lastRentCallReminder = emailStatus.rentcall_reminder[0];
+            //     if (computedEmailStatus.last.rentcall) {
+            //         if (moment(computedEmailStatus.last.rentcall.sentDate).isBefore(moment(lastRentCallReminder.sentDate))){
+            //             computedEmailStatus.last.rentcall = lastRentCallReminder;
+            //         }
+            //     } else {
+            //         computedEmailStatus.last.rentcall = lastRentCallReminder;
+            //     }
+            // }
 
             Object.assign(rentToReturn, {emailStatus: computedEmailStatus});
         }
@@ -174,7 +180,7 @@ function toRentData(inputRent, inputOccupant, emailStatus) {
                 const term = moment(String(currentRent.term), 'YYYYMMDDHH');
                 rentToReturn.paymentStatus.push({
                     month: term.month() + 1,
-                    status: payment > 0 ? 'partialypaid' : 'notpaid'
+                    status: payment > 0 ? 'partiallypaid' : 'notpaid'
                 });
                 rentToReturn.countMonthNotPaid++;
             });
@@ -289,6 +295,18 @@ function toOccupantData(inputOccupant) {
             discount: occupant.discount ? Number(occupant.discount) : 0,
         }
     );
+
+    occupant.contactEmails = occupant.contacts.reduce((acc, {email}) => {
+        if (email) {
+            return [
+                ...acc,
+                email.toLowerCase()
+            ];
+        }
+        return acc;
+    }, []);
+
+    occupant.hasContactEmails = occupant.contactEmails.length > 0;
 
     // Compute if contract is completed
     occupant.status = 'inprogress';

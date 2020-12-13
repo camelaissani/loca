@@ -1,14 +1,14 @@
 const express = require('express');
 const logger = require('winston');
-const api = require('./api');
+const apiV1 = require('./api');
+const apiV2 = require('./apiv2');
 const auth = require('./auth');
 const page = require('./page');
 const pages = require('../pages');
 
 function _shouldBeLogged(req, res, next) {
     if (!req.session || !req.user) {
-        res.sendStatus(401);
-        return;
+        return res.sendStatus(401);
     }
     next();
 }
@@ -16,8 +16,7 @@ function _shouldBeLogged(req, res, next) {
 function _shouldBeLoggedThenRedirect(req, res, next) {
     if (!req.session || !req.user) {
         logger.info('redirect to /signin');
-        res.redirect('/signin');
-        return;
+        return res.redirect('/signin');
     }
     next();
 }
@@ -26,15 +25,13 @@ function _shouldNotBeLoggedThenRedirect(req, res, next) {
     if (req.session && req.user) {
         // TODO remove harcoded page dashboard
         logger.info('redirect to /dashboard');
-        res.redirect('/dashboard');
-        return;
+        return res.redirect('/dashboard');
     }
     next();
 }
 
 module.exports = [
     // control route access
-    () => express.Router().use(/^\/api/, _shouldBeLogged),
     () => pages.restrictedList.reduce((router, pageDesc) => {
         const path = `/${pageDesc.id}${pageDesc.params || ''}`;
         router.use(path, _shouldBeLoggedThenRedirect);
@@ -56,6 +53,7 @@ module.exports = [
     () => express.Router().use('/signout', _shouldBeLogged),
     // add routes
     auth,
-    api,
+    apiV2,
+    apiV1,
     page
 ];

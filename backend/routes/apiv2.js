@@ -1,7 +1,9 @@
-'use strict';
-
 const express = require('express');
-const loginManager = require('../managers/loginmanager');
+const jwt = require('jsonwebtoken');
+const logger = require('winston');
+const config = require('../../config');
+const realmModel = require('../models/realm');
+const realmManager = require('../managers/realmmanager');
 const rentManager = require('../managers/rentmanager');
 const occupantManager = require('../managers/occupantmanager');
 const documentManager = require('../managers/documentmanager');
@@ -14,15 +16,60 @@ const emailManager = require('../managers/emailmanager');
 module.exports = function() {
     const router = express.Router();
 
+    // protect the api access by checking the access token
     router.use((req, res, next) => {
-        if (!req.session || !req.user) {
-            return res.sendStatus(401);
+        if (!req.headers.authorization) {
+            return res.sendStatus(403);
         }
+
+        const accessToken = req.headers.authorization.split(' ')[1];
+        if (!accessToken) {
+            return res.sendStatus(403);
+        }
+
+        try {
+            const decoded = jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET);
+            req.user = decoded.account;
+        } catch (err) {
+            logger.warn(err);
+            return res.sendStatus(403);
+        }
+
         next();
     });
 
+    // update req with the user organizations
+    router.use((req, res, next) => {
+        if (req.path !== '/realms' && !req.headers.organizationid) {
+            return res.sendStatus(404);
+        }
+
+        realmModel.findByEmail(req.user.email, (err, realms = []) => {
+            if (err) {
+                return next(err);
+            }
+            if (realms.length) {
+                req.realms = realms;
+                const realmId = req.headers.organizationid;
+                if (realmId) {
+                    req.realm = req.realms.find(realm =>
+                        realm._id.toString() === realmId
+                    );
+                    if (req.path !== '/realms' && !req.realm) {
+                        return res.sendStatus(404);
+                    }
+                }
+            } else {
+                delete req.realm;
+                delete req.realms;
+            }
+            next();
+        });
+    });
+
     const realmsRouter = express.Router();
-    realmsRouter.get('/:id', loginManager.selectRealm);
+    realmsRouter.get('/', realmManager.all);
+    realmsRouter.get('/:id', realmManager.one);
     router.use('/realms', realmsRouter);
 
     const occupantsRouter = express.Router();
@@ -34,6 +81,7 @@ module.exports = function() {
     router.use('/occupants', occupantsRouter);
 
     const documentsRouter = express.Router();
+    documentsRouter.get('/:document/:id/:term', documentManager.get);
     documentsRouter.patch('/:id', documentManager.update);
     router.use('/documents', documentsRouter);
 
@@ -42,8 +90,8 @@ module.exports = function() {
     router.use('/notifications', notificationsRouter);
 
     const rentsRouter = express.Router();
-    rentsRouter.patch('/:id', rentManager.update);
-    rentsRouter.get('/occupant/:id', rentManager.rentsOfOccupant);
+    rentsRouter.patch('/payment/:id', rentManager.update);
+    rentsRouter.get('/tenant/:id', rentManager.rentsOfOccupant);
     rentsRouter.get('/:year/:month', rentManager.all);
     rentsRouter.get('/overview', rentManager.overview);
     rentsRouter.get('/overview/:year/:month', rentManager.overview);
@@ -69,6 +117,6 @@ module.exports = function() {
     router.use('/emails', emailRouter);
 
     const apiRouter = express.Router();
-    apiRouter.use('/api', router);
+    apiRouter.use('/api/v2', router);
     return apiRouter;
 };
