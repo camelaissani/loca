@@ -4,7 +4,7 @@
     <% if (config.demoMode) { %>
         <a class="btn btn-success btn-lg" href="/signin"><%= t('Demonstration') %></a>
     <% } else { %>
-        <% if (!config.subscription) { %>
+        <% if (!config.signup) { %>
             <a class="btn btn-primary btn-lg" disabled><%= t('Free subscription') %></a>
         <% } else { %>
             <a class="btn btn-primary btn-lg js-nav-action" data-id="signup" href="#"><%= t('Free subscription') %></a>

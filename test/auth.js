@@ -7,7 +7,7 @@
 //     relativePath: '../../config',
 //     instance: {
 //         default: {
-//             subscription: true,
+//             signup: true,
 //             demomode: true
 //         }
 //     }

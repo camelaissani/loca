@@ -18,7 +18,7 @@ describe('api', () => {
     // TODO: move these tests in auth.js
     // describe('session', () => {
     //     it('POST   /api/signup', (done) => {
-    //         config.subscription = true;
+    //         config.signup = true;
     //         loginManager.signup = () => {};
     //         const mocked_signup = sinon.stub(loginManager, 'signup', (req, res) => {res.json({});});
     //         requester(apiRouter(), {httpMethod: 'post', uri: '/api/signup'})
@@ -28,7 +28,7 @@ describe('api', () => {
     //                 throw err;
     //             }
     //             assert(mocked_signup.calledOnce);
-    //             config.subscription = false;
+    //             config.signup = false;
     //             loginManager.signup.restore();
     //             delete loginManager.signup;
     //             done();

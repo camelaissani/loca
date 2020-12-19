@@ -32,7 +32,7 @@ module.exports = function() {
     router.use(loginManager.updateRequestWithUserFromRefreshToken);
     router.use(loginManager.updateRequestWithRealmsOfUser);
 
-    if (config.subscription) {
+    if (config.signup) {
         router.post('/signup', loginManager.signup);
         router.post('/signedup', (req, res) => {
             res.redirect('/signin');

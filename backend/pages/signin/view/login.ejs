@@ -6,7 +6,7 @@
     <form id="login-form" role="form" action="/signedin" method='post'>
         <div class="form-error"><i class="fa fa-exclamation-triangle"></i> <span class="js-form-error-message"></span></div>
 
-        <% if (config.subscription) { %>
+        <% if (config.signup) { %>
         <span class="help-block small text-right"><%= t('No account yet?') %> <a class="js-nav-action" data-id="signup" href="#"><%= t('Free subscription') %></a></span>
         <% } %>
 

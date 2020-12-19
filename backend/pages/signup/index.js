@@ -1,7 +1,7 @@
 const config = require('../../../config');
 
 module.exports = () => {
-    if (config.subscription) {
+    if (config.signup) {
         return {
             id:'signup',
             public: true

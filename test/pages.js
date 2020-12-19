@@ -24,7 +24,7 @@ describe('pages', () => {
     });
     describe('rendering', () => {
         it('GET  /', (done) => {
-            config.subscription = true;
+            config.signup = true;
             requester(pageRouter(), { httpMethod: 'get', uri: '/' }, viewEngine)
                 .expect(200)
                 .end((err) => {
@@ -42,7 +42,7 @@ describe('pages', () => {
         });
 
         it('GET  /signup', (done) => {
-            config.subscription = true;
+            config.signup = true;
             requester(pageRouter(), { httpMethod: 'get', uri: '/signup' }, viewEngine)
                 .expect(200)
                 .end((err) => {

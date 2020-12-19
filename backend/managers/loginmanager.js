@@ -262,7 +262,7 @@ const loginManager = {
     }
 };
 
-if (config.subscription) {
+if (config.signup) {
     loginManager.signup = function(req, res) {
         const email = req.param('email');
         const password = req.param('password');

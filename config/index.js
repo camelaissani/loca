@@ -13,7 +13,7 @@ const appHttpPort = process.env.LOCA_NODEJS_PORT || process.env.PORT || 8080;
 const configDir = process.env.LOCA_CONFIG_DIR || process.env.CONFIG_DIR || path.join(__dirname, '..', 'config');
 const demoMode = toBoolean(process.env.LOCA_DEMOMODE || process.env.DEMO_MODE || true);
 const restoreDatabase = toBoolean(process.env.RESTORE_DB || true);
-const subscription = toBoolean(process.env.LOCA_PRODUCTIVE || process.env.PRODUCTIVE || false);
+const signup = toBoolean(process.env.LOCA_PRODUCTIVE || process.env.SIGNUP || false);
 
 const website = require(path.join(configDir, 'website.json'));
 
@@ -25,7 +25,7 @@ module.exports = {
     configDir,
     businesslogic: 'FR',
     productive: process.env.NODE_ENV === 'production',
-    subscription,
+    signup,
     restoreDatabase,
     demoMode,
     database: process.env.MONGO_URL || process.env.LOCA_DBNAME || process.env.BASE_DB_URL || 'mongodb://localhost/demodb',
