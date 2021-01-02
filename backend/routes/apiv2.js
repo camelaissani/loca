@@ -70,6 +70,8 @@ module.exports = function() {
     const realmsRouter = express.Router();
     realmsRouter.get('/', realmManager.all);
     realmsRouter.get('/:id', realmManager.one);
+    realmsRouter.post('/', realmManager.add);
+    realmsRouter.patch('/:id', realmManager.update);
     router.use('/realms', realmsRouter);
 
     const occupantsRouter = express.Router();

@@ -40,7 +40,9 @@ class RealmModel extends Model {
             user9: String,
             user10: String,
             vatNumber: String,
-            zipCode: String
+            zipCode: String,
+            locale: String,
+            currency: String
         });
     }
 

@@ -17,7 +17,7 @@ const _sendEmail = async (locale, message) => {
     try {
         const response = await axios.post(config.EMAILER_URL, postData, {
             headers: {
-                'Application-Locale': locale
+                'Accept-Language': locale
             }
         });
 

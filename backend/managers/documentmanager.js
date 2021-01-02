@@ -21,7 +21,7 @@ const get = async (req, res) => {
     const response = await axios.get(url, {
         responseType: 'stream',
         headers: {
-            'Application-Locale': language
+            'Accept-Language': language
         }
     });
 
