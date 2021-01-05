@@ -20,7 +20,7 @@
     "mongorestore": "node scripts/mongorestore.js"
   },
   "dependencies": {
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "bcryptjs": "2.4.3",
     "body-parser": "1.19.0",
     "bootbox": "5.4.0",
