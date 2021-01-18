@@ -18,7 +18,13 @@ const _findAllOccupants = (realm, term) => {
             if (errors && errors.length > 0) {
                 return reject(errors);
             }
-            resolve(occupants);
+
+            resolve(occupants.sort((o1, o2) => {
+                const name1 = o1.isCompany ? o1.company : o1.name;
+                const name2 = o2.isCompany ? o2.company : o2.name;
+
+                return name1.localeCompare(name2);
+            }));
         });
     });
 };
