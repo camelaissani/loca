@@ -62,7 +62,7 @@
 <script id="view-rent-email-status-badges-template" type="text/x-handlebars-template">
     <ul class="list-inline">
         <li>
-            {{#if emailStatus.status.rentcall}}
+            {{#if emailStatus.status.rentcall }}
                 <span
                     class="label label-success"
                     data-toggle="tooltip"
@@ -71,7 +71,27 @@
                     <i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}} [{{emailStatus.count.allRentcall}}]
                 </span>
             {{else}}
-                <span class="label label-default"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}}</span>
+                {{#if emailStatus.status.rentcall_reminder }}
+                    <span
+                        class="label label-success"
+                        data-toggle="tooltip"
+                        data-placement="bottom"
+                        title="{{i18next key="Sent to" email=emailStatus.last.rentcall_reminder.sentTo datetime=emailStatus.last.rentcall_reminder.sentDate}}">
+                        <i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}} [{{emailStatus.count.allRentcall}}]
+                    </span>
+                {{else}}
+                    {{#if emailStatus.status.rentcall_last_reminder }}
+                        <span
+                            class="label label-success"
+                            data-toggle="tooltip"
+                            data-placement="bottom"
+                            title="{{i18next key="Sent to" email=emailStatus.last.rentcall_last_reminder.sentTo datetime=emailStatus.last.rentcall_last_reminder.sentDate}}">
+                            <i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}} [{{emailStatus.count.allRentcall}}]
+                        </span>
+                    {{else}}
+                        <span class="label label-default"><i class="fa fa-envelope-o"></i> {{i18next key="Rent notice"}}</span>
+                    {{/if}}
+                {{/if}}
             {{/if}}
         </li>
         <li>
