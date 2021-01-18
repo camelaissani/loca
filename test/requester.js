@@ -13,6 +13,12 @@ module.exports = function(router, {httpMethod, uri}, viewEngineStub) {
         app.set('views', path.join(__dirname, '..', 'backend', 'pages'));
         app.set('view engine', 'ejs');
     }
+    app.use((req, res, next) => {
+        // to bypass login
+        req.session = {};
+        req.user = {};
+        next();
+    });
     app.use(router);
 
     return request(app)[httpMethod](uri);
