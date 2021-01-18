@@ -17,10 +17,10 @@
 					<strong><u>ENTRE LES SOUSSIGNES</u></strong></p>
 				</p>
 				<p>
-					LA SOCIETE <%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
-					<% if (realm.street2 && realm.street2.length>0) { %>
-			        <%= realm.street2 %>
-			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">Bobigny sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+					LA SOCIETE <%= realm.companyInfo.name+' '+realm.companyInfo.legalStructure %>, au capital de <%=realm.companyInfo.capital%> EUR, ayant son siège social à <%=realm.addresses[0].city%>, <%= realm.addresses[0].street1 %>
+					<% if (realm.addresses[0].street2 && realm.addresses[0].street2.length>0) { %>
+			        <%= realm.addresses[0].street2 %>
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true"><%= realm.companyInfo.dos %> sous le No <%= realm.companyInfo.ein %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.companyInfo.legalRepresentative %>, <span contenteditable="true">gérant</span>.
 				</p>
 
 				<p>Ci-après dénommé « LE BAILLEUR »</p>
@@ -35,11 +35,11 @@
 					<br>au capital de <span contenteditable="true"><% if (typeof(occupant.capital)=='number') { %> <%=occupant.capital.toFixed(2)%> <% } else { %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% } %></span> EUR,
 					<br>ayant son siège social au :
 					<p>
-						<%= realm.street1 %>
-		            	<% if (realm.street2 && realm.street2.length>0) { %>
-		            	<br><%= realm.street2 %>
+						<%= realm.addresses[0].street1 %>
+		            	<% if (realm.addresses[0].street2 && realm.addresses[0].street2.length>0) { %>
+		            	<br><%= realm.addresses[0].street2 %>
 		            	<% } %>
-		            	<br><%= realm.zipCode %> <%= realm.city %>
+		            	<br><%= realm.addresses[0].zipCode %> <%= realm.addresses[0].city %>
 					</p>
 				</p>
 
@@ -57,16 +57,16 @@
 			<div class="items">
 				<p><strong>LESQUELLES ONT ETABLI ENSEMBLE LES CONVENTIONS DE BAIL, OBJET DES PRESENTES : IL A ETE ARRETE ET CONVENU CE QUI SUIT :</strong></p>
 				<p>
-					<%= realm.legalForm+' '+realm.company %> donne à bail au Preneur qui accepte, les locaux dont le plan est joint en annexe A, et dont la consistance, la désignation et la destination sont ci-après établies, tels qu'ils existent.
+					<%= realm.companyInfo.legalStructure+' '+realm.companyInfo.name %> donne à bail au Preneur qui accepte, les locaux dont le plan est joint en annexe A, et dont la consistance, la désignation et la destination sont ci-après établies, tels qu'ils existent.
 				</p>
 
 
 				<p><u>ARTICLE I- DESIGNATION DES LIEUX :</u></p>
 				<p>
-					Dans un immeuble situé à <%= realm.street1 %>
-					<% if (realm.street2 && realm.street2.length>0) { %>
-			        <%= realm.street2 %>
-			        <% } %> - <%=realm.zipCode%> <%=realm.city%>, un local à usage de bureau ou d’activité d'une superficie de <span contenteditable="true"><%= occupant.office.surface.toFixed(2) %></span> m².
+					Dans un immeuble situé à <%= realm.addresses[0].street1 %>
+					<% if (realm.addresses[0].street2 && realm.addresses[0].street2.length>0) { %>
+			        <%= realm.addresses[0].street2 %>
+			        <% } %> - <%=realm.addresses[0].zipCode%> <%=realm.addresses[0].city%>, un local à usage de bureau ou d’activité d'une superficie de <span contenteditable="true"><%= occupant.office.surface.toFixed(2) %></span> m².
 				</p>
 				<p>
 					Tels que lesdits locaux existent, s'étendent, se poursuivent et comportent et sans qu'il soit besoin d'en faire plus ample désignation à la demande du preneur qui déclare parfaitement les connaître pour les avoir vus et visités en vue des présentes.
@@ -260,10 +260,10 @@
 		<div class="next page contract">
 			<div class="items">
 				<p>
-					<br>Fait en deux exemplaires à <span contenteditable="true"><%= realm.city %></span>, le <span contenteditable="true"><%=today%></span>
+					<br>Fait en deux exemplaires à <span contenteditable="true"><%= realm.addresses[0].city %></span>, le <span contenteditable="true"><%=today%></span>
 				</p>
 				<p>
-					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
+					<%=realm.companyInfo.legalRepresentative%> gérant de <%= realm.companyInfo.name+' '+realm.companyInfo.legalStructure %>
 				</p>
 				<p>
 					<br>&nbsp;

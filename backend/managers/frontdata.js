@@ -248,23 +248,35 @@ function toPrintData(realm, doc, fromMonth, month, year, occupants) {
         }),
         config,
         document: doc,
-        realm: realm.manager ? realm : {
-            manager: '?',
-            company: '?',
-            legalForm: '?',
-            capital: 0,
-            rcs: '?',
-            vatNumber: '?',
-            street1: '?',
-            street2: '?',
-            zipCode: '?',
-            city: '?',
-            contact: '?',
-            phone1: '?',
-            phone2: '?',
-            email: '?',
-            bank: '?',
-            rib: '?'
+        realm: {
+            companyInfo: {
+                name: '?',
+                legalStructure: '?',
+                capital: '?',
+                ein: '?',
+                dos: '?',
+                vatNumber: '?',
+                legalRepresentative: '?'
+            },
+            addresses: [{
+                street1: '?',
+                street2: '?',
+                zipCode: '?',
+                city: '?',
+                state: '?',
+                country: '?'
+            }],
+            bankInfo: {
+                name: '?',
+                iban: '?'
+            },
+            contacts: [{
+                name: '?',
+                email: '?',
+                phone1: '?',
+                phone2: '?'
+            }],
+            ...realm
         }
     };
 

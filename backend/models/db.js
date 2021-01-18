@@ -56,20 +56,20 @@ module.exports = {
             return new Promise((resolve, reject) => {
                 logger.debug(`connecting database ${config.database}...`);
                 db = mongojs(config.database, collections);
-                db.listCollections(() => {}); // Run this command to force connection a this stage
-                db.on('connect', function() {
+                db.listCollections(() => { }); // Run this command to force connection a this stage
+                db.on('connect', function () {
                     logger.info(`connected to ${config.database}`);
-                    resolve();
+                    resolve(db);
                 });
 
-                db.on('error', function(err) {
+                db.on('error', function (err) {
                     logger.error(`cannot connect to ${config.database}`);
                     reject(err);
                 });
             });
         }
         logger.debug('database already connected');
-        return Promise.resolve();
+        return Promise.resolve(db);
     },
 
     exists() {
@@ -98,8 +98,8 @@ module.exports = {
         });
         logger.debug(`\tfilter is ${JSON.stringify(query)}`);
 
-        db[collection].find(query, function(err, dbItems) {
-            if (err || !dbItems || dbItems.length<0) {
+        db[collection].find(query, function (err, dbItems) {
+            if (err || !dbItems || dbItems.length < 0) {
                 if (err) {
                     logDBError(err);
                 }
@@ -112,12 +112,12 @@ module.exports = {
     },
 
     listWithFilter(realm, collection, filter, callback) {
-        logger.info(`find items in collection: ${collection}${realm && realm.length > 0 ? ' in realm: '+realm.name : ''}`);
+        logger.info(`find items in collection: ${collection}${realm && realm.length > 0 ? ' in realm: ' + realm.name : ''}`);
         const query = buildFilter(realm, filter);
         if (query) {
             logger.debug(`\tfilter is ${JSON.stringify(query)}`);
         }
-        db[collection].find(query, function(err, dbItems) {
+        db[collection].find(query, function (err, dbItems) {
             if (err) {
                 logDBError(err);
                 callback(['item has not been found in database']);
@@ -141,7 +141,7 @@ module.exports = {
             item.realmId = realm._id;
         }
         logger.debug('\titem is', item);
-        db[collection].save(item, function(err, saved) {
+        db[collection].save(item, function (err, saved) {
             if (err || !saved) {
                 if (err) {
                     logDBError(err);
@@ -156,16 +156,19 @@ module.exports = {
     },
 
     update(realm, collection, item, callback) {
-        logger.info(`update items in collection: ${collection}${realm && realm.length > 0 ? ' in realm: '+realm.name : ''}`);
+        logger.info(`update items in collection: ${collection}${realm && realm.length > 0 ? ' in realm: ' + realm.name : ''}`);
         const _id = item._id.toString();
         delete item._id;
-        const filter = buildFilter(null, {_id});
+        const filter = buildFilter(null, { _id });
         const itemToUpdate = {
-            $set: Object.merge(item, {
+            $set: item
+        };
+        if (realm) {
+            itemToUpdate.$set = Object.merge(item, {
                 realmName: realm.name,
                 realmId: realm._id
-            })
-        };
+            });
+        }
         logger.debug(`\tfilter is ${JSON.stringify(filter)}`);
         logger.silly(`\titem to update is ${JSON.stringify(itemToUpdate)}`);
 
@@ -193,12 +196,15 @@ module.exports = {
         logger.info(`upsert in collection ${collection} ${realm && realm.length > 0 ? 'in realm: ' + realm.name : ''}`);
 
         const fieldsToUpdate = {
-            $set: Object.merge(fieldsToSet, {
-                realmName: realm.name,
-                realmId: realm._id
-            }),
+            $set: fieldsToSet,
             $setOnInsert: fieldsToSetOnInsert
         };
+        if (realm) {
+            fieldsToUpdate.$set = Object.merge(fieldsToSet, {
+                realmName: realm.name,
+                realmId: realm._id
+            });
+        }
         const options = {
             upsert: true
         };
@@ -224,13 +230,13 @@ module.exports = {
     },
 
     remove(realm, collection, items, callback) {
-        logger.info(`remove items in collection: ${collection}${realm && realm.length > 0 ? 'in realm: '+realm.name : ''}`);
+        logger.info(`remove items in collection: ${collection}${realm && realm.length > 0 ? 'in realm: ' + realm.name : ''}`);
         const filter = buildFilter(null, {
-            $or: items.map(item => {return {_id: item};})
+            $or: items.map(item => { return { _id: item }; })
         });
 
         logger.debug(`\tfilter is ${JSON.stringify(filter)}`);
-        db[collection].remove(filter, function(err, deleted) {
+        db[collection].remove(filter, function (err, deleted) {
             if (err || !deleted) {
                 if (err) {
                     logDBError(err);

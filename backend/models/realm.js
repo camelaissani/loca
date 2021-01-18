@@ -8,27 +8,45 @@ class RealmModel extends Model {
         super('realms');
         this.schema = new OF({
             _id: String,
-            administrator: String,
-            bank: String,
-            capital: Number,
-            city: String,
-            company: String,
-            contact: String,
-            creation: String,
-            email: String,
-            isCompany: Boolean,
-            legalForm: String,
-            manager: String,
             name: String,
+            members: Array,      // [{ name, email, role, registered },]
+            addresses: Array,    // [{ street1, street2, zipCode, city, state, country }, ]
+            bankInfo: Object,    // { name, iban }
+            contacts: Array,     // [{ name, email, phone1, phone2 }]
+            isCompany: Boolean,
+            companyInfo: Object, // { name, legalStructure, capital, ein, dos, vatNumber, legalRepresentative }
+            locale: String,
+            currency: String,
+            tenants: Array ,     // [{ name, emails, access },]
+
+            // TODO to remove, replaced by companyInfo
+            creation: String,
+            company: String,
+            legalForm: String,
+            vatNumber: String,
+            capital: Number,
+            siret: String,
+            rcs: String,
+            manager: String,
+
+            // TODO to remove, replaced by bankInfo
+            bank: String,
+            rib: String,
+
+            // TODO to remove, replaced by contacts
+            contact: String,
+            email: String,
             phone1: String,
             phone2: String,
-            rcs: String,
-            realmName: String,
-            renter: String,
-            rib: String,
-            siret: String,
+
+            // TODO to remove, replaced by addresses
             street1: String,
             street2: String,
+            zipCode: String,
+            city: String,
+
+            // TODO to remove, replaced by members
+            administrator: String,
             user1: String,
             user2: String,
             user3: String,
@@ -38,11 +56,7 @@ class RealmModel extends Model {
             user7: String,
             user8: String,
             user9: String,
-            user10: String,
-            vatNumber: String,
-            zipCode: String,
-            locale: String,
-            currency: String
+            user10: String
         });
     }
 
@@ -71,28 +85,16 @@ class RealmModel extends Model {
     }
 
     findByEmail(email, callback) {
+        // TODO to optimize: filter should by applied on DB
         super.findAll(null, function(errors, realms) {
             if (errors) {
                 callback(errors);
             } else if (!realms || realms.length === 0) {
                 callback(null, null);
             } else {
-                const realmsFound = realms.filter(function(realm) {
-                    if (realm.administrator === email ||
-                        realm.user1 === email ||
-                        realm.user2 === email ||
-                        realm.user3 === email ||
-                        realm.user4 === email ||
-                        realm.user5 === email ||
-                        realm.user6 === email ||
-                        realm.user7 === email ||
-                        realm.user8 === email ||
-                        realm.user9 === email ||
-                        realm.user10 === email) {
-                        return true;
-                    }
-                });
-
+                const realmsFound = realms.filter(
+                    realm => realm.members.map(({ email }) => email).includes(email)
+                );
                 callback(null, realmsFound);
             }
         });
@@ -102,8 +104,8 @@ class RealmModel extends Model {
         super.add(null, realm, callback);
     }
 
-    update() {
-        logger.error('method not implemented!');
+    update(realm, callback) {
+        super.update(null, realm, callback);
     }
 
     remove() {

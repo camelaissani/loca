@@ -1,5 +1,5 @@
 <div class="footer">
     <% if (realm.isCompany) { %>
-        <%= `${realm.company} ${realm.legalForm} ${t('with share capital of')} ${formatMoney(realm.capital)} ${realm.siret}` %>
+        <%= `${realm.companyInfo.name} ${realm.companyInfo.legalStructure} ${t('with share capital of')} ${formatMoney(realm.companyInfo.capital)} ${realm.companyInfo.ein}` %>
     <% } %>
 </div>

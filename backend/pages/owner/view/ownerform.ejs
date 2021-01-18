@@ -27,6 +27,10 @@
                 <label class="control-label" for="siret"><%= t('UIN') %></label>
                 <input type="text" id="siret" class="form-control uneditable-input" readonly="readonly" disabled/>
             </div>
+             <div class="form-group js-company-fields">
+                <label class="control-label" for="dos"><%= t('DOS') %></label>
+                <input type="text" id="dos" class="form-control uneditable-input" readonly="readonly" disabled/>
+            </div>
             <div class="form-group js-company-fields">
                 <label class="control-label" for="capital"><%= t('Ownership equity') %></label>
                 <div class="input-group">
@@ -69,6 +73,20 @@
                     <div class="form-group">
                         <label class="control-label"><%= t('City') %></label>
                         <input type="text" id="city" class="form-control uneditable-input" readonly="readonly" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('State') %></label>
+                        <input type="text" id="state" class="form-control uneditable-input" readonly="readonly" disabled>
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="form-group">
+                        <label class="control-label"><%= t('Country') %></label>
+                        <input type="text" id="country" class="form-control uneditable-input" readonly="readonly" disabled>
                     </div>
                 </div>
             </div>

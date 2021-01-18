@@ -33,7 +33,7 @@
 			Nous vous rappelons que nos relations commerciales avec votre société sont liées par un bail<br>signé le <%= formatDateText(occupant.beginDate) %>.
 			</p>
 			<p>
-			Dans ce bail, il est explicitement indiqué que <%=occupant.name%> s'oblige à payer d'avance, la location d'un bureau, à <%= realm.legalForm + ' ' + realm.company %> tous les mois, le premier jour de chaque mois (chapitre Loyers - article II)
+			Dans ce bail, il est explicitement indiqué que <%=occupant.name%> s'oblige à payer d'avance, la location d'un bureau, à <%= realm.companyInfo.name + ' ' + realm.companyInfo.legalStructure %> tous les mois, le premier jour de chaque mois (chapitre Loyers - article II)
 			<p>
 			<u><b>Or, à ce jour, plusieurs loyers n'ont pas été réglés représentant un montant de <%= formatMoney(rent.total.grandTotal) %> TTC.</b></u>
 			</p>

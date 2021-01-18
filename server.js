@@ -9,6 +9,8 @@ logger.add(logger.transports.Console, {
     colorize: true
 });
 
+const restoredb = require('./scripts/mongorestore');
+const migratedb = require('./scripts/migration');
 const i18next = require('i18next');
 const i18nMiddleware = require('i18next-express-middleware');
 const { LanguageDetector } = require('i18next-express-middleware');
@@ -147,11 +149,14 @@ app.locals = {
 
 db.init()
     .then(db.exists)
-    .then((isDbExists) => {
+    .then(async (isDbExists) => {
         if (config.restoreDatabase) {
-            require('./scripts/mongorestore');
+            await restoredb();
             logger.debug('database restored');
         }
+
+        // migrate db to the new models
+        await migratedb();
 
         const appDebugHttPort = 9091;
         const http_port = config.productive ? config.appHttpPort : appDebugHttPort;

@@ -16,10 +16,10 @@
 					<strong><u>ENTRE</u></strong></p>
 				</p>
 				<p>
-					<%= realm.company+' '+realm.legalForm %>, au capital de <%=realm.capital%> EUR, ayant son siège social à <%=realm.city%>, <%= realm.street1 %>
-					<% if (realm.street2 && realm.street2.length>0) { %>
-			        <%= realm.street2 %>
-			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true">Bobigny sous le No <%= realm.siret %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.manager %>, <span contenteditable="true">gérant</span>.
+					<%= realm.companyInfo.name+' '+realm.companyInfo.legalStructure %>, au capital de <%=realm.companyInfo.capital%> EUR, ayant son siège social à <%=realm.addresses[0].city%>, <%= realm.addresses[0].street1 %>
+					<% if (realm.addresses[0].street2 && realm.addresses[0].street2.length>0) { %>
+			        <%= realm.addresses[0].street2 %>
+			        <% } %>, inscrite au Registre de Commerce de <span contenteditable="true"><%= realm.companyInfo.dos %> sous le No <%= realm.companyInfo.ein %></span>, représentée par <span contenteditable="true">Monsieur</span> <%= realm.companyInfo.legalRepresentative %>, <span contenteditable="true">gérant</span>.
 				</p>
 
 				<p>Ci-après dénommé « LE DOMICILIATAIRE »</p>
@@ -34,11 +34,11 @@
 					<br>au capital de <span contenteditable="true"><% if (typeof(occupant.capital)=='number') { %> <%=occupant.capital.toFixed(2)%> <% } else { %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<% } %></span> EUR,
 					<br>ayant son siège social au :
 					<p>
-						<%= realm.street1 %>
-		            	<% if (realm.street2 && realm.street2.length>0) { %>
-		            	<br><%= realm.street2 %>
+						<%= realm.addresses[0].street1 %>
+		            	<% if (realm.addresses[0].street2 && realm.addresses[0].street2.length>0) { %>
+		            	<br><%= realm.addresses[0].street2 %>
 		            	<% } %>
-		            	<br><%= realm.zipCode %> <%= realm.city %>
+		            	<br><%= realm.addresses[0].zipCode %> <%= realm.addresses[0].city %>
 					</p>
 				</p>
 
@@ -112,22 +112,22 @@
 
 				<p><u>Article 7 : Attribution de juridiction</u></p>
 				<p>
-					Tout litige pouvant survenir entre les parties à l'occasion de l'exécution du présent contrat devra être porté devant le tribunal de commerce de <span contenteditable="true"><%= realm.city %></span>.
+					Tout litige pouvant survenir entre les parties à l'occasion de l'exécution du présent contrat devra être porté devant le tribunal de commerce de <span contenteditable="true"><%= realm.addresses[0].city %></span>.
 				</p>
 
 				<p><u>Article 8 : Élection de domicile</u></p>
 				<p>
-					Les parties font élection de domicile à <%= realm.street1 %>
-					<% if (realm.street2 && realm.street2.length>0) { %>
-			        <%= realm.street2 %>
-			        <% } %> - <%=realm.zipCode%> <%=realm.city%>.
+					Les parties font élection de domicile à <%= realm.addresses[0].street1 %>
+					<% if (realm.addresses[0].street2 && realm.addresses[0].street2.length>0) { %>
+			        <%= realm.addresses[0].street2 %>
+			        <% } %> - <%=realm.addresses[0].zipCode%> <%=realm.addresses[0].city%>.
 				</p>
 
 				<p>
-					<br>Fait en deux exemplaires à <span contenteditable="true"><%= realm.city %></span>, le <span contenteditable="true"><%=today%></span>
+					<br>Fait en deux exemplaires à <span contenteditable="true"><%= realm.addresses[0].city %></span>, le <span contenteditable="true"><%=today%></span>
 				</p>
 				<p>
-					<%=realm.manager%> gérant de <%= realm.company+' '+realm.legalForm %>
+					<%=realm.companyInfo.legalRepresentative%> gérant de <%= realm.companyInfo.name+' '+realm.companyInfo.legalStructure %>
 				</p>
 				<p>
 					<br>&nbsp;

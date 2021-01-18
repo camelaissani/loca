@@ -35,33 +35,20 @@ const _sendEmail = async (locale, message) => {
     } catch (error) {
         logger.error(`POST ${config.EMAILER_URL} failed`);
         logger.error(`data sent: ${JSON.stringify(postData)}`);
-        logger.error(error.data);
-        let result = {
-            ...message,
-            error
-        };
-        if (config.demoMode) {
-            logger.info('email status fallback workflow activated in demo mode');
-            result = {
-                ...message,
-                error: {
-                    message: 'demo mode, mail cannot be sent'
-                }
-            };
-        }
-        return [ result ];
+        logger.error(error.message);
+        throw new Error(error);
     }
 };
 
 module.exports = {
     send: async (req, res) => {
-        const realm = req.realm;
-        const { document, tenantIds, year, month } = req.body;
-        const term = moment(`${year}/${month}/01`, 'YYYY/MM/DD').format('YYYYMMDDHH');
-        const findTenant = promisify(occupantModel.findOne).bind(occupantModel);
-        const messages = [];
-        await Promise.all(tenantIds.map(async tenantId => {
-            try {
+        try {
+            const realm = req.realm;
+            const { document, tenantIds, year, month } = req.body;
+            const term = moment(`${year}/${month}/01`, 'YYYY/MM/DD').format('YYYYMMDDHH');
+            const findTenant = promisify(occupantModel.findOne).bind(occupantModel);
+            const messages = [];
+            await Promise.all(tenantIds.map(async tenantId => {
                 const tenant = await findTenant(realm, tenantId);
                 messages.push({
                     name: tenant.name,
@@ -69,18 +56,14 @@ module.exports = {
                     document,
                     term
                 });
-            } catch (error) {
-                logger.error(error);
-            }
-        }));
-        const statusList = await Promise.all(messages.map(message => _sendEmail(req.language, message)));
-        try {
+            }));
+            const statusList = await Promise.all(messages.map(message => _sendEmail(req.language, message)));
             const results = statusList.reduce((acc, statuses, index) => {
-                acc.push(...statuses.map(status => ({ name: messages[index].name, ...status})));
+                acc.push(...statuses.map(status => ({ name: messages[index].name, ...status })));
                 return acc;
             }, []);
             res.json(results);
-        } catch(err) {
+        } catch (err) {
             logger.error(err);
             res.status(500).send(err);
         }

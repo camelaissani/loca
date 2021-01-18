@@ -166,16 +166,24 @@ span.error {
 .limit {
     position: absolute;
 
-    top: @margin + 105mm;
+    top: @margin + 100mm;
     left: @margin;
 }
 
 .paymentinfo {
     position: absolute;
 
-    top: @margin + 205mm;
+    top: @margin + 220mm;
     left: @margin;
     font-size: @small-font-size;
+
+    .columns {
+        display: flex;
+        flex-direction: row;
+        div {
+            width: 50%;
+        }
+    }
 }
 
 .footer {
@@ -193,7 +201,7 @@ span.error {
 
 .reference {
     position: absolute;
-    top: @margin + 75mm;
+    top: @margin + 70mm;
     left: @margin;
 
     table {
@@ -220,7 +228,7 @@ span.error {
 .today {
     position: absolute;
 
-    top: @margin + 75mm;
+    top: @margin + 70mm;
     left: @margin + 95mm;
     font: @default-font-size "Tahoma";
     text-align: left;
@@ -229,7 +237,7 @@ span.error {
 
 .items {
     position: absolute;
-    top: @margin + 115mm;
+    top: @margin + 110mm;
     left: @margin;
     width: 210mm - 2*@margin;
 

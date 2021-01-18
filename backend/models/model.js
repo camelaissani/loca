@@ -62,8 +62,11 @@ module.exports = class Model {
     update(realm, item, callback) {
         const updateSchema = this.updateSchema || this.schema;
         const itemToUpdate = updateSchema.filter(item);
-        db.update(realm, this.collection, itemToUpdate, (errors) => {
-            callback(errors && errors.length > 0 ? errors : null);
+        db.update(realm, this.collection, itemToUpdate, (errors, dbItem) => {
+            if (errors && errors.length > 0) {
+                return callback(errors);
+            }
+            callback(null, this.schema.filter(dbItem));
         });
     }
 

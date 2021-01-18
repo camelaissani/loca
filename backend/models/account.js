@@ -1,6 +1,5 @@
 'use strict';
 
-const logger = require('winston');
 const Model = require('./model');
 const OF = require('./objectfilter');
 
@@ -34,8 +33,13 @@ class AccountModel extends Model {
         super.add(null, item, callback);
     }
 
-    findAll() {
-        logger.error('method not implemented!');
+    findAll(callback) {
+        super.findAll(null, function(errors, accounts) {
+            if (errors) {
+                return callback(errors);
+            }
+            callback(null, accounts);
+        });
     }
 }
 

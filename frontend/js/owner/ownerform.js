@@ -37,6 +37,12 @@ class OwnerForm extends Form {
                         depends: () => $(domSelector + ' #isCompany option:selected').val()==='company'
                     }
                 },
+                'dos': {
+                    minlength: 2,
+                    required: {
+                        depends: () => $(domSelector + ' #isCompany option:selected').val()==='company'
+                    }
+                },
                 'capital': {
                     number: true,
                     min: 0,
@@ -53,6 +59,14 @@ class OwnerForm extends Form {
                     minlength: 2
                 },
                 'city': {
+                    required: true,
+                    minlength: 2
+                },
+                'state': {
+                    required: false,
+                    minlength: 2
+                },
+                'country': {
                     required: true,
                     minlength: 2
                 },
@@ -83,6 +97,7 @@ class OwnerForm extends Form {
                 company: '',
                 legalForm: '',
                 siret: '',
+                dos: '',
                 capital: '',
                 vatNumber: '',
                 manager: '',
@@ -90,6 +105,8 @@ class OwnerForm extends Form {
                 street2: '',
                 zipCode: '',
                 city: '',
+                state: '',
+                country: '',
                 contact: '',
                 phone1: '',
                 phone2: '',
