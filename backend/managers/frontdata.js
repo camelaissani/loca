@@ -305,6 +305,9 @@ function toOccupantData(inputOccupant) {
             guaranty: occupant.guaranty ? Number(occupant.guaranty) : 0,
             vatRatio: occupant.vatRatio ? Number(occupant.vatRatio) : 0,
             discount: occupant.discount ? Number(occupant.discount) : 0,
+            rental: 0,
+            expenses: 0,
+            total: 0
         }
     );
 
@@ -354,7 +357,15 @@ function toOccupantData(inputOccupant) {
                 occupant.office.expense += property.expense;
             }
         }
+        occupant.rental += property.price || 0;
+        occupant.expenses += property.expense || 0;
     });
+    occupant.preTaxTotal = occupant.rental + occupant.expenses - occupant.discount;
+    occupant.total = occupant.preTaxTotal;
+    if (occupant.vatRatio) {
+        occupant.vat =  occupant.preTaxTotal * occupant.vatRatio;
+        occupant.total = occupant.preTaxTotal + occupant.vat;
+    }
     if (occupant.office) {
         occupant.office.m2Price = occupant.office.price / occupant.office.surface;
         occupant.office.m2Expense = occupant.office.expense / occupant.office.surface;
