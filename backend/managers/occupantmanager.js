@@ -247,6 +247,20 @@ function all(req, res) {
     });
 }
 
+function one(req, res) {
+    const realm = req.realm;
+    const occupantId = req.params.id;
+    occupantModel.findOne(realm, occupantId, (errors, dbOccupant) => {
+        if (errors && errors.length > 0) {
+            res.json({
+                errors: errors
+            });
+        } else {
+            res.json(FD.toOccupantData(dbOccupant));
+        }
+    });
+}
+
 function overview(req, res) {
     const realm = req.realm;
     let result = {
@@ -284,6 +298,7 @@ module.exports = {
     add,
     update,
     remove,
+    one,
     all,
     overview
 };

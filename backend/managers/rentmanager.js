@@ -7,24 +7,38 @@ const rentModel = require('../models/rent');
 const occupantModel = require('../models/occupant');
 const config = require('../../config');
 
-const _findAllOccupants = (realm, term) => {
+const _findOccupants = (realm, occupantId, term) => {
     return new Promise((resolve, reject) => {
         const filter = {
             '$query': {
-                '$and': [{ 'rents.term': term }]
+                '$and': []
             }
         };
+        if (occupantId) {
+            filter['$query']['$and'].push({ '_id': occupantId });
+        }
+        if (term) {
+            filter['$query']['$and'].push({ 'rents.term': term });
+        }
         occupantModel.findFilter(realm, filter, (errors, occupants) => {
             if (errors && errors.length > 0) {
                 return reject(errors);
             }
 
-            resolve(occupants.sort((o1, o2) => {
-                const name1 = o1.isCompany ? o1.company : o1.name;
-                const name2 = o2.isCompany ? o2.company : o2.name;
+            resolve(occupants
+                .map(occupant => {
+                    if (term) {
+                        occupant.rents = occupant.rents.filter(rent => rent.term === term);
+                    }
+                    return occupant;
+                })
+                .sort((o1, o2) => {
+                    const name1 = o1.isCompany ? o1.company : o1.name;
+                    const name2 = o2.isCompany ? o2.company : o2.name;
 
-                return name1.localeCompare(name2);
-            }));
+                    return name1.localeCompare(name2);
+                })
+            );
         });
     });
 };
@@ -63,7 +77,7 @@ const _getEmailStatus = async term => {
 const _getRentsDataByTerm = async (realm, monthOfYear) => {
     const term = Number(monthOfYear.startOf('month').format('YYYYMMDDHH'));
     const [dbOccupants, emailStatus = {}] = await Promise.all([
-        _findAllOccupants(realm, term),
+        _findOccupants(realm, null, term),
         _getEmailStatus(term).catch(logger.error)
     ]);
 
@@ -194,16 +208,18 @@ const update = (req, res) => {
     });
 };
 
-const rentsOfOccupant = (req, res) => {
+const rentsOfOccupant = async (req, res) => {
     const realm = req.realm;
-    const id = req.params.id;
-    const term = Number(moment().startOf('month').format('YYYYMMDDHH'));
+    const { id } = req.params;
+    const term = Number(moment().format('YYYYMMDDHH'));
 
-    occupantModel.findOne(realm, id, (errors, dbOccupant) => {
-        if (errors && errors.length > 0) {
-            return res.status(500).json({ errors });
+    try {
+        const dbOccupants = await _findOccupants(realm, id);
+        if (!dbOccupants.length) {
+            return res.sendStatus(404);
         }
 
+        const dbOccupant = dbOccupants[0];
         const rentsToReturn = dbOccupant.rents.map(currentRent => {
             const rent = FD.toRentData(currentRent);
             if (currentRent.term === term) {
@@ -213,13 +229,43 @@ const rentsOfOccupant = (req, res) => {
             return rent;
         });
 
-        const occupant = FD.toOccupantData(dbOccupant);
-
         res.json({
-            occupant,
+            occupant: FD.toOccupantData(dbOccupant),
             rents: rentsToReturn
         });
-    });
+    } catch (errors) {
+        logger.error(errors);
+        res.status(500).json({ errors });
+    }
+};
+
+const rentOfOccupant = async (req, res) => {
+    const realm = req.realm;
+    const { id, month, year } = req.params;
+    const term = Number(moment(`${month}/${year}`, 'MM/YYYY').startOf('month').format('YYYYMMDDHH'));
+    try {
+        const dbOccupants = await _findOccupants(realm, id, term);
+        if (!dbOccupants.length) {
+            return res.status(404).json({ error: 'tenant not found' });
+        }
+
+        const dbOccupant = dbOccupants[0];
+
+        if (!dbOccupant.rents.length) {
+            return res.status(404).json({ error: 'rent not found' });
+        }
+
+        const rent = FD.toRentData(dbOccupant.rents[0], dbOccupant);
+        if (rent.term === Number(moment().format('YYYYMMDDHH'))) {
+            rent.active = 'active';
+        }
+        rent.vatRatio = dbOccupant.vatRatio;
+
+        res.json(rent);
+    } catch (errors) {
+        logger.error(errors);
+        res.status(500).json({ errors });
+    }
 };
 
 const all = async (req, res) => {
@@ -257,6 +303,7 @@ const overview = async (req, res) => {
 module.exports = {
     update,
     rentsOfOccupant,
+    rentOfOccupant,
     all,
     overview
 };

@@ -79,6 +79,7 @@ module.exports = function() {
     occupantsRouter.patch('/:id', occupantManager.update);
     occupantsRouter.delete('/:ids', occupantManager.remove);
     occupantsRouter.get('/', occupantManager.all);
+    occupantsRouter.get('/:id', occupantManager.one);
     occupantsRouter.get('/overview', occupantManager.overview);
     router.use('/tenants', occupantsRouter);
 
@@ -94,9 +95,8 @@ module.exports = function() {
     const rentsRouter = express.Router();
     rentsRouter.patch('/payment/:id', rentManager.update);
     rentsRouter.get('/tenant/:id', rentManager.rentsOfOccupant);
+    rentsRouter.get('/tenant/:id/:year/:month', rentManager.rentOfOccupant);
     rentsRouter.get('/:year/:month', rentManager.all);
-    // rentsRouter.get('/overview', rentManager.overview);
-    // rentsRouter.get('/overview/:year/:month', rentManager.overview);
     router.use('/rents', rentsRouter);
 
     const propertiesRouter = express.Router();
