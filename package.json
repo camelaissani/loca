@@ -20,7 +20,7 @@
     "mongorestore": "node scripts/mongorestore.js"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "0.21.1",
     "bcryptjs": "2.4.3",
     "body-parser": "1.19.0",
     "bootbox": "5.4.0",
@@ -52,6 +52,7 @@
     "moment-timezone": "0.5.28",
     "mongobackup": "0.3.5",
     "mongojs": "3.1.0",
+    "nanoid": "3.1.22",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
     "serve-favicon": "2.5.0",
@@ -59,11 +60,11 @@
     "winston": "2.4.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
+    "@babel/cli": "7.12.1",
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
     "babel-eslint": "10.1.0",
-    "browser-sync": "^2.26.10",
+    "browser-sync": "2.26.14",
     "eslint": "6.8.0",
     "fs-extra": "9.0.0",
     "imagemin": "6.1.0",

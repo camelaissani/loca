@@ -80,7 +80,7 @@ module.exports = function() {
     occupantsRouter.delete('/:ids', occupantManager.remove);
     occupantsRouter.get('/', occupantManager.all);
     occupantsRouter.get('/:id', occupantManager.one);
-    occupantsRouter.get('/overview', occupantManager.overview);
+    // occupantsRouter.get('/overview', occupantManager.overview);
     router.use('/tenants', occupantsRouter);
 
     const documentsRouter = express.Router();
@@ -104,7 +104,8 @@ module.exports = function() {
     propertiesRouter.patch('/:id', propertyManager.update);
     propertiesRouter.delete('/:ids', propertyManager.remove);
     propertiesRouter.get('/', propertyManager.all);
-    propertiesRouter.get('/overview', propertyManager.overview);
+    propertiesRouter.get('/:id', propertyManager.one);
+    // propertiesRouter.get('/overview', propertyManager.overview);
     router.use('/properties', propertiesRouter);
 
     router.get('/accounting/:year', accountingManager.all);

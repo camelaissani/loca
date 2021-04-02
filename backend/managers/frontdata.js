@@ -311,7 +311,7 @@ function toOccupantData(inputOccupant) {
         }
     );
 
-    occupant.contactEmails = occupant.contacts.reduce((acc, {email}) => {
+    occupant.contactEmails = (occupant.contacts && occupant.contacts.length) ? occupant.contacts.reduce((acc, {email}) => {
         if (email) {
             return [
                 ...acc,
@@ -319,7 +319,7 @@ function toOccupantData(inputOccupant) {
             ];
         }
         return acc;
-    }, []);
+    }, []) : [];
 
     occupant.hasContactEmails = occupant.contactEmails.length > 0;
 
@@ -332,44 +332,51 @@ function toOccupantData(inputOccupant) {
         occupant.terminated = true;
         occupant.status = 'stopped';
     }
-    occupant.office = {
-        surface: 0,
-        m2Price: 0,
-        m2Expense: 0,
-        price: 0,
-        expense: 0
-    };
-    occupant.parking = {
-        price: 0,
-        expense: 0
-    };
-    occupant.properties.forEach((item) => {
-        var property = item.property;
-        if (property.type === 'parking') {
-            occupant.parking.price += property.price;
-            if (property.expense) {
-                occupant.parking.expense += property.expense;
+    if (occupant.properties) {
+        occupant.office = {
+            surface: 0,
+            m2Price: 0,
+            m2Expense: 0,
+            price: 0,
+            expense: 0
+        };
+        occupant.parking = {
+            price: 0,
+            expense: 0
+        };
+        occupant.properties.forEach((item) => {
+            var property = item.property;
+            if (property.type === 'parking') {
+                occupant.parking.price += property.price;
+                if (property.expense) {
+                    occupant.parking.expense += property.expense;
+                }
+            } else {
+                occupant.office.surface += property.surface;
+                occupant.office.price += property.price;
+                if (property.expense) {
+                    occupant.office.expense += property.expense;
+                }
             }
-        } else {
-            occupant.office.surface += property.surface;
-            occupant.office.price += property.price;
-            if (property.expense) {
-                occupant.office.expense += property.expense;
-            }
+            occupant.rental += property.price || 0;
+            occupant.expenses += property.expense || 0;
+        });
+        occupant.preTaxTotal = occupant.rental + occupant.expenses - occupant.discount;
+        occupant.total = occupant.preTaxTotal;
+        if (occupant.vatRatio) {
+            occupant.vat =  occupant.preTaxTotal * occupant.vatRatio;
+            occupant.total = occupant.preTaxTotal + occupant.vat;
         }
-        occupant.rental += property.price || 0;
-        occupant.expenses += property.expense || 0;
-    });
-    occupant.preTaxTotal = occupant.rental + occupant.expenses - occupant.discount;
-    occupant.total = occupant.preTaxTotal;
-    if (occupant.vatRatio) {
-        occupant.vat =  occupant.preTaxTotal * occupant.vatRatio;
-        occupant.total = occupant.preTaxTotal + occupant.vat;
+        if (occupant.office) {
+            occupant.office.m2Price = occupant.office.price / occupant.office.surface;
+            occupant.office.m2Expense = occupant.office.expense / occupant.office.surface;
+        }
     }
-    if (occupant.office) {
-        occupant.office.m2Price = occupant.office.price / occupant.office.surface;
-        occupant.office.m2Expense = occupant.office.expense / occupant.office.surface;
-    }
+
+    occupant.hasPayments = occupant.rents ? occupant.rents.some(
+        rent => (rent.payments && rent.payments.some(payment => payment.amount > 0)) ||
+        rent.discounts.some(discount => discount.origin === 'settlement')
+    ) : false;
     delete occupant.rents;
     return occupant;
 }

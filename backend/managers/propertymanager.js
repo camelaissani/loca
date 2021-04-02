@@ -122,6 +122,30 @@ function all(req, res) {
     });
 }
 
+function one(req, res) {
+    const realm = req.realm;
+    const tenantId = req.params.id;
+
+    propertyModel.findOne(realm, tenantId, (errors, dbProperty) => {
+        if (errors && errors.length > 0) {
+            res.json({
+                errors: errors
+            });
+            return;
+        }
+
+        _toPropertiesData(realm, dbProperty, (errors, property) => {
+            if (errors && errors.length > 0) {
+                res.json({
+                    errors: errors
+                });
+                return;
+            }
+            res.json(property);
+        });
+    });
+}
+
 function overview(req, res) {
     const realm = req.realm;
     let result = {
@@ -165,5 +189,6 @@ module.exports = {
     update,
     remove,
     all,
+    one,
     overview
 };

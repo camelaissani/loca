@@ -18,6 +18,8 @@ class OccupantModel extends Model {
             street2: String,
             zipCode: String,
             city: String,
+            state: String,
+            country: String,
             contacts: Array,
             contract: String,
             beginDate: String,

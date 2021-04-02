@@ -63,14 +63,16 @@ const update = (inputContract, modification) => {
 
     const updatedContract = create(modifiedContract);
 
-    inputContract.rents
-        .filter(rent => _isPayment(rent) || rent.discounts.some(discount => discount.origin === 'settlement'))
-        .forEach(paidRent => {
-            payTerm(updatedContract, moment(String(paidRent.term), 'YYYYMMDDHH').format('DD/MM/YYYY HH:mm'), {
-                payments: paidRent.payments,
-                discounts: paidRent.discounts.filter(discount => discount.origin === 'settlement')
+    if (inputContract.rents) {
+        inputContract.rents
+            .filter(rent => _isPayment(rent) || rent.discounts.some(discount => discount.origin === 'settlement'))
+            .forEach(paidRent => {
+                payTerm(updatedContract, moment(String(paidRent.term), 'YYYYMMDDHH').format('DD/MM/YYYY HH:mm'), {
+                    payments: paidRent.payments,
+                    discounts: paidRent.discounts.filter(discount => discount.origin === 'settlement')
+                });
             });
-        });
+    }
 
     return updatedContract;
 };
@@ -90,6 +92,9 @@ const terminate = (inputContract, termination) => {
 };
 
 const payTerm = (contract, term, settlements) => {
+    if (!contract.rents || !contract.rents.length) {
+        throw Error('cannot pay term, the rents were not generated');
+    }
     const current = moment(term, 'DD/MM/YYYY HH:mm');
     const momentBegin = moment(contract.begin, 'DD/MM/YYYY HH:mm');
     const momentEnd = moment(contract.termination || contract.end, 'DD/MM/YYYY HH:mm');
@@ -122,8 +127,11 @@ const _isPayment = rent => {
 };
 
 const _checkLostPayments = (momentBegin, momentEnd, contract) => {
-    const lostPayments =
-    contract.rents
+    if (!contract.rents || !contract.rents.length) {
+        return;
+    }
+
+    const lostPayments = contract.rents
         .filter(rent =>
             !moment(rent.term, 'YYYYMMDDHH').isBetween(momentBegin, momentEnd, contract.frequency, '[]') &&
             _isPayment(rent))

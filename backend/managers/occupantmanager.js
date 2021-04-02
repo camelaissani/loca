@@ -1,9 +1,12 @@
-'use strict';
+const logger = require('winston');
+const { customAlphabet } = require('nanoid');
 const moment = require('moment');
 const FD = require('./frontdata');
 const Contract = require('./contract');
 const occupantModel = require('../models/occupant');
 const propertyModel = require('../models/property');
+
+const nanoid = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 12);
 
 function _buildPropertyMap(realm, callback) {
     propertyModel.findAll(realm, (errors, properties) => {
@@ -25,51 +28,56 @@ function add(req, res) {
     const realm = req.realm;
     const occupant = occupantModel.schema.filter(req.body);
 
-    if (!occupant.properties || occupant.properties.length === 0) {
-        res.json({
-            errors: ['Missing properties']
-        });
-        return;
-    }
-
     if (!occupant.isCompany) {
         occupant.company = null;
         occupant.legalForm = null;
         occupant.siret = null;
         occupant.capital = null;
-        occupant.name = occupant.manager;
+        occupant.name = occupant.name || occupant.manager;
     } else {
         occupant.name = occupant.company;
     }
 
+    occupant.reference = occupant.reference || nanoid();
+
+    if (!occupant.name) {
+        return res.status(422).json({
+            errors: ['Missing tenant name']
+        });
+    }
+
     _buildPropertyMap(realm, (errors, propertyMap) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(404).json({
                 errors: errors
             });
-            return;
         }
 
         // Resolve proprerties
-        occupant.properties.forEach((item) => {
-            item.property = propertyMap[item.propertyId];
-        });
+        if (occupant.properties) {
+            occupant.properties.forEach((item) => {
+                item.property = propertyMap[item.propertyId];
+            });
+        }
 
-        const contract = Contract.create({
-            begin: occupant.beginDate,
-            end: occupant.endDate,
-            frequency: 'months',
-            properties: occupant.properties
-        });
+        // Build rents from contract
+        occupant.rents = [];
+        if (occupant.beginDate && occupant.endDate && occupant.properties) {
+            const contract = Contract.create({
+                begin: occupant.beginDate,
+                end: occupant.endDate,
+                frequency: 'months',
+                properties: occupant.properties
+            });
 
-        occupant.rents = contract.rents;
+            occupant.rents = contract.rents;
+        }
 
         occupantModel.add(realm, occupant, (errors, occupant) => {
             if (errors) {
-                res.json({
+                return res.status(500).json({
                     errors: errors
                 });
-                return;
             }
             res.json(FD.toOccupantData(occupant));
         });
@@ -81,30 +89,29 @@ function update(req, res) {
     const occupantId = req.params.id;
     const occupant = occupantModel.schema.filter(req.body);
 
-    if (!occupant.properties || occupant.properties.length === 0) {
-        res.json({
-            errors: ['Missing properties']
-        });
-        return;
-    }
-
-
     if (!occupant.isCompany) {
         occupant.company = null;
         occupant.legalForm = null;
         occupant.siret = null;
         occupant.capital = null;
-        occupant.name = occupant.manager;
+        occupant.name = occupant.name || occupant.manager;
     } else {
         occupant.name = occupant.company;
     }
 
+    occupant.reference = occupant.reference || nanoid();
+
+    if (!occupant.name) {
+        return res.status(422).json({
+            errors: ['Missing tenant name']
+        });
+    }
+
     occupantModel.findOne(realm, occupantId, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(404).json({
                 errors: errors
             });
-            return;
         }
 
         if (dbOccupant.documents) {
@@ -113,70 +120,78 @@ function update(req, res) {
 
         _buildPropertyMap(realm, (errors, propertyMap) => {
             if (errors && errors.length > 0) {
-                res.json({
+                return res.status(404).json({
                     errors: errors
                 });
-                return;
             }
 
             // Resolve proprerties
-            occupant.properties = occupant.properties.map((item) => {
-                let itemToKeep;
-                dbOccupant.properties.forEach((dbItem) => {
-                    if (dbItem.propertyId === item.propertyId) {
-                        itemToKeep = dbItem;
+            if (occupant.properties) {
+                occupant.properties = occupant.properties.map((item) => {
+                    let itemToKeep;
+                    dbOccupant.properties.forEach((dbItem) => {
+                        if (dbItem.propertyId === item.propertyId) {
+                            itemToKeep = dbItem;
+                        }
+                    });
+                    if (!itemToKeep) {
+                        itemToKeep = {
+                            propertyId: item.propertyId,
+                            property: propertyMap[item.propertyId],
+                        };
                     }
-                });
-                if (!itemToKeep) {
-                    itemToKeep = {
-                        propertyId: item.propertyId,
-                        property: propertyMap[item.propertyId],
-                    };
-                }
-                itemToKeep.entryDate = occupant.beginDate;
-                itemToKeep.exitDate = occupant.endDate;
-                return itemToKeep;
-            });
-
-            const contract = {
-                begin: dbOccupant.beginDate,
-                end: dbOccupant.endDate,
-                frequency: 'months',
-                terms: Math.round(
-                    moment(dbOccupant.endDate, 'DD/MM/YYYY')
-                        .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),
-                properties: dbOccupant.properties,
-                vatRate: dbOccupant.vatRatio,
-                discount: dbOccupant.discount,
-                rents: dbOccupant.rents
-            };
-
-            const modification = {
-                begin: occupant.beginDate,
-                end: occupant.endDate,
-                termination: occupant.terminationDate,
-                properties: occupant.properties
-            };
-
-            try {
-                const newContract = Contract.update(contract, modification);
-
-                occupant.rents = newContract.rents;
-
-                occupantModel.update(realm, occupant, (errors) => {
-                    if (errors) {
-                        res.json({
-                            errors: errors
-                        });
-                        return;
-                    }
-                    res.json(FD.toOccupantData(occupant));
-                });
-            } catch (e) {
-                res.json({
-                    errors: [String(e)]
+                    itemToKeep.entryDate = item.entryDate || occupant.beginDate;
+                    itemToKeep.exitDate = item.exitDate || occupant.endDate;
+                    return itemToKeep;
                 });
             }
+
+            // Build rents from contract
+            occupant.rents = [];
+            if (occupant.beginDate && occupant.endDate && occupant.properties) {
+                try {
+                    const contract = {
+                        begin: dbOccupant.beginDate,
+                        end: dbOccupant.endDate,
+                        frequency: 'months',
+                        terms: Math.ceil(
+                            moment(dbOccupant.endDate, 'DD/MM/YYYY')
+                                .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),
+                        properties: dbOccupant.properties,
+                        vatRate: dbOccupant.vatRatio,
+                        discount: dbOccupant.discount,
+                        rents: dbOccupant.rents
+                    };
+
+                    const modification = {
+                        begin: occupant.beginDate,
+                        end: occupant.endDate,
+                        termination: occupant.terminationDate,
+                        properties: occupant.properties,
+                    };
+                    if (occupant.vatRatio !== undefined) {
+                        modification.vatRate = occupant.vatRatio;
+                    }
+                    if (occupant.discount !== undefined) {
+                        modification.discount = occupant.discount;
+                    }
+
+                    const newContract = Contract.update(contract, modification);
+                    occupant.rents = newContract.rents;
+                } catch (e) {
+                    logger.error(e);
+                    return res.sendStatus(500);
+                }
+            }
+
+            occupantModel.update(realm, occupant, (errors) => {
+                if (errors) {
+                    return res.status(500).json({
+                        errors: errors
+                    });
+                }
+                res.json(FD.toOccupantData(occupant));
+            });
         });
     });
 }
@@ -194,11 +209,15 @@ function remove(req, res) {
             }
         }, (errors, occupants) => {
             if (errors) {
-                res.json({
-                    errors: []
+                return res.status(500).json({
+                    errors
                 });
-                return;
             }
+
+            if (!occupants || !occupants.length) {
+                return res.sendStatus(404);
+            }
+
             if (occupants) {
                 const occupantsWithPaidRents = occupants.filter(occupant => {
                     return occupant.rents
@@ -207,29 +226,33 @@ function remove(req, res) {
                 });
                 if (occupantsWithPaidRents.length > 0) {
                     // TODO: to localize
-                    callback(['Impossible de supprimer le locataire : ' + occupantsWithPaidRents[0].name + '. Des loyers ont été encaissés.']);
-                    return;
+                    return res.status(422).json({
+                        errors: ['Impossible de supprimer le locataire : ' + occupantsWithPaidRents[0].name + '. Des loyers ont été encaissés.']
+                    });
                 }
                 occupantModel.remove(
                     realm,
                     occupants.map(occupant => occupant._id.toString()),
-                    error => error ? callback([error]) : callback([]));
+                    errors => {
+                        if (errors) {
+                            return res.status(500).json({
+                                errors
+                            });
+                        }
+                        callback();
+                    });
             }
         });
     }
 
-    releaseRent((errors) => {
-        if (errors && errors.length > 0) {
-            res.json({
-                errors: errors
-            });
-            return;
-        }
-
+    releaseRent(() => {
         occupantModel.remove(realm, occupantIds, (errors) => {
-            res.json({
-                errors: errors
-            });
+            if (errors) {
+                return res.status(500).json({
+                    errors
+                });
+            }
+            res.sendStatus(200);
         });
     });
 }
@@ -238,12 +261,12 @@ function all(req, res) {
     const realm = req.realm;
     occupantModel.findAll(realm, (errors, occupants) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(500).json({
                 errors: errors
             });
-        } else {
-            res.json(occupants.map(occupant => FD.toOccupantData(occupant)));
         }
+
+        res.json(occupants.map(occupant => FD.toOccupantData(occupant)));
     });
 }
 
@@ -252,12 +275,12 @@ function one(req, res) {
     const occupantId = req.params.id;
     occupantModel.findOne(realm, occupantId, (errors, dbOccupant) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(404).json({
                 errors: errors
             });
-        } else {
-            res.json(FD.toOccupantData(dbOccupant));
         }
+
+        res.json(FD.toOccupantData(dbOccupant));
     });
 }
 
@@ -272,25 +295,24 @@ function overview(req, res) {
 
     occupantModel.findAll(realm, (errors, occupants) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(404).json({
                 errors: errors
             });
-        } else {
-
-            if (occupants) {
-                result.countAll = occupants.length;
-                result = occupants.reduce((acc, occupant) => {
-                    const endMoment = moment(occupant.terminationDate || occupant.endDate, 'DD/MM/YYYY');
-                    if (endMoment.isBefore(currentDate, 'day')) {
-                        acc.countInactive++;
-                    } else {
-                        acc.countActive++;
-                    }
-                    return acc;
-                }, result);
-            }
-            res.json(result);
         }
+
+        if (occupants) {
+            result.countAll = occupants.length;
+            result = occupants.reduce((acc, occupant) => {
+                const endMoment = moment(occupant.terminationDate || occupant.endDate, 'DD/MM/YYYY');
+                if (endMoment.isBefore(currentDate, 'day')) {
+                    acc.countInactive++;
+                } else {
+                    acc.countActive++;
+                }
+                return acc;
+            }, result);
+        }
+        res.json(result);
     });
 }
 
