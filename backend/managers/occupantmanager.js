@@ -129,11 +129,13 @@ function update(req, res) {
             if (occupant.properties) {
                 occupant.properties = occupant.properties.map((item) => {
                     let itemToKeep;
-                    dbOccupant.properties.forEach((dbItem) => {
-                        if (dbItem.propertyId === item.propertyId) {
-                            itemToKeep = dbItem;
-                        }
-                    });
+                    if (dbOccupant.properties) {
+                        dbOccupant.properties.forEach((dbItem) => {
+                            if (dbItem.propertyId === item.propertyId) {
+                                itemToKeep = dbItem;
+                            }
+                        });
+                    }
                     if (!itemToKeep) {
                         itemToKeep = {
                             propertyId: item.propertyId,
