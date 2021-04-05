@@ -1,4 +1,3 @@
-'use strict';
 const OF = require('./objectfilter');
 const Model = require('./model');
 

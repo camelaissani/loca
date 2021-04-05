@@ -4,6 +4,7 @@ const logger = require('winston');
 const config = require('../../config');
 const realmModel = require('../models/realm');
 const realmManager = require('../managers/realmmanager');
+const leaseManager = require('../managers/leasemanager');
 const rentManager = require('../managers/rentmanager');
 const occupantManager = require('../managers/occupantmanager');
 const documentManager = require('../managers/documentmanager');
@@ -74,13 +75,20 @@ module.exports = function() {
     realmsRouter.patch('/:id', realmManager.update);
     router.use('/realms', realmsRouter);
 
+    const leasesRouter = express.Router();
+    leasesRouter.get('/', leaseManager.all);
+    leasesRouter.get('/:id', leaseManager.one);
+    leasesRouter.post('/', leaseManager.add);
+    leasesRouter.patch('/:id', leaseManager.update);
+    leasesRouter.delete('/:ids', leaseManager.remove);
+    router.use('/leases', leasesRouter);
+
     const occupantsRouter = express.Router();
+    occupantsRouter.get('/', occupantManager.all);
+    occupantsRouter.get('/:id', occupantManager.one);
     occupantsRouter.post('/', occupantManager.add);
     occupantsRouter.patch('/:id', occupantManager.update);
     occupantsRouter.delete('/:ids', occupantManager.remove);
-    occupantsRouter.get('/', occupantManager.all);
-    occupantsRouter.get('/:id', occupantManager.one);
-    // occupantsRouter.get('/overview', occupantManager.overview);
     router.use('/tenants', occupantsRouter);
 
     const documentsRouter = express.Router();
@@ -100,12 +108,11 @@ module.exports = function() {
     router.use('/rents', rentsRouter);
 
     const propertiesRouter = express.Router();
+    propertiesRouter.get('/', propertyManager.all);
+    propertiesRouter.get('/:id', propertyManager.one);
     propertiesRouter.post('/', propertyManager.add);
     propertiesRouter.patch('/:id', propertyManager.update);
     propertiesRouter.delete('/:ids', propertyManager.remove);
-    propertiesRouter.get('/', propertyManager.all);
-    propertiesRouter.get('/:id', propertyManager.one);
-    // propertiesRouter.get('/overview', propertyManager.overview);
     router.use('/properties', propertiesRouter);
 
     router.get('/accounting/:year', accountingManager.all);

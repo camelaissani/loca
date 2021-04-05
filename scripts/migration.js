@@ -2,6 +2,7 @@ const db = require('../backend/models/db');
 const accountModel = require('../backend/models/account');
 const realmModel = require('../backend/models/realm');
 const tenantModel = require('../backend/models/occupant');
+const leaseModel = require('../backend/models/lease');
 
 const updateRealm = async realm => {
     return await new Promise((resolve, reject) => {
@@ -17,6 +18,52 @@ const updateRealm = async realm => {
         }
     });
 };
+
+const addLease = async (realm, lease) => {
+    return await new Promise((resolve, reject) => {
+        try {
+            leaseModel.add(realm, lease, (errors, saved) => {
+                if (errors) {
+                    return reject(errors);
+                }
+                resolve(saved);
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const updateLease = async (realm, lease) => {
+    return await new Promise((resolve, reject) => {
+        try {
+            leaseModel.update(realm, lease, (errors, saved) => {
+                if (errors) {
+                    return reject(errors);
+                }
+                resolve(saved);
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const updateTenant = async (realm, tenant) => {
+    return await new Promise((resolve, reject) => {
+        try {
+            tenantModel.update(realm, tenant, (errors, saved) => {
+                if (errors) {
+                    return reject(errors);
+                }
+                resolve(saved);
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 
 const findAllAccounts = () => {
     return new Promise((resolve, reject) => {
@@ -63,6 +110,21 @@ const findAllTenants = (realm) => {
     });
 };
 
+const findAllLeases = (realm) => {
+    return new Promise((resolve, reject) => {
+        try {
+            leaseModel.findAll(realm, (errors, leases) => {
+                if (errors) {
+                    return reject(errors);
+                }
+                resolve(leases);
+            });
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
 // Main
 module.exports = async () => {
     try {
@@ -72,7 +134,7 @@ module.exports = async () => {
         const accountMap = accounts.reduce((acc, { email, firstname, lastname }) => {
             acc[email] = `${firstname} ${lastname}`;
             return acc;
-        }, {'': ''});
+        }, { '': '' });
         const updatedRealms = await Promise.all(realms.map(async realm => {
             const updatedRealm = {
                 _id: realm._id,
@@ -135,7 +197,65 @@ module.exports = async () => {
                 };
             }
 
-            // const tenants = await findAllTenants(realm);
+            let dbCustomLease;
+            let dbFrench369Lease;
+            const leases = await findAllLeases(realm);
+            const customLease = {
+                name: 'custom',
+                description: 'Monthly rents without time limit',
+                timeRange: 'months',
+                active: true,
+                system: true,
+                archived: false
+            };
+            const french369Lease = {
+                name: '369',
+                description: 'French business lease limited to 9 years',
+                numberOfTerms: 108,
+                timeRange: 'months',
+                active: true,
+                system: false
+            };
+            if (!leases || !leases.length) {
+                dbCustomLease = await addLease(realm, customLease);
+                dbFrench369Lease = await addLease(realm, french369Lease);
+            }
+            // else {
+            //     dbCustomLease = leases.find(({ system }) => system === true);
+            //     dbFrench369Lease = leases.find(({ name }) => ['369', 'Bail commercial 3 6 9'].includes(name));
+
+            //     if (dbCustomLease) {
+            //         dbCustomLease = await updateLease(realm, {
+            //             ...dbCustomLease,
+            //             ...customLease
+            //         });
+            //     }
+
+            //     if (dbFrench369Lease) {
+            //         dbFrench369Lease = await updateLease(realm, {
+            //             ...dbFrench369Lease,
+            //             ...french369Lease
+            //         });
+            //     }
+            // }
+
+            const tenants = await findAllTenants(realm);
+            await Promise.all(tenants.map(async (dbTenant) => {
+                if (dbCustomLease && dbTenant.contract === 'custom') {
+                    await updateTenant(realm, {
+                        ...dbTenant,
+                        leaseId: String(dbCustomLease._id)
+                    });
+                } else if (dbFrench369Lease && dbTenant.contract === '369') {
+                    await updateTenant(realm, {
+                        ...dbTenant,
+                        leaseId: String(dbFrench369Lease._id)
+                    });
+                }
+            }));
+            // const utenants = await findAllTenants(realm);
+            // console.log(utenants.map(({contract, leaseId}) => ({contract, leaseId})));
+
             // updatedRealm.tenants = tenants
             //     .filter(({ terminationDate }) => !terminationDate)
             //     .reduce((acc, { name, contacts }) => ([

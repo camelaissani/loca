@@ -22,6 +22,7 @@ class OccupantModel extends Model {
             country: String,
             contacts: Array,
             contract: String,
+            leaseId: String,
             beginDate: String,
             endDate: String,
             terminationDate: String,
