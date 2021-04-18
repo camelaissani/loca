@@ -66,7 +66,7 @@ function add(req, res) {
             const contract = Contract.create({
                 begin: occupant.beginDate,
                 end: occupant.endDate,
-                frequency: 'months',
+                frequency: occupant.frequency || 'months',
                 properties: occupant.properties
             });
 
@@ -155,7 +155,7 @@ function update(req, res) {
                     const contract = {
                         begin: dbOccupant.beginDate,
                         end: dbOccupant.endDate,
-                        frequency: 'months',
+                        frequency: occupant.frequency || 'months',
                         terms: Math.ceil(
                             moment(dbOccupant.endDate, 'DD/MM/YYYY')
                                 .diff(moment(dbOccupant.beginDate, 'DD/MM/YYYY'), 'months', true)),

@@ -25,6 +25,7 @@ class OccupantModel extends Model {
             leaseId: String,
             beginDate: String,
             endDate: String,
+            frequency: String,
             terminationDate: String,
             guarantyPayback: Number,
             properties: Array,

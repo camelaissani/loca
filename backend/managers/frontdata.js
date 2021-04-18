@@ -294,6 +294,7 @@ function toOccupantData(inputOccupant) {
     Object.assign(
         occupant,
         {
+            frequency: occupant.frequency || 'months',
             street1: occupant.street1 || '',
             street2: occupant.street2 || '',
             zipCode: occupant.zipCode || '',

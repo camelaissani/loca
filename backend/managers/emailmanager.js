@@ -35,8 +35,8 @@ const _sendEmail = async (locale, message) => {
     } catch (error) {
         logger.error(`POST ${config.EMAILER_URL} failed`);
         logger.error(`data sent: ${JSON.stringify(postData)}`);
-        logger.error(error.message);
-        throw new Error(error);
+        logger.error((error.response && error.response.data && error.response.data.message) || error.message);
+        throw error;
     }
 };
 
@@ -44,20 +44,28 @@ module.exports = {
     send: async (req, res) => {
         try {
             const realm = req.realm;
-            const { document, tenantIds, year, month } = req.body;
-            const term = moment(`${year}/${month}/01`, 'YYYY/MM/DD').format('YYYYMMDDHH');
+            const { document, tenantIds, terms, year, month } = req.body;
             const findTenant = promisify(occupantModel.findOne).bind(occupantModel);
             const messages = [];
-            await Promise.all(tenantIds.map(async tenantId => {
+            await Promise.all(tenantIds.map(async (tenantId, index) => {
                 const tenant = await findTenant(realm, tenantId);
                 messages.push({
                     name: tenant.name,
                     tenantId,
                     document,
-                    term
+                    term: Number(terms && terms[index] || moment(`${year}/${month}/01`, 'YYYY/MM/DD').format('YYYYMMDDHH'))
                 });
             }));
-            const statusList = await Promise.all(messages.map(message => _sendEmail(req.language, message)));
+            const statusList = await Promise.all(messages.map(async message => {
+                try {
+                    return await _sendEmail(req.language, message);
+                } catch (error) {
+                    return [{
+                        ...message,
+                        error: (error.response && error.response.data) || { status: 500, message: 'Something went wrong'}
+                    }];
+                }
+            }));
             const results = statusList.reduce((acc, statuses, index) => {
                 acc.push(...statuses.map(status => ({ name: messages[index].name, ...status })));
                 return acc;

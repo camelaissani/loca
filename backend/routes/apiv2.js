@@ -101,9 +101,9 @@ module.exports = function() {
     router.use('/notifications', notificationsRouter);
 
     const rentsRouter = express.Router();
-    rentsRouter.patch('/payment/:id', rentManager.update);
+    rentsRouter.patch('/payment/:id/:term', rentManager.updateByTerm);
     rentsRouter.get('/tenant/:id', rentManager.rentsOfOccupant);
-    rentsRouter.get('/tenant/:id/:year/:month', rentManager.rentOfOccupant);
+    rentsRouter.get('/tenant/:id/:term', rentManager.rentOfOccupantByTerm);
     rentsRouter.get('/:year/:month', rentManager.all);
     router.use('/rents', rentsRouter);
 
