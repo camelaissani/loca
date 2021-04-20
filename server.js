@@ -35,6 +35,32 @@ const ejsHelpers = require('./backend/pages/ejshelpers');
 
 const dist_directory = path.join(__dirname, 'dist');
 
+const initUnsealVault = async () => {
+    const vault = require('node-vault')({
+        endpoint: config.VAULT_URL
+    });
+
+    const vaultStatus = await vault.health();
+    if (!vaultStatus.initialized) {
+        logger.info('Initializing vault...');
+        const result = await vault.init({ secret_shares: 5, secret_threshold: 3 });
+        // set token for all following requests
+        vault.token = result.root_token;
+
+        // unseal vault server
+        logger.info('Unsealing vault...');
+        let status = await vault.unseal({ secret_shares: 1, key: result.keys[0] });
+        logger.info(status);
+
+        status = await vault.unseal({ secret_shares: 2, key: result.keys[1] });
+        logger.info(status);
+
+        status = await vault.unseal({ secret_shares: 3, key: result.keys[2] });
+        logger.info(status);
+    }
+    logger.info('Vault initialized and unsealed');
+};
+
 // Init locale
 i18next.use(LanguageDetector)
     .use(i18nFS)
@@ -157,6 +183,9 @@ db.init()
 
         // migrate db to the new models
         await migratedb();
+
+        // init vault
+        await initUnsealVault();
 
         const appDebugHttPort = 9091;
         const http_port = config.productive ? config.appHttpPort : appDebugHttPort;

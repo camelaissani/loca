@@ -53,8 +53,10 @@
     "mongobackup": "0.3.5",
     "mongojs": "3.1.0",
     "nanoid": "3.1.22",
+    "node-vault": "0.9.21",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
+    "request": "2.88.2",
     "serve-favicon": "2.5.0",
     "sugar": "2.0.6",
     "winston": "2.4.4"
