@@ -1,4 +1,3 @@
-'use strict';
 const config = require('./config');
 
 const logger = require('winston');
@@ -171,7 +170,7 @@ db.init()
                 logger.info('In demo mode (login disabled)');
             }
             logger.debug('loaded configuration from', config.configdir);
-            logger.debug(JSON.stringify(config, null, 1));
+            logger.debug(config.log());
             if (!config.productive) {
                 const browserSync = require('browser-sync');
                 browserSync.init({
