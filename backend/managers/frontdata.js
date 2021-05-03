@@ -520,6 +520,7 @@ function toProperty(inputProperty, inputOccupant, inputOccupants) {
             }
         }
     }
+    property.occupancyHistory = [];
     if (inputOccupants && inputOccupants.length) {
         property.occupancyHistory = inputOccupants.map(occupant => {
             return {
