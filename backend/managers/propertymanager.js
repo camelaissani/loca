@@ -96,7 +96,10 @@ function remove(req, res) {
     const ids = req.params.ids.split(',');
 
     propertyModel.remove(realm, ids, (errors) => {
-        return res.status(500).json({ errors: errors });
+        if (errors) {
+            return res.status(500).json({ errors: errors });
+        }
+        res.sendStatus(200); // better to return 204
     });
 }
 
