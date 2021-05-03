@@ -475,44 +475,60 @@ function toAccountingData(year, inputOccupants) {
     };
 }
 
-function toProperty(inputProperty, inputOccupant) {
+function toProperty(inputProperty, inputOccupant, inputOccupants) {
     const currentDate = moment();
-    const property = {
+    let property = {
         _id: inputProperty._id,
-        name: inputProperty.name,
         type: inputProperty.type,
-        location: inputProperty.location,
-        phone: inputProperty.phone,
-        price: inputProperty.price,
+        name: inputProperty.name,
+        description: inputProperty.description,
         surface: inputProperty.surface,
-        expense: inputProperty.expense || 0,
-        priceWithExpenses: math.round(inputProperty.price + inputProperty.expense, 2),
-        m2Expense: inputProperty.surface ? math.round((inputProperty.expense / inputProperty.surface), 2) : null,
-        m2Price: inputProperty.surface ? math.round((inputProperty.price / inputProperty.surface), 2) : null,
+        phone: inputProperty.phone,
+        digicode: inputProperty.digicode,
+        address: inputProperty.address,
+
+        price: inputProperty.price,
+
         beginDate: '',
         endDate: '',
         lastBusyDay: '',
         occupantLabel: '',
         available: true,
-        status: 'vacant'
+        status: 'vacant',
+
+        // TODO moved in Occupant.properties model
+        expense: inputProperty.expense || 0,
+        priceWithExpenses: math.round(inputProperty.price + inputProperty.expense, 2),
+        m2Expense: inputProperty.surface ? math.round((inputProperty.expense / inputProperty.surface), 2) : null,
+        m2Price: inputProperty.surface ? math.round((inputProperty.price / inputProperty.surface), 2) : null,
+
+        // TODO to remove, replaced by address
+        location: inputProperty.location
     };
     if (inputOccupant) {
-        Object.assign(
-            property,
-            {
-                beginDate: inputOccupant.entryDate,
-                endDate:  inputOccupant.exitDate,
-                lastBusyDay: inputOccupant.terminationDate || inputOccupant.endDate,
-                occupantLabel: inputOccupant.name
-            }
-        );
+        property = {
+            ...property,
+            beginDate: inputOccupant.entryDate,
+            endDate:  inputOccupant.exitDate,
+            lastBusyDay: inputOccupant.terminationDate || inputOccupant.endDate,
+            occupantLabel: inputOccupant.name
+        };
         if (property.lastBusyDay) {
             property.available = moment(property.lastBusyDay, 'DD/MM/YYYY').isBefore(currentDate, 'day');
             if (!property.available) {
                 property.status = 'occupied';
             }
-
         }
+    }
+    if (inputOccupants && inputOccupants.length) {
+        property.occupancyHistory = inputOccupants.map(occupant => {
+            return {
+                id: occupant._id,
+                name: occupant.name,
+                beginDate: occupant.beginDate,
+                endDate: occupant.terminationDate || occupant.endDate
+            };
+        });
     }
 
     return property;

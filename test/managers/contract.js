@@ -190,8 +190,9 @@ describe('contract functionalities', () => {
                 property: {
                     name: 'office1',
                     price: 100,
-                    expense: 10
-                }
+                },
+                rent: 100,
+                expenses: [{ title: 'expense', amount: 10 }]
             }]
         });
 
@@ -227,12 +228,16 @@ describe('contract functionalities', () => {
             exitDate: '31/12/2020',
             property: {
                 name: 'office1',
-                price: 300,
-                expense: 10
-            }
+                price: 300
+            },
+            rent: 300,
+            expenses: [{ title: 'expense', amount: 10 }]
         };
 
-        let termP1 = p1.property.price + p1.property.expense;
+        let termP1 = p1.rent + p1.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0);
         termP1 *= 1.2; // VAT
 
         const contract = Contract.create({
@@ -265,11 +270,15 @@ describe('contract functionalities', () => {
             property: {
                 name: 'office',
                 price: 320,
-                expense: 32
-            }
+            },
+            rent: 320,
+            expenses: [{ title: 'expense', amount: 32 }]
         };
 
-        let termP2 = p2.property.price + p2.property.expense;
+        let termP2 = p2.rent + p2.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0);
         termP2 *= 1.2; // VAT
 
         const newContract = Contract.update(contract, {properties: [p1, p2]});
@@ -309,12 +318,16 @@ describe('contract functionalities', () => {
             exitDate: '31/08/2020',
             property: {
                 name: 'mon bureau',
-                price: 300,
-                expense: 10
-            }
+                price: 300
+            },
+            rent: 300,
+            expenses: [{ title: 'expense', amount: 10 }]
         };
 
-        let rentAmountProperty1 = property.property.price + property.property.expense;
+        let rentAmountProperty1 = property.rent + property.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0);
         rentAmountProperty1 *= 1.2; // VAT
 
         const contract = Contract.create({
@@ -341,12 +354,16 @@ describe('contract functionalities', () => {
             exitDate: '31/12/2020',
             property: {
                 name: 'office1',
-                price: 300,
-                expense: 10
-            }
+                price: 300
+            },
+            rent: 300,
+            expenses: [{ title: 'expense', amount: 10 }]
         };
 
-        let termP1 = p1.property.price + p1.property.expense;
+        let termP1 = p1.rent + p1.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0);
         termP1 *= 1.2; // VAT
 
         const p2 = {
@@ -354,12 +371,16 @@ describe('contract functionalities', () => {
             exitDate: '31/12/2020',
             property: {
                 name: 'office',
-                price: 320,
-                expense: 32
-            }
+                price: 320
+            },
+            rent: 320,
+            expenses: [{ title: 'expense', amount: 32 }]
         };
 
-        let termP2 = p2.property.price + p2.property.expense;
+        let termP2 = p2.rent + p2.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0);
         termP2 *= 1.2; // VAT
 
         const contract = Contract.create({

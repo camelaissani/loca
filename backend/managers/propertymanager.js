@@ -9,11 +9,9 @@ function _toPropertiesData(realm, inputProperties, callback) {
     occupantModel.findFilter(
         realm,
         {
-            $query: {
-                properties: {
-                    $elemMatch: {
-                        propertyId: {$in: inputProperties.map(property => property._id.toString())}
-                    }
+            properties: {
+                $elemMatch: {
+                    propertyId: { $in: inputProperties.map(property => property._id.toString()) }
                 }
             }
         },
@@ -33,7 +31,7 @@ function _toPropertiesData(realm, inputProperties, callback) {
                                     acc.occupant = occupant;
                                 } else {
                                     const acc_property = acc.occupant.properties.find(currentProperty => currentProperty.propertyId === property._id.toString());
-                                    const beginDate =  moment(occupant_property.entryDate, 'DD/MM/YYYY').startOf('day');
+                                    const beginDate = moment(occupant_property.entryDate, 'DD/MM/YYYY').startOf('day');
                                     const lastBeginDate = moment(acc_property.entryDate, 'DD/MM/YYYY').startOf('day');
                                     if (beginDate.isAfter(lastBeginDate)) {
                                         acc.occupant = occupant;
@@ -41,8 +39,15 @@ function _toPropertiesData(realm, inputProperties, callback) {
                                 }
                             }
                             return acc;
-                        }, {occupant:null})
-                        .occupant
+                        }, { occupant: null })
+                        .occupant,
+                    occupants
+                        .filter(({ properties }) => properties.map(({ propertyId }) => propertyId).includes(property._id))
+                        .sort((occ1, occ2) => {
+                            const m1 = moment(occ1.beginDate, 'DD/MM/YYYY');
+                            const m2 = moment(occ2.beginDate, 'DD/MM/YYYY');
+                            return m1.isBefore(m2) ? 1 : -1;
+                        })
                 );
             }));
         }
@@ -58,13 +63,11 @@ function add(req, res) {
 
     propertyModel.add(realm, property, (errors, dbProperty) => {
         if (errors) {
-            res.json({errors: errors});
-            return;
+            return res.status(500).json({ errors: errors });
         }
         _toPropertiesData(realm, [dbProperty], (errors, properties) => {
             if (errors && errors.length > 0) {
-                res.json({errors: errors});
-                return;
+                return res.status(500).json({ errors: errors });
             }
             res.json(properties[0]);
         });
@@ -77,13 +80,11 @@ function update(req, res) {
 
     propertyModel.update(realm, property, (errors) => {
         if (errors) {
-            res.json({errors: errors});
-            return;
+            return res.status(500).json({ errors: errors });
         }
         _toPropertiesData(realm, [property], (errors, properties) => {
             if (errors && errors.length > 0) {
-                res.json({errors: errors});
-                return;
+                return res.status(500).json({ errors: errors });
             }
             res.json(properties[0]);
         });
@@ -95,7 +96,7 @@ function remove(req, res) {
     const ids = req.params.ids.split(',');
 
     propertyModel.remove(realm, ids, (errors) => {
-        res.json({errors: errors});
+        return res.status(500).json({ errors: errors });
     });
 }
 
@@ -104,18 +105,16 @@ function all(req, res) {
 
     propertyModel.findAll(realm, (errors, properties) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(500).json({
                 errors: errors
             });
-            return;
         }
 
         _toPropertiesData(realm, properties, (errors, properties) => {
             if (errors && errors.length > 0) {
-                res.json({
+                return res.status(500).json({
                     errors: errors
                 });
-                return;
             }
             res.json(properties);
         });
@@ -128,18 +127,16 @@ function one(req, res) {
 
     propertyModel.findOne(realm, tenantId, (errors, dbProperty) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(500).json({
                 errors: errors
             });
-            return;
         }
 
         _toPropertiesData(realm, dbProperty, (errors, property) => {
             if (errors && errors.length > 0) {
-                res.json({
+                return res.status(500).json({
                     errors: errors
                 });
-                return;
             }
             res.json(property);
         });
@@ -156,21 +153,19 @@ function overview(req, res) {
 
     propertyModel.findAll(realm, (errors, properties) => {
         if (errors && errors.length > 0) {
-            res.json({
+            return res.status(500).json({
                 errors: errors
             });
-            return;
         }
 
         _toPropertiesData(realm, properties, (errors, properties) => {
             if (errors && errors.length > 0) {
-                res.json({
+                return res.status(500).json({
                     errors: errors
                 });
-                return;
             }
             result.countAll = properties.length;
-            properties.reduce( (acc, property) => {
+            properties.reduce((acc, property) => {
                 if (property.available) {
                     acc.countFree++;
                 } else {
@@ -180,7 +175,6 @@ function overview(req, res) {
             }, result);
             res.json(result);
         });
-
     });
 }
 

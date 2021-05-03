@@ -11,11 +11,18 @@ class PropertyModel extends Model {
             description: String,
             surface: Number,
             phone: String,
+            digicode: String,
+            address: Object, // { street1, street2, zipCode, city, state, country }
+
+            price: Number,
+
+            // TODO moved in Occupant.properties model
+            expense: Number,
+
+            // TODO to remove, replaced by address
             building: String,
             level: String,
             location: String,
-            price: Number,
-            expense: Number
         });
     }
 

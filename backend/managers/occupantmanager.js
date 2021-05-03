@@ -57,6 +57,10 @@ function add(req, res) {
         if (occupant.properties) {
             occupant.properties.forEach((item) => {
                 item.property = propertyMap[item.propertyId];
+                item.entryDate = item.entryDate || occupant.beginDate;
+                item.exitDate = item.exitDate || occupant.endDate;
+                item.rent = item.rent || item.property.price;
+                item.expenses = item.expenses || (item.property.expense && [{ title: 'general expense', amount: item.property.expense }]) || [];
             });
         }
 
@@ -144,6 +148,8 @@ function update(req, res) {
                     }
                     itemToKeep.entryDate = item.entryDate || occupant.beginDate;
                     itemToKeep.exitDate = item.exitDate || occupant.endDate;
+                    itemToKeep.rent = item.rent || item.property.price;
+                    itemToKeep.expenses = item.expenses || (item.property.expense && [{ title: 'general expense', amount: item.property.expense }]) || [];
                     return itemToKeep;
                 });
             }

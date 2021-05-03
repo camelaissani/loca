@@ -23,18 +23,20 @@ module.exports = function(contract, rentDate, previousRent, settlements, rent) {
     }).forEach(function (property) {
         if (property.property) {
             const name = property.property.name || '';
-            const preTaxAmount = property.property.price || 0;
-            const charges = property.property.expense || 0;
+            const preTaxAmount = property.rent || 0;
+            const expenses = property.expenses || [];
 
             rent.preTaxAmounts.push({
                 description: name,
                 amount: preTaxAmount
             });
 
-            rent.charges.push({
-                description: `charges ${name}`,
-                amount: charges
-            });
+            if (expenses.length) {
+                rent.charges.push(...expenses.map(({title, amount}) => ({
+                    description: title,
+                    amount
+                })));
+            }
         }
     });
     if (settlements) {

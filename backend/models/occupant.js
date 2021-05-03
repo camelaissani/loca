@@ -28,7 +28,7 @@ class OccupantModel extends Model {
             frequency: String,
             terminationDate: String,
             guarantyPayback: Number,
-            properties: Array,
+            properties: Array, // [{ propertyId, property: { ... }, entryDate, exitDate, rent, expenses: [title, amount] }]
             guaranty: Number,
             reference: String,
             isVat: Boolean,

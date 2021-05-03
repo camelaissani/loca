@@ -220,38 +220,60 @@ module.exports = async () => {
                 dbCustomLease = await addLease(realm, customLease);
                 dbFrench369Lease = await addLease(realm, french369Lease);
             }
-            // else {
-            //     dbCustomLease = leases.find(({ system }) => system === true);
-            //     dbFrench369Lease = leases.find(({ name }) => ['369', 'Bail commercial 3 6 9'].includes(name));
+            else {
+                dbCustomLease = leases.find(({ system }) => system === true);
+                dbFrench369Lease = leases.find(({ numberOfTerms }) => numberOfTerms === 108);
 
-            //     if (dbCustomLease) {
-            //         dbCustomLease = await updateLease(realm, {
-            //             ...dbCustomLease,
-            //             ...customLease
-            //         });
-            //     }
+                if (dbCustomLease) {
+                    dbCustomLease = await updateLease(realm, {
+                        ...dbCustomLease,
+                        ...customLease
+                    });
+                }
 
-            //     if (dbFrench369Lease) {
-            //         dbFrench369Lease = await updateLease(realm, {
-            //             ...dbFrench369Lease,
-            //             ...french369Lease
-            //         });
-            //     }
-            // }
+                if (dbFrench369Lease) {
+                    dbFrench369Lease = await updateLease(realm, {
+                        ...dbFrench369Lease,
+                        ...french369Lease
+                    });
+                }
+            }
 
             const tenants = await findAllTenants(realm);
             await Promise.all(tenants.map(async (dbTenant) => {
-                if (dbCustomLease && dbTenant.contract === 'custom') {
-                    await updateTenant(realm, {
-                        ...dbTenant,
-                        leaseId: String(dbCustomLease._id)
-                    });
-                } else if (dbFrench369Lease && dbTenant.contract === '369') {
-                    await updateTenant(realm, {
-                        ...dbTenant,
-                        leaseId: String(dbFrench369Lease._id)
-                    });
+                // add the leaseId property to tenant (occupant)
+                let leaseId = dbTenant.leaseId;
+                if (dbCustomLease && dbFrench369Lease) {
+                    leaseId = String(dbCustomLease._id);
+                    if (dbTenant.contract === '369') {
+                        leaseId = String(dbFrench369Lease._id);
+                    }
                 }
+
+                // update the properties to add the rent and expenses of properties
+                let properties = dbTenant.properties;
+                properties.forEach(property => {
+                    if (property.expenses) {
+                        return;
+                    }
+                    property.rent = property.property.price;
+                    property.expenses = [];
+
+                    if (!property.property.expense) {
+                        return;
+                    }
+
+                    property.expenses = [{
+                        title: 'general expense',
+                        amount: property.property.expense
+                    }];
+                });
+
+                await updateTenant(realm, {
+                    ...dbTenant,
+                    leaseId,
+                    properties
+                });
             }));
             // const utenants = await findAllTenants(realm);
             // console.log(utenants.map(({contract, leaseId}) => ({contract, leaseId})));

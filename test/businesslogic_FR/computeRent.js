@@ -12,8 +12,9 @@ describe('business logic rent computation', () => {
             property: {
                 name: 'mon bureau',
                 price: 300,
-                expense: 10
-            }
+            },
+            rent: 300,
+            expenses: [{title: 'expense', amount: 10}]
         };
         const contract = {
             begin: '01/01/2017',
@@ -23,7 +24,10 @@ describe('business logic rent computation', () => {
             properties: [property]
         };
 
-        const grandTotal = math.round((property.property.price + property.property.expense - contract.discount) * (1+contract.vatRate), 2);
+        const grandTotal = math.round((property.rent + property.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0) - contract.discount) * (1+contract.vatRate), 2);
 
         it('check rent object structure', () => {
             const computedRent = BL.computeRent(contract, '01/01/2017');
@@ -54,17 +58,19 @@ describe('business logic rent computation', () => {
             property: {
                 name: 'mon bureau',
                 price: 300,
-                expense: 10
-            }
+            },
+            rent: 300,
+            expenses: [{title: 'expense', amount: 10}]
         };
         const property2 = {
             entryDate: '01/02/2017',
             exitDate: '31/08/2017',
             property: {
                 name: 'mon parking',
-                price: 30,
-                expense: 5
-            }
+                price: 30
+            },
+            rent: 30,
+            expenses: [{title: 'expense', amount: 5}]
         };
         const contract = {
             begin: '01/01/2017',
@@ -73,8 +79,14 @@ describe('business logic rent computation', () => {
             vatRate: 0.2,
             properties: [property1, property2]
         };
-        const grandTotal1 = math.round((property1.property.price + property1.property.expense - contract.discount) * (1+contract.vatRate), 2);
-        const grandTotal2 = math.round((property2.property.price + property2.property.expense) * (1+contract.vatRate), 2);
+        const grandTotal1 = math.round((property1.property.price + property1.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0) - contract.discount) * (1+contract.vatRate), 2);
+        const grandTotal2 = math.round((property2.property.price + property2.expenses.reduce((acc, { amount }) => {
+            acc += amount;
+            return acc;
+        }, 0)) * (1+contract.vatRate), 2);
 
         it('compute one rent one property should be billed', () => {
             const computedRent = BL.computeRent(contract, '01/01/2017');
