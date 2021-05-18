@@ -21,6 +21,7 @@ const get = async (req, res) => {
   const response = await axios.get(url, {
     responseType: 'stream',
     headers: {
+      organizationId: req.headers.organizationid || String(req.realm._id),
       'Accept-Language': language,
     },
   });

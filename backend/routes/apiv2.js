@@ -8,6 +8,7 @@ const leaseManager = require('../managers/leasemanager');
 const rentManager = require('../managers/rentmanager');
 const occupantManager = require('../managers/occupantmanager');
 const documentManager = require('../managers/documentmanager');
+const templateManager = require('../managers/templatemanager');
 const propertyManager = require('../managers/propertymanager');
 const ownerManager = require('../managers/ownermanager');
 const notificationManager = require('../managers/notificationmanager');
@@ -95,6 +96,14 @@ module.exports = function () {
   documentsRouter.get('/:document/:id/:term', documentManager.get);
   documentsRouter.patch('/:id', documentManager.update);
   router.use('/documents', documentsRouter);
+
+  const templatesRouter = express.Router();
+  templatesRouter.get('/', templateManager.all);
+  templatesRouter.get('/:id', templateManager.one);
+  templatesRouter.post('/', templateManager.add);
+  templatesRouter.put('/', templateManager.update);
+  templatesRouter.delete('/:ids', templateManager.remove);
+  router.use('/templates', templatesRouter);
 
   const notificationsRouter = express.Router();
   notificationsRouter.get('/', notificationManager.all);

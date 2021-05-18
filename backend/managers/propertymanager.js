@@ -29,10 +29,12 @@ function _toPropertiesData(realm, inputProperties, callback) {
             property,
             occupants.reduce(
               (acc, occupant) => {
-                const occupant_property = occupant.properties.find(
-                  (currentProperty) =>
-                    currentProperty.propertyId === property._id.toString()
-                );
+                const occupant_property =
+                  occupant.properties &&
+                  occupant.properties.find(
+                    (currentProperty) =>
+                      currentProperty.propertyId === property._id.toString()
+                  );
                 if (occupant_property) {
                   if (!acc.occupant) {
                     acc.occupant = occupant;
@@ -59,7 +61,7 @@ function _toPropertiesData(realm, inputProperties, callback) {
               { occupant: null }
             ).occupant,
             occupants
-              .filter(({ properties }) =>
+              .filter(({ properties = [] }) =>
                 properties
                   .map(({ propertyId }) => propertyId)
                   .includes(property._id)

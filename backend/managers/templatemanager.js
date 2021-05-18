@@ -1,7 +1,7 @@
 const config = require('../../config');
 const axios = require('axios');
 
-//TODO: if no added value to have the api in  loca then move that in nginx config
+//TODO: if no added value to have the api in loca then move that in nginx config
 
 const pdfGeneratorUrl = `${config.PDFGENERATOR_URL}/templates`;
 

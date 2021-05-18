@@ -83,6 +83,7 @@ async function update(req, res) {
       name: lease.name || dbLease.name,
       description: lease.description || dbLease.description,
       active: lease.active !== undefined ? lease.active : dbLease.active,
+      templateId: lease.templateId || '',
     };
   }
 

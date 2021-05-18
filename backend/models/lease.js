@@ -13,6 +13,7 @@ class LeaseModel extends Model {
       timeRange: String, // days, weeks, months, years
       active: Boolean,
       system: Boolean,
+      templateId: String,
     });
   }
 

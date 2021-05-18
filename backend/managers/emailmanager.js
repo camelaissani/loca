@@ -5,7 +5,7 @@ const logger = require('winston');
 const config = require('../../config');
 const occupantModel = require('../models/occupant');
 
-const _sendEmail = async (locale, message) => {
+const _sendEmail = async (req, message) => {
   const postData = {
     templateName: message.document,
     recordId: message.tenantId,
@@ -17,7 +17,8 @@ const _sendEmail = async (locale, message) => {
   try {
     const response = await axios.post(config.EMAILER_URL, postData, {
       headers: {
-        'Accept-Language': locale,
+        organizationId: req.headers.organizationid || String(req.realm._id),
+        'Accept-Language': req.language,
       },
     });
 
@@ -69,7 +70,7 @@ module.exports = {
       const statusList = await Promise.all(
         messages.map(async (message) => {
           try {
-            return await _sendEmail(req.language, message);
+            return await _sendEmail(req, message);
           } catch (error) {
             return [
               {

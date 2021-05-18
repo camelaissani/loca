@@ -52,14 +52,16 @@ const _findOccupants = (realm, occupantId, startTerm, endTerm) => {
   });
 };
 
-const _getEmailStatus = async (startTerm, endTerm) => {
+const _getEmailStatus = async (realm, startTerm, endTerm) => {
   try {
     let emailEndPoint = `${config.EMAILER_URL}/status/${startTerm}`;
     if (endTerm) {
       emailEndPoint = `${config.EMAILER_URL}/status/${startTerm}/${endTerm}`;
     }
     logger.debug(`get email status ${emailEndPoint}`);
-    const response = await axios.get(emailEndPoint);
+    const response = await axios.get(emailEndPoint, {
+      organizationId: String(realm._id),
+    });
     logger.debug(response.data);
     return response.data.reduce((acc, status) => {
       const data = {
@@ -93,7 +95,7 @@ const _getRentsDataByTerm = async (realm, currentDate, frequency) => {
 
   const [dbOccupants, emailStatus = {}] = await Promise.all([
     _findOccupants(realm, null, startTerm, endTerm),
-    _getEmailStatus(startTerm, endTerm).catch(logger.error),
+    _getEmailStatus(realm, startTerm, endTerm).catch(logger.error),
   ]);
 
   // compute rents
