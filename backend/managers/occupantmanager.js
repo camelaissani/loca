@@ -148,8 +148,8 @@ function update(req, res) {
                     }
                     itemToKeep.entryDate = item.entryDate || occupant.beginDate;
                     itemToKeep.exitDate = item.exitDate || occupant.endDate;
-                    itemToKeep.rent = item.rent || item.property.price;
-                    itemToKeep.expenses = item.expenses || (item.property.expense && [{ title: 'general expense', amount: item.property.expense }]) || [];
+                    itemToKeep.rent = item.rent || itemToKeep.property.price;
+                    itemToKeep.expenses = item.expenses || (itemToKeep.property.expense && [{ title: 'general expense', amount: itemToKeep.property.expense }]) || [];
                     return itemToKeep;
                 });
             }
