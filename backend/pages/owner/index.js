@@ -1,6 +1,6 @@
 module.exports = () => {
-    return {
-        id: 'owner',
-        restricted: true
-    };
+  return {
+    id: 'owner',
+    restricted: true,
+  };
 };

@@ -12,358 +12,360 @@
 @large-border: 2.8pt solid #555;
 
 body {
-    margin: 0;
-    padding: 0;
-    font: @default-font-size "Tahoma";
+  margin: 0;
+  padding: 0;
+  font: @default-font-size 'Tahoma';
 }
 * {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
-h1, h2, h3 {
-    margin: 0;
-    padding: 0;
+h1,
+h2,
+h3 {
+  margin: 0;
+  padding: 0;
 }
 table {
-    border: none;
-    border-collapse: collapse;
+  border: none;
+  border-collapse: collapse;
 }
 
 span,
 span:focus,
-span:active{
-    border: 2px solid #ccc;
-    outline: none;
-    padding: 2px;
-    background-color: #FFFFE0;
+span:active {
+  border: 2px solid #ccc;
+  outline: none;
+  padding: 2px;
+  background-color: #ffffe0;
 }
 span.error {
-    border: 2px solid red;
+  border: 2px solid red;
 }
 .page {
-    position: relative;
-    width: 210mm;
-    height: 296mm;
-    border: 1px solid #ccc;
-    page-break-inside: avoid;
+  position: relative;
+  width: 210mm;
+  height: 296mm;
+  border: 1px solid #ccc;
+  page-break-inside: avoid;
 }
 
 .logo {
-    position: absolute;
-    top: @margin;
-    left: @margin;
-    h1 {
-        display: inline-block;
-        font-size: @logo-font-size;
-        color: #330066;
-    }
-    img {
-        display: inline-block;
-    }
+  position: absolute;
+  top: @margin;
+  left: @margin;
+  h1 {
+    display: inline-block;
+    font-size: @logo-font-size;
+    color: #330066;
+  }
+  img {
+    display: inline-block;
+  }
 }
 .contact {
-    border-top : @border;
-    margin: 2pt 0 0 0;
-    padding: 5pt 0 0 0;
+  border-top: @border;
+  margin: 2pt 0 0 0;
+  padding: 5pt 0 0 0;
 }
 .customer {
-    position: absolute;
-    top: @margin + 35mm;
-    left: @margin + 95mm;
+  position: absolute;
+  top: @margin + 35mm;
+  left: @margin + 95mm;
 
-    h3{
-        margin-bottom: 5pt;
-    }
+  h3 {
+    margin-bottom: 5pt;
+  }
 }
 
 .object {
-    position: absolute;
-    top: @margin + 95mm;
-    left: @margin;
+  position: absolute;
+  top: @margin + 95mm;
+  left: @margin;
 }
 
 .certificate .object {
+  position: absolute;
+  top: @margin + 95mm;
+  left: @margin;
+  right: @margin;
+  padding: 5pt;
+  border: @border;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: @xlarge-font-size;
+  font-weight: bold;
+}
+
+.contract {
+  .object {
     position: absolute;
-    top: @margin + 95mm;
+    top: @margin + 65mm;
     left: @margin;
     right: @margin;
-    padding: 5pt;
+    padding: 15pt;
     border: @border;
     text-align: center;
     text-transform: uppercase;
     font-size: @xlarge-font-size;
     font-weight: bold;
-}
-
-.contract {
-    .object {
-        position: absolute;
-        top: @margin + 65mm;
-        left: @margin;
-        right: @margin;
-        padding: 15pt;
-        border: @border;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: @xlarge-font-size;
-        font-weight: bold;
-        background-color: #ccc;
-        small {
-            font-weight: normal;
-            text-transform: none;
-            font-style: italic;
-        }
+    background-color: #ccc;
+    small {
+      font-weight: normal;
+      text-transform: none;
+      font-style: italic;
     }
+  }
 
-    .items {
-        top: @margin;
-        font-size: @normal-font-size;
-        line-height: @default-font-size + 5;
-        table {
-            border: @thin-border;
-            th {
-                vertical-align: middle;
-            }
-            td {
-                vertical-align: middle;
-            }
-            tr {
-                   border: none;
-            }
-        }
-        small {
-            font-size: @xsmall-font-size;
-        }
+  .items {
+    top: @margin;
+    font-size: @normal-font-size;
+    line-height: @default-font-size + 5;
+    table {
+      border: @thin-border;
+      th {
+        vertical-align: middle;
+      }
+      td {
+        vertical-align: middle;
+      }
+      tr {
+        border: none;
+      }
     }
-
-    &:first-child .items {
-        top: @margin + 90mm;
+    small {
+      font-size: @xsmall-font-size;
     }
+  }
 
-    .footer {
-        font-size: @xsmall-font-size;
-    }
+  &:first-child .items {
+    top: @margin + 90mm;
+  }
 
+  .footer {
+    font-size: @xsmall-font-size;
+  }
 }
 
 .title {
-    position: absolute;
+  position: absolute;
 
-    top: @margin + 84.7mm;
-    left: @margin + 95mm;
+  top: @margin + 84.7mm;
+  left: @margin + 95mm;
 
-    color: #333;
-    font-weight: bold;
-    font-size: @large-font-size;
-    text-transform:uppercase;
-    letter-spacing: 2pt;
+  color: #333;
+  font-weight: bold;
+  font-size: @large-font-size;
+  text-transform: uppercase;
+  letter-spacing: 2pt;
 
-    .invoice {
-        top: @margin + 90mm;
-    }
+  .invoice {
+    top: @margin + 90mm;
+  }
 }
 
 .limit {
-    position: absolute;
+  position: absolute;
 
-    top: @margin + 100mm;
-    left: @margin;
+  top: @margin + 100mm;
+  left: @margin;
 }
 
 .paymentinfo {
-    position: absolute;
+  position: absolute;
 
-    top: @margin + 220mm;
-    left: @margin;
-    font-size: @small-font-size;
+  top: @margin + 220mm;
+  left: @margin;
+  font-size: @small-font-size;
 
-    .columns {
-        display: flex;
-        flex-direction: row;
-        div {
-            width: 50%;
-        }
+  .columns {
+    display: flex;
+    flex-direction: row;
+    div {
+      width: 50%;
     }
+  }
 }
 
 .footer {
-    position: absolute;
-    bottom: @margin;
-    left: @margin;
-    right: @margin;
+  position: absolute;
+  bottom: @margin;
+  left: @margin;
+  right: @margin;
 }
 
-.txtAlignRight, .subtotal,.total, .due {
-    text-align: right;
-    white-space: nowrap;
+.txtAlignRight,
+.subtotal,
+.total,
+.due {
+  text-align: right;
+  white-space: nowrap;
 }
-
 
 .reference {
-    position: absolute;
-    top: @margin + 70mm;
-    left: @margin;
+  position: absolute;
+  top: @margin + 70mm;
+  left: @margin;
 
-    table {
-        width: 200pt;
-        font-size: @small-font-size;
-    }
+  table {
+    width: 200pt;
+    font-size: @small-font-size;
+  }
 
-    td {
-        padding: 2pt;
-        text-align: right;
-    }
+  td {
+    padding: 2pt;
+    text-align: right;
+  }
 
-    td.label {
-        text-align: left;
-        font-size: @small-font-size;
-    }
-    table td, table th {
-
+  td.label {
+    text-align: left;
+    font-size: @small-font-size;
+  }
+  table td,
+  table th {
     padding: 2pt;
     margin: 0;
-}
+  }
 }
 
 .today {
-    position: absolute;
+  position: absolute;
 
-    top: @margin + 70mm;
-    left: @margin + 95mm;
-    font: @default-font-size "Tahoma";
-    text-align: left;
+  top: @margin + 70mm;
+  left: @margin + 95mm;
+  font: @default-font-size 'Tahoma';
+  text-align: left;
 }
 
-
 .items {
-    position: absolute;
-    top: @margin + 110mm;
-    left: @margin;
-    width: 210mm - 2*@margin;
+  position: absolute;
+  top: @margin + 110mm;
+  left: @margin;
+  width: 210mm - 2 * @margin;
 
-    table {
-        //border: @thin-border;
-        border-top: @thin-border;
-        border-bottom: @thin-border;
-        width: 100%;
-    }
+  table {
+    //border: @thin-border;
+    border-top: @thin-border;
+    border-bottom: @thin-border;
+    width: 100%;
+  }
 
-    th {
-        border-right: @thin-border;
-        border-bottom: @thin-border;
-    }
+  th {
+    border-right: @thin-border;
+    border-bottom: @thin-border;
+  }
 
-    th:first-child {
-        border-left: @thin-border;
-    }
+  th:first-child {
+    border-left: @thin-border;
+  }
 
-    td {
-        padding-right: 10pt;
-        border-right: @thin-border;
-        vertical-align: top;
-    }
+  td {
+    padding-right: 10pt;
+    border-right: @thin-border;
+    vertical-align: top;
+  }
 
-    td:first-child {
-         border-left: @thin-border;
-    }
+  td:first-child {
+    border-left: @thin-border;
+  }
 
-    td.description {
-        width: 220pt;
-        padding-left:10pt;
-    }
+  td.description {
+    width: 220pt;
+    padding-left: 10pt;
+  }
 
-    td.total-line {
-        border-right: none;
-        text-align: left;
-        padding-left:10pt;
-        border-left: @thin-border;
-        border-top: @thin-border;
-    }
+  td.total-line {
+    border-right: none;
+    text-align: left;
+    padding-left: 10pt;
+    border-left: @thin-border;
+    border-top: @thin-border;
+  }
 
-    td.total-value {
-        border-left: none;
-        border-top: @thin-border;
-    }
+  td.total-value {
+    border-left: none;
+    border-top: @thin-border;
+  }
 
-    td.blank:last-child {
-      border-bottom: @thin-border;
-    }
+  td.blank:last-child {
+    border-bottom: @thin-border;
+  }
 }
 
 .certificate .items {
-    font-size: @large-font-size;
-    line-height: @large-font-size + 12;
+  font-size: @large-font-size;
+  line-height: @large-font-size + 12;
 }
 
 .certificate .signature {
-    font-size: @default-font-size;
-    line-height: normal;
+  font-size: @default-font-size;
+  line-height: normal;
 }
 
 .rubber-stamp {
-    position: absolute;
-    top: @margin + 55mm;
-    left: @margin + 10mm;
-    font-size: @xlarge-font-size;
-    font-weight: bold;
-    text-align: center;
+  position: absolute;
+  top: @margin + 55mm;
+  left: @margin + 10mm;
+  font-size: @xlarge-font-size;
+  font-weight: bold;
+  text-align: center;
 
-    border-radius: 10pt;
-    border: @large-border;
-    padding: 5pt;
+  border-radius: 10pt;
+  border: @large-border;
+  padding: 5pt;
 
-    font-family: 'Vollkorn', serif;
-    text-transform: uppercase;
-    transform:rotate(-20deg);
-    transform-origin: bottom left;
-    -ms-transform:rotate(-20deg);
-    -moz-transform: rotate(-20deg);
-    -webkit-transform: rotate(-20deg);
-    -o-transform: rotate(-20deg);
-    -o-transform-origin: bottom left;
+  font-family: 'Vollkorn', serif;
+  text-transform: uppercase;
+  transform: rotate(-20deg);
+  transform-origin: bottom left;
+  -ms-transform: rotate(-20deg);
+  -moz-transform: rotate(-20deg);
+  -webkit-transform: rotate(-20deg);
+  -o-transform: rotate(-20deg);
+  -o-transform-origin: bottom left;
 }
 
 .printbutton {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background-color: #ccc;
-    text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #ccc;
+  text-align: center;
 
-    button {
-        height: 35px;
-        text-transform: uppercase;
-        font-size: 20px;
-    }
+  button {
+    height: 35px;
+    text-transform: uppercase;
+    font-size: 20px;
+  }
 }
 
 .red {
-    color: #d00;
-    border-color: #d00;
+  color: #d00;
+  border-color: #d00;
 }
 
 .text-right {
-    text-align: right;
+  text-align: right;
 }
 
 @page {
-    size: A4 portrait;
-    margin: 0;
+  size: A4 portrait;
+  margin: 0;
 }
 @media print {
-    span,
-    span:focus,
-    span:active{
-        border: none;
-        padding: 0;
-        background-color: transparent;
-    }
-    .page {
-        border: none;
-    }
-    .printbutton {
-        display: none;
-    }
+  span,
+  span:focus,
+  span:active {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+  }
+  .page {
+    border: none;
+  }
+  .printbutton {
+    display: none;
+  }
 }

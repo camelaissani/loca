@@ -1,144 +1,176 @@
 .tiles {
-    .col-xs-1,
-    .col-xs-2,
-    .col-xs-3,
-    .col-xs-4,
-    .col-xs-5,
-    .col-xs-6,
-    .col-xs-7,
-    .col-xs-8,
-    .col-xs-9,
-    .col-xs-10,
-    .col-xs-11,
-    .col-xs-12 {
-        padding-left: 0;
-        padding-right: 5px;
-        padding-bottom: 5px;
-        &.last-col {
-            padding-right: 0;
-        }
-        &.last-row {
-            padding-bottom: 0;
-        }
+  .col-xs-1,
+  .col-xs-2,
+  .col-xs-3,
+  .col-xs-4,
+  .col-xs-5,
+  .col-xs-6,
+  .col-xs-7,
+  .col-xs-8,
+  .col-xs-9,
+  .col-xs-10,
+  .col-xs-11,
+  .col-xs-12 {
+    padding-left: 0;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    &.last-col {
+      padding-right: 0;
+    }
+    &.last-row {
+      padding-bottom: 0;
+    }
+  }
+
+  .tile {
+    height: 195px;
+    padding: 10px;
+    color: white;
+    &:not(.disabled) {
+      cursor: pointer;
     }
 
-    .tile {
-        height: 195px;
-        padding: 10px;
-        color: white;
-        &:not(.disabled) {
-            cursor: pointer;
-        }
-
-        .h1, .h2, .h3, .h4, .h5,
-        h1, h2, h3, h4, h5 {
-            color: white;
-        }
-
-        .carousel {
-            height: 175px; // - padding
-            .item {
-                height: 175px; //- padding
-            }
-        }
-
-        .vertical-center {
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-            margin: 0;
-            .h1, .h2, .h3, .h4, .h5,
-            h1, h2, h3, h4, h5 {
-                &:first-child {
-                    margin-top: 0;
-                }
-            }
-        }
-
-        .tilecaption {
-            font-size: 70px;
-        }
-
-        .tilecurrency {
-            font-size: 24px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-
-        &.blue {
-            background: rgb(0,172,238);
-            &:hover:not(.disabled) {
-                background-color: darken(rgb(0,172,238), 10%)
-            }
-            &.lighter {
-                background: rgb(62,157,215);
-                &:hover:not(.disabled) {
-                    background-color: darken(rgb(62,157,215), 10%)
-                }
-            }
-            &.light {
-                background: rgb(71,193,228);
-                &:hover:not(.disabled) {
-                    background-color: darken(rgb(71,193,228), 10%)
-                }
-            }
-            &.dark {
-                background: rgb(0,93,233);
-                &:hover:not(.disabled) {
-                    background-color: darken(rgb(0,93,233), 10%)
-                }
-            }
-        }
-
-        &.grey {
-            color: #555;
-            .h1, .h2, .h3, .h4, .h5,
-            h1, h2, h3, h4, h5 {
-                color: #555;
-            }
-            background: rgb(243,243,243);
-            &:hover:not(.disabled) {
-                background-color: darken(rgb(243,243,243), 10%)
-            }
-        }
-
-        &.cover {
-            background-size: cover;
-            background-image: url('/public/images/manhattan.jpg');
-            background-position: center center;
-            font-weight: bold;
-            .h1, .h2, .h3, .h4, .h5,
-            h1, h2, h3, h4, h5 {
-                font-weight: bold;
-            }
-        }
-
-        &.red {
-            background: rgb(175,26,63);
-            &:hover:not(.disabled) {
-                background-color: darken(rgb(175,26,63), 10%)
-            }
-        }
-
-        &.white {
-            background: white;
-            &:hover:not(.disabled) {
-                background-color: darken(white, 10%)
-            }
-        }
-
-        &.orange {
-            background: rgb(209,70,37);
-            &:hover:not(.disabled) {
-                background-color: darken(rgb(209,70,37), 10%)
-            }
-        }
-
-        &.green {
-            background: rgb(0,142,0);
-            &:hover:not(.disabled) {
-                background-color: darken(rgb(0,142,0), 10%)
-            }
-        }
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      color: white;
     }
+
+    .carousel {
+      height: 175px; // - padding
+      .item {
+        height: 175px; //- padding
+      }
+    }
+
+    .vertical-center {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      margin: 0;
+      .h1,
+      .h2,
+      .h3,
+      .h4,
+      .h5,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+
+    .tilecaption {
+      font-size: 70px;
+    }
+
+    .tilecurrency {
+      font-size: 24px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    &.blue {
+      background: rgb(0, 172, 238);
+      &:hover:not(.disabled) {
+        background-color: darken(rgb(0, 172, 238), 10%);
+      }
+      &.lighter {
+        background: rgb(62, 157, 215);
+        &:hover:not(.disabled) {
+          background-color: darken(rgb(62, 157, 215), 10%);
+        }
+      }
+      &.light {
+        background: rgb(71, 193, 228);
+        &:hover:not(.disabled) {
+          background-color: darken(rgb(71, 193, 228), 10%);
+        }
+      }
+      &.dark {
+        background: rgb(0, 93, 233);
+        &:hover:not(.disabled) {
+          background-color: darken(rgb(0, 93, 233), 10%);
+        }
+      }
+    }
+
+    &.grey {
+      color: #555;
+      .h1,
+      .h2,
+      .h3,
+      .h4,
+      .h5,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        color: #555;
+      }
+      background: rgb(243, 243, 243);
+      &:hover:not(.disabled) {
+        background-color: darken(rgb(243, 243, 243), 10%);
+      }
+    }
+
+    &.cover {
+      background-size: cover;
+      background-image: url('/public/images/manhattan.jpg');
+      background-position: center center;
+      font-weight: bold;
+      .h1,
+      .h2,
+      .h3,
+      .h4,
+      .h5,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-weight: bold;
+      }
+    }
+
+    &.red {
+      background: rgb(175, 26, 63);
+      &:hover:not(.disabled) {
+        background-color: darken(rgb(175, 26, 63), 10%);
+      }
+    }
+
+    &.white {
+      background: white;
+      &:hover:not(.disabled) {
+        background-color: darken(white, 10%);
+      }
+    }
+
+    &.orange {
+      background: rgb(209, 70, 37);
+      &:hover:not(.disabled) {
+        background-color: darken(rgb(209, 70, 37), 10%);
+      }
+    }
+
+    &.green {
+      background: rgb(0, 142, 0);
+      &:hover:not(.disabled) {
+        background-color: darken(rgb(0, 142, 0), 10%);
+      }
+    }
+  }
 }

@@ -4,82 +4,91 @@ html {
 }
 
 body {
-    overflow-x: hidden;
-    background-color: @body-bg;
-    padding-top: 70px;
-    padding-bottom: 15px;
-    margin-bottom: @footer-height;
-
+  overflow-x: hidden;
+  background-color: @body-bg;
+  padding-top: 70px;
+  padding-bottom: 15px;
+  margin-bottom: @footer-height;
 }
 .covered-body {
-    background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
-    background-size: cover;
+  background: url('/public/images/manhattan.jpg') no-repeat center center fixed;
+  background-size: cover;
 
-    font-family: "Open Sans",Arial,sans-serif;
-    .view {
-        color: #fff;
-        a {
-            color: #fff;
-        }
-        h1, h2, h3, h4, h5, h6,
-        .h1, .h2, .h3, .h4, .h5, .h6 {
-            color: #fff;
-        }
+  font-family: 'Open Sans', Arial, sans-serif;
+  .view {
+    color: #fff;
+    a {
+      color: #fff;
     }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+      color: #fff;
+    }
+  }
 }
 
 .footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: @footer-height;
-    color: @navbar-default-color;
-    background: @navbar-default-bg;
-    font-size: 11px;
-    padding: 15px 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: @footer-height;
+  color: @navbar-default-color;
+  background: @navbar-default-bg;
+  font-size: 11px;
+  padding: 15px 0;
 
-    a {
-        color: @navbar-default-link-color;
-        padding-right: 5px;
-        &:focus {
-            outline: 0;
-        }
+  a {
+    color: @navbar-default-link-color;
+    padding-right: 5px;
+    &:focus {
+      outline: 0;
     }
+  }
 }
 
 .sheet {
-    display: none;
+  display: none;
 }
 
 .modal {
-    z-index: 9999;
+  z-index: 9999;
 }
 
 // SPECIFIC
 #waitwindow {
-    position: fixed;
-    height: 60px;
-    width: 230px;
-    top: 50%;
-    left: 50%;
-    margin-top: -60px/2;
-    margin-left: -230px/2;
-    color: #ffffff;
-    background-color: #f0ad4e;
-    border-color: #eea236;
+  position: fixed;
+  height: 60px;
+  width: 230px;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px/2;
+  margin-left: -230px/2;
+  color: #ffffff;
+  background-color: #f0ad4e;
+  border-color: #eea236;
 
-    .loading {
-        padding-left: 10px;
-        font-size: 18px;
-    }
+  .loading {
+    padding-left: 10px;
+    font-size: 18px;
+  }
 }
 
-@media(max-width: @screen-md) {
-    body {
-        padding-top: 0;
-        overflow-x: auto;
-    }
-    .footer {
-        width: @container-desktop;
-    }
+@media (max-width: @screen-md) {
+  body {
+    padding-top: 0;
+    overflow-x: auto;
+  }
+  .footer {
+    width: @container-desktop;
+  }
 }

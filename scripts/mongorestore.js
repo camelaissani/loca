@@ -11,32 +11,32 @@ const bkpDirectory = path.join(__dirname, '..', 'bkp');
 const bkpFile = path.join(bkpDirectory, `${db_name}.dump`);
 
 module.exports = async () => {
-    await new Promise((resolve, reject) => {
-        try {
-            let cmd;
-            if (fs.existsSync(bkpFile)) {
-                cmd = mongobackup.restore({
-                    host : db_url.hostname,
-                    drop: true,
-                    gzip: true,
-                    archive: bkpFile
-                });
-            } else {
-                cmd = mongobackup.restore({
-                    db : db_name,
-                    host : db_url.hostname,
-                    drop: true,
-                    path: path.join(bkpDirectory, db_name)
-                });
-            }
-            cmd.on('close', code => {
-                resolve(code);
-            });
-            cmd.on('error', error => {
-                reject(error);
-            });
-        } catch (error) {
-            reject(error);
-        }
-    });
+  await new Promise((resolve, reject) => {
+    try {
+      let cmd;
+      if (fs.existsSync(bkpFile)) {
+        cmd = mongobackup.restore({
+          host: db_url.hostname,
+          drop: true,
+          gzip: true,
+          archive: bkpFile,
+        });
+      } else {
+        cmd = mongobackup.restore({
+          db: db_name,
+          host: db_url.hostname,
+          drop: true,
+          path: path.join(bkpDirectory, db_name),
+        });
+      }
+      cmd.on('close', (code) => {
+        resolve(code);
+      });
+      cmd.on('error', (error) => {
+        reject(error);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
 };

@@ -1,6 +1,6 @@
 module.exports = () => {
-    return {
-        id: 'profile',
-        restricted: true
-    };
+  return {
+    id: 'profile',
+    restricted: true,
+  };
 };

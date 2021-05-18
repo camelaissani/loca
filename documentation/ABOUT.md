@@ -1,7 +1,7 @@
 # About Loca
 
 Why pay hundreds of dollars for an overpriced, problematic and confusing rental property management software, when you can create a similar and simple app to your taste and preferences,
-without any  of the complex or complicated features… and best of all, absolutely free to use anytime, anywhere?
+without any of the complex or complicated features… and best of all, absolutely free to use anytime, anywhere?
 
 This is the underlying philosophy behind the creation and development of Loca by its Lead Developer, Camel Aissani.
 A rental property manager by profession who also enjoys Software Development and Coding as a part time hobby.
@@ -14,6 +14,5 @@ significantly reduce the need for making frequent, costly phone calls to tenants
 
 Our promise to you our esteemed clients is that Loca will be a welcome solution to your rental management needs,
 not an additional problem.
-
 
 Thank You For Using Loca Today.

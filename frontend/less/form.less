@@ -1,75 +1,84 @@
 .huge {
-    font-size: @jumbotron-font-size;
-    height: @jumbotron-font-size * 2;
+  font-size: @jumbotron-font-size;
+  height: @jumbotron-font-size * 2;
 }
 
-.form-control[readonly="readonly"] {
-    color: @text-color;
-    background-color: @body-bg;
-    border: none;
-    box-shadow: none;
-    cursor: default;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    &::-ms-expand {
-        display: none;
-    }
+.form-control[readonly='readonly'] {
+  color: @text-color;
+  background-color: @body-bg;
+  border: none;
+  box-shadow: none;
+  cursor: default;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  &::-ms-expand {
+    display: none;
+  }
 }
 
 form {
-    .form-error {
-        display: none;
-        margin-bottom: 15px;
-        .fa {
-            color: @brand-warning;
-            font-size: 20px;
-        }
+  .form-error {
+    display: none;
+    margin-bottom: 15px;
+    .fa {
+      color: @brand-warning;
+      font-size: 20px;
     }
+  }
 }
 
 .form-card {
-    background-color: @well-bg;
-    max-width: 500px;
-    margin: auto;
-    margin-top: 40px;
-    .btn {
-        width: 100%;
+  background-color: @well-bg;
+  max-width: 500px;
+  margin: auto;
+  margin-top: 40px;
+  .btn {
+    width: 100%;
+  }
+  p {
+    margin-top: 10px;
+  }
+  padding: 10px 0;
+  box-shadow: none;
+  .form-group {
+    margin-bottom: 5px;
+    &:last-of-type {
+      margin-bottom: 15px;
     }
-    p {
-        margin-top: 10px;
-    }
-    padding: 10px 0;
-    box-shadow: none;
-    .form-group {
-        margin-bottom: 5px;
-        &:last-of-type {
-            margin-bottom: 15px;
-        }
-    }
-    .help-block {
-        margin-top: 10px;
-        margin-bottom: 0;
-    }
+  }
+  .help-block {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
 
-    .page-header {
-        padding: 0 40px 20px 40px;
-        margin: 0;
-        h1, h2, h3, h4, h5, h6,
-        .h1, .h2, .h3, .h4, .h5, .h6 {
-            color: @text-color;
-        }
+  .page-header {
+    padding: 0 40px 20px 40px;
+    margin: 0;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+      color: @text-color;
     }
-    form {
-        padding: 0 50px;
-    }
-
+  }
+  form {
+    padding: 0 50px;
+  }
 }
 
 body.covered-body {
-    .form-card {
-        color: @text-color;
-        a {
-            color: @text-color;
-        }
+  .form-card {
+    color: @text-color;
+    a {
+      color: @text-color;
     }
+  }
 }

@@ -1,41 +1,41 @@
 #view-accounting {
-    .table {
-        width: inherit;
-    }
+  .table {
+    width: inherit;
+  }
 
-    tbody tr td {
-        height: 95px;
-        min-width: 90px;
-        max-width: 90px;
-        width: 90px;
-        &.inactive {
-            background-color: lighten(@gray-base, 80%);
-        }
+  tbody tr td {
+    height: 95px;
+    min-width: 90px;
+    max-width: 90px;
+    width: 90px;
+    &.inactive {
+      background-color: lighten(@gray-base, 80%);
     }
+  }
 
-    tbody tr td:first-child {
-        max-width: none;
-        white-space: nowrap;
-    }
+  tbody tr td:first-child {
+    max-width: none;
+    white-space: nowrap;
+  }
 
-    #accounting-payments-table-top-hscroll {
-        overflow-x: scroll;
-        overflow-y: hidden;
-        #accounting-payments-fake-table {
-            height: 1px; // hack to display the h scrollbar
-        }
+  #accounting-payments-table-top-hscroll {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    #accounting-payments-fake-table {
+      height: 1px; // hack to display the h scrollbar
     }
-    #accounting-payments-per-year-table.table {
-        margin-bottom: 0;
-    }
+  }
+  #accounting-payments-per-year-table.table {
+    margin-bottom: 0;
+  }
 
-    #accounting-payments-table tbody tr td:first-child {
-        max-width: none;
-        white-space: nowrap;
-    }
+  #accounting-payments-table tbody tr td:first-child {
+    max-width: none;
+    white-space: nowrap;
+  }
 
-    small {
-        font-size: ceil((@font-size-base * 0.90));
-        color: @gray-light;
-    }
+  small {
+    font-size: ceil((@font-size-base * 0.9));
+    color: @gray-light;
+  }
 }

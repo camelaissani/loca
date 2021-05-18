@@ -1,23 +1,21 @@
-
-
 # Loca
 
 Loca is a free and open-source web-based application that offers a veritable and user-friendly platform for owners and
-managers  of buildings, flats, offices, meeting rooms, car parks, letter boxes...to make accurate financial and business decisions.
+managers of buildings, flats, offices, meeting rooms, car parks, letter boxes...to make accurate financial and business decisions.
 
 Loca is designed to help small and independent rental property owners, managers and agents to effectively manage their properties, keep accurate, secured and tenancy and property info /documents, in all downloadable formats at all times.
 
 The idea is to make easy the management of properties and occupants with feature such as
 
-•	Collect and keep all information of your properties and tenants securely in one place.
+• Collect and keep all information of your properties and tenants securely in one place.
 
-•	Create downloadable rental contracts and leasing agreements from templates available in the system.
+• Create downloadable rental contracts and leasing agreements from templates available in the system.
 
-•	Follow all rental  payments month by month
+• Follow all rental payments month by month
 
-•	Generate rental debt recovery letters from Templates for recovery unpaid rents by defaulting tenants… and so much more.
+• Generate rental debt recovery letters from Templates for recovery unpaid rents by defaulting tenants… and so much more.
 
- ## How to contribute
+## How to contribute
 
 If the issue you report is not yet reported and related to the Loca core code, please report it on GitHub.
 Provide as much details as needed and include screenshots if possible..

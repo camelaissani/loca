@@ -5,7 +5,6 @@
 //     proxyquire = require('proxyquire'),
 //     mocks = require('./mocks');
 
-
 // describe('occupantmanager', function() {
 //     it('Check create contract 9 years', function(done) {
 //         var manager;
