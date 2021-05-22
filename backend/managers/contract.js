@@ -1,3 +1,4 @@
+const Sugar = require('sugar');
 const moment = require('moment');
 const BL = require('../businesslogic');
 
@@ -60,7 +61,7 @@ const create = (contract) => {
 };
 
 const update = (inputContract, modification) => {
-  const originalContract = JSON.parse(JSON.stringify(inputContract));
+  const originalContract = Sugar.Object.clone(inputContract, true);
   const modifiedContract = {
     ...originalContract,
     ...modification,
@@ -87,11 +88,7 @@ const update = (inputContract, modification) => {
 
   if (inputContract.rents) {
     inputContract.rents
-      .filter(
-        (rent) =>
-          _isPayment(rent) ||
-          rent.discounts.some((discount) => discount.origin === 'settlement')
-      )
+      .filter((rent) => _isPayment(rent))
       .forEach((paidRent) => {
         payTerm(
           updatedContract,
@@ -100,9 +97,14 @@ const update = (inputContract, modification) => {
           ),
           {
             payments: paidRent.payments,
+            vats: paidRent.vats.filter((vat) => vat.origin === 'settlement'),
             discounts: paidRent.discounts.filter(
               (discount) => discount.origin === 'settlement'
             ),
+            debts: paidRent.debts.filter(
+              (debt) => debt.amount && debt.amount > 0
+            ),
+            description: paidRent.description,
           }
         );
       });
@@ -175,9 +177,16 @@ const payTerm = (contract, term, settlements) => {
 };
 
 const _isPayment = (rent) => {
-  return !!(
-    rent.payments.length > 0 &&
-    rent.payments.some((payment) => payment.amount && payment.amount > 0)
+  return (
+    rent.payments.some((payment) => payment.amount && payment.amount > 0) ||
+    rent.discounts.some(
+      (discount) =>
+        discount.origin === 'settlement' &&
+        discount.amount &&
+        discount.amount > 0
+    ) ||
+    rent.debts.some((debt) => debt.amount && debt.amount > 0) ||
+    !!rent.description
   );
 };
 

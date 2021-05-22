@@ -257,12 +257,9 @@ function remove(req, res) {
             );
           });
           if (occupantsWithPaidRents.length > 0) {
-            // TODO: to localize
             return res.status(422).json({
               errors: [
-                'Impossible de supprimer le locataire : ' +
-                  occupantsWithPaidRents[0].name +
-                  '. Des loyers ont été encaissés.',
+                `impossible to remove ${occupantsWithPaidRents[0].name}. Rents have been recorded.`,
               ],
             });
           }

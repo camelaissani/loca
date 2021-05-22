@@ -140,6 +140,38 @@ describe('contract functionalities', () => {
     );
   });
 
+  it('update contract which has a payment', () => {
+    const contract = Contract.create({
+      begin: '01/01/2017 00:00',
+      end: '31/12/2025 23:59',
+      frequency: 'months',
+      properties: [{}, {}],
+    });
+    Contract.payTerm(contract, '01/01/2017 00:00', {
+      payments: [{ amount: 200 }],
+      debts: [{ description: 'extra', amount: 100 }],
+      discounts: [{ origin: 'settlement', description: '', amount: 100 }],
+    });
+    const newContract = Contract.update(contract, { end: '31/03/2026 23:59' });
+
+    assert.strictEqual(newContract.terms, 108 + 3, 'incorrect number of terms');
+    assert.strictEqual(
+      newContract.rents.length,
+      108 + 3,
+      'incorrect number of rents'
+    );
+
+    assert.strictEqual(
+      contract.rents.filter((rent) => rent.payments.length !== 0).length,
+      1
+    );
+
+    const firstRent = contract.rents.find((rent) => rent.term === 2017010100);
+    assert.strictEqual(firstRent.payments[0].amount, 200);
+    assert.strictEqual(firstRent.debts[0].amount, 100);
+    assert.strictEqual(firstRent.discounts[0].amount, 100);
+  });
+
   it('terminate contract', () => {
     const contract = Contract.create({
       begin: '01/01/2017 00:00',
