@@ -1,12 +1,16 @@
-# Loca
+# :warning: DEPRECATED :warning:
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/microrealestate)
-![Docker](https://github.com/camelaissani/loca/workflows/Docker/badge.svg)
-[![Build Status](https://travis-ci.org/camelaissani/loca.svg?branch=master)](https://travis-ci.org/camelaissani/loca)
-[![Coverage Status](https://coveralls.io/repos/github/camelaissani/loca/badge.svg?branch=master)](https://coveralls.io/github/camelaissani/loca?branch=master)
-<sup>Only backend code is covered see issues [#8](https://github.com/camelaissani/loca/issues/8) and [#9](https://github.com/camelaissani/loca/issues/9)</sup>
+This repository will be soon deprecated in favor of [MicroRealEstate](https://github.com/microrealestate/microrealestate).
 
-## What's Loca?
+The new version uses latest stack on the front-end (NextJS, ReactJS, MobX). The split between front and back-end code is more obvious and the UI has been fully rewritten.
+
+Also, additional functionalities were added in order to customize the application to the landlords needs.
+
+Developer wise [MicroRealEstate](https://github.com/microrealestate/microrealestate) should be easier to enhance and to maintain.
+
+## Loca
+
+### What is Loca?
 
 This nodejs project is a tentative of web application that offers a toolkit for owners of buildings, flats, offices, meeting rooms, car parks, letter boxes...
 
@@ -19,13 +23,11 @@ The idea is to make easy the management of properties and occupants by proposing
 
 ![Loca](http://www.nuageprive.fr/images/loca-sample.png 'Open source real estate management')
 
-[Check out the live demo.](http://demo.nuageprive.fr/)
-
-## Getting started
+### Getting started
 
 Follow instructions from [here](https://github.com/microrealestate/microrealestate#getting-started)
 
-## Technical Stack
+### Technical Stack
 
 Back-end:
 
@@ -37,7 +39,7 @@ JQuery, Bootstrap, Handlebars, and [frontexpress](https://github.com/camelaissan
 
 Build system based on RollupJS
 
-## Why I created this application?
+### Why do I created this application?
 
 Simply to help my best friend and I to manage properties that we rent.
 
