@@ -50,7 +50,7 @@ module.exports = function () {
       if (err) {
         return next(err);
       }
-      if (realms.length) {
+      if (realms && realms.length) {
         req.realms = realms;
         const realmId = req.headers.organizationid;
         if (realmId) {
@@ -63,7 +63,7 @@ module.exports = function () {
         }
       } else {
         delete req.realm;
-        delete req.realms;
+        req.realms = [];
       }
       next();
     });
