@@ -128,8 +128,8 @@ const findAllLeases = (realm) => {
 module.exports = async () => {
   try {
     await db.init();
-    const realms = await findAllRealms();
-    const accounts = await findAllAccounts();
+    const realms = (await findAllRealms()) || [];
+    const accounts = (await findAllAccounts()) || [];
     const accountMap = accounts.reduce(
       (acc, { email, firstname, lastname }) => {
         acc[email] = `${firstname} ${lastname}`;
@@ -311,7 +311,7 @@ module.exports = async () => {
           }
         }
 
-        const tenants = await findAllTenants(realm);
+        const tenants = (await findAllTenants(realm)) || [];
         await Promise.all(
           tenants.map(async (dbTenant) => {
             // add the leaseId property to tenant (occupant)
