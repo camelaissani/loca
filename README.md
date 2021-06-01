@@ -1,6 +1,6 @@
 # :warning: DEPRECATED :warning:
 
-This repository will be soon deprecated in favor of [MicroRealEstate](https://github.com/microrealestate/microrealestate).
+This repository is deprecated in favor of [MicroRealEstate](https://github.com/microrealestate/microrealestate).
 
 The new version uses latest stack on the front-end (NextJS, ReactJS, MobX). The split between front and back-end code is more obvious and the UI has been fully rewritten.
 
