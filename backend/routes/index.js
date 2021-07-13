@@ -1,7 +1,6 @@
 const express = require('express');
 const logger = require('winston');
 const apiV1 = require('./api');
-const apiV2 = require('./apiv2');
 const auth = require('./auth');
 const page = require('./page');
 const pages = require('../pages');
@@ -55,7 +54,6 @@ module.exports = [
   () => express.Router().use('/signout', _shouldBeLogged),
   // add routes
   auth,
-  apiV2,
   apiV1,
   page,
 ];

@@ -48,7 +48,6 @@
     "intl": "1.2.5",
     "jquery": "3.5.0",
     "jquery-validation": "1.19.3",
-    "jsonwebtoken": "8.5.1",
     "mathjs": "3.20.2",
     "method-override": "3.0.0",
     "minivents": "2.2.0",
